@@ -1,14 +1,14 @@
 extern crate cpal;
 extern crate failure;
 
-use super::oscillator::Oscillator;
+use super::voice::Voice;
 use cpal::traits::{DeviceTrait, EventLoopTrait, HostTrait};
 use std::sync::{Arc, Mutex};
 
 pub struct Engine {
     sample_rate: u32,
     sample_clock: u64,
-    oscillators: Arc<Mutex<Vec<Box<dyn Oscillator + Send>>>>,
+    voices: Arc<Mutex<Vec<Box<Voice>>>>,
     num_channels: usize,
 }
 
@@ -21,15 +21,15 @@ impl Engine {
         let sample_rate = format.sample_rate.0;
         let sample_clock = 0u64;
 
-        let oscillators: Arc<Mutex<Vec<Box<dyn Oscillator + Send>>>> = Arc::new(Mutex::new(Vec::new()));
+        let voices: Arc<Mutex<Vec<Box<Voice>>>> = Arc::new(Mutex::new(Vec::new()));
         let num_channels: usize = format.channels as usize;
 
-        Engine{sample_rate, sample_clock, oscillators, num_channels}
+        Engine{sample_rate, sample_clock, voices, num_channels}
     }
 
-    pub fn add_oscillator(&mut self, osc: Box<dyn Oscillator + Send>) {
-        let mut oscillators = self.oscillators.lock().unwrap();
-        oscillators.push(osc);
+    pub fn add_voice(&mut self, voice: Box<Voice>) {
+        let mut voices = self.voices.lock().unwrap();
+        voices.push(voice);
     }
 
     pub fn get_sample_rate(&self) -> u32 {
@@ -38,9 +38,9 @@ impl Engine {
 
     fn get_sample(&mut self) -> f32 {
         let mut value = 0.0;
-        let mut oscs_mutex = self.oscillators.lock().unwrap();
-        for osc in oscs_mutex.iter_mut() {
-            value += osc.get_sample(self.sample_clock, 440.0);
+        let mut voices = self.voices.lock().unwrap();
+        for voice in voices.iter_mut() {
+            value += voice.get_sample(self.sample_clock);
         }
         value
     }
@@ -64,6 +64,7 @@ impl Engine {
 
             match data {
                 cpal::StreamData::Output { buffer: cpal::UnknownTypeOutputBuffer::F32(mut buffer) } => {
+                    //for sample in buffer.chunks_mut(self.num_channels) {
                     for sample in buffer.chunks_mut(self.num_channels) {
                         // Current buffer size: 512
                         self.sample_clock = self.sample_clock + 1;
