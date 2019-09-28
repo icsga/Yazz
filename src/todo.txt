@@ -1,0 +1,11 @@
+- Implement graphical view of waveform
+- Port complex sine generator
+- Implement triangle generator
+- Implement Modulator
+- Add frequency modulator to oscillator
+- Implement ADSR envelope generator
+- Add MIDI support
+- Start GUI:
+    - Number of voices
+    - Oscillator type, freq, amp
+    - EG settings
