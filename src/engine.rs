@@ -30,7 +30,7 @@ impl Engine {
     }
 
     fn get_sample(&mut self, synth: &Arc<Mutex<Synth>>) -> f32 {
-        let mysynth = synth.lock().unwrap();
+        let mut mysynth = synth.lock().unwrap();
         mysynth.get_sample(self.sample_clock)
     }
 
@@ -69,5 +69,4 @@ impl Engine {
         });
     }
 }
-
 
