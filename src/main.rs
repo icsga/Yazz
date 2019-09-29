@@ -4,14 +4,21 @@ mod oscillator;
 mod sine_oscillator;
 mod square_oscillator;
 mod voice;
+mod synth;
+mod tui;
 
 use oscillator::Oscillator;
-use sine_oscillator::SineOscillator;
+//use sine_oscillator::SineOscillator;
 use complex_sine_osc::ComplexSineOscillator;
-use square_oscillator::SquareWaveOscillator;
+//use square_oscillator::SquareWaveOscillator;
 use engine::Engine;
-use voice::Voice;
+//use voice::Voice;
+use synth::Synth;
+use tui::Tui;
 
+use std::sync::{Arc, Mutex};
+
+/*
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
@@ -32,21 +39,26 @@ fn test_oscillator(osc: &mut dyn Oscillator) {
         file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(i as u64, osc.get_freq()))).unwrap();
     }
 }
+*/
 
-fn main() -> Result<(), failure::Error> {
+fn setup_ui() {
+    let mut tui = Tui::new();
+    tui.handle_input();
+}
+
+fn setup_sound() -> Result<(), failure::Error> {
     let mut engine = Engine::new();
     let sample_rate = engine.get_sample_rate();
     println!("sample_rate: {}", sample_rate);
 
-    let mut voice1 = Box::new(Voice::new(sample_rate));
-    let mut osc = Box::new(SquareWaveOscillator::new(sample_rate));
-    let mut lfo1 = Box::new(SineOscillator::new(sample_rate));
-    lfo1.set_freq(1.0);
-    voice1.set_oscillator(osc);
-    voice1.add_freq_mod(lfo1);
-    engine.add_voice(voice1);
+    let synth = Arc::new(Mutex::new(Synth::new(sample_rate)));
 
-    engine.run()
+    engine.run(synth)
+}
+
+fn main() -> Result<(), failure::Error> {
+    setup_ui();
+    setup_sound()
 
     //test_oscillator(&mut *osc);
     //Ok(())

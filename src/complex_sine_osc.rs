@@ -15,6 +15,8 @@ struct CompSineOscState {
     last_value: f32,
     last_stabilization: u64, // Time of last stabilization
     phasor: num::complex::Complex<f32>, // Phasor with current state
+    omega: num::complex::Complex<f32>,
+    stabilizer: num::complex::Complex<f32>
 }
 
 impl ComplexSineOscillator {
@@ -24,7 +26,9 @@ impl ComplexSineOscillator {
         let last_value = 0.0;
         let last_stabilization = 0;
         let phasor = num::complex::Complex::new(1.0, 0.0);
-        let state = RefCell::new(CompSineOscState{last_update, last_value, last_stabilization, phasor});
+        let omega = num::complex::Complex::new(0.0, 0.0);
+        let stabilizer = num::complex::Complex::new(0.0, 0.0);
+        let state = RefCell::new(CompSineOscState{last_update, last_value, last_stabilization, phasor, omega, stabilizer});
         let osc = ComplexSineOscillator{freq, sample_rate, state};
         osc
     }
@@ -44,12 +48,11 @@ impl Oscillator for ComplexSineOscillator {
         if sample_clock != state.last_update {
             let dt = sample_clock - state.last_update;
 
-            // compute the angular frequency of the oscilator in radians
-            let ang_freq = 2.0 * 3.141592 * freq / self.sample_rate as f32;
+            // compute the angular frequency omega of the oscilator in radians
+            state.omega.im = 2.0 * 3.141592 * freq / self.sample_rate as f32;
 
             // compute the complex angular coeficient
-            let omega = num::complex::Complex::new(0.0, ang_freq);
-            let coefficient = omega.exp();
+            let coefficient = state.omega.exp();
 
             // advance the phasor Δt units
             for _ in 0..dt {
@@ -62,9 +65,8 @@ impl Oscillator for ComplexSineOscillator {
             if state.last_stabilization > 500 {
                     let a = state.phasor.re;
                     let b = state.phasor.im;
-                    let c = (3.0 - a.powi(2) - b.powi(2)) / 2.0;
-                    let stab = num::complex::Complex::new(c, 0.0);
-                    state.phasor = state.phasor * stab;
+                    state.stabilizer.re = (3.0 - a.powi(2) - b.powi(2)) / 2.0;
+                    state.phasor = state.phasor * state.stabilizer;
                     state.last_stabilization = 0;
             }
 
