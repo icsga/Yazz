@@ -27,16 +27,11 @@ impl Oscillator for SquareWaveOscillator {
     fn get_sample(&self, sample_clock: u64, freq: f32) -> f32 {
         let range = self.sample_rate as f32 / freq;
         let clock_offset: f32 = (sample_clock % range as u64) as f32;
-        //println!("co: {}, range: {}", clock_offset, range);
         if clock_offset > (range / 2.0) {
             0.0
         } else {
             1.0
         }
-    }
-
-    fn get_sample_rate(&self) -> u32 {
-        self.sample_rate
     }
 }
 

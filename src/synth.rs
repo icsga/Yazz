@@ -12,7 +12,7 @@ impl Synth {
         Synth{sample_rate, voice}
     }
 
-    pub fn get_sample(&self, sample_clock: u64) -> f32 {
+    pub fn get_sample(&mut self, sample_clock: u64) -> f32 {
         self.voice.get_sample(sample_clock)
     }
 }

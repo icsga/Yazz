@@ -19,20 +19,17 @@ enum TuiState {
 }
 
 #[derive(Debug)]
-enum Function {
+enum FunctionId {
     Oscillator,
     Filter,
     Amp,
     Lfo,
     Envelope,
-    Mod
-}
+    Mod,
 
-enum Parameter {
     // Oscillator, Lfo
     Waveform,
-    FreqCoarse,
-    FreqFine,
+    Frequency,
     Phase,
 
     // Filter
@@ -56,6 +53,9 @@ enum Parameter {
     Target
 }
 
+enum Parameter {
+}
+
 enum ValType {
     Int,
     Float,
@@ -64,7 +64,7 @@ enum ValType {
 
 use std::fmt::{self, Debug, Display};
 
-impl fmt::Display for Function {
+impl fmt::Display for FunctionId {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Debug::fmt(self, f)
     }
@@ -72,29 +72,39 @@ impl fmt::Display for Function {
 
 /* Item for a list of selectable functions */
 struct Selection {
-    id: Function,
+    id: FunctionId,
     key: Key,
     val_type: ValType,
     int_min: u32,
     int_max: u32,
     f_min: f32,
-    f_max: f32
+    f_max: f32,
+    next: &'static [Selection]
 }
 
 static FUNCTIONS: [Selection; 2] = [
-    Selection{id: Function::Oscillator, key: Key::Char('o'), val_type: ValType::Int, int_min: 1, int_max: 3, f_min: 0.0, f_max: 0.0},
-    Selection{id: Function::Lfo,        key: Key::Char('l'), val_type: ValType::Int, int_min: 1, int_max: 3, f_min: 0.0, f_max: 0.0},
+    Selection{id: FunctionId::Oscillator, key: Key::Char('o'), val_type: ValType::Int, int_min: 1, int_max: 3, f_min: 0.0, f_max: 0.0, next: &OSC_PARAMS},
+    Selection{id: FunctionId::Lfo,        key: Key::Char('l'), val_type: ValType::Int, int_min: 1, int_max: 3, f_min: 0.0, f_max: 0.0, next: &[]},
+];
+
+static OSC_PARAMS: [Selection; 3] = [
+    Selection{id: FunctionId::Waveform, key: Key::Char('w'), val_type: ValType::Int, int_min: 1, int_max: 3, f_min: 0.0, f_max: 0.0, next: &[]},
+    Selection{id: FunctionId::Frequency, key: Key::Char('f'), val_type: ValType::Float, int_min: 0, int_max: 0, f_min: 0.0, f_max: 22000.0, next: &[]},
+    Selection{id: FunctionId::Phase, key: Key::Char('p'), val_type: ValType::Float, int_min: 0, int_max: 0, f_min: 0.0, f_max: 100.0, next: &[]},
 ];
 
 fn select_function(funcs: &[Selection], next_state: TuiState) {
 }
 
 pub struct Tui {
+    // Function selection
     state: TuiState,
-    selected_function: Function,
+    selected_function: FunctionId,
     function_index: u32,
-    selected_parameter: Parameter,
+    selected_parameter: FunctionId,
     parameter_index: u32,
+
+    // TUI handling
     x: u16,
     y: u16,
     stdout: RawTerminal<std::io::Stdout>,
@@ -103,9 +113,9 @@ pub struct Tui {
 impl Tui {
     pub fn new() -> Self {
         Tui{state: TuiState::Function,
-            selected_function: Function::Oscillator,
+            selected_function: FunctionId::Oscillator,
             function_index: 1,
-            selected_parameter: Parameter::Waveform,
+            selected_parameter: FunctionId::Waveform,
             parameter_index: 1,
             x: 0,
             y: 0,
@@ -122,13 +132,7 @@ impl Tui {
                 match c {
                     // Exit.
                     Key::Char('q') => { exit = true; break},
-                    /*
-                    Key::Char(c)   => println!("{}", c),
-                    Key::Alt(c)    => println!("Alt-{}", c),
-                    Key::Ctrl(c)   => println!("Ctrl-{}", c),
-                    Key::Left      => println!("<left>"),
-                    */
-                    _              => self.generate_event(c),
+                    _              => self.select_item(c),
                 }
                 self.stdout.flush().unwrap();
             }
@@ -139,7 +143,7 @@ impl Tui {
         }
     }
 
-    fn generate_event(&mut self, c: termion::event::Key) {
+    fn select_item(&mut self, c: termion::event::Key) {
         self.state = match &self.state {
             TuiState::Function => self.get_function(c),
             TuiState::FunctionIndex => self.get_function_index(c),
@@ -150,7 +154,7 @@ impl Tui {
         };
     }
 
-    fn select_func(&mut self, f: Function, s: TuiState) -> TuiState {
+    fn select_func(&mut self, f: FunctionId, s: TuiState) -> TuiState {
         self.selected_function = f;
         self.function_index = 0;
         print!("{}\r", clear::CurrentLine);
@@ -163,15 +167,15 @@ impl Tui {
 
     fn get_function(&mut self, c: termion::event::Key) -> TuiState {
         match c {
-            Key::Char('o') => self.select_func(Function::Oscillator, TuiState::FunctionIndex),
-            Key::Char('l') => self.select_func(Function::Lfo, TuiState::FunctionIndex),
+            Key::Char('o') => self.select_func(FunctionId::Oscillator, TuiState::FunctionIndex),
+            Key::Char('l') => self.select_func(FunctionId::Lfo, TuiState::FunctionIndex),
             _ => TuiState::Function // Ignore others
         }
     }
 
     fn select_func_index(&mut self, val: u32, s: TuiState) -> TuiState {
         self.function_index = val;
-        print!("{} {}", cursor::Goto(self.x, self.y), self.function_index);
+        print!("{} {}", Goto(self.x, self.y), self.function_index);
         s
     }
 
