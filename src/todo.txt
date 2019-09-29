@@ -1,14 +1,20 @@
 - Use Gnuplot for graphical view of waveform - Done
 - Port complex sine generator - Done
-- Implement Voice (osc + mod + amp)
-- Implement Modulator
-- Implement triangle generator
-- Add frequency modulator to oscillator
+- Implement Voice (osc + mod + amp) - Done
+- Implement Modulator - Done
+- Add frequency modulator to oscillator - Done
+- Implement oscillators:
+    - Square
+    - Triangle
+    - Saw
+    - Noise
+    - Sample
+    - Wavetable
 - Implement ADSR envelope generator
 - Add MIDI support
 - Control parameters via key commands
 - Morphing between sounds
-- Start GUI:
+- Implement GUI:
     - Number of voices
     - Oscillator type, freq, amp
     - EG settings
