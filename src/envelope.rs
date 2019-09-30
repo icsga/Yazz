@@ -22,9 +22,9 @@ impl Envelope {
     pub fn new(sample_rate: u32) -> Envelope {
         Envelope{sample_rate: sample_rate,
                  attack: 2000.0,
-                 decay: 2000.0,
-                 sustain: 0.5,
-                 release: 2000.0,
+                 decay: 4000.0,
+                 sustain: 0.2,
+                 release: 20000.0,
                  state: RefCell::new(EnvelopeState{trigger_time: 0,
                                                    release_time: 0,
                                                    last_update:0,
