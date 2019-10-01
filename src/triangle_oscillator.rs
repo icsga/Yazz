@@ -5,31 +5,31 @@ use super::Oscillator;
 use super::SampleGenerator;
 use std::cell::RefCell;
 
-pub struct SquareOscillator {
+pub struct TriangleOscillator {
     freq: f32,
     sample_rate: u32,
-    state: RefCell<SquareOscState>
+    state: RefCell<TriangleOscState>
 }
 
-struct SquareOscState {
+struct TriangleOscState {
     last_update: u64, // Time of last sample generation
     last_value: f32,
     last_angle: f32,
 }
 
-impl SquareOscillator {
-    pub fn new(sample_rate: u32) -> SquareOscillator {
+impl TriangleOscillator {
+    pub fn new(sample_rate: u32) -> TriangleOscillator {
         let freq = 440.0;
         let last_update = 0;
         let last_value = 0.0;
         let last_angle = 0.0;
-        let state = RefCell::new(SquareOscState{last_update, last_value, last_angle});
-        let osc = SquareOscillator{freq, sample_rate, state};
+        let state = RefCell::new(TriangleOscState{last_update, last_value, last_angle});
+        let osc = TriangleOscillator{freq, sample_rate, state};
         osc
     }
 }
 
-impl Oscillator for SquareOscillator {
+impl Oscillator for TriangleOscillator {
     fn set_freq(&mut self, freq: f32) {
         self.freq = freq;
     }
@@ -39,7 +39,7 @@ impl Oscillator for SquareOscillator {
     }
 }
 
-impl SampleGenerator for SquareOscillator {
+impl SampleGenerator for TriangleOscillator {
     fn get_sample(&self, sample_clock: u64) -> f32 {
         let mut state = self.state.borrow_mut();
         if sample_clock != state.last_update {
@@ -53,10 +53,14 @@ impl SampleGenerator for SquareOscillator {
                 state.last_angle -= 1.0;
             }
 
-            state.last_value = if state.last_angle < 0.5 {
-                1.0
+            state.last_value = if state.last_angle < 0.25 {
+                state.last_angle / 0.25
+            } else if state.last_angle < 0.5 {
+                1.0 + (1.0 - state.last_angle / 0.25)
+            } else if state.last_angle < 0.75 {
+                (2.0 - state.last_angle / 0.25)
             } else {
-                -1.0
+                -1.0 - (3.0 - state.last_angle / 0.25)
             };
 
             // advance time

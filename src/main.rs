@@ -7,8 +7,9 @@ mod envelope;
 mod oscillator;
 mod parameter;
 mod sine_oscillator;
+mod triangle_oscillator;
 mod sample_generator;
-//mod square_oscillator;
+mod square_oscillator;
 mod synth;
 mod termion_wrapper;
 mod tui;
@@ -20,7 +21,8 @@ use oscillator::Oscillator;
 use parameter::SynthParam;
 use sample_generator::SampleGenerator;
 use sine_oscillator::SineOscillator;
-//use square_oscillator::SquareWaveOscillator;
+use triangle_oscillator::TriangleOscillator;
+use square_oscillator::SquareOscillator;
 //use voice::Voice;
 use synth::Synth;
 use termion_wrapper::TermionWrapper;
@@ -29,13 +31,17 @@ use tui::Tui;
 use std::sync::{Arc, Mutex};
 use std::sync::mpsc::{channel, Sender, Receiver};
 
-/*
 use std::error::Error;
 use std::fs::File;
+use std::io::{stdin, stdout, Write};
 use std::io::prelude::*;
 use std::path::Path;
 
-fn test_oscillator(osc: &mut dyn Oscillator) {
+extern crate midir;
+use midir::{MidiInput, Ignore};
+
+fn test_oscillator() {
+    let osc = TriangleOscillator::new(44100);
     let path = Path::new("osc_output.txt");
     let display = path.display();
 
@@ -45,23 +51,16 @@ fn test_oscillator(osc: &mut dyn Oscillator) {
         Ok(file) => file,
     };
 
-    let num_samples = (osc.get_sample_rate() as f32 / osc.get_freq()) as usize;
+    let num_samples = ((44000.0 / osc.get_freq()) * 2.0) as usize;
     for i in 0..num_samples {
-        file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(i as u64, osc.get_freq()))).unwrap();
+        file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(i as u64))).unwrap();
     }
 }
-*/
-
-use std::error::Error;
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
-
 
 fn test_envalope() {
     let sample_rate = 44100;
     let env = Envelope::new(sample_rate);
-    let path = Path::new("osc_output.txt");
+    let path = Path::new("env_output.txt");
     let display = path.display();
 
     // Open a file in write-only mode, returns `io::Result<File>`
@@ -106,26 +105,51 @@ fn setup_sound(sender: Sender<SynthParam>, receiver: Receiver<SynthParam>) -> Re
 }
 */
 
+struct MidiMessage {
+    mtype: u8,
+    param: u8,
+    value: u8
+}
+
 fn main() {
+    //test_oscillator()
+    let (m2s_sender, m2s_receiver) = channel::<MidiMessage>(); // MIDI to Synth
     let (u2s_sender, u2s_receiver) = channel::<SynthParam>(); // UI to Synth
     let (s2u_sender, s2u_receiver) = channel::<SynthParam>(); // Synth to UI
+
+    println!("Setting up MIDI... ");
+    let input = String::new();
+    let mut midi_in = MidiInput::new("midir reading input").unwrap();
+    midi_in.ignore(Ignore::None);
+    println!("Available MIDI ports: {}", midi_in.port_count());
+    let in_port = 1;
+    println!("Opening connection");
+    let in_port_name = midi_in.port_name(in_port).unwrap();
+    let _conn_in = midi_in.connect(in_port, "midir-read-input", move |stamp, message, _| {
+        //println!("{}: {:?} (len = {})", stamp, message, message.len());
+        if message.len() == 3 {
+            let m = MidiMessage{mtype: message[0], param: message[1], value: message[2]};
+            m2s_sender.send(m).unwrap();
+        }
+    }, ()).unwrap();
+    println!("... finished.");
 
     //setup_ui(u2s_sender, s2u_receiver);
     println!("Setting up UI...");
     let tui = Tui::new(u2s_sender, s2u_receiver);
     let termion = TermionWrapper::new(tui);
     let term_handle = TermionWrapper::run(termion);
-    println!("... finished");
+    println!("\r... finished");
 
     //setup_sound(s2u_sender, u2s_receiver).unwrap();
-    println!("Setting up sound...");
+    println!("\rSetting up sound...");
     let mut engine = Engine::new();
     let sample_rate = engine.get_sample_rate();
-    println!("sample_rate: {}", sample_rate);
+    println!("\rsample_rate: {}", sample_rate);
 
     let synth = Synth::new(sample_rate);
     let synth = Arc::new(Mutex::new(synth));
-    let synth_handle = Synth::run(synth.clone(), s2u_sender, u2s_receiver);
+    let synth_handle = Synth::run(synth.clone(), s2u_sender, u2s_receiver, m2s_receiver);
 
     println!("... finished, starting loop");
 
@@ -133,7 +157,6 @@ fn main() {
     //test_envalope();
 
 
-    //test_oscillator(&mut *osc);
     //Ok(())
     term_handle.join().unwrap();
     synth_handle.join().unwrap();

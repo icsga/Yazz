@@ -8,10 +8,10 @@ use std::cell::RefCell;
 pub struct SineOscillator {
     freq: f32,
     sample_rate: u32,
-    state: RefCell<CompSineOscState>
+    state: RefCell<SineOscState>
 }
 
-struct CompSineOscState {
+struct SineOscState {
     last_update: u64, // Time of last sample generation
     last_value: f32,
     last_stabilization: u64, // Time of last stabilization
@@ -29,7 +29,7 @@ impl SineOscillator {
         let phasor = num::complex::Complex::new(1.0, 0.0);
         let omega = num::complex::Complex::new(0.0, 0.0);
         let stabilizer = num::complex::Complex::new(0.0, 0.0);
-        let state = RefCell::new(CompSineOscState{last_update, last_value, last_stabilization, phasor, omega, stabilizer});
+        let state = RefCell::new(SineOscState{last_update, last_value, last_stabilization, phasor, omega, stabilizer});
         let osc = SineOscillator{freq, sample_rate, state};
         osc
     }
