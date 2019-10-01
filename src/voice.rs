@@ -2,6 +2,8 @@ use super::Envelope;
 use super::Oscillator;
 use super::SampleGenerator;
 use super::SineOscillator;
+use super::TriangleOscillator;
+use super::SquareOscillator;
 
 pub struct Voice {
     // Components
@@ -20,14 +22,20 @@ pub struct Voice {
 
 impl Voice {
     pub fn new(sample_rate: u32) -> Self {
-        let osc = Box::new(SineOscillator::new(sample_rate));
+        //let osc = Box::new(SineOscillator::new(sample_rate));
+        //let osc = Box::new(TriangleOscillator::new(sample_rate));
+        let osc = Box::new(SquareOscillator::new(sample_rate));
         let env = Box::new(Envelope::new(sample_rate));
         let amp_modulators = Vec::new();
         let freq_modulators = Vec::new();
         let osc_freq = 440.0;
         let osc_amp = 0.5;
         let last_update = 0u64;
-        Voice{osc, env, amp_modulators, freq_modulators, osc_freq, osc_amp, last_update}
+        let mut voice = Voice{osc, env, amp_modulators, freq_modulators, osc_freq, osc_amp, last_update};
+        let mut modu = Box::new(SineOscillator::new(sample_rate));
+        modu.set_freq(1.0);
+        voice.add_freq_mod(modu);
+        voice
     }
 
     pub fn get_sample(&mut self, sample_clock: u64) -> f32 {
@@ -41,7 +49,7 @@ impl Voice {
     fn get_freq_mod(&self, sample_clock: u64) -> f32 {
         let mut freq_mod = 0.0;
         for fm in self.freq_modulators.iter() {
-            freq_mod += fm.get_sample(sample_clock);
+            freq_mod += fm.get_sample(sample_clock) * 5.0;
         }
         freq_mod
     }
@@ -67,12 +75,10 @@ impl Voice {
     }
 
     pub fn trigger(&mut self) {
-        println!("Voice: Trigger");
         self.env.trigger(self.last_update);
     }
 
     pub fn release(&mut self) {
-        println!("Voice: Release");
         self.env.release(self.last_update);
     }
 }

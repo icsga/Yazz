@@ -78,7 +78,6 @@ impl Tui {
     pub fn handle_input(&mut self, c: termion::event::Key) {
         // Test: Any key triggers the envelope
         let param = SynthParam::new();
-        println!("TUI: Sending");
         self.sender.send(param).unwrap();
         return;
         /*

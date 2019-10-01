@@ -21,9 +21,7 @@ impl Synth {
         let handler = spawn(move || {
             let mut triggered: bool = false;
             loop {
-                println!("Synth: Waiting for param");
                 let param = receiver.recv();
-                println!("Synth: Got parameter");
                 let mut locked_synth = synth.lock().unwrap();
                 if triggered {
                     locked_synth.voice.release();
