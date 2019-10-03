@@ -40,9 +40,10 @@ impl Voice {
 
     pub fn get_sample(&mut self, sample_clock: u64) -> f32 {
         self.last_update = sample_clock;
-        let freq_mod = self.get_freq_mod(sample_clock) * 20.0;
+        //let freq_mod = self.get_freq_mod(sample_clock) * 2.0;
+        let freq_mod = 0.0;
         let amp_mod = self.get_amp_mod(sample_clock);
-        self.osc.set_freq(self.osc_freq + freq_mod);
+        self.osc.set_freq(self.osc.get_freq() + freq_mod);
         self.osc.get_sample(sample_clock) * (self.osc_amp + amp_mod) * self.env.get_sample(sample_clock)
     }
 
@@ -72,6 +73,11 @@ impl Voice {
 
     pub fn add_amp_mod(&mut self, am: Box<dyn SampleGenerator + Send>) {
         self.amp_modulators.push(am);
+    }
+
+    pub fn set_freq(&mut self, freq: f32) {
+        println!("Setting freq {}", freq);
+        self.osc.set_freq(freq);
     }
 
     pub fn trigger(&mut self) {

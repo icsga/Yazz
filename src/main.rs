@@ -4,6 +4,7 @@
 
 mod engine;
 mod envelope;
+mod midi_handler;
 mod oscillator;
 mod parameter;
 mod sine_oscillator;
@@ -17,6 +18,8 @@ mod voice;
 
 use engine::Engine;
 use envelope::Envelope;
+use midi_handler::MidiHandler;
+use midi_handler::MidiMessage;
 use oscillator::Oscillator;
 use parameter::SynthParam;
 use sample_generator::SampleGenerator;
@@ -29,7 +32,7 @@ use termion_wrapper::TermionWrapper;
 use tui::Tui;
 
 use std::sync::{Arc, Mutex};
-use std::sync::mpsc::{channel, Sender, Receiver};
+//use std::sync::mpsc::{channel, Sender, Receiver};
 
 use std::error::Error;
 use std::fs::File;
@@ -39,6 +42,11 @@ use std::path::Path;
 
 extern crate midir;
 use midir::{MidiInput, Ignore};
+
+#[macro_use]
+extern crate crossbeam_channel;
+use crossbeam_channel::unbounded;
+use crossbeam_channel::{Sender, Receiver};
 
 fn test_oscillator() {
     let osc = TriangleOscillator::new(44100);
@@ -105,17 +113,11 @@ fn setup_sound(sender: Sender<SynthParam>, receiver: Receiver<SynthParam>) -> Re
 }
 */
 
-struct MidiMessage {
-    mtype: u8,
-    param: u8,
-    value: u8
-}
-
 fn main() {
     //test_oscillator()
-    let (m2s_sender, m2s_receiver) = channel::<MidiMessage>(); // MIDI to Synth
-    let (u2s_sender, u2s_receiver) = channel::<SynthParam>(); // UI to Synth
-    let (s2u_sender, s2u_receiver) = channel::<SynthParam>(); // Synth to UI
+    let (m2s_sender, m2s_receiver) = unbounded::<MidiMessage>(); // MIDI to Synth
+    let (u2s_sender, u2s_receiver) = unbounded::<SynthParam>(); // UI to Synth
+    let (s2u_sender, s2u_receiver) = unbounded::<SynthParam>(); // Synth to UI
 
     println!("Setting up MIDI... ");
     let input = String::new();
@@ -126,7 +128,6 @@ fn main() {
     println!("Opening connection");
     let in_port_name = midi_in.port_name(in_port).unwrap();
     let _conn_in = midi_in.connect(in_port, "midir-read-input", move |stamp, message, _| {
-        //println!("{}: {:?} (len = {})", stamp, message, message.len());
         if message.len() == 3 {
             let m = MidiMessage{mtype: message[0], param: message[1], value: message[2]};
             m2s_sender.send(m).unwrap();
