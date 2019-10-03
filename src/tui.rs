@@ -5,7 +5,9 @@ use termion::clear;
 use termion::event::Key;
 use termion::cursor::{DetectCursorPos, Goto};
 
-use std::sync::mpsc::{Sender, Receiver};
+//use std::sync::mpsc::{Sender, Receiver};
+use crossbeam_channel::unbounded;
+use crossbeam_channel::{Sender, Receiver};
 
 enum TuiState {
     Function,
