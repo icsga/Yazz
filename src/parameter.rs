@@ -52,7 +52,7 @@ pub enum FunctionId {
 pub enum ParameterValue {
     Int(u64),
     Float(f32),
-    Index(usize),
+    Choice(usize),
     NoValue
 }
 
@@ -71,11 +71,6 @@ pub struct SynthParam {
 
 impl SynthParam {
     pub fn new(function: Parameter, function_id: FunctionId, parameter: Parameter, param_val: ParameterValue) -> Self {
-        SynthParam{
-            function: Parameter::Oscillator,
-            function_id: FunctionId::Index(2),
-            parameter: Parameter::Waveform,
-            param_val: ParameterValue::Index(2)
-        }
+        SynthParam{function, function_id, parameter, param_val}
     }
 }
