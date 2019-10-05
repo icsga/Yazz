@@ -1,5 +1,5 @@
 use super::midi_handler::MidiMessage;
-use super::parameter::{Function, FunctionId, Parameter, ParameterValue, SynthParam};
+use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
 use super::voice::Voice;
 
 use std::sync::{Arc, Mutex};

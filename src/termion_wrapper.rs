@@ -15,6 +15,7 @@ use std::thread::spawn;
 
 pub struct TermionWrapper {
     stdout: RawTerminal<std::io::Stdout>,
+    //stdout: std::io::Stdout,
     tui: Tui,
 }
 
@@ -22,6 +23,7 @@ impl TermionWrapper {
     pub fn new(tui: Tui) -> TermionWrapper {
         TermionWrapper{
             stdout: stdout().into_raw_mode().unwrap(),
+            //stdout: stdout(),
             tui: tui
         }
     }
@@ -46,6 +48,10 @@ impl TermionWrapper {
             }
         });
         handler
+    }
+
+    pub fn cursor_pos(&mut self) -> (u16, u16) {
+        self.stdout.cursor_pos().unwrap()
     }
 }
 

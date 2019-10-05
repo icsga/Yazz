@@ -1,23 +1,16 @@
 use std::fmt::{self, Debug, Display};
 
-#[derive(Debug)]
-pub enum Function {
+#[derive(Clone, Copy, Debug)]
+pub enum Parameter {
+    // Function
     Oscillator,
     Filter,
     Amp,
     Lfo,
     Envelope,
     Mod,
-    System
-}
+    System,
 
-pub enum FunctionId {
-    Int(u32),
-    Index(usize),
-    NoValue
-}
-
-pub enum Parameter {
     // Oscillator, Lfo
     Waveform,
     Frequency,
@@ -41,9 +34,21 @@ pub enum Parameter {
 
     // Mod
     Source,
-    Target
+    Target,
+
+    // Waveforms
+    Sine,
+    Square,
+    Triangle
 }
 
+pub enum FunctionId {
+    Int(u64),
+    Index(usize),
+    NoValue
+}
+
+#[derive(Clone, Copy, Debug)]
 pub enum ParameterValue {
     Int(u64),
     Float(f32),
@@ -51,23 +56,23 @@ pub enum ParameterValue {
     NoValue
 }
 
-impl fmt::Display for Function {
+impl fmt::Display for Parameter {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Debug::fmt(self, f)
     }
 }
 
 pub struct SynthParam {
-    function: Function,
+    function: Parameter,
     function_id: FunctionId,
     parameter: Parameter,
     param_val: ParameterValue
 }
 
 impl SynthParam {
-    pub fn new() -> Self {
+    pub fn new(function: Parameter, function_id: FunctionId, parameter: Parameter, param_val: ParameterValue) -> Self {
         SynthParam{
-            function: Function::Oscillator,
+            function: Parameter::Oscillator,
             function_id: FunctionId::Index(2),
             parameter: Parameter::Waveform,
             param_val: ParameterValue::Index(2)
