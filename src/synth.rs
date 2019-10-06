@@ -1,4 +1,5 @@
 use super::midi_handler::MidiMessage;
+use super::midi_handler::MessageType;
 use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
 use super::voice::Voice;
 
@@ -58,14 +59,16 @@ impl Synth {
     }
 
     fn handle_midi_message(&mut self, msg: MidiMessage) {
-        let freq = self.keymap[msg.param as usize];
-        self.voice.set_freq(freq);
-        if self.triggered {
-            self.voice.release();
-            self.triggered = false;
-        } else {
-            self.voice.trigger();
-            self.triggered = true;
+        let channel = msg.mtype & 0x0F;
+        let mtype: u8 = msg.mtype & 0xF0;
+        match mtype {
+            0x90 => {
+                let freq = self.keymap[msg.param as usize];
+                self.voice.set_freq(freq);
+                self.voice.trigger();
+            }
+            0x80 => self.voice.release(),
+            _ => ()
         }
     }
 }
