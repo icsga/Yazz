@@ -20,6 +20,7 @@ use engine::Engine;
 use envelope::Envelope;
 use midi_handler::MidiHandler;
 use midi_handler::MidiMessage;
+use midi_handler::MessageType;
 use oscillator::Oscillator;
 use parameter::SynthParam;
 use sample_generator::SampleGenerator;
@@ -135,12 +136,14 @@ fn main() {
     }, ()).unwrap();
     println!("... finished.");
 
+    /*
     //setup_ui(u2s_sender, s2u_receiver);
     println!("Setting up UI...");
     let tui = Tui::new(u2s_sender, s2u_receiver);
     let termion = TermionWrapper::new(tui);
     let term_handle = TermionWrapper::run(termion);
     println!("\r... finished");
+    */
 
     //setup_sound(s2u_sender, u2s_receiver).unwrap();
     println!("\rSetting up sound...");
@@ -159,6 +162,6 @@ fn main() {
 
 
     //Ok(())
-    term_handle.join().unwrap();
+    //term_handle.join().unwrap();
     synth_handle.join().unwrap();
 }

@@ -8,6 +8,7 @@ use termion::color;
 use termion::color::{Black, White, LightWhite, Reset, Rgb};
 use std::io::{stdout, stdin};
 use std::convert::TryInto;
+use std::num::ParseFloatError;
 
 //use std::sync::mpsc::{Sender, Receiver};
 use crossbeam_channel::unbounded;
@@ -364,7 +365,7 @@ impl Tui {
                         match x {
                             '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.' => {
                                 self.temp_string.push(x);
-                                let value = self.temp_string.parse();
+                                let value: Result<f32, ParseFloatError> = self.temp_string.parse();
                                 current = if let Ok(x) = value { x } else { current };
                             },
                             '\n' => new_state = TuiState::EventComplete,
@@ -381,7 +382,7 @@ impl Tui {
                         let len = self.temp_string.len();
                         if len > 0 {
                             self.temp_string.pop();
-                            if len > 1 {
+                            if len >= 1 {
                                 let value = self.temp_string.parse();
                                 current = if let Ok(x) = value { x } else { current };
                             } else {
@@ -425,11 +426,13 @@ impl Tui {
                 let mut val = if let ParameterValue::Float(x) = val { x } else { panic!(); };
                 if val > max {
                     val = max;
-                    self.temp_string = val.to_string();
                 }
                 if val < min {
                     val = min;
-                    self.temp_string = val.to_string();
+                }
+                self.temp_string = val.to_string();
+                if !self.temp_string.contains(".") {
+                    self.temp_string.push('.');
                 }
                 self.selected_parameter.value = ParameterValue::Float(val);
             }

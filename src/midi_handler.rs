@@ -13,6 +13,16 @@ pub struct MidiMessage {
     pub value: u8
 }
 
+pub enum MessageType {
+    NoteOn = 0x08,
+    NoteOff = 0x90,
+    KeyAT = 0xA0,
+    ControlChg = 0xB0,
+    ProgramChg = 0xC0,
+    ChannelAT = 0xD0,
+    PitchWheel = 0xE0
+}
+
 impl MidiHandler {
     pub fn new(m2s_sender: Sender<MidiMessage>) -> MidiHandler {
         let mut keymap: [f32; 127] = [0.0; 127];
