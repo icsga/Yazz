@@ -4,6 +4,8 @@ use super::TermionWrapper;
 use termion::clear;
 use termion::event::Key;
 use termion::cursor::{DetectCursorPos, Goto};
+use termion::color;
+use termion::color::{Black, White, LightWhite, Reset, Rgb};
 use std::io::{stdout, stdin};
 use std::convert::TryInto;
 
@@ -126,10 +128,6 @@ impl Tui {
     }
 
     pub fn handle_input(&mut self, c: termion::event::Key) {
-        let (x, y) = Tui::push_cursor(1, 5);
-        print!("handle_input in {}{}", self.state, clear::UntilNewline);
-        Tui::restore_cursor(x, y);
-
         let new_state = match self.state {
             TuiState::Init => {
                 self.init();
@@ -140,21 +138,13 @@ impl Tui {
             TuiState::Param => self.get_param(c),
             TuiState::Value => self.get_value(c),
             TuiState::EventComplete => {
-                self.send_event();
+                //self.send_event();
+                self.init();
                 TuiState::Function
             }
         };
         self.state = new_state;
-    }
-
-    fn restore_cursor(x: u16, y: u16) {
-        print!("{}", Goto(x, y));
-    }
-
-    fn push_cursor(x: u16, y: u16) -> (u16, u16) {
-        let (cur_x, cur_y) = stdout().cursor_pos().unwrap();
-        Tui::restore_cursor(x, y);
-        (cur_x, cur_y)
+        self.display();
     }
 
     fn init(&mut self) {
@@ -162,6 +152,7 @@ impl Tui {
         let (x, y) = stdout().cursor_pos().unwrap(); //self.termion.cursor_pos().unwrap();
         self.selected_function.x = x;
         self.selected_function.y = y;
+        self.temp_string.clear();
     }
 
     fn send_event(&self) {
@@ -178,26 +169,19 @@ impl Tui {
                 if self.selected_function.item_index < self.selected_function.item_list.len() - 1 {
                     self.selected_function.item_index += 1;
                 }
-                self.select_function();
-                self.select_function_index();
                 TuiState::Function
             }
             Key::Down      => {
                 if self.selected_function.item_index > 0 {
                     self.selected_function.item_index -= 1;
                 }
-                self.select_function();
-                self.select_function_index();
                 TuiState::Function
             }
             Key::Right     => {
-                self.select_function_index();
                 TuiState::FunctionIndex
             }
             _ => {
                 let state = self.handle_key_selection(c);
-                self.select_function();
-                self.select_function_index();
                 state
             }
         }
@@ -207,7 +191,6 @@ impl Tui {
         for (count, f) in self.selected_function.item_list.iter().enumerate() {
             if f.key == c {
                 self.selected_function.item_index = count;
-                self.select_function();
                 return TuiState::FunctionIndex
             } else {
             }
@@ -215,13 +198,16 @@ impl Tui {
         TuiState::Function
     }
 
-    fn select_function(&mut self) {
-        print!("{}{}", Goto(self.selected_function.x, self.selected_function.y), clear::UntilNewline);
-        print!("{}", self.selected_function.item_list[self.selected_function.item_index].item);
-        let (x, y) = stdout().cursor_pos().unwrap();; //self.termion.cursor_pos().unwrap();
-        self.selected_function.val_x = x;
-        self.selected_function.val_y = y;
-        self.selected_parameter.item_list = self.selected_function.item_list[self.selected_function.item_index].next;
+    fn handle_param_key_selection(&mut self, c: termion::event::Key) -> TuiState {
+        for (count, f) in self.selected_parameter.item_list.iter().enumerate() {
+            if f.key == c {
+                self.selected_parameter.item_index = count;
+                self.select_param();
+                return TuiState::Value
+            } else {
+            }
+        }
+        TuiState::Function
     }
 
     fn get_function_index(&mut self, c: termion::event::Key) -> TuiState {
@@ -243,7 +229,6 @@ impl Tui {
                         }
                         let new_state = if y * 10 > *max {
                             // Can't add another digit, accept value as final and move on
-                            self.select_function_index();
                             self.select_param();
                             TuiState::Param
                         } else {
@@ -252,13 +237,21 @@ impl Tui {
                         };
                         self.update_index_val(current, new_state)
                     }
-                    _ => { self.select_function_index(); self.select_param(); TuiState::Param},
+                    _ => {
+                        self.select_param();
+                        TuiState::Param
+                    },
                 }
             }
             Key::Up        => self.update_index_val(current + 1, TuiState::FunctionIndex),
             Key::Down      => self.update_index_val(if current > 0 { current - 1 } else { current }, TuiState::FunctionIndex),
-            Key::Right     => { self.select_function_index(); self.select_param(); TuiState::Param},
-            _ => {self.select_function(); TuiState::Function}
+            Key::Right     => {
+                self.select_param();
+                TuiState::Param
+            },
+            _ => {
+                TuiState::Function
+            }
         }
     }
 
@@ -273,16 +266,7 @@ impl Tui {
             ValueRange::ChoiceRange(_) => {}
             ValueRange::NoRange => {}
         };
-        self.select_function_index();
         s
-    }
-
-    fn select_function_index(&mut self) {
-        print!("{} {:?}", Goto(self.selected_function.val_x, self.selected_function.val_y), self.selected_function.value);
-        let (x, y) = stdout().cursor_pos().unwrap();; //self.termion.cursor_pos().unwrap();
-        self.selected_parameter.x = x;
-        self.selected_parameter.y = y;
-        self.selected_parameter.item_list = self.selected_function.item_list[self.selected_function.item_index].next;
     }
 
     fn get_param(&mut self, c: termion::event::Key) -> TuiState {
@@ -313,18 +297,6 @@ impl Tui {
         next_state
     }
 
-    fn handle_param_key_selection(&mut self, c: termion::event::Key) -> TuiState {
-        for (count, f) in self.selected_parameter.item_list.iter().enumerate() {
-            if f.key == c {
-                self.selected_parameter.item_index = count;
-                self.select_param();
-                return TuiState::Value
-            } else {
-            }
-        }
-        TuiState::Function
-    }
-
     fn select_param(&mut self) {
         // The value in the selected parameter needs to point to the right type
         let item = &self.selected_parameter.item_list[self.selected_parameter.item_index].item;
@@ -341,12 +313,11 @@ impl Tui {
             }
             _ => ()
         }
-        Tui::display_param(&mut self.selected_parameter);
-        Tui::display_value(&self.selected_parameter);
     }
 
     fn get_value(&mut self, c: termion::event::Key) -> TuiState {
         let val = self.selected_parameter.value;
+        let mut new_state = TuiState::Value;
         match self.selected_parameter.item_list[self.selected_parameter.item_index].val_range {
             ValueRange::IntRange(min, max) => {
                 let mut current = if let ParameterValue::Int(x) = val { x } else { panic!() };
@@ -362,123 +333,184 @@ impl Tui {
                                 } else {
                                     current = val_digit_added;
                                 }
-                                let new_state = if y * 10 > max {
+                                new_state = if y * 10 > max {
                                     // Can't add another digit, accept value as final and move on
                                     TuiState::Param
                                 } else {
                                     // Could add more digits, not finished yet
                                     TuiState::Value
                                 };
-                                self.update_param_value(current, new_state)
-                            }
-                            '\n' => TuiState::EventComplete,
-                            _ => TuiState::Value,
+                            },
+                            '\n' => new_state = TuiState::EventComplete,
+                            _ => new_state = TuiState::Value,
                         }
                     }
-                    Key::Up        => self.update_param_value(current + 1, TuiState::Value),
-                    Key::Down      => self.update_param_value(if current > 0 { current - 1 } else { current }, TuiState::Value),
+                    Key::Up        => current += 1,
+                    Key::Down      => if current > 0 { current -= 1 },
                     Key::Left => {
                         self.select_param();
-                        TuiState::Param
+                        new_state = TuiState::Param
                     }
-                    _ => {self.select_function(); TuiState::Param}
+                    _ => {
+                        new_state = TuiState::Param
+                    }
                 }
+                self.update_param_value(ParameterValue::Int(current), new_state)
             }
             ValueRange::FloatRange(min, max) => {
-                let current = if let ParameterValue::Float(x) = val { x } else { panic!() };
+                let mut current = if let ParameterValue::Float(x) = val { x } else { panic!() };
                 match c {
                     Key::Char(x) => {
                         match x {
                             '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.' => {
                                 self.temp_string.push(x);
-                                self.update_param_value(0, TuiState::Value)
-                            }
-                            '\n' => TuiState::EventComplete,
-                            _ => TuiState::FunctionIndex,
+                                let value = self.temp_string.parse();
+                                current = if let Ok(x) = value { x } else { current };
+                            },
+                            '\n' => new_state = TuiState::EventComplete,
+                            _ => new_state = TuiState::FunctionIndex,
                         }
                     }
+                    Key::Up        => current += 1.0,
+                    Key::Down      => current -= 1.0,
                     Key::Left => {
                         self.select_param();
-                        TuiState::Param
+                        new_state = TuiState::Param
                     }
                     Key::Backspace => {
-                        self.temp_string.pop();
-                        self.update_param_value(0, TuiState::Value)
+                        let len = self.temp_string.len();
+                        if len > 0 {
+                            self.temp_string.pop();
+                            if len > 1 {
+                                let value = self.temp_string.parse();
+                                current = if let Ok(x) = value { x } else { current };
+                            } else {
+                                new_state = TuiState::Param
+                            }
+                        } else {
+                            new_state = TuiState::Param
+                        }
                     }
-                    _ => {self.select_function(); TuiState::Param}
+                    _ => new_state = TuiState::Param
                 }
+                self.update_param_value(ParameterValue::Float(current), new_state)
             }
             ValueRange::ChoiceRange(choice_list) => {
-                let current = if let ParameterValue::Choice(x) = val { x } else { panic!() };
+                let mut current = if let ParameterValue::Choice(x) = val { x } else { panic!() };
                 match c {
-                    Key::Up        => self.update_param_value(current as u64 + 1, TuiState::Value),
-                    Key::Down      => self.update_param_value(if current > 0 { current as u64 - 1 } else { current as u64 }, TuiState::Value),
+                    Key::Up        => current += 1,
+                    Key::Down      => if current > 0 { current -= 1 },
                     Key::Left => {
                         self.select_param();
-                        TuiState::Param
+                        new_state = TuiState::Param
                     }
-                    Key::Char('\n') => TuiState::EventComplete,
-                    _ => TuiState::Value
+                    Key::Char('\n') => new_state = TuiState::EventComplete,
+                    _ => new_state = TuiState::Value
                 }
+                self.update_param_value(ParameterValue::Choice(current), new_state)
             }
             _ => TuiState::Value
         }
     }
 
-    fn update_param_value(&mut self, val: u64, s: TuiState) -> TuiState {
+    fn update_param_value(&mut self, val: ParameterValue, s: TuiState) -> TuiState {
         match self.selected_parameter.item_list[self.selected_parameter.item_index].val_range {
             ValueRange::IntRange(min, max) => {
+                let val = if let ParameterValue::Int(x) = val { x } else { panic!(); };
                 if val <= max && val >= min {
                     self.selected_parameter.value = ParameterValue::Int(val.try_into().unwrap());
                 }
             }
             ValueRange::FloatRange(min, max) => {
-                let mut value: f32 = self.temp_string.parse().unwrap();
-                if value > max {
-                    value = max;
-                    self.temp_string = value.to_string();
+                let mut val = if let ParameterValue::Float(x) = val { x } else { panic!(); };
+                if val > max {
+                    val = max;
+                    self.temp_string = val.to_string();
                 }
-                if value < min {
-                    value = min;
-                    self.temp_string = value.to_string();
+                if val < min {
+                    val = min;
+                    self.temp_string = val.to_string();
                 }
-                self.selected_parameter.value = ParameterValue::Float(value);
+                self.selected_parameter.value = ParameterValue::Float(val);
             }
             ValueRange::ChoiceRange(selection_list) => {
-                let val = val as usize;
+                let val = if let ParameterValue::Float(x) = val { x as usize } else { panic!(); };
                 if val < selection_list.len() {
                     self.selected_parameter.value = ParameterValue::Choice(val);
                 }
             }
             ValueRange::NoRange => {}
         };
-        Tui::display_value(&self.selected_parameter);
+        self.send_event();
         s
     }
 
-    fn display_param(item: &mut SelectedItem) {
-        let param = item.item_list[item.item_index].item;
-        let val_range = &item.item_list[item.item_index].val_range;
-        print!("{}{}", Goto(item.x, item.y), clear::UntilNewline);
-        print!("{}", param);
-        let (x, y) = stdout().cursor_pos().unwrap();; //self.termion.cursor_pos().unwrap();
-        item.val_x = x;
-        item.val_y = y;
+    fn display(&mut self) {
+        print!("{}", Goto(self.selected_function.x, self.selected_function.y));
+        self.display_function();
+        self.display_function_index();
+        if self.state == TuiState::Function || self.state == TuiState::FunctionIndex {
+            print!("{}", clear::UntilNewline);
+            return;
+        }
+        self.display_param();
+        self.display_value();
+        print!("{}", clear::UntilNewline);
     }
 
-    fn display_value(item: &SelectedItem) {
-        print!("{} ", Goto(item.val_x, item.val_y));
+    fn display_function(&mut self) {
+        if self.state == TuiState::Function {
+            print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+        } else {
+            print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+        }
+        print!("{}", self.selected_function.item_list[self.selected_function.item_index].item);
+        if self.state == TuiState::Function {
+            print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+        }
+    }
+
+    fn display_function_index(&mut self) {
+        if self.state == TuiState::FunctionIndex {
+            print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+        }
+        print!(" {:?}", self.selected_function.value);
+        if self.state == TuiState::FunctionIndex {
+            print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+        }
+        self.selected_parameter.item_list = self.selected_function.item_list[self.selected_function.item_index].next;
+    }
+
+    fn display_param(&self) {
+        let item = &self.selected_parameter;
+        if self.state == TuiState::Param {
+            print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+        }
+        print!(" {}", item.item_list[item.item_index].item);
+        if self.state == TuiState::Param {
+            print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+        }
+    }
+
+    fn display_value(&self) {
+        let item = &self.selected_parameter;
+        if self.state == TuiState::Value {
+            print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+        }
         match item.value {
-            ParameterValue::Int(x) => print!("{}", x),
-            ParameterValue::Float(x) => print!("{}", x),
+            ParameterValue::Int(x) => print!(" {}", x),
+            ParameterValue::Float(x) => print!(" {}", x),
             ParameterValue::Choice(x) => {
                 let item = &item.item_list[item.item_index];
                 let range = &item.val_range;
                 let selection = if let ValueRange::ChoiceRange(list) = range { list } else { panic!() };
                 let item = selection[x].item;
-                print!("{}{}", item, clear::UntilNewline);
+                print!(" {}", item);
             },
             _ => ()
+        }
+        if self.state == TuiState::Value {
+            print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         }
     }
 }
