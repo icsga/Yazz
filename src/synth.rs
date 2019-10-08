@@ -56,6 +56,24 @@ impl Synth {
     }
 
     fn handle_tui_message(&mut self, msg: SynthParam) {
+        match msg.function {
+            Parameter::Oscillator => {
+                match msg.parameter {
+                    Parameter::Waveform => {
+                        let value = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() };
+                        self.voice.set_wave_ratio(value);
+                    }
+                    _ => {}
+                }
+            }
+            Parameter::Filter => {}
+            Parameter::Amp => {}
+            Parameter::Lfo => {}
+            Parameter::Envelope => {}
+            Parameter::Mod => {}
+            Parameter::System => {}
+            _ => {}
+        }
     }
 
     fn handle_midi_message(&mut self, msg: MidiMessage) {

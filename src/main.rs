@@ -5,12 +5,13 @@
 mod engine;
 mod envelope;
 mod midi_handler;
+mod multi_oscillator;
 mod oscillator;
 mod parameter;
-mod sine_oscillator;
-mod triangle_oscillator;
+//mod sine_oscillator;
+//mod triangle_oscillator;
 mod sample_generator;
-mod square_oscillator;
+//mod square_oscillator;
 mod synth;
 mod termion_wrapper;
 mod tui;
@@ -24,9 +25,10 @@ use midi_handler::MessageType;
 use oscillator::Oscillator;
 use parameter::SynthParam;
 use sample_generator::SampleGenerator;
-use sine_oscillator::SineOscillator;
-use triangle_oscillator::TriangleOscillator;
-use square_oscillator::SquareOscillator;
+use multi_oscillator::MultiOscillator;
+//use sine_oscillator::SineOscillator;
+//use triangle_oscillator::TriangleOscillator;
+//use square_oscillator::SquareOscillator;
 //use voice::Voice;
 use synth::Synth;
 use termion_wrapper::TermionWrapper;
@@ -50,7 +52,7 @@ use crossbeam_channel::unbounded;
 use crossbeam_channel::{Sender, Receiver};
 
 fn test_oscillator() {
-    let osc = TriangleOscillator::new(44100);
+    let mut osc = MultiOscillator::new(44100);
     let path = Path::new("osc_output.txt");
     let display = path.display();
 
@@ -60,9 +62,10 @@ fn test_oscillator() {
         Ok(file) => file,
     };
 
-    let num_samples = ((44000.0 / osc.get_freq()) * 2.0) as usize;
+    let freq = 440.0;
+    let num_samples = ((44000.0 / freq) * 2.0) as usize;
     for i in 0..num_samples {
-        file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(i as u64))).unwrap();
+        file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(freq, i as u64))).unwrap();
     }
 }
 

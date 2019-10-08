@@ -106,8 +106,8 @@ static ENV_PARAMS: [Selection; 4] = [
 
 static WAVEFORM: [Selection; 3] = [
     Selection{item: Parameter::Sine,      key: Key::Char('s'), val_range: ValueRange::NoRange, next: &[]},
-    Selection{item: Parameter::Square,    key: Key::Char('q'), val_range: ValueRange::NoRange, next: &[]},
     Selection{item: Parameter::Triangle,  key: Key::Char('t'), val_range: ValueRange::NoRange, next: &[]},
+    Selection{item: Parameter::Square,    key: Key::Char('q'), val_range: ValueRange::NoRange, next: &[]},
 ];
 
 struct SelectedItem {
@@ -171,10 +171,13 @@ impl Tui {
         };
         self.change_state(new_state);
         self.display();
-        //self.send_event();
     }
 
     fn change_state(&mut self, new_state: TuiState) {
+        if new_state == TuiState::Value {
+            self.send_event();
+        }
+
         if new_state == self.state {
             return;
         }
@@ -373,7 +376,7 @@ impl Tui {
         let function = &self.selected_function.item_list[self.selected_function.item_index];
         let function_id = if let ParameterValue::Int(x) = &self.selected_function.value { x } else { panic!() };
         let parameter = &self.selected_parameter.item_list[self.selected_parameter.item_index];
-        let param_val = &self.selected_function.value;
+        let param_val = &self.selected_parameter.value;
         self.sender.send(SynthParam::new(function.item, FunctionId::Int(*function_id), parameter.item, *param_val)).unwrap();
     }
 

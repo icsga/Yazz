@@ -1,19 +1,10 @@
-// http://dsp.stackexchange.com/a/1087
 extern crate num;
 
-use super::Oscillator;
 use super::SampleGenerator;
-use std::cell::RefCell;
 
 pub struct SineOscillator {
-    freq: f32,
     sample_rate: u32,
-    state: RefCell<SineOscState>
-}
-
-struct SineOscState {
     last_update: u64, // Time of last sample generation
-    last_value: f32,
     last_stabilization: u64, // Time of last stabilization
     phasor: num::complex::Complex<f32>, // Phasor with current state
     omega: num::complex::Complex<f32>,
@@ -22,61 +13,44 @@ struct SineOscState {
 
 impl SineOscillator {
     pub fn new(sample_rate: u32) -> SineOscillator {
-        let freq = 440.0;
         let last_update = 0;
-        let last_value = 0.0;
         let last_stabilization = 0;
         let phasor = num::complex::Complex::new(1.0, 0.0);
         let omega = num::complex::Complex::new(0.0, 0.0);
         let stabilizer = num::complex::Complex::new(0.0, 0.0);
-        let state = RefCell::new(SineOscState{last_update, last_value, last_stabilization, phasor, omega, stabilizer});
-        let osc = SineOscillator{freq, sample_rate, state};
+        let osc = SineOscillator{sample_rate, last_update, last_stabilization, phasor, omega, stabilizer};
         osc
     }
 }
 
-impl Oscillator for SineOscillator {
-    fn set_freq(&mut self, freq: f32) {
-        self.freq = freq;
-    }
-
-    fn get_freq(&self) -> f32 {
-        self.freq
-    }
-}
-
 impl SampleGenerator for SineOscillator {
-    fn get_sample(&self, sample_clock: u64) -> f32 {
-        let mut state = self.state.borrow_mut();
-        if sample_clock != state.last_update {
-            let dt = sample_clock - state.last_update;
+    // Based on http://dsp.stackexchange.com/a/1087
+    fn get_sample(&self, frequency: f32, sample_clock: u64) -> f32 {
+        let dt = sample_clock - self.last_update;
 
-            // Compute the angular frequency omega in radians
-            state.omega.im = 2.0 * 3.141592 * self.freq / self.sample_rate as f32;
+        // Compute the angular frequency omega in radians
+        self.omega.im = 2.0 * 3.141592 * frequency / self.sample_rate as f32;
 
-            // compute the complex angular coeficient
-            let coefficient = state.omega.exp();
+        // compute the complex angular coeficient
+        let coefficient = self.omega.exp();
 
-            for _ in 0..dt {
-                    state.phasor *= coefficient;
-            }
-
-            // Periodically stabilize the phasor's amplitude.
-            if state.last_stabilization > 500 {
-                    let a = state.phasor.re;
-                    let b = state.phasor.im;
-                    state.stabilizer.re = (3.0 - a.powi(2) - b.powi(2)) / 2.0;
-                    state.phasor = state.phasor * state.stabilizer;
-                    state.last_stabilization = 0;
-            }
-
-            // advance time
-            state.last_update += dt;
-            state.last_stabilization += dt;
-            // return the 'sine' component of the phasor
-            state.last_value = state.phasor.im;
+        for _ in 0..dt {
+                self.phasor *= coefficient;
         }
-        state.last_value
+
+        // Periodically stabilize the phasor's amplitude.
+        if self.last_stabilization > 500 {
+                let a = self.phasor.re;
+                let b = self.phasor.im;
+                self.stabilizer.re = (3.0 - a.powi(2) - b.powi(2)) / 2.0;
+                self.phasor = self.phasor * self.stabilizer;
+                self.last_stabilization = 0;
+        }
+
+        // advance time
+        self.last_update += dt;
+        self.last_stabilization += dt;
+        self.phasor.im // return the 'sine' component of the phasor
     }
 }
 

@@ -63,14 +63,14 @@ impl fmt::Display for Parameter {
 }
 
 pub struct SynthParam {
-    function: Parameter,
-    function_id: FunctionId,
-    parameter: Parameter,
-    param_val: ParameterValue
+    pub function: Parameter,
+    pub function_id: FunctionId,
+    pub parameter: Parameter,
+    pub value: ParameterValue
 }
 
 impl SynthParam {
-    pub fn new(function: Parameter, function_id: FunctionId, parameter: Parameter, param_val: ParameterValue) -> Self {
-        SynthParam{function, function_id, parameter, param_val}
+    pub fn new(function: Parameter, function_id: FunctionId, parameter: Parameter, value: ParameterValue) -> Self {
+        SynthParam{function, function_id, parameter, value}
     }
 }
