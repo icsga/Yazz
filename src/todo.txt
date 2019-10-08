@@ -4,14 +4,14 @@
 - Implement Modulator - Done
 - Add frequency modulator to oscillator - Done
 - Implement oscillators:
-    - Square
-    - Triangle
+    - Square - Done
+    - Triangle - Done
     - Saw
     - Noise
     - Sample
     - Wavetable
-- Implement ADSR envelope generator
-- Add MIDI support
+- Implement ADSR envelope generator - Done
+- Add MIDI support - Done
 - Control parameters via key commands
 - Morphing between sounds
 - Implement GUI:
