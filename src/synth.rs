@@ -15,6 +15,7 @@ pub struct Synth {
     voice: Voice,
     keymap: [f32; 127],
     triggered: bool,
+    voices_triggered: u32,
 }
 
 impl Synth {
@@ -24,7 +25,8 @@ impl Synth {
         let mut keymap: [f32; 127] = [0.0; 127];
         Synth::calculate_keymap(&mut keymap, 440.0);
         let triggered = false;
-        Synth{sample_rate, voice, keymap, triggered}
+        let voices_triggered = 0;
+        Synth{sample_rate, voice, keymap, triggered, voices_triggered}
     }
 
     pub fn run(synth: Arc<Mutex<Synth>>, sender: Sender<SynthParam>, t2s_receiver: Receiver<SynthParam>, m2s_receiver: Receiver<MidiMessage>) -> std::thread::JoinHandle<()> {
@@ -84,8 +86,14 @@ impl Synth {
                 let freq = self.keymap[msg.param as usize];
                 self.voice.set_freq(freq);
                 self.voice.trigger();
+                self.voices_triggered += 1;
             }
-            0x80 => self.voice.release(),
+            0x80 => {
+                self.voices_triggered -= 1;
+                if self.voices_triggered == 0 {
+                    self.voice.release();
+                }
+            }
             _ => ()
         }
     }

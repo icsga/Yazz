@@ -55,6 +55,7 @@ fn test_oscillator() {
     let mut osc = MultiOscillator::new(44100);
     let path = Path::new("osc_output.txt");
     let display = path.display();
+    let modulator = MultiOscillator::new(44100);
 
     // Open a file in write-only mode, returns `io::Result<File>`
     let mut file = match File::create(&path) {
@@ -62,10 +63,25 @@ fn test_oscillator() {
         Ok(file) => file,
     };
 
+    //osc.set_ratios(0.5, 0.0, 0.5, 0.0);
     let freq = 440.0;
-    let num_samples = ((44000.0 / freq) * 2.0) as usize;
+    //let num_samples = ((44000.0 / freq) * 2.0) as usize;
+    let num_samples_per_wave = (44000.0 / freq) as usize;
+    let num_samples = num_samples_per_wave * 4;
+    /*
     for i in 0..num_samples {
+        let mod_val = (modulator.get_sample(1.0, i as u64) + 1.0) * 0.5;
+        osc.set_ratio(mod_val);
         file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(freq, i as u64))).unwrap();
+    }
+    */
+
+    // Plot ratios
+    let step = 3.0 / num_samples as f32;
+    for i in 0..num_samples {
+        osc.set_ratio(i as f32 * step);
+        //file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(freq, i as u64))).unwrap();
+        write!(&mut file, "{} {} {} {}\n", osc.sine_ratio, osc.tri_ratio, osc.saw_ratio, osc.square_ratio);
     }
 }
 
@@ -118,7 +134,9 @@ fn setup_sound(sender: Sender<SynthParam>, receiver: Receiver<SynthParam>) -> Re
 */
 
 fn main() {
-    //test_oscillator()
+    //test_oscillator();
+    //return;
+
     let (m2s_sender, m2s_receiver) = unbounded::<MidiMessage>(); // MIDI to Synth
     let (u2s_sender, u2s_receiver) = unbounded::<SynthParam>(); // UI to Synth
     let (s2u_sender, s2u_receiver) = unbounded::<SynthParam>(); // Synth to UI

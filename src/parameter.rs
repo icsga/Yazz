@@ -38,8 +38,9 @@ pub enum Parameter {
 
     // Waveforms
     Sine,
+    Triangle,
+    Saw,
     Square,
-    Triangle
 }
 
 pub enum FunctionId {
