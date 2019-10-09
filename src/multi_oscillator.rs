@@ -1,13 +1,16 @@
 use super::SampleGenerator;
 
+use rand::prelude::*;
+
 pub struct MultiOscillator {
-    sample_rate: u32,
+    sample_rate: f32,
     last_update: u64, // Time of last sample generation
 
     pub sine_ratio: f32,
     pub tri_ratio: f32,
     pub saw_ratio: f32,
     pub square_ratio: f32,
+    pub noise_ratio: f32,
 
     pub num_voices: u32,
     pub voice_spread: f32,
@@ -29,11 +32,13 @@ struct State {
 
 impl MultiOscillator {
     pub fn new(sample_rate: u32) -> MultiOscillator {
+        let sample_rate = sample_rate as f32;
         let last_update = 0;
         let sine_ratio = 1.0;
         let tri_ratio = 0.0;
         let saw_ratio = 0.0;
         let square_ratio = 0.0;
+        let noise_ratio = 0.0;
         let num_voices = 1;
         let voice_spread = 0.0;
         let freq_offset = 0.0;
@@ -51,25 +56,29 @@ impl MultiOscillator {
                                   num_voices,
                                   voice_spread,
                                   square_ratio,
+                                  noise_ratio,
                                   state
                                   };
         osc
     }
 
-    pub fn set_ratios(&mut self, sine_ratio: f32, tri_ratio: f32, saw_ratio: f32, square_ratio: f32) {
+    pub fn set_ratios(&mut self, sine_ratio: f32, tri_ratio: f32, saw_ratio: f32, square_ratio: f32, noise_ratio: f32) {
         self.sine_ratio = sine_ratio;
         self.tri_ratio = tri_ratio;
         self.saw_ratio = saw_ratio;
         self.square_ratio = square_ratio;
+        self.noise_ratio = noise_ratio;
     }
 
     pub fn set_ratio(&mut self, ratio: f32) {
         if ratio <= 1.0 {
-            self.set_ratios(1.0 - ratio, ratio, 0.0, 0.0);
+            self.set_ratios(1.0 - ratio, ratio, 0.0, 0.0, 0.0);
         } else if ratio <= 2.0 {
-            self.set_ratios(0.0, 1.0 - (ratio - 1.0), ratio - 1.0, 0.0);
+            self.set_ratios(0.0, 1.0 - (ratio - 1.0), ratio - 1.0, 0.0, 0.0);
         } else if ratio <= 3.0 {
-            self.set_ratios(0.0, 0.0, 1.0 - (ratio - 2.0), ratio - 2.0);
+            self.set_ratios(0.0, 0.0, 1.0 - (ratio - 2.0), ratio - 2.0, 0.0);
+        } else if ratio <= 4.0 {
+            self.set_ratios(0.0, 0.0, 0.0, 1.0 - (ratio - 3.0), ratio - 3.0);
         }
     }
 
@@ -85,7 +94,7 @@ impl MultiOscillator {
     // Based on http://dsp.stackexchange.com/a/1087
     fn get_sample_sine(state: &mut State, frequency: f32, dt: u64, sample_rate: f32) -> f32 {
         // Compute the angular frequency omega in radians
-        state.omega.im = 2.0 * 3.141592 * frequency / sample_rate;
+        state.omega.im = 2.0 * 3.141592 * frequency / sample_rate as f32;
 
         // compute the complex angular coeficient
         let coefficient = state.omega.exp();
@@ -121,6 +130,10 @@ impl MultiOscillator {
             -1.0
         }
     }
+
+    fn get_sample_noise(state: &State, frequency: f32, dt: f32) -> f32 {
+        (rand::random::<f32>() * 2.0) - 1.0
+    }
 }
 
 impl SampleGenerator for MultiOscillator {
@@ -133,7 +146,7 @@ impl SampleGenerator for MultiOscillator {
             let state: &mut State = &mut self.state[i as usize];
             let freq_offset = (frequency / 100.0) * state.freq_offset;
             let frequency = frequency + freq_offset;
-            let freq_speed = frequency / self.sample_rate as f32;
+            let freq_speed = frequency / self.sample_rate;
             let diff = freq_speed * dt_f;
             state.last_pos += diff;
             if state.last_pos > 1.0 {
@@ -141,7 +154,7 @@ impl SampleGenerator for MultiOscillator {
             }
 
             if self.sine_ratio > 0.0 {
-                result += MultiOscillator::get_sample_sine(state, frequency, dt, self.sample_rate as f32) * self.sine_ratio;
+                result += MultiOscillator::get_sample_sine(state, frequency, dt, self.sample_rate) * self.sine_ratio;
 
                 // Periodically stabilize the phasor's amplitude.
                 // TODO: Move stabilization into main loop
@@ -153,7 +166,6 @@ impl SampleGenerator for MultiOscillator {
                         state.last_stabilization = 0;
                 }
             }
-
             if self.tri_ratio > 0.0 {
                 result += MultiOscillator::get_sample_triangle(state, frequency, dt_f) * self.tri_ratio;
             }
@@ -162,6 +174,9 @@ impl SampleGenerator for MultiOscillator {
             }
             if self.square_ratio > 0.0 {
                 result += MultiOscillator::get_sample_square(state, frequency, dt_f) * self.square_ratio;
+            }
+            if self.noise_ratio > 0.0 {
+                result += MultiOscillator::get_sample_noise(state, frequency, dt_f) * self.noise_ratio;
             }
 
         }

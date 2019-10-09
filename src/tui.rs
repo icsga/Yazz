@@ -1,4 +1,5 @@
 use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
+use super::synth::Synth2UIMessage;
 use super::TermionWrapper;
 
 use termion::clear;
@@ -104,11 +105,12 @@ static ENV_PARAMS: [Selection; 4] = [
     Selection{item: Parameter::Release, key: Key::Char('r'), val_range: ValueRange::FloatRange(0.0, 10.0), next: &[]},
 ];
 
-static WAVEFORM: [Selection; 4] = [
+static WAVEFORM: [Selection; 5] = [
     Selection{item: Parameter::Sine,      key: Key::Char('s'), val_range: ValueRange::NoRange, next: &[]},
     Selection{item: Parameter::Triangle,  key: Key::Char('t'), val_range: ValueRange::NoRange, next: &[]},
     Selection{item: Parameter::Saw,       key: Key::Char('w'), val_range: ValueRange::NoRange, next: &[]},
     Selection{item: Parameter::Square,    key: Key::Char('q'), val_range: ValueRange::NoRange, next: &[]},
+    Selection{item: Parameter::Noise ,    key: Key::Char('n'), val_range: ValueRange::NoRange, next: &[]},
 ];
 
 struct SelectedItem {
@@ -121,7 +123,7 @@ pub struct Tui {
     // Function selection
     state: TuiState,
     sender: Sender<SynthParam>,
-    receiver: Receiver<SynthParam>,
+    receiver: Receiver<Synth2UIMessage>,
 
     // TUI handling
     current_list: &'static [Selection],
@@ -132,7 +134,7 @@ pub struct Tui {
 }
 
 impl Tui {
-    pub fn new(sender: Sender<SynthParam>, receiver: Receiver<SynthParam>) -> Tui {
+    pub fn new(sender: Sender<SynthParam>, receiver: Receiver<Synth2UIMessage>) -> Tui {
         //let (x, y) = stdout().cursor_pos().unwrap();; //self.termion.cursor_pos().unwrap();
         let state = TuiState::Init;
         let current_list = &FUNCTIONS;

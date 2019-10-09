@@ -41,6 +41,7 @@ pub enum Parameter {
     Triangle,
     Saw,
     Square,
+    Noise,
 }
 
 pub enum FunctionId {

@@ -19,7 +19,7 @@ mod voice;
 
 use engine::Engine;
 use envelope::Envelope;
-use midi_handler::MidiHandler;
+//use midi_handler::MidiHandler;
 use midi_handler::MidiMessage;
 use midi_handler::MessageType;
 use oscillator::Oscillator;
@@ -30,7 +30,7 @@ use multi_oscillator::MultiOscillator;
 //use triangle_oscillator::TriangleOscillator;
 //use square_oscillator::SquareOscillator;
 //use voice::Voice;
-use synth::Synth;
+use synth::{Synth, Synth2UIMessage};
 use termion_wrapper::TermionWrapper;
 use tui::Tui;
 
@@ -44,12 +44,15 @@ use std::io::prelude::*;
 use std::path::Path;
 
 extern crate midir;
-use midir::{MidiInput, Ignore};
+use midir::{MidiInput, MidiInputConnection, Ignore};
 
 #[macro_use]
 extern crate crossbeam_channel;
 use crossbeam_channel::unbounded;
 use crossbeam_channel::{Sender, Receiver};
+
+extern crate rand;
+use rand::Rng;
 
 fn test_oscillator() {
     let mut osc = MultiOscillator::new(44100);
@@ -81,7 +84,7 @@ fn test_oscillator() {
     for i in 0..num_samples {
         osc.set_ratio(i as f32 * step);
         //file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(freq, i as u64))).unwrap();
-        write!(&mut file, "{} {} {} {}\n", osc.sine_ratio, osc.tri_ratio, osc.saw_ratio, osc.square_ratio);
+        write!(&mut file, "{} {} {} {}\n", osc.sine_ratio, osc.tri_ratio, osc.saw_ratio, osc.square_ratio).unwrap();
     }
 }
 
@@ -108,39 +111,7 @@ fn test_envalope() {
     }
 }
 
-/*
-fn setup_ui(sender: Sender<SynthParam>, receiver: Receiver<SynthParam>) {
-    println!("Setting up UI...");
-    let tui = Tui::new(sender, receiver);
-    let mut termion = TermionWrapper::new(tui);
-    //termion.run();
-    println!("... finished");
-}
-
-fn setup_sound(sender: Sender<SynthParam>, receiver: Receiver<SynthParam>) -> Result<(), failure::Error> {
-    println!("Setting up sound...");
-    let mut engine = Engine::new();
-    let sample_rate = engine.get_sample_rate();
-    println!("sample_rate: {}", sample_rate);
-
-    let mut synth = Synth::new(sample_rate, sender, receiver);
-    synth.run();
-    let synth = Arc::new(Mutex::new(synth));
-
-    println!("... finished, starting loop");
-
-    engine.run(synth)
-}
-*/
-
-fn main() {
-    //test_oscillator();
-    //return;
-
-    let (m2s_sender, m2s_receiver) = unbounded::<MidiMessage>(); // MIDI to Synth
-    let (u2s_sender, u2s_receiver) = unbounded::<SynthParam>(); // UI to Synth
-    let (s2u_sender, s2u_receiver) = unbounded::<SynthParam>(); // Synth to UI
-
+fn setup_midi(m2s_sender: Sender<MidiMessage>) -> MidiInputConnection<()> {
     println!("Setting up MIDI... ");
     let input = String::new();
     let mut midi_in = MidiInput::new("midir reading input").unwrap();
@@ -149,38 +120,64 @@ fn main() {
     let in_port = 1;
     println!("Opening connection");
     let in_port_name = midi_in.port_name(in_port).unwrap();
-    let _conn_in = midi_in.connect(in_port, "midir-read-input", move |stamp, message, _| {
+    let conn_in = midi_in.connect(in_port, "midir-read-input", move |stamp, message, _| {
         if message.len() == 3 {
             let m = MidiMessage{mtype: message[0], param: message[1], value: message[2]};
             m2s_sender.send(m).unwrap();
         }
     }, ()).unwrap();
     println!("... finished.");
+    conn_in
+}
 
-    //setup_ui(u2s_sender, s2u_receiver);
+fn setup_ui(u2s_sender: Sender<SynthParam>, s2u_receiver: Receiver<Synth2UIMessage>) -> std::thread::JoinHandle<()> {
     println!("Setting up UI...");
     let tui = Tui::new(u2s_sender, s2u_receiver);
     let termion = TermionWrapper::new(tui);
     let term_handle = TermionWrapper::run(termion);
     println!("\r... finished");
+    term_handle
+}
 
-    //setup_sound(s2u_sender, u2s_receiver).unwrap();
-    println!("\rSetting up sound...");
-    let mut engine = Engine::new();
+fn setup_audio() -> (Engine, u32) {
+    println!("\rSetting up audio engine...");
+    let engine = Engine::new();
     let sample_rate = engine.get_sample_rate();
     println!("\rsample_rate: {}", sample_rate);
+    println!("\r... finished");
+    (engine, sample_rate)
+}
 
-    let synth = Synth::new(sample_rate);
+fn setup_synth(sample_rate: u32, s2u_sender: Sender<Synth2UIMessage>, u2s_receiver: Receiver<SynthParam>, m2s_receiver: Receiver<MidiMessage>) -> (Arc<Mutex<Synth>>, std::thread::JoinHandle<()>) { 
+    println!("\rSetting up synth engine...");
+    let synth = Synth::new(sample_rate, s2u_sender);
     let synth = Arc::new(Mutex::new(synth));
-    let synth_handle = Synth::run(synth.clone(), s2u_sender, u2s_receiver, m2s_receiver);
+    let synth_handle = Synth::run(synth.clone(), u2s_receiver, m2s_receiver);
+    println!("\r... finished");
+    (synth, synth_handle)
+}
 
-    println!("... finished, starting loop");
+fn main() {
+    //test_oscillator();
+    //return;
 
+    // Prepare communication channels
+    let (m2s_sender, m2s_receiver) = unbounded::<MidiMessage>(); // MIDI to Synth
+    let (u2s_sender, u2s_receiver) = unbounded::<SynthParam>(); // UI to Synth
+    let (s2u_sender, s2u_receiver) = unbounded::<Synth2UIMessage>(); // Synth to UI
+
+    // Do setup
+    let midi_connection = setup_midi(m2s_sender);
+    let term_handle = setup_ui(u2s_sender, s2u_receiver);
+    let (mut engine, sample_rate) = setup_audio();
+    let (synth, synth_handle) = setup_synth(sample_rate, s2u_sender, u2s_receiver, m2s_receiver);
+
+    // Run
+    println!("\r... finished, starting processing");
     engine.run(synth).unwrap();
-    //test_envalope();
 
-
-    //Ok(())
+    // Cleanup
     term_handle.join().unwrap();
     synth_handle.join().unwrap();
 }
+
