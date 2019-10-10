@@ -1,4 +1,3 @@
-extern crate termion;
 
 use termion::clear;
 use termion::cursor;

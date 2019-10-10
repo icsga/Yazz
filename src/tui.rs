@@ -1,6 +1,8 @@
 use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
 use super::synth::Synth2UIMessage;
+use super::midi_handler::MidiMessage;
 use super::TermionWrapper;
+use super::{UiMessage, SynthMessage};
 
 use termion::clear;
 use termion::event::Key;
@@ -122,8 +124,8 @@ struct SelectedItem {
 pub struct Tui {
     // Function selection
     state: TuiState,
-    sender: Sender<SynthParam>,
-    receiver: Receiver<Synth2UIMessage>,
+    sender: Sender<SynthMessage>,
+    ui_receiver: Receiver<UiMessage>,
 
     // TUI handling
     current_list: &'static [Selection],
@@ -134,7 +136,7 @@ pub struct Tui {
 }
 
 impl Tui {
-    pub fn new(sender: Sender<SynthParam>, receiver: Receiver<Synth2UIMessage>) -> Tui {
+    pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> Tui {
         //let (x, y) = stdout().cursor_pos().unwrap();; //self.termion.cursor_pos().unwrap();
         let state = TuiState::Init;
         let current_list = &FUNCTIONS;
@@ -143,7 +145,7 @@ impl Tui {
         let temp_string = String::new();
         Tui{state,
             sender,
-            receiver,
+            ui_receiver,
             current_list,
             selected_function,
             selected_parameter,
@@ -380,7 +382,8 @@ impl Tui {
         let function_id = if let ParameterValue::Int(x) = &self.selected_function.value { x } else { panic!() };
         let parameter = &self.selected_parameter.item_list[self.selected_parameter.item_index];
         let param_val = &self.selected_parameter.value;
-        self.sender.send(SynthParam::new(function.item, FunctionId::Int(*function_id), parameter.item, *param_val)).unwrap();
+        let param = SynthParam::new(function.item, FunctionId::Int(*function_id), parameter.item, *param_val);
+        self.sender.send(SynthMessage::Param(param)).unwrap();
     }
 
     fn display(&self) {

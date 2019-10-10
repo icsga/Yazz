@@ -2,6 +2,8 @@
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 
+extern crate termion;
+
 mod engine;
 mod envelope;
 mod midi_handler;
@@ -32,6 +34,7 @@ use multi_oscillator::MultiOscillator;
 //use voice::Voice;
 use synth::{Synth, Synth2UIMessage};
 use termion_wrapper::TermionWrapper;
+use termion::event::Key;
 use tui::Tui;
 
 use std::sync::{Arc, Mutex};
@@ -111,7 +114,25 @@ fn test_envalope() {
     }
 }
 
-fn setup_midi(m2s_sender: Sender<MidiMessage>) -> MidiInputConnection<()> {
+pub enum SynthMessage {
+    Midi(MidiMessage),
+    Param(SynthParam),
+}
+
+pub enum UiMessage {
+    Midi(MidiMessage),
+    Key(Key),
+    Param(SynthParam),
+}
+
+fn setup_messaging() -> (Sender<UiMessage>, Receiver<UiMessage>, Sender<SynthMessage>, Receiver<SynthMessage>) {
+    // Prepare communication channels
+    let (to_ui_sender, ui_receiver) = unbounded::<UiMessage>(); // MIDI and Synth to UI
+    let (to_synth_sender, synth_receiver) = unbounded::<SynthMessage>(); // MIDI and UI to Synth
+    (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver)
+}
+
+fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>) -> MidiInputConnection<()> {
     println!("Setting up MIDI... ");
     let input = String::new();
     let mut midi_in = MidiInput::new("midir reading input").unwrap();
@@ -123,16 +144,18 @@ fn setup_midi(m2s_sender: Sender<MidiMessage>) -> MidiInputConnection<()> {
     let conn_in = midi_in.connect(in_port, "midir-read-input", move |stamp, message, _| {
         if message.len() == 3 {
             let m = MidiMessage{mtype: message[0], param: message[1], value: message[2]};
-            m2s_sender.send(m).unwrap();
+            m2s_sender.send(SynthMessage::Midi(m)).unwrap();
+            let m = MidiMessage{mtype: message[0], param: message[1], value: message[2]};
+            m2u_sender.send(UiMessage::Midi(m)).unwrap();
         }
     }, ()).unwrap();
     println!("... finished.");
     conn_in
 }
 
-fn setup_ui(u2s_sender: Sender<SynthParam>, s2u_receiver: Receiver<Synth2UIMessage>) -> std::thread::JoinHandle<()> {
+fn setup_ui(to_synth_sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> std::thread::JoinHandle<()> {
     println!("Setting up UI...");
-    let tui = Tui::new(u2s_sender, s2u_receiver);
+    let tui = Tui::new(to_synth_sender, ui_receiver);
     let termion = TermionWrapper::new(tui);
     let term_handle = TermionWrapper::run(termion);
     println!("\r... finished");
@@ -148,11 +171,11 @@ fn setup_audio() -> (Engine, u32) {
     (engine, sample_rate)
 }
 
-fn setup_synth(sample_rate: u32, s2u_sender: Sender<Synth2UIMessage>, u2s_receiver: Receiver<SynthParam>, m2s_receiver: Receiver<MidiMessage>) -> (Arc<Mutex<Synth>>, std::thread::JoinHandle<()>) { 
+fn setup_synth(sample_rate: u32, s2u_sender: Sender<UiMessage>, synth_receiver: Receiver<SynthMessage>) -> (Arc<Mutex<Synth>>, std::thread::JoinHandle<()>) { 
     println!("\rSetting up synth engine...");
     let synth = Synth::new(sample_rate, s2u_sender);
     let synth = Arc::new(Mutex::new(synth));
-    let synth_handle = Synth::run(synth.clone(), u2s_receiver, m2s_receiver);
+    let synth_handle = Synth::run(synth.clone(), synth_receiver);
     println!("\r... finished");
     (synth, synth_handle)
 }
@@ -161,16 +184,12 @@ fn main() {
     //test_oscillator();
     //return;
 
-    // Prepare communication channels
-    let (m2s_sender, m2s_receiver) = unbounded::<MidiMessage>(); // MIDI to Synth
-    let (u2s_sender, u2s_receiver) = unbounded::<SynthParam>(); // UI to Synth
-    let (s2u_sender, s2u_receiver) = unbounded::<Synth2UIMessage>(); // Synth to UI
-
     // Do setup
-    let midi_connection = setup_midi(m2s_sender);
-    let term_handle = setup_ui(u2s_sender, s2u_receiver);
+    let (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver) = setup_messaging();
+    let midi_connection = setup_midi(to_synth_sender.clone(), to_ui_sender.clone());
+    let term_handle = setup_ui(to_synth_sender, ui_receiver);
     let (mut engine, sample_rate) = setup_audio();
-    let (synth, synth_handle) = setup_synth(sample_rate, s2u_sender, u2s_receiver, m2s_receiver);
+    let (synth, synth_handle) = setup_synth(sample_rate, to_ui_sender, synth_receiver);
 
     // Run
     println!("\r... finished, starting processing");

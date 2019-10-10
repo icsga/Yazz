@@ -1,3 +1,4 @@
+use super::{SynthMessage, UiMessage};
 use super::midi_handler::{MessageType, MidiMessage};
 use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
 use super::voice::Voice;
@@ -21,7 +22,7 @@ pub struct Synth {
     keymap: [f32; 127],
     triggered: bool,
     voices_triggered: u32,
-    sender: Sender<Synth2UIMessage>,
+    sender: Sender<UiMessage>,
 }
 
 /* Data for a single sound patch. */
@@ -38,7 +39,7 @@ struct OscillatorParams {
 }
 
 impl Synth {
-    pub fn new(sample_rate: u32, sender: Sender<Synth2UIMessage>) -> Self {
+    pub fn new(sample_rate: u32, sender: Sender<UiMessage>) -> Self {
         //let voices = [Voice::new(sample_rate); 16];
         let voice = Voice::new(sample_rate);
         let mut keymap: [f32; 127] = [0.0; 127];
@@ -49,17 +50,16 @@ impl Synth {
     }
 
     /* Starts a thread for receiving UI and MIDI messages. */
-    pub fn run(synth: Arc<Mutex<Synth>>, t2s_receiver: Receiver<SynthParam>, m2s_receiver: Receiver<MidiMessage>) -> std::thread::JoinHandle<()> {
+    pub fn run(synth: Arc<Mutex<Synth>>, synth_receiver: Receiver<SynthMessage>) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
             loop {
                 select! {
-                    recv(t2s_receiver) -> msg => {
+                    recv(synth_receiver) -> msg => {
                         let mut locked_synth = synth.lock().unwrap();
-                        locked_synth.handle_ui_message(msg.unwrap());
-                    },
-                    recv(m2s_receiver) -> msg => {
-                        let mut locked_synth = synth.lock().unwrap();
-                        locked_synth.handle_midi_message(msg.unwrap());
+                        match msg.unwrap() {
+                            SynthMessage::Param(m) => locked_synth.handle_ui_message(m),
+                            SynthMessage::Midi(m)  => locked_synth.handle_midi_message(m),
+                        }
                     },
                 }
             }
