@@ -7,7 +7,9 @@ use termion::input::TermRead;
 use termion::raw::{IntoRawMode, RawTerminal};
 
 use super::SynthParam;
-use super::Tui;
+use super::{UiMessage, SynthMessage};
+
+use crossbeam_channel::{Sender};
 
 use std::io::{Write, stdout, stdin};
 use std::thread::spawn;
@@ -15,19 +17,17 @@ use std::thread::spawn;
 pub struct TermionWrapper {
     stdout: RawTerminal<std::io::Stdout>,
     //stdout: std::io::Stdout,
-    tui: Tui,
 }
 
 impl TermionWrapper {
-    pub fn new(tui: Tui) -> TermionWrapper {
+    pub fn new() -> TermionWrapper {
         TermionWrapper{
             stdout: stdout().into_raw_mode().unwrap(),
             //stdout: stdout(),
-            tui: tui
         }
     }
 
-    pub fn run(mut termion: TermionWrapper) -> std::thread::JoinHandle<()> {
+    pub fn run(mut termion: TermionWrapper, to_ui_sender: Sender<UiMessage>) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
             let mut exit = false;
             let stdin = stdin();
@@ -37,8 +37,8 @@ impl TermionWrapper {
                 match c {
                     // Exit.
                     Key::Char('q') => { exit = true; break},
-                    _              => termion.tui.handle_input(c),
-                }
+                    _              => to_ui_sender.send(UiMessage::Key(c)).unwrap(),
+                };
                 termion.stdout.flush().unwrap();
             }
             if exit {
@@ -47,10 +47,6 @@ impl TermionWrapper {
             }
         });
         handler
-    }
-
-    pub fn cursor_pos(&mut self) -> (u16, u16) {
-        self.stdout.cursor_pos().unwrap()
     }
 }
 

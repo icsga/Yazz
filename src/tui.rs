@@ -1,5 +1,4 @@
 use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
-use super::synth::Synth2UIMessage;
 use super::midi_handler::MidiMessage;
 use super::TermionWrapper;
 use super::{UiMessage, SynthMessage};
@@ -17,6 +16,7 @@ use crossbeam_channel::unbounded;
 use crossbeam_channel::{Sender, Receiver};
 
 use std::fmt::{self, Debug, Display};
+use std::thread::spawn;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 enum TuiState {
@@ -151,6 +151,24 @@ impl Tui {
             selected_parameter,
             temp_string
         }
+    }
+
+    pub fn run(mut tui: Tui) -> std::thread::JoinHandle<()> {
+        let handler = spawn(move || {
+            loop {
+                select! {
+                    recv(tui.ui_receiver) -> msg => {
+                        match msg.unwrap() {
+                            //UiMessage::Midi(m)  => locked_synth.handle_midi_message(m),
+                            //UiMessage::Param(m) => locked_synth.handle_ui_message(m),
+                            UiMessage::Key(m) => tui.handle_input(m),
+                            _ => panic!(),
+                        }
+                    },
+                }
+            }
+        });
+        handler
     }
 
     fn init(&mut self) {

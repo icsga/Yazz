@@ -32,12 +32,13 @@ use multi_oscillator::MultiOscillator;
 //use triangle_oscillator::TriangleOscillator;
 //use square_oscillator::SquareOscillator;
 //use voice::Voice;
-use synth::{Synth, Synth2UIMessage};
+use synth::Synth;
 use termion_wrapper::TermionWrapper;
 use termion::event::Key;
 use tui::Tui;
 
 use std::sync::{Arc, Mutex};
+use std::thread::JoinHandle;
 //use std::sync::mpsc::{channel, Sender, Receiver};
 
 use std::error::Error;
@@ -153,13 +154,14 @@ fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>) -
     conn_in
 }
 
-fn setup_ui(to_synth_sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> std::thread::JoinHandle<()> {
+fn setup_ui(to_synth_sender: Sender<SynthMessage>, to_ui_sender: Sender<UiMessage>, ui_receiver: Receiver<UiMessage>) -> (JoinHandle<()>, JoinHandle<()>) {
     println!("Setting up UI...");
     let tui = Tui::new(to_synth_sender, ui_receiver);
-    let termion = TermionWrapper::new(tui);
-    let term_handle = TermionWrapper::run(termion);
+    let termion = TermionWrapper::new();
+    let term_handle = TermionWrapper::run(termion, to_ui_sender);
+    let tui_handle = Tui::run(tui);
     println!("\r... finished");
-    term_handle
+    (term_handle, tui_handle)
 }
 
 fn setup_audio() -> (Engine, u32) {
@@ -187,7 +189,7 @@ fn main() {
     // Do setup
     let (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver) = setup_messaging();
     let midi_connection = setup_midi(to_synth_sender.clone(), to_ui_sender.clone());
-    let term_handle = setup_ui(to_synth_sender, ui_receiver);
+    let (term_handle, tui_handle) = setup_ui(to_synth_sender, to_ui_sender.clone(), ui_receiver);
     let (mut engine, sample_rate) = setup_audio();
     let (synth, synth_handle) = setup_synth(sample_rate, to_ui_sender, synth_receiver);
 
@@ -197,6 +199,7 @@ fn main() {
 
     // Cleanup
     term_handle.join().unwrap();
+    tui_handle.join().unwrap();
     synth_handle.join().unwrap();
 }
 
