@@ -2,12 +2,15 @@ use super::Envelope;
 use super::Oscillator;
 use super::SampleGenerator;
 use super::MultiOscillator;
+use super::SoundData;
+
+use std::sync::Arc;
 
 pub struct Voice {
     // Components
     //osc: Box<dyn SampleGenerator + Send>,
-    osc: MultiOscillator,
-    env: Box<Envelope>,
+    osc: [MultiOscillator; 3],
+    env: [Envelope; 2],
 
     // Modulators
     amp_modulators: Vec<Box<dyn SampleGenerator + Send>>,
@@ -21,31 +24,45 @@ pub struct Voice {
 
 impl Voice {
     pub fn new(sample_rate: u32) -> Self {
-        let mut osc = MultiOscillator::new(sample_rate);
+        let osc = [
+            MultiOscillator::new(sample_rate, 0),
+            MultiOscillator::new(sample_rate, 1),
+            MultiOscillator::new(sample_rate, 2),
+        ];
         //osc.set_voice_num(3);
-        osc.set_ratios(0.0, 0.0, 0.0, 1.0, 0.0);
-        let env = Box::new(Envelope::new(sample_rate as f32));
+        //osc.set_ratios(0.0, 0.0, 0.0, 1.0, 0.0);
+        //osc.set_ratios(sound.osc[0].mix[0], sound.osc[0].mix[1], sound.osc[0].mix[2], sound.osc[0].mix[3], sound.osc[0].mix[4]);
+        let env = [
+            Envelope::new(sample_rate as f32, 0),
+            Envelope::new(sample_rate as f32, 1),
+        ];
         let amp_modulators = Vec::new();
         let freq_modulators = Vec::new();
         let input_freq = 440.0;
         let osc_amp = 0.5;
         let last_update = 0u64;
-        let mut voice = Voice{osc, env, amp_modulators, freq_modulators, input_freq, osc_amp, last_update};
-        let mut modu = Box::new(MultiOscillator::new(sample_rate));
-        modu.set_ratios(0.0, 1.0, 0.0, 0.0, 0.0);
-        voice.add_freq_mod(modu);
+        let voice = Voice{osc, env, amp_modulators, freq_modulators, input_freq, osc_amp, last_update};
+        //let mut modu = Box::new(MultiOscillator::new(sample_rate));
+        //modu.set_ratios(0.0, 1.0, 0.0, 0.0, 0.0);
+        //voice.add_freq_mod(modu);
         voice
     }
 
-    pub fn get_sample(&mut self, sample_clock: u64) -> f32 {
-        self.last_update = sample_clock;
-        let wave_mod = (self.get_freq_mod(sample_clock) * 1.0) + 3.0;
-        //self.osc.set_ratio(wave_mod);
+    pub fn get_sample(&mut self, sample_clock: u64, sound: &SoundData) -> f32 {
+        let mut result = 0.0;
+        //let wave_mod = (self.get_freq_mod(sample_clock) * 1.0) + 3.0;
+        //let amp_mod = self.get_amp_mod(sample_clock);
+        let amp_mod = 0.0;
         let freq_mod = 0.0;
-        let amp_mod = self.get_amp_mod(sample_clock);
-        self.osc.get_sample(self.input_freq + freq_mod, sample_clock) * (self.osc_amp + amp_mod) * self.env.get_sample(sample_clock)
+        for (i, osc) in self.osc.iter_mut().enumerate() {
+            self.last_update = sample_clock;
+            //self.osc.set_ratio(wave_mod);
+            result += osc.get_sample(self.input_freq + freq_mod, sample_clock, sound) * (self.osc_amp + amp_mod) * self.env[0].get_sample(sample_clock, sound);
+        }
+        result
     }
 
+    /*
     fn get_freq_mod(&mut self, sample_clock: u64) -> f32 {
         let mut freq_mod = 0.0;
         for fm in self.freq_modulators.iter_mut() {
@@ -61,6 +78,7 @@ impl Voice {
         }
         amp_mod
     }
+    */
 
     /*
     pub fn set_oscillator(&mut self, osc: Box<dyn SampleGenerator + Send>) {
@@ -81,29 +99,10 @@ impl Voice {
     }
 
     pub fn trigger(&mut self) {
-        self.env.trigger(self.last_update);
+        self.env[0].trigger(self.last_update);
     }
 
     pub fn release(&mut self) {
-        self.env.release(self.last_update);
-    }
-    
-    pub fn set_wave_ratio(&mut self, value: usize) {
-        match value {
-            0 => self.osc.set_ratios(1.0, 0.0, 0.0, 0.0, 0.0),
-            1 => self.osc.set_ratios(0.0, 1.0, 0.0, 0.0, 0.0),
-            2 => self.osc.set_ratios(0.0, 0.0, 1.0, 0.0, 0.0),
-            3 => self.osc.set_ratios(0.0, 0.0, 0.0, 1.0, 0.0),
-            4 => self.osc.set_ratios(0.0, 0.0, 0.0, 0.0, 1.0),
-            _ => {}
-        }
-    }
-
-    pub fn set_wave_ratio_direct(&mut self, value: f32) {
-        self.osc.set_ratio(value);
-    }
-
-    pub fn get_env(&mut self) -> &mut Envelope {
-        &mut self.env
+        self.env[0].release(self.last_update);
     }
 }

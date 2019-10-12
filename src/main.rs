@@ -32,7 +32,7 @@ use multi_oscillator::MultiOscillator;
 //use triangle_oscillator::TriangleOscillator;
 //use square_oscillator::SquareOscillator;
 //use voice::Voice;
-use synth::Synth;
+use synth::{Synth, SoundData};
 use termion_wrapper::TermionWrapper;
 use termion::event::Key;
 use tui::Tui;
@@ -58,6 +58,7 @@ use crossbeam_channel::{Sender, Receiver};
 extern crate rand;
 use rand::Rng;
 
+/*
 fn test_oscillator() {
     let mut osc = MultiOscillator::new(44100);
     let path = Path::new("osc_output.txt");
@@ -91,7 +92,9 @@ fn test_oscillator() {
         write!(&mut file, "{} {} {} {}\n", osc.sine_ratio, osc.tri_ratio, osc.saw_ratio, osc.square_ratio).unwrap();
     }
 }
+*/
 
+/*
 fn test_envalope() {
     let sample_rate = 44100;
     let env = Envelope::new(sample_rate as f32);
@@ -114,6 +117,7 @@ fn test_envalope() {
         file.write_fmt(format_args!("{:.*}\n", 5, env.get_sample(i as u64))).unwrap();
     }
 }
+*/
 
 pub enum SynthMessage {
     Midi(MidiMessage),

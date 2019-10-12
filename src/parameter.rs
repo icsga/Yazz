@@ -45,6 +45,7 @@ pub enum Parameter {
     Noise,
 }
 
+// TODO: This seems to be unneeded, replace by simple int
 pub enum FunctionId {
     Int(u64),
     Index(usize),

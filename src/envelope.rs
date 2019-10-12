@@ -1,13 +1,28 @@
-use std::cell::RefCell;
+use std::sync::Arc;
+use super::synth::SoundData;
 
 pub struct Envelope {
     sample_rate: f32,
+    id: usize,
     rate_mul: f32,
-    attack: f32,
-    decay: f32,
-    sustain: f32,
-    release: f32,
-    state: RefCell<EnvelopeState>,
+    state: EnvelopeState,
+}
+
+#[derive(Default)]
+pub struct EnvelopeData {
+    pub attack: f32,
+    pub decay: f32,
+    pub sustain: f32,
+    pub release: f32,
+}
+
+impl EnvelopeData {
+    pub fn init(&mut self) {
+        self.attack = 2000.0;
+        self.decay = 2000.0;
+        self.sustain = 10.0;
+        self.release = 4000.0;
+    }
 }
 
 struct EnvelopeState {
@@ -20,82 +35,60 @@ struct EnvelopeState {
 }
 
 impl Envelope {
-    pub fn new(sample_rate: f32) -> Envelope {
+    pub fn new(sample_rate: f32, id: usize) -> Envelope {
         Envelope{sample_rate: sample_rate,
+                 id: id,
                  rate_mul: sample_rate / 1000.0, // 1 ms
-                 attack: 2000.0,
-                 decay: 4000.0,
-                 sustain: 0.2,
-                 release: 20000.0,
-                 state: RefCell::new(EnvelopeState{trigger_time: 0,
-                                                   release_time: 0,
-                                                   last_update:0,
-                                                   last_value: 0.0,
-                                                   is_held: false,
-                                                   is_running: false})
+                 state: EnvelopeState{trigger_time: 0,
+                                      release_time: 0,
+                                      last_update:0,
+                                      last_value: 0.0,
+                                      is_held: false,
+                                      is_running: false},
         }
     }
 
-    pub fn trigger(&self, sample_time: u64) {
-        let mut state = self.state.borrow_mut();
-        state.trigger_time = sample_time;
-        state.is_held = true;
-        state.is_running = true;
+    pub fn trigger(&mut self, sample_time: u64) {
+        self.state.trigger_time = sample_time;
+        self.state.is_held = true;
+        self.state.is_running = true;
     }
 
-    pub fn release(&self, sample_time: u64) {
-        let mut state = self.state.borrow_mut();
-        state.release_time = sample_time;
-        state.is_held = false;
+    pub fn release(&mut self, sample_time: u64) {
+        self.state.release_time = sample_time;
+        self.state.is_held = false;
     }
 
-    pub fn get_sample(&self, sample_time: u64) -> f32 {
-        let mut state = self.state.borrow_mut();
-        if sample_time != state.last_update && state.is_running {
-            let mut dt = (sample_time - state.trigger_time) as f32;
+    pub fn get_sample(&mut self, sample_time: u64, data: &SoundData) -> f32 {
+        let data = data.get_env_data(self.id);
+        if sample_time != self.state.last_update && self.state.is_running {
+            let mut dt = (sample_time - self.state.trigger_time) as f32;
             loop {
-                if dt < self.attack {
-                    state.last_value = dt / self.attack;
+                if dt < data.attack {
+                    self.state.last_value = dt / data.attack;
                     break;
                 }
-                dt -= self.attack;
-                if dt < self.decay {
-                    let sustain_diff = 1.0 - self.sustain;
-                    state.last_value = (sustain_diff - ((dt / self.decay) * sustain_diff)) + self.sustain;
+                dt -= data.attack;
+                if dt < data.decay {
+                    let sustain_diff = 1.0 - data.sustain;
+                    self.state.last_value = (sustain_diff - ((dt / data.decay) * sustain_diff)) + data.sustain;
                     break;
                 }
-                if state.is_held {
-                    state.last_value = self.sustain;
+                if self.state.is_held {
+                    self.state.last_value = data.sustain;
                     break;
                 }
-                dt = (sample_time - state.release_time) as f32;
-                if dt < self.release {
-                    state.last_value = self.sustain - ((dt / self.release) * self.sustain);
+                dt = (sample_time - self.state.release_time) as f32;
+                if dt < data.release {
+                    self.state.last_value = data.sustain - ((dt / data.release) * data.sustain);
                     break;
                 }
                 // Envelope has finished
-                state.is_running = false;
-                state.last_value = 0.0;
+                self.state.is_running = false;
+                self.state.last_value = 0.0;
                 break;
             }
         }
-        state.last_value
-    }
-
-    /** Attack: 0 - 1 second in ms */
-    pub fn set_attack(&mut self, value: f32) {
-        self.attack = self.rate_mul * value;
-    }
-
-    pub fn set_decay(&mut self, value: f32) {
-        self.decay = self.rate_mul * value;
-    }
-
-    pub fn set_sustain(&mut self, value: f32) {
-        self.sustain = value;
-    }
-
-    pub fn set_release(&mut self, value: f32) {
-        self.release = self.rate_mul * value;
+        self.state.last_value
     }
 }
