@@ -1,5 +1,5 @@
 use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
-use super::midi_handler::MidiMessage;
+use super::midi_handler::{MidiMessage, MessageType};
 use super::TermionWrapper;
 use super::{UiMessage, SynthMessage};
 
@@ -11,6 +11,8 @@ use termion::color::{Black, White, LightWhite, Reset, Rgb};
 use std::io::{stdout, stdin};
 use std::convert::TryInto;
 use std::num::ParseFloatError;
+use std::io;
+use std::io::Write;
 
 use crossbeam_channel::unbounded;
 use crossbeam_channel::{Sender, Receiver};
@@ -82,10 +84,11 @@ static FUNCTIONS: [Selection; 4] = [
     Selection{item: Parameter::Envelope,   key: Key::Char('e'), val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
 ];
 
-static OSC_PARAMS: [Selection; 3] = [
+static OSC_PARAMS: [Selection; 4] = [
     Selection{item: Parameter::Waveform,  key: Key::Char('w'), val_range: ValueRange::ChoiceRange(&WAVEFORM), next: &[]},
     Selection{item: Parameter::Frequency, key: Key::Char('f'), val_range: ValueRange::FloatRange(0.0, 22000.0), next: &[]},
     Selection{item: Parameter::Phase,     key: Key::Char('p'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
+    Selection{item: Parameter::Blend,     key: Key::Char('b'), val_range: ValueRange::FloatRange(0.0, 5.0), next: &[]},
 ];
 
 static LFO_PARAMS: [Selection; 3] = [
@@ -101,10 +104,10 @@ static FILTER_PARAMS: [Selection; 3] = [
 ];
 
 static ENV_PARAMS: [Selection; 4] = [
-    Selection{item: Parameter::Attack,  key: Key::Char('a'), val_range: ValueRange::FloatRange(0.0, 10.0), next: &[]},
-    Selection{item: Parameter::Decay,   key: Key::Char('d'), val_range: ValueRange::FloatRange(0.0, 10.0), next: &[]},
+    Selection{item: Parameter::Attack,  key: Key::Char('a'), val_range: ValueRange::FloatRange(0.0, 1000.0), next: &[]}, // Value = Duration in ms
+    Selection{item: Parameter::Decay,   key: Key::Char('d'), val_range: ValueRange::FloatRange(0.0, 1000.0), next: &[]},
     Selection{item: Parameter::Sustain, key: Key::Char('s'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
-    Selection{item: Parameter::Release, key: Key::Char('r'), val_range: ValueRange::FloatRange(0.0, 10.0), next: &[]},
+    Selection{item: Parameter::Release, key: Key::Char('r'), val_range: ValueRange::FloatRange(0.0, 1000.0), next: &[]},
 ];
 
 static WAVEFORM: [Selection; 5] = [
@@ -156,15 +159,11 @@ impl Tui {
     pub fn run(mut tui: Tui) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
             loop {
-                select! {
-                    recv(tui.ui_receiver) -> msg => {
-                        match msg.unwrap() {
-                            //UiMessage::Midi(m)  => locked_synth.handle_midi_message(m),
-                            //UiMessage::Param(m) => locked_synth.handle_ui_message(m),
-                            UiMessage::Key(m) => tui.handle_input(m),
-                            _ => panic!(),
-                        }
-                    },
+                let msg = tui.ui_receiver.recv().unwrap();
+                match msg {
+                    UiMessage::Midi(m)  => tui.handle_midi(m),
+                    UiMessage::Key(m) => tui.handle_input(m),
+                    _ => panic!(),
                 }
             }
         });
@@ -174,6 +173,47 @@ impl Tui {
     fn init(&mut self) {
         print!("{}{}", clear::All, Goto(1, 1));
         self.temp_string.clear();
+    }
+
+    pub fn handle_midi(&mut self, m: MidiMessage) {
+        match m.get_message_type() {
+            MessageType::ControlChg => {
+                if m.param == 0x01 {
+                    // ModWheel
+                    self.handle_control_change(m.value as u64);
+                }
+            },
+            _ => ()
+        }
+    }
+
+    fn handle_control_change(&mut self, val: u64) {
+        match self.state {
+            TuiState::Param => self.change_state(TuiState::Value),
+            TuiState::Value => (),
+            _ => return,
+        }
+        let item = &mut self.selected_parameter;
+        match item.item_list[item.item_index].val_range {
+            ValueRange::IntRange(min, max) => {
+                let inc: f32 = (max - min) as f32 / 127.0;
+                let value = (val as f32 * inc) as u64;
+                Tui::update_value(item, &mut ParameterValue::Int(value), &mut self.temp_string);
+            }
+            ValueRange::FloatRange(min, max) => {
+                let inc: f32 = (max - min) / 127.0;
+                let value = val as f32 * inc;
+                Tui::update_value(item, &mut ParameterValue::Float(value), &mut self.temp_string);
+            }
+            ValueRange::ChoiceRange(choice_list) => {
+                let inc: f32 = choice_list.len() as f32 / 127.0;
+                let value = (val as f32 * inc) as u64;
+                Tui::update_value(item, &mut ParameterValue::Choice(value as usize), &mut self.temp_string);
+            }
+            _ => ()
+        }
+        self.send_event();
+        self.display();
     }
 
     pub fn handle_input(&mut self, c: termion::event::Key) {
@@ -187,7 +227,6 @@ impl Tui {
             TuiState::Param => Tui::select_item(c, &mut self.selected_parameter, &self.state),
             TuiState::Value => Tui::get_value(c, &mut self.selected_parameter, &self.state, &mut self.temp_string),
             TuiState::EventComplete => {
-                //self.send_event();
                 self.init();
                 TuiState::Function
             }
@@ -204,6 +243,7 @@ impl Tui {
         if new_state == self.state {
             return;
         }
+
         self.state = new_state;
         match new_state {
             TuiState::Init => {}
@@ -408,13 +448,12 @@ impl Tui {
         print!("{}", Goto(1, 1));
         self.display_function();
         self.display_function_index();
-        if self.state == TuiState::Function || self.state == TuiState::FunctionIndex {
-            print!("{}", clear::UntilNewline);
-            return;
+        if self.state == TuiState::Param || self.state == TuiState::Value {
+            self.display_param();
+            self.display_value();
         }
-        self.display_param();
-        self.display_value();
         print!("{}", clear::UntilNewline);
+        io::stdout().flush().ok();
     }
 
     fn display_function(&self) {

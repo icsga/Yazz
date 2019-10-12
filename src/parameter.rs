@@ -15,6 +15,7 @@ pub enum Parameter {
     Waveform,
     Frequency,
     Phase,
+    Blend,
 
     // Filter
     Type,

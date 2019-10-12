@@ -1,7 +1,8 @@
 use std::cell::RefCell;
 
 pub struct Envelope {
-    sample_rate: u32,
+    sample_rate: f32,
+    rate_mul: f32,
     attack: f32,
     decay: f32,
     sustain: f32,
@@ -19,8 +20,9 @@ struct EnvelopeState {
 }
 
 impl Envelope {
-    pub fn new(sample_rate: u32) -> Envelope {
+    pub fn new(sample_rate: f32) -> Envelope {
         Envelope{sample_rate: sample_rate,
+                 rate_mul: sample_rate / 1000.0, // 1 ms
                  attack: 2000.0,
                  decay: 4000.0,
                  sustain: 0.2,
@@ -78,5 +80,22 @@ impl Envelope {
             }
         }
         state.last_value
+    }
+
+    /** Attack: 0 - 1 second in ms */
+    pub fn set_attack(&mut self, value: f32) {
+        self.attack = self.rate_mul * value;
+    }
+
+    pub fn set_decay(&mut self, value: f32) {
+        self.decay = self.rate_mul * value;
+    }
+
+    pub fn set_sustain(&mut self, value: f32) {
+        self.sustain = value;
+    }
+
+    pub fn set_release(&mut self, value: f32) {
+        self.release = self.rate_mul * value;
     }
 }

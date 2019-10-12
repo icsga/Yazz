@@ -24,7 +24,7 @@ impl Voice {
         let mut osc = MultiOscillator::new(sample_rate);
         //osc.set_voice_num(3);
         osc.set_ratios(0.0, 0.0, 0.0, 1.0, 0.0);
-        let env = Box::new(Envelope::new(sample_rate));
+        let env = Box::new(Envelope::new(sample_rate as f32));
         let amp_modulators = Vec::new();
         let freq_modulators = Vec::new();
         let input_freq = 440.0;
@@ -97,5 +97,13 @@ impl Voice {
             4 => self.osc.set_ratios(0.0, 0.0, 0.0, 0.0, 1.0),
             _ => {}
         }
+    }
+
+    pub fn set_wave_ratio_direct(&mut self, value: f32) {
+        self.osc.set_ratio(value);
+    }
+
+    pub fn get_env(&mut self) -> &mut Envelope {
+        &mut self.env
     }
 }

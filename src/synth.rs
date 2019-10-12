@@ -53,14 +53,11 @@ impl Synth {
     pub fn run(synth: Arc<Mutex<Synth>>, synth_receiver: Receiver<SynthMessage>) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
             loop {
-                select! {
-                    recv(synth_receiver) -> msg => {
-                        let mut locked_synth = synth.lock().unwrap();
-                        match msg.unwrap() {
-                            SynthMessage::Param(m) => locked_synth.handle_ui_message(m),
-                            SynthMessage::Midi(m)  => locked_synth.handle_midi_message(m),
-                        }
-                    },
+                let msg = synth_receiver.recv().unwrap();
+                let mut locked_synth = synth.lock().unwrap();
+                match msg {
+                    SynthMessage::Param(m) => locked_synth.handle_ui_message(m),
+                    SynthMessage::Midi(m)  => locked_synth.handle_midi_message(m),
                 }
             }
         });
@@ -88,13 +85,38 @@ impl Synth {
                         let value = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() };
                         self.voice.set_wave_ratio(value);
                     }
+                    Parameter::Blend => {
+                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
+                        self.voice.set_wave_ratio_direct(value);
+                    }
                     _ => {}
                 }
             }
             Parameter::Filter => {}
-            Parameter::Amp => {}
+            Parameter::Amp => {
+            }
             Parameter::Lfo => {}
-            Parameter::Envelope => {}
+            Parameter::Envelope => {
+                match msg.parameter {
+                    Parameter::Attack => {
+                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
+                        self.voice.get_env().set_attack(value);
+                    }
+                    Parameter::Decay => {
+                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
+                        self.voice.get_env().set_decay(value);
+                    }
+                    Parameter::Sustain => {
+                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
+                        self.voice.get_env().set_sustain(value);
+                    }
+                    Parameter::Release => {
+                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
+                        self.voice.get_env().set_release(value);
+                    }
+                    _ => {}
+                }
+            }
             Parameter::Mod => {}
             Parameter::System => {}
             _ => {}

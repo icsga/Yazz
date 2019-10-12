@@ -21,7 +21,7 @@ mod voice;
 
 use engine::Engine;
 use envelope::Envelope;
-//use midi_handler::MidiHandler;
+use midi_handler::MidiHandler;
 use midi_handler::MidiMessage;
 use midi_handler::MessageType;
 use oscillator::Oscillator;
@@ -94,7 +94,7 @@ fn test_oscillator() {
 
 fn test_envalope() {
     let sample_rate = 44100;
-    let env = Envelope::new(sample_rate);
+    let env = Envelope::new(sample_rate as f32);
     let path = Path::new("env_output.txt");
     let display = path.display();
 
@@ -135,21 +135,7 @@ fn setup_messaging() -> (Sender<UiMessage>, Receiver<UiMessage>, Sender<SynthMes
 
 fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>) -> MidiInputConnection<()> {
     println!("Setting up MIDI... ");
-    let input = String::new();
-    let mut midi_in = MidiInput::new("midir reading input").unwrap();
-    midi_in.ignore(Ignore::None);
-    println!("Available MIDI ports: {}", midi_in.port_count());
-    let in_port = 1;
-    println!("Opening connection");
-    let in_port_name = midi_in.port_name(in_port).unwrap();
-    let conn_in = midi_in.connect(in_port, "midir-read-input", move |stamp, message, _| {
-        if message.len() == 3 {
-            let m = MidiMessage{mtype: message[0], param: message[1], value: message[2]};
-            m2s_sender.send(SynthMessage::Midi(m)).unwrap();
-            let m = MidiMessage{mtype: message[0], param: message[1], value: message[2]};
-            m2u_sender.send(UiMessage::Midi(m)).unwrap();
-        }
-    }, ()).unwrap();
+    let conn_in = MidiHandler::run(m2s_sender, m2u_sender);
     println!("... finished.");
     conn_in
 }
