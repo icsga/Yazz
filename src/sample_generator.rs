@@ -1,4 +1,6 @@
+use super::synth::SoundData;
+
 pub trait SampleGenerator {
-    fn get_sample(&mut self, frequency: f32, sample_clock: u64) -> f32;
+    fn get_sample(&mut self, frequency: f32, sample_clock: u64, data: &SoundData) -> f32;
 }
 
