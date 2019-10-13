@@ -22,6 +22,7 @@ pub struct MultiOscData {
     pub noise_ratio: f32,
     pub num_voices: u32,
     pub voice_spread: f32,
+    pub freq_offset: f32,
 }
 
 impl MultiOscData {
