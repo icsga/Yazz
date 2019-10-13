@@ -19,7 +19,7 @@ pub struct Voice {
     // Current state
     input_freq: f32, // Frequency to play as received from Synth
     osc_amp: f32,
-    last_update: u64
+    last_update: i64
 }
 
 impl Voice {
@@ -40,7 +40,7 @@ impl Voice {
         let freq_modulators = Vec::new();
         let input_freq = 440.0;
         let osc_amp = 0.5;
-        let last_update = 0u64;
+        let last_update = 0i64;
         let voice = Voice{osc, env, amp_modulators, freq_modulators, input_freq, osc_amp, last_update};
         //let mut modu = Box::new(MultiOscillator::new(sample_rate));
         //modu.set_ratios(0.0, 1.0, 0.0, 0.0, 0.0);
@@ -48,7 +48,7 @@ impl Voice {
         voice
     }
 
-    pub fn get_sample(&mut self, sample_clock: u64, sound: &SoundData) -> f32 {
+    pub fn get_sample(&mut self, sample_clock: i64, sound: &SoundData) -> f32 {
         let mut result = 0.0;
         //let amp_mod = self.get_amp_mod(sample_clock);
         let amp_mod = 0.0;
@@ -67,7 +67,7 @@ impl Voice {
     }
 
     /*
-    fn get_freq_mod(&mut self, sample_clock: u64) -> f32 {
+    fn get_freq_mod(&mut self, sample_clock: i64) -> f32 {
         let mut freq_mod = 0.0;
         for fm in self.freq_modulators.iter_mut() {
             freq_mod += fm.get_sample(0.25, sample_clock) * 1.0;
@@ -75,7 +75,7 @@ impl Voice {
         freq_mod
     }
 
-    fn get_amp_mod(&mut self, sample_clock: u64) -> f32 {
+    fn get_amp_mod(&mut self, sample_clock: i64) -> f32 {
         let mut amp_mod = 0.0;
         for am in self.amp_modulators.iter_mut() {
             amp_mod += am.get_sample(1.0, sample_clock);

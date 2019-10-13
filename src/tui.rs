@@ -1,6 +1,6 @@
 extern crate term_cursor as cursor;
 
-use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
+use super::parameter::{Parameter, ParameterValue, SynthParam};
 use super::midi_handler::{MidiMessage, MessageType};
 use super::TermionWrapper;
 use super::{UiMessage, SynthMessage};
@@ -65,7 +65,7 @@ fn previous(current: &TuiState) -> TuiState {
 
 #[derive(Debug)]
 enum ValueRange {
-    IntRange(u64, u64),
+    IntRange(i64, i64),
     FloatRange(f32, f32),
     ChoiceRange(&'static [Selection]),
     NoRange
@@ -90,7 +90,7 @@ static FUNCTIONS: [Selection; 4] = [
 static OSC_PARAMS: [Selection; 5] = [
     Selection{item: Parameter::Waveform,  key: Key::Char('w'), val_range: ValueRange::ChoiceRange(&WAVEFORM), next: &[]},
     Selection{item: Parameter::Level,     key: Key::Char('l'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
-    Selection{item: Parameter::Frequency, key: Key::Char('f'), val_range: ValueRange::FloatRange(-4.0, 4.0), next: &[]},
+    Selection{item: Parameter::Frequency, key: Key::Char('f'), val_range: ValueRange::IntRange(-24, 24), next: &[]},
     Selection{item: Parameter::Blend,     key: Key::Char('b'), val_range: ValueRange::FloatRange(0.0, 5.0), next: &[]},
     Selection{item: Parameter::Phase,     key: Key::Char('p'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
 ];
@@ -198,14 +198,14 @@ impl Tui {
             MessageType::ControlChg => {
                 if m.param == 0x01 {
                     // ModWheel
-                    self.handle_control_change(m.value as u64);
+                    self.handle_control_change(m.value as i64);
                 }
             },
             _ => ()
         }
     }
 
-    fn handle_control_change(&mut self, val: u64) {
+    fn handle_control_change(&mut self, val: i64) {
         match self.state {
             TuiState::Param => self.change_state(TuiState::Value),
             TuiState::Value => (),
@@ -215,17 +215,17 @@ impl Tui {
         match item.item_list[item.item_index].val_range {
             ValueRange::IntRange(min, max) => {
                 let inc: f32 = (max - min) as f32 / 127.0;
-                let value = (val as f32 * inc) as u64;
+                let value = min + (val as f32 * inc) as i64;
                 Tui::update_value(item, &ParameterValue::Int(value), &mut self.temp_string);
             }
             ValueRange::FloatRange(min, max) => {
                 let inc: f32 = (max - min) / 127.0;
-                let value = val as f32 * inc;
+                let value = min + val as f32 * inc;
                 Tui::update_value(item, &ParameterValue::Float(value), &mut self.temp_string);
             }
             ValueRange::ChoiceRange(choice_list) => {
                 let inc: f32 = choice_list.len() as f32 / 127.0;
-                let value = (val as f32 * inc) as u64;
+                let value = (val as f32 * inc) as i64;
                 Tui::update_value(item, &ParameterValue::Choice(value as usize), &mut self.temp_string);
             }
             _ => ()
@@ -290,10 +290,10 @@ impl Tui {
     /** Queries the current value of the selected parameter, since we don't keep a local copy. */
     fn get_current_value(&self) {
         let function = &self.selected_function.item_list[self.selected_function.item_index];
-        let function_id = if let ParameterValue::Int(x) = &self.selected_function.value { x } else { panic!() };
+        let function_id = if let ParameterValue::Int(x) = &self.selected_function.value { *x as usize } else { panic!() };
         let parameter = &self.selected_parameter.item_list[self.selected_parameter.item_index];
         let param_val = &self.selected_parameter.value;
-        let param = SynthParam::new(function.item, FunctionId::Int(*function_id), parameter.item, *param_val);
+        let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
         self.sender.send(SynthMessage::ParamQuery(param)).unwrap();
     }
 
@@ -346,7 +346,7 @@ impl Tui {
                     Key::Char(x) => {
                         match x {
                             '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' => {
-                                let y = x as u64 - '0' as u64;
+                                let y = x as i64 - '0' as i64;
                                 let val_digit_added = current * 10 + y;
                                 if val_digit_added > max {
                                     current = y; // Can't add another digit, replace current value with new one
@@ -481,10 +481,10 @@ impl Tui {
 
     fn send_event(&self) {
         let function = &self.selected_function.item_list[self.selected_function.item_index];
-        let function_id = if let ParameterValue::Int(x) = &self.selected_function.value { x } else { panic!() };
+        let function_id = if let ParameterValue::Int(x) = &self.selected_function.value { *x as usize } else { panic!() };
         let parameter = &self.selected_parameter.item_list[self.selected_parameter.item_index];
         let param_val = &self.selected_parameter.value;
-        let param = SynthParam::new(function.item, FunctionId::Int(*function_id), parameter.item, *param_val);
+        let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
         self.sender.send(SynthMessage::Param(param)).unwrap();
     }
 
@@ -493,16 +493,16 @@ impl Tui {
         print!("{}{}", clear::All, cursor::Goto(1, 1));
         self.display_function();
         if self.state == TuiState::FunctionIndex {
-            x_pos = 10;
+            x_pos = 12;
         }
         self.display_function_index();
         if self.state == TuiState::Param || self.state == TuiState::Value {
             if self.state == TuiState::Param {
-                x_pos = 12;
+                x_pos = 14;
             }
             self.display_param();
             if self.state == TuiState::Value {
-                x_pos = 20;
+                x_pos = 23;
             }
             self.display_value();
         }
@@ -528,7 +528,8 @@ impl Tui {
         if self.state == TuiState::FunctionIndex {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
-        print!(" {:?}", self.selected_function.value);
+        let function_id = if let ParameterValue::Int(x) = &self.selected_function.value { *x as usize } else { panic!() };
+        print!(" {}", function_id);
         if self.state == TuiState::FunctionIndex {
             print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         }

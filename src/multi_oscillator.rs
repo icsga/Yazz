@@ -7,7 +7,7 @@ use rand::prelude::*;
 pub struct MultiOscillator {
     sample_rate: f32,
     id: usize,
-    last_update: u64, // Time of last sample generation
+    last_update: i64, // Time of last sample generation
     state: [State; 7], // State for up to 7 oscillators running in sync
 }
 
@@ -22,7 +22,8 @@ pub struct MultiOscData {
     pub noise_ratio: f32,
     pub num_voices: u32,
     pub voice_spread: f32,
-    pub freq_offset: f32,
+    pub tune_halfsteps: i64,
+    pub freq_offset: f32, // Value derived from tune_halfsteps
 }
 
 impl MultiOscData {
@@ -67,6 +68,27 @@ impl MultiOscData {
     pub fn set_voice_num(&mut self, voices: u32) {
         self.num_voices = 1;
     }
+
+    pub fn set_freq_offset(&mut self, halfsteps: i64) {
+        self.tune_halfsteps = halfsteps;
+        self.freq_offset = 1.059463f32.powf(halfsteps as f32);
+    }
+
+    pub fn get_waveform(&self) -> i64 {
+        if self.sine_ratio > 0.0 {
+            0
+        } else if self.tri_ratio > 0.0 {
+            1
+        } else if self.saw_ratio > 0.0 {
+            2
+        } else if self.square_ratio > 0.0 {
+            3
+        } else if self.noise_ratio > 0.0 {
+            4
+        } else {
+            0
+        }
+    }
 }
 
 #[derive(Copy, Clone)]
@@ -75,7 +97,7 @@ struct State {
     last_pos: f32,
 
     // Sinewave
-    last_stabilization: u64, // Time of last stabilization
+    last_stabilization: i64, // Time of last stabilization
     phasor: num::complex::Complex<f32>, // Phasor with current state
     omega: num::complex::Complex<f32>,
     stabilizer: num::complex::Complex<f32>
@@ -101,7 +123,7 @@ impl MultiOscillator {
     }
 
     // Based on http://dsp.stackexchange.com/a/1087
-    fn get_sample_sine(state: &mut State, frequency: f32, dt: u64, sample_rate: f32) -> f32 {
+    fn get_sample_sine(state: &mut State, frequency: f32, dt: i64, sample_rate: f32) -> f32 {
         // Compute the angular frequency omega in radians
         state.omega.im = 2.0 * 3.141592 * frequency / sample_rate as f32;
 
@@ -159,7 +181,7 @@ impl MultiOscillator {
 }
 
 impl SampleGenerator for MultiOscillator {
-    fn get_sample(&mut self, frequency: f32, sample_clock: u64, data: &SoundData) -> f32 {
+    fn get_sample(&mut self, frequency: f32, sample_clock: i64, data: &SoundData) -> f32 {
         let data = data.get_osc_data(self.id);
         let dt = sample_clock - self.last_update;
         let dt_f = dt as f32;

@@ -46,16 +46,18 @@ pub enum Parameter {
     Noise,
 }
 
+/*
 // TODO: This seems to be unneeded, replace by simple int
 pub enum FunctionId {
-    Int(u64),
-    Index(usize),
-    NoValue
+    Int(i64),
+    //Index(usize),
+    //NoValue
 }
+*/
 
 #[derive(Clone, Copy, Debug)]
 pub enum ParameterValue {
-    Int(u64),
+    Int(i64),
     Float(f32),
     Choice(usize),
     NoValue
@@ -69,13 +71,13 @@ impl fmt::Display for Parameter {
 
 pub struct SynthParam {
     pub function: Parameter,
-    pub function_id: FunctionId,
+    pub function_id: usize,
     pub parameter: Parameter,
     pub value: ParameterValue
 }
 
 impl SynthParam {
-    pub fn new(function: Parameter, function_id: FunctionId, parameter: Parameter, value: ParameterValue) -> Self {
+    pub fn new(function: Parameter, function_id: usize, parameter: Parameter, value: ParameterValue) -> Self {
         SynthParam{function, function_id, parameter, value}
     }
 }
