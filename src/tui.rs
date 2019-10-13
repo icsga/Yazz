@@ -1,11 +1,14 @@
+extern crate term_cursor as cursor;
+
 use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
 use super::midi_handler::{MidiMessage, MessageType};
 use super::TermionWrapper;
 use super::{UiMessage, SynthMessage};
+use super::canvas::Canvas;
 
 use termion::clear;
 use termion::event::Key;
-use termion::cursor::{DetectCursorPos, Goto};
+//use termion::cursor::{DetectCursorPos, Goto};
 use termion::color;
 use termion::color::{Black, White, LightWhite, Reset, Rgb};
 use std::io::{stdout, stdin};
@@ -86,9 +89,9 @@ static FUNCTIONS: [Selection; 4] = [
 
 static OSC_PARAMS: [Selection; 4] = [
     Selection{item: Parameter::Waveform,  key: Key::Char('w'), val_range: ValueRange::ChoiceRange(&WAVEFORM), next: &[]},
-    Selection{item: Parameter::Frequency, key: Key::Char('f'), val_range: ValueRange::FloatRange(0.0, 22000.0), next: &[]},
-    Selection{item: Parameter::Phase,     key: Key::Char('p'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
     Selection{item: Parameter::Blend,     key: Key::Char('b'), val_range: ValueRange::FloatRange(0.0, 5.0), next: &[]},
+    Selection{item: Parameter::Phase,     key: Key::Char('p'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
+    Selection{item: Parameter::Level,     key: Key::Char('l'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
 ];
 
 static LFO_PARAMS: [Selection; 3] = [
@@ -135,6 +138,8 @@ pub struct Tui {
     selected_function: SelectedItem,
     selected_parameter: SelectedItem,
 
+    canvas: Canvas,
+
     temp_string: String,
 }
 
@@ -146,32 +151,44 @@ impl Tui {
         let selected_function = SelectedItem{item_list: &FUNCTIONS, item_index: 0, value: ParameterValue::Int(1)};
         let selected_parameter = SelectedItem{item_list: &OSC_PARAMS, item_index: 0, value: ParameterValue::Int(1)};
         let temp_string = String::new();
+        let canvas = Canvas::new(200, 30);
         Tui{state,
             sender,
             ui_receiver,
             current_list,
             selected_function,
             selected_parameter,
+            canvas,
             temp_string
         }
     }
 
     pub fn run(mut tui: Tui) -> std::thread::JoinHandle<()> {
+        let mut get_wave = true;
         let handler = spawn(move || {
             loop {
+                get_wave = true;
                 let msg = tui.ui_receiver.recv().unwrap();
                 match msg {
                     UiMessage::Midi(m)  => tui.handle_midi(m),
                     UiMessage::Key(m) => tui.handle_input(m),
-                    _ => panic!(),
+                    UiMessage::Param(m) => tui.handle_param(m),
+                    UiMessage::WaveBuffer(m) => {
+                        tui.handle_wavebuffer(m);
+                        get_wave = false;
+                    },
+                };
+                if get_wave {
+                    tui.get_waveform();
                 }
+                tui.display();
             }
         });
         handler
     }
 
-    fn init(&mut self) {
-        print!("{}{}", clear::All, Goto(1, 1));
+    pub fn init(&mut self) {
+        print!("{}{}", clear::All, cursor::Goto(0, 0));
         self.temp_string.clear();
     }
 
@@ -198,22 +215,34 @@ impl Tui {
             ValueRange::IntRange(min, max) => {
                 let inc: f32 = (max - min) as f32 / 127.0;
                 let value = (val as f32 * inc) as u64;
-                Tui::update_value(item, &mut ParameterValue::Int(value), &mut self.temp_string);
+                Tui::update_value(item, &ParameterValue::Int(value), &mut self.temp_string);
             }
             ValueRange::FloatRange(min, max) => {
                 let inc: f32 = (max - min) / 127.0;
                 let value = val as f32 * inc;
-                Tui::update_value(item, &mut ParameterValue::Float(value), &mut self.temp_string);
+                Tui::update_value(item, &ParameterValue::Float(value), &mut self.temp_string);
             }
             ValueRange::ChoiceRange(choice_list) => {
                 let inc: f32 = choice_list.len() as f32 / 127.0;
                 let value = (val as f32 * inc) as u64;
-                Tui::update_value(item, &mut ParameterValue::Choice(value as usize), &mut self.temp_string);
+                Tui::update_value(item, &ParameterValue::Choice(value as usize), &mut self.temp_string);
             }
             _ => ()
         }
         self.send_event();
-        self.display();
+    }
+
+    pub fn handle_param(&mut self, m: SynthParam) {
+        let item = &mut self.selected_parameter;
+        Tui::update_value(item, &m.value, &mut self.temp_string);
+    }
+
+    pub fn handle_wavebuffer(&mut self, m: Vec<f32>) {
+        self.canvas.clear();
+        for (x_pos, v) in m.iter().enumerate() {
+            let y_pos = ((v + 1.0) * (29.0 / 2.0)) as usize;
+            self.canvas.set(x_pos, y_pos, '*' as u8);
+        }
     }
 
     pub fn handle_input(&mut self, c: termion::event::Key) {
@@ -232,30 +261,44 @@ impl Tui {
             }
         };
         self.change_state(new_state);
-        self.display();
     }
 
     fn change_state(&mut self, new_state: TuiState) {
+        if new_state != self.state {
+            self.state = new_state;
+            match new_state {
+                TuiState::Init => {}
+                TuiState::Function => {}
+                TuiState::FunctionIndex => {}
+                TuiState::Param => {
+                    self.selected_parameter.item_list = self.selected_function.item_list[self.selected_function.item_index].next;
+                    Tui::select_param(&mut self.selected_parameter);
+                }
+                TuiState::Value => {}
+                TuiState::EventComplete => {}
+            }
+        }
+        if new_state == TuiState::Param {
+            self.get_current_value();
+        }
         if new_state == TuiState::Value {
             self.send_event();
         }
+    }
 
-        if new_state == self.state {
-            return;
-        }
+    /** Queries the current value of the selected parameter, since we don't keep a local copy. */
+    fn get_current_value(&self) {
+        let function = &self.selected_function.item_list[self.selected_function.item_index];
+        let function_id = if let ParameterValue::Int(x) = &self.selected_function.value { x } else { panic!() };
+        let parameter = &self.selected_parameter.item_list[self.selected_parameter.item_index];
+        let param_val = &self.selected_parameter.value;
+        let param = SynthParam::new(function.item, FunctionId::Int(*function_id), parameter.item, *param_val);
+        self.sender.send(SynthMessage::ParamQuery(param)).unwrap();
+    }
 
-        self.state = new_state;
-        match new_state {
-            TuiState::Init => {}
-            TuiState::Function => {}
-            TuiState::FunctionIndex => {}
-            TuiState::Param => {
-                self.selected_parameter.item_list = self.selected_function.item_list[self.selected_function.item_index].next;
-                Tui::select_param(&mut self.selected_parameter);
-            }
-            TuiState::Value => {}
-            TuiState::EventComplete => {}
-        }
+    fn get_waveform(&self) {
+        let buffer = vec!(0.0; 200);
+        self.sender.send(SynthMessage::WaveBuffer(buffer)).unwrap();
     }
 
     fn select_item(c: termion::event::Key, item: &mut SelectedItem, state: &TuiState) -> TuiState {
@@ -324,7 +367,7 @@ impl Tui {
                     Key::Left => previous(state),
                     _ => TuiState::Param,
                 };
-                Tui::update_value(item, &mut ParameterValue::Int(current), temp_string);
+                Tui::update_value(item, &ParameterValue::Int(current), temp_string);
                 new_state
             }
             ValueRange::FloatRange(min, max) => {
@@ -363,7 +406,7 @@ impl Tui {
                     }
                     _ => previous(state)
                 };
-                Tui::update_value(item, &mut ParameterValue::Float(current), temp_string);
+                Tui::update_value(item, &ParameterValue::Float(current), temp_string);
                 new_state
             }
             ValueRange::ChoiceRange(choice_list) => {
@@ -377,14 +420,14 @@ impl Tui {
                     Key::Char('\n') => next(state),
                     _ => *state
                 };
-                Tui::update_value(item, &mut ParameterValue::Choice(current), temp_string);
+                Tui::update_value(item, &ParameterValue::Choice(current), temp_string);
                 new_state
             }
             _ => TuiState::Value
         }
     }
 
-    fn update_value(item: &mut SelectedItem, val: &mut ParameterValue, temp_string: &mut String) {
+    fn update_value(item: &mut SelectedItem, val: &ParameterValue, temp_string: &mut String) {
         match item.item_list[item.item_index].val_range {
             ValueRange::IntRange(min, max) => {
                 let val = if let ParameterValue::Int(x) = *val { x } else { panic!(); };
@@ -445,14 +488,26 @@ impl Tui {
     }
 
     fn display(&self) {
-        print!("{}", Goto(1, 1));
+        let mut x_pos: i32 = 1;
+        print!("{}{}", clear::All, cursor::Goto(1, 1));
         self.display_function();
+        if self.state == TuiState::FunctionIndex {
+            x_pos = 10;
+        }
         self.display_function_index();
         if self.state == TuiState::Param || self.state == TuiState::Value {
+            if self.state == TuiState::Param {
+                x_pos = 12;
+            }
             self.display_param();
+            if self.state == TuiState::Value {
+                x_pos = 20;
+            }
             self.display_value();
         }
-        print!("{}", clear::UntilNewline);
+        //print!("{}", clear::UntilNewline);
+        self.display_options(x_pos);
+        self.canvas.render(10, 10);
         io::stdout().flush().ok();
     }
 
@@ -508,6 +563,39 @@ impl Tui {
         }
         if self.state == TuiState::Value {
             print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+        }
+    }
+
+    fn display_options(&self, x_pos: i32) {
+        if self.state == TuiState::Function {
+            let mut y_item = 2;
+            let list = self.selected_function.item_list;
+            for item in list.iter() {
+                print!("{}{}", cursor::Goto(x_pos, y_item), item.item);
+                y_item += 1;
+            }
+        }
+        if self.state == TuiState::FunctionIndex {
+            let item = &self.selected_function.item_list[self.selected_function.item_index];
+            let (min, max) = if let ValueRange::IntRange(min, max) = item.val_range { (min, max) } else { panic!() };
+            print!("{}{} - {}", cursor::Goto(x_pos, 2), min, max);
+        }
+        if self.state == TuiState::Param {
+            let mut y_item = 2;
+            let list = self.selected_parameter.item_list;
+            for item in list.iter() {
+                print!("{}{}", cursor::Goto(x_pos, y_item), item.item);
+                y_item += 1;
+            }
+        }
+        if self.state == TuiState::Value {
+            let range = &self.selected_parameter.item_list[self.selected_parameter.item_index].val_range;
+            match range {
+                ValueRange::IntRange(min, max) => print!("{}{} - {}", cursor::Goto(x_pos, 2), min, max),
+                ValueRange::FloatRange(min, max) => print!("{}{} - {}", cursor::Goto(x_pos, 2), min, max),
+                ValueRange::ChoiceRange(list) => print!("{}1 - {}", cursor::Goto(x_pos, 2), list.len()),
+                ValueRange::NoRange => ()
+            }
         }
     }
 }

@@ -18,10 +18,10 @@ pub struct EnvelopeData {
 
 impl EnvelopeData {
     pub fn init(&mut self) {
-        self.attack = 2000.0;
-        self.decay = 2000.0;
-        self.sustain = 10.0;
-        self.release = 4000.0;
+        self.attack = 200.0;
+        self.decay = 200.0;
+        self.sustain = 0.2;
+        self.release = 400.0;
     }
 }
 
@@ -61,17 +61,20 @@ impl Envelope {
 
     pub fn get_sample(&mut self, sample_time: u64, data: &SoundData) -> f32 {
         let data = data.get_env_data(self.id);
+        let attack = data.attack * self.rate_mul;
+        let decay = data.decay * self.rate_mul;
+        let release = data.release * self.rate_mul;
         if sample_time != self.state.last_update && self.state.is_running {
             let mut dt = (sample_time - self.state.trigger_time) as f32;
             loop {
-                if dt < data.attack {
-                    self.state.last_value = dt / data.attack;
+                if dt < attack {
+                    self.state.last_value = dt / attack;
                     break;
                 }
-                dt -= data.attack;
-                if dt < data.decay {
+                dt -= attack;
+                if dt < decay {
                     let sustain_diff = 1.0 - data.sustain;
-                    self.state.last_value = (sustain_diff - ((dt / data.decay) * sustain_diff)) + data.sustain;
+                    self.state.last_value = (sustain_diff - ((dt / decay) * sustain_diff)) + data.sustain;
                     break;
                 }
                 if self.state.is_held {
@@ -79,8 +82,8 @@ impl Envelope {
                     break;
                 }
                 dt = (sample_time - self.state.release_time) as f32;
-                if dt < data.release {
-                    self.state.last_value = data.sustain - ((dt / data.release) * data.sustain);
+                if dt < release {
+                    self.state.last_value = data.sustain - ((dt / release) * data.sustain);
                     break;
                 }
                 // Envelope has finished
@@ -88,6 +91,9 @@ impl Envelope {
                 self.state.last_value = 0.0;
                 break;
             }
+        }
+        if self.state.last_value > 1.0 {
+            panic!("\r\nEnvelope: Got value {}", self.state.last_value);
         }
         self.state.last_value
     }

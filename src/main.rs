@@ -10,14 +10,12 @@ mod midi_handler;
 mod multi_oscillator;
 mod oscillator;
 mod parameter;
-//mod sine_oscillator;
-//mod triangle_oscillator;
 mod sample_generator;
-//mod square_oscillator;
 mod synth;
 mod termion_wrapper;
 mod tui;
 mod voice;
+mod canvas;
 
 use engine::Engine;
 use envelope::Envelope;
@@ -28,24 +26,21 @@ use oscillator::Oscillator;
 use parameter::SynthParam;
 use sample_generator::SampleGenerator;
 use multi_oscillator::MultiOscillator;
-//use sine_oscillator::SineOscillator;
-//use triangle_oscillator::TriangleOscillator;
-//use square_oscillator::SquareOscillator;
-//use voice::Voice;
 use synth::{Synth, SoundData};
 use termion_wrapper::TermionWrapper;
 use termion::event::Key;
 use tui::Tui;
+use canvas::Canvas;
 
 use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
-//use std::sync::mpsc::{channel, Sender, Receiver};
 
 use std::error::Error;
 use std::fs::File;
 use std::io::{stdin, stdout, Write};
 use std::io::prelude::*;
 use std::path::Path;
+use std::vec::Vec;
 
 extern crate midir;
 use midir::{MidiInput, MidiInputConnection, Ignore};
@@ -122,12 +117,15 @@ fn test_envalope() {
 pub enum SynthMessage {
     Midi(MidiMessage),
     Param(SynthParam),
+    ParamQuery(SynthParam),
+    WaveBuffer(Vec<f32>),
 }
 
 pub enum UiMessage {
     Midi(MidiMessage),
     Key(Key),
     Param(SynthParam),
+    WaveBuffer(Vec<f32>),
 }
 
 fn setup_messaging() -> (Sender<UiMessage>, Receiver<UiMessage>, Sender<SynthMessage>, Receiver<SynthMessage>) {
@@ -146,9 +144,10 @@ fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>) -
 
 fn setup_ui(to_synth_sender: Sender<SynthMessage>, to_ui_sender: Sender<UiMessage>, ui_receiver: Receiver<UiMessage>) -> (JoinHandle<()>, JoinHandle<()>) {
     println!("Setting up UI...");
-    let tui = Tui::new(to_synth_sender, ui_receiver);
+    let mut tui = Tui::new(to_synth_sender, ui_receiver);
     let termion = TermionWrapper::new();
     let term_handle = TermionWrapper::run(termion, to_ui_sender);
+    tui.init();
     let tui_handle = Tui::run(tui);
     println!("\r... finished");
     (term_handle, tui_handle)

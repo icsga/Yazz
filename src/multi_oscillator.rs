@@ -13,6 +13,8 @@ pub struct MultiOscillator {
 
 #[derive(Default)]
 pub struct MultiOscData {
+    pub level: f32,
+    pub phase: f32,
     pub sine_ratio: f32,
     pub tri_ratio: f32,
     pub saw_ratio: f32,
@@ -26,6 +28,8 @@ impl MultiOscData {
     pub fn init(&mut self) {
         self.select_wave(0);
         self.set_voice_num(1);
+        self.level = 1.0;
+        self.phase = 0.5;
     }
 
     pub fn select_wave(&mut self, value: usize) {
@@ -111,15 +115,28 @@ impl MultiOscillator {
         state.phasor.im // return the 'sine' component of the phasor
     }
 
-    fn get_sample_triangle(state: &State, frequency: f32, dt: f32) -> f32 {
-        if state.last_pos < 0.25 {
-            state.last_pos / 0.25
-        } else if state.last_pos < 0.5 {
-            1.0 + (1.0 - state.last_pos / 0.25)
-        } else if state.last_pos < 0.75 {
-            (2.0 - state.last_pos / 0.25)
+    fn get_sample_triangle(state: &State, frequency: f32, phase: f32, dt: f32) -> f32 {
+        /*
+        //if state.last_pos < 0.25 {
+        let q1 = phase / 2.0;
+        let q2 = phase;
+        let q3 = phase + ((1.0 - phase) / 2.0);
+        if state.last_pos < q1 {
+            state.last_pos / q1
+        } else if state.last_pos < q2 {
+            1.0 + (1.0 - state.last_pos / q1)
+        } else if state.last_pos < q3  {
+            (2.0 - state.last_pos / q1)
         } else {
-            -1.0 - (3.0 - state.last_pos / 0.25)
+            -1.0 - (3.0 - state.last_pos / q1)
+        }
+        */
+        let rate_q1 = 2.0 / phase;
+        let rate_q2 = 2.0 / (1.0 - phase);
+        if state.last_pos < phase {
+            (state.last_pos * rate_q1) - 1.0
+        } else {
+            1.0 - ((state.last_pos - phase) * rate_q2)
         }
     }
 
@@ -127,8 +144,8 @@ impl MultiOscillator {
         1.0 - (state.last_pos * 2.0)
     }
 
-    fn get_sample_square(state: &State, frequency: f32, dt: f32) -> f32 {
-        if state.last_pos < 0.5 {
+    fn get_sample_square(state: &State, frequency: f32, phase: f32, dt: f32) -> f32 {
+        if state.last_pos < phase {
             1.0
         } else {
             -1.0
@@ -172,13 +189,13 @@ impl SampleGenerator for MultiOscillator {
                 }
             }
             if data.tri_ratio > 0.0 {
-                result += MultiOscillator::get_sample_triangle(state, frequency, dt_f) * data.tri_ratio;
+                result += MultiOscillator::get_sample_triangle(state, frequency, data.phase, dt_f) * data.tri_ratio;
             }
             if data.saw_ratio > 0.0 {
                 result += MultiOscillator::get_sample_saw(state, frequency, dt_f) * data.saw_ratio;
             }
             if data.square_ratio > 0.0 {
-                result += MultiOscillator::get_sample_square(state, frequency, dt_f) * data.square_ratio;
+                result += MultiOscillator::get_sample_square(state, frequency, data.phase, dt_f) * data.square_ratio;
             }
             if data.noise_ratio > 0.0 {
                 result += MultiOscillator::get_sample_noise(state, frequency, dt_f) * data.noise_ratio;
@@ -186,7 +203,7 @@ impl SampleGenerator for MultiOscillator {
 
         }
         self.last_update += dt;
-        result / data.num_voices as f32
+        (result / data.num_voices as f32) * data.level
     }
 }
 
