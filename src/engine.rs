@@ -7,7 +7,7 @@ use std::sync::{Arc, Mutex};
 
 pub struct Engine {
     sample_rate: u32,
-    sample_clock: u64,
+    sample_clock: i64,
     num_channels: usize,
 }
 
@@ -18,7 +18,7 @@ impl Engine {
         let format = device.default_output_format().unwrap();
 
         let sample_rate = format.sample_rate.0;
-        let sample_clock = 0u64;
+        let sample_clock = 0i64;
 
         let num_channels: usize = format.channels as usize;
 

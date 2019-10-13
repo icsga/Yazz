@@ -1,6 +1,6 @@
 use super::{SynthMessage, UiMessage};
 use super::midi_handler::{MessageType, MidiMessage};
-use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
+use super::parameter::{Parameter, ParameterValue, SynthParam};
 use super::voice::Voice;
 use super::envelope::EnvelopeData;
 use super::SampleGenerator;
@@ -106,7 +106,7 @@ impl Synth {
     }
 
     /* Called by the audio engine to get the next sample to be output. */
-    pub fn get_sample(&mut self, sample_clock: u64) -> f32 {
+    pub fn get_sample(&mut self, sample_clock: i64) -> f32 {
         let mut value: f32 = 0.0;
         for v in self.voice.iter_mut() {
             value += v.get_sample(sample_clock, &self.sound.lock().unwrap());
@@ -124,7 +124,8 @@ impl Synth {
     /* Handles a message received from the UI. */
     fn handle_ui_message(&mut self, msg: SynthParam) {
         let mut sound = self.sound.lock().unwrap();
-        let id = if let FunctionId::Int(x) = msg.function_id { x - 1 } else { panic!() } as usize;
+        //let id = if let FunctionId::Int(x) = msg.function_id { x - 1 } else { panic!() } as usize;
+        let id = msg.function_id - 1;
         match msg.function {
             Parameter::Oscillator => {
                 match msg.parameter {
@@ -137,8 +138,8 @@ impl Synth {
                         sound.osc[id].level = value / 100.0;
                     }
                     Parameter::Frequency => {
-                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        sound.osc[id].freq_offset = value;
+                        let value = if let ParameterValue::Int(x) = msg.value { x } else { panic!() };
+                        sound.osc[id].set_freq_offset(value);
                     }
                     Parameter::Blend => {
                         let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
@@ -184,26 +185,22 @@ impl Synth {
 
     fn handle_ui_query(&mut self, mut msg: SynthParam) {
         let sound = self.sound.lock().unwrap();
-        let id = if let FunctionId::Int(x) = msg.function_id { x - 1 } else { panic!() } as usize;
+        //let id = if let FunctionId::Int(x) = msg.function_id { x - 1 } else { panic!() } as usize;
+        let id = msg.function_id - 1;
         match msg.function {
             Parameter::Oscillator => {
                 match msg.parameter {
-                    /*
                     Parameter::Waveform => {
-                        if let ParameterValue::Choice(x) = &mut msg.value { *x = sound.env[id].attack; } else { panic!() };
+                        if let ParameterValue::Choice(x) = &mut msg.value { *x = sound.osc[id].get_waveform() as usize; } else { panic!() };
                     }
-                    Parameter::Blend => {
-                        if let ParameterValue::Choice(x) = &mut msg.value { *x = sound.env[id].attack; } else { panic!() };
-                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        //self.voice.set_wave_ratio_direct(value);
-                        sound.osc[id].set_ratio(value);
-                    }
-                    */
                     Parameter::Level => {
-                        if let ParameterValue::Float(x) = &mut msg.value { *x = sound.osc[id].level; } else { panic!() };
+                        if let ParameterValue::Float(x) = &mut msg.value { *x = sound.osc[id].level * 100.0; } else { panic!() };
                     }
                     Parameter::Phase => {
                         if let ParameterValue::Float(x) = &mut msg.value { *x = sound.osc[id].phase; } else { panic!() };
+                    }
+                    Parameter::Frequency => {
+                        if let ParameterValue::Int(x) = &mut msg.value { *x = sound.osc[id].tune_halfsteps; } else { panic!() };
                     }
                     _ => {}
                 }
@@ -255,7 +252,7 @@ impl Synth {
         let len = buffer.capacity();
         let mut osc = MultiOscillator::new(44100, 0);
         for i in 0..200 {
-            buffer[i] = osc.get_sample(440.0, i as u64, &self.sound.lock().unwrap());
+            buffer[i] = osc.get_sample(440.0, i as i64, &self.sound.lock().unwrap());
         }
         self.sender.send(UiMessage::WaveBuffer(buffer)).unwrap();
     }

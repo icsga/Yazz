@@ -26,9 +26,9 @@ impl EnvelopeData {
 }
 
 struct EnvelopeState {
-    trigger_time: u64,
-    release_time: u64,
-    last_update: u64,
+    trigger_time: i64,
+    release_time: i64,
+    last_update: i64,
     last_value: f32,
     is_held: bool,
     is_running: bool
@@ -48,18 +48,18 @@ impl Envelope {
         }
     }
 
-    pub fn trigger(&mut self, sample_time: u64) {
+    pub fn trigger(&mut self, sample_time: i64) {
         self.state.trigger_time = sample_time;
         self.state.is_held = true;
         self.state.is_running = true;
     }
 
-    pub fn release(&mut self, sample_time: u64) {
+    pub fn release(&mut self, sample_time: i64) {
         self.state.release_time = sample_time;
         self.state.is_held = false;
     }
 
-    pub fn get_sample(&mut self, sample_time: u64, data: &SoundData) -> f32 {
+    pub fn get_sample(&mut self, sample_time: i64, data: &SoundData) -> f32 {
         let data = data.get_env_data(self.id);
         let attack = data.attack * self.rate_mul;
         let decay = data.decay * self.rate_mul;
