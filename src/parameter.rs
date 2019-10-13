@@ -13,9 +13,10 @@ pub enum Parameter {
 
     // Oscillator, Lfo
     Waveform,
-    Frequency,
     Phase,
     Blend,
+    Level,
+    Frequency,
 
     // Filter
     Type,

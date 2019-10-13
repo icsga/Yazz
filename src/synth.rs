@@ -3,7 +3,8 @@ use super::midi_handler::{MessageType, MidiMessage};
 use super::parameter::{FunctionId, Parameter, ParameterValue, SynthParam};
 use super::voice::Voice;
 use super::envelope::EnvelopeData;
-use super::multi_oscillator::MultiOscData;
+use super::SampleGenerator;
+use super::multi_oscillator::{MultiOscData, MultiOscillator};
 
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
@@ -21,7 +22,7 @@ pub enum Synth2UIMessage {
 pub struct Synth {
     sample_rate: u32,
     sound: Arc<Mutex<SoundData>>,
-    voice: [Voice; 2],
+    voice: [Voice; 1],
     keymap: [f32; 127],
     triggered: bool,
     voices_triggered: u32,
@@ -72,7 +73,7 @@ impl Synth {
         sound.init();
         let sound = Arc::new(Mutex::new(sound));
         let voice = [
-            Voice::new(sample_rate), Voice::new(sample_rate)
+            Voice::new(sample_rate)
             /*
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
@@ -95,7 +96,9 @@ impl Synth {
                 let mut locked_synth = synth.lock().unwrap();
                 match msg {
                     SynthMessage::Param(m) => locked_synth.handle_ui_message(m),
+                    SynthMessage::ParamQuery(m) => locked_synth.handle_ui_query(m),
                     SynthMessage::Midi(m)  => locked_synth.handle_midi_message(m),
+                    SynthMessage::WaveBuffer(m) => locked_synth.handle_wave_buffer(m),
                 }
             }
         });
@@ -121,19 +124,25 @@ impl Synth {
     /* Handles a message received from the UI. */
     fn handle_ui_message(&mut self, msg: SynthParam) {
         let mut sound = self.sound.lock().unwrap();
-        let id = if let FunctionId::Int(x) = msg.function_id { x } else { panic!() } as usize;
+        let id = if let FunctionId::Int(x) = msg.function_id { x - 1 } else { panic!() } as usize;
         match msg.function {
             Parameter::Oscillator => {
                 match msg.parameter {
                     Parameter::Waveform => {
                         let value = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() };
-                        //self.voice.set_wave_ratio(value);
                         sound.osc[id].select_wave(value);
                     }
                     Parameter::Blend => {
                         let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        //self.voice.set_wave_ratio_direct(value);
                         sound.osc[id].set_ratio(value);
+                    }
+                    Parameter::Level => {
+                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
+                        sound.osc[id].level = value / 100.0;
+                    }
+                    Parameter::Phase => {
+                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
+                        sound.osc[id].phase = value;
                     }
                     _ => {}
                 }
@@ -146,22 +155,18 @@ impl Synth {
                 match msg.parameter {
                     Parameter::Attack => {
                         let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        //self.voice.get_env().set_attack(value);
                         sound.env[id].attack = value;
                     }
                     Parameter::Decay => {
                         let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        //self.voice.get_env().set_decay(value);
                         sound.env[id].decay = value;
                     }
                     Parameter::Sustain => {
                         let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        //self.voice.get_env().set_sustain(value);
-                        sound.env[id].sustain = value;
+                        sound.env[id].sustain = value / 100.0;
                     }
                     Parameter::Release => {
                         let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        //self.voice.get_env().set_release(value);
                         sound.env[id].release = value;
                     }
                     _ => {}
@@ -171,6 +176,54 @@ impl Synth {
             Parameter::System => {}
             _ => {}
         }
+    }
+
+    fn handle_ui_query(&mut self, mut msg: SynthParam) {
+        let sound = self.sound.lock().unwrap();
+        let id = if let FunctionId::Int(x) = msg.function_id { x - 1 } else { panic!() } as usize;
+        match msg.function {
+            Parameter::Oscillator => {
+                match msg.parameter {
+                    /*
+                    Parameter::Waveform => {
+                        if let ParameterValue::Choice(x) = &mut msg.value { *x = sound.env[id].attack; } else { panic!() };
+                    }
+                    Parameter::Blend => {
+                        if let ParameterValue::Choice(x) = &mut msg.value { *x = sound.env[id].attack; } else { panic!() };
+                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
+                        //self.voice.set_wave_ratio_direct(value);
+                        sound.osc[id].set_ratio(value);
+                    }
+                    */
+                    Parameter::Level => {
+                        if let ParameterValue::Float(x) = &mut msg.value { *x = sound.osc[id].level; } else { panic!() };
+                    }
+                    Parameter::Phase => {
+                        if let ParameterValue::Float(x) = &mut msg.value { *x = sound.osc[id].phase; } else { panic!() };
+                    }
+                    _ => {}
+                }
+            }
+            Parameter::Filter => {}
+            Parameter::Amp => {
+            }
+            Parameter::Lfo => {}
+            Parameter::Envelope => {
+                if let ParameterValue::Float(x) = &mut msg.value {
+                    *x = match msg.parameter {
+                        Parameter::Attack => sound.env[id].attack,
+                        Parameter::Decay => sound.env[id].decay,
+                        Parameter::Sustain => sound.env[id].sustain,
+                        Parameter::Release => sound.env[id].release,
+                        _ => panic!()
+                    };
+                } else { panic!() };
+            }
+            Parameter::Mod => {}
+            Parameter::System => {}
+            _ => {}
+        }
+        self.sender.send(UiMessage::Param(msg)).unwrap();
     }
 
     /* Handles a received MIDI message. */
@@ -192,5 +245,14 @@ impl Synth {
             }
             _ => ()
         }
+    }
+
+    fn handle_wave_buffer(&mut self, mut buffer: Vec<f32>) {
+        let len = buffer.capacity();
+        let mut osc = MultiOscillator::new(44100, 0);
+        for i in 0..200 {
+            buffer[i] = osc.get_sample(440.0, i as u64, &self.sound.lock().unwrap());
+        }
+        self.sender.send(UiMessage::WaveBuffer(buffer)).unwrap();
     }
 }
