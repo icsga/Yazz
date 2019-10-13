@@ -132,13 +132,17 @@ impl Synth {
                         let value = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() };
                         sound.osc[id].select_wave(value);
                     }
-                    Parameter::Blend => {
-                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        sound.osc[id].set_ratio(value);
-                    }
                     Parameter::Level => {
                         let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
                         sound.osc[id].level = value / 100.0;
+                    }
+                    Parameter::Frequency => {
+                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
+                        sound.osc[id].freq_offset = value;
+                    }
+                    Parameter::Blend => {
+                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
+                        sound.osc[id].set_ratio(value);
                     }
                     Parameter::Phase => {
                         let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };

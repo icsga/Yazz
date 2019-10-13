@@ -9,7 +9,7 @@ use std::sync::Arc;
 pub struct Voice {
     // Components
     //osc: Box<dyn SampleGenerator + Send>,
-    osc: [MultiOscillator; 1],
+    osc: [MultiOscillator; 3],
     env: [Envelope; 2],
 
     // Modulators
@@ -26,8 +26,8 @@ impl Voice {
     pub fn new(sample_rate: u32) -> Self {
         let osc = [
             MultiOscillator::new(sample_rate, 0),
-            //MultiOscillator::new(sample_rate, 1),
-            //MultiOscillator::new(sample_rate, 2),
+            MultiOscillator::new(sample_rate, 1),
+            MultiOscillator::new(sample_rate, 2),
         ];
         //osc.set_voice_num(3);
         //osc.set_ratios(0.0, 0.0, 0.0, 1.0, 0.0);
@@ -55,8 +55,11 @@ impl Voice {
         let freq_mod = 0.0;
         self.last_update = sample_clock;
         for (i, osc) in self.osc.iter_mut().enumerate() {
-            result += osc.get_sample(self.input_freq + freq_mod, sample_clock, sound) * (self.osc_amp + amp_mod) * self.env[0].get_sample(sample_clock, sound);
+            let freq = (self.input_freq + freq_mod) * sound.osc[i].freq_offset;
+            result += osc.get_sample(freq, sample_clock, sound) * (self.osc_amp + amp_mod);
         }
+        result /= sound.osc[0].level + sound.osc[1].level + sound.osc[2].level;
+        result *= self.env[0].get_sample(sample_clock, sound);
         if result > 1.0 {
             panic!("Voice: {}", result);
         }
