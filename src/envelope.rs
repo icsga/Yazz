@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use super::synth::SoundData;
+use super::sound::SoundData;
 
 pub struct Envelope {
     sample_rate: f32,
@@ -18,16 +18,17 @@ pub struct EnvelopeData {
 
 impl EnvelopeData {
     pub fn init(&mut self) {
-        self.attack = 200.0;
-        self.decay = 200.0;
-        self.sustain = 0.2;
-        self.release = 400.0;
+        self.attack = 50.0;
+        self.decay = 100.0;
+        self.sustain = 1.0;
+        self.release = 10.0;
     }
 }
 
 struct EnvelopeState {
     trigger_time: i64,
     release_time: i64,
+    release_level: f32,
     last_update: i64,
     last_value: f32,
     is_held: bool,
@@ -41,6 +42,7 @@ impl Envelope {
                  rate_mul: sample_rate / 1000.0, // 1 ms
                  state: EnvelopeState{trigger_time: 0,
                                       release_time: 0,
+                                      release_level: 0.0,
                                       last_update:0,
                                       last_value: 0.0,
                                       is_held: false,
@@ -56,6 +58,7 @@ impl Envelope {
 
     pub fn release(&mut self, sample_time: i64) {
         self.state.release_time = sample_time;
+        self.state.release_level = self.state.last_value;
         self.state.is_held = false;
     }
 
@@ -67,23 +70,30 @@ impl Envelope {
         if sample_time != self.state.last_update && self.state.is_running {
             let mut dt = (sample_time - self.state.trigger_time) as f32;
             loop {
-                if dt < attack {
-                    self.state.last_value = dt / attack;
-                    break;
-                }
-                dt -= attack;
-                if dt < decay {
-                    let sustain_diff = 1.0 - data.sustain;
-                    self.state.last_value = (sustain_diff - ((dt / decay) * sustain_diff)) + data.sustain;
-                    break;
-                }
                 if self.state.is_held {
+                    // Attack phase
+                    if dt < attack {
+                        self.state.last_value = dt / attack;
+                        break;
+                    }
+                    // Decay phase
+                    dt -= attack;
+                    if dt < decay {
+                        let sustain_diff = 1.0 - data.sustain;
+                        self.state.last_value = (sustain_diff - ((dt / decay) * sustain_diff)) + data.sustain;
+                        break;
+                    }
+                    // Sustain phase
                     self.state.last_value = data.sustain;
                     break;
                 }
+                // Release phase
                 dt = (sample_time - self.state.release_time) as f32;
                 if dt < release {
-                    self.state.last_value = data.sustain - ((dt / release) * data.sustain);
+                    // TODO: The case where the envelope is released before the sustain phase is
+                    // not correctly handled. We should calculate the adjusted release time
+                    // depending on the ratio of release level to sustain level.
+                    self.state.last_value = self.state.release_level - ((dt / release) * self.state.release_level);
                     break;
                 }
                 // Envelope has finished
@@ -95,7 +105,7 @@ impl Envelope {
         if self.state.last_value > 1.0 {
             panic!("\r\nEnvelope: Got value {}", self.state.last_value);
         }
-        self.state.last_value
+        self.state.last_value.powi(4)
     }
 
     pub fn is_running(&self) -> bool {

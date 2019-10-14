@@ -63,7 +63,7 @@ impl Voice {
         let mut reset = false;
         let mut freq: f32;
         for (i, osc) in self.osc.iter_mut().enumerate() {
-            if i == 1 {
+            if sound.osc[i].key_follow == 0 {
                 freq = 440.0 + freq_mod; // Fixed pitch
             } else {
                 freq = self.input_freq + freq_mod;
@@ -77,7 +77,11 @@ impl Voice {
                 reset = false;
             }
         }
-        result /= sound.osc[0].level + sound.osc[1].level + sound.osc[2].level;
+        let level_sum = sound.osc[0].level + sound.osc[1].level + sound.osc[2].level;
+        if level_sum > 1.0 {
+            // Normalize level to avoid distortion
+            result /= level_sum;
+        }
         result *= self.env[0].get_sample(sample_clock, sound);
         if result > 1.0 {
             panic!("Voice: {}", result);
@@ -125,10 +129,13 @@ impl Voice {
         self.input_freq = freq;
     }
 
-    pub fn trigger(&mut self, trigger_seq: u64) {
+    pub fn trigger(&mut self, trigger_seq: u64, trigger_time: i64) {
         self.triggered = true;
         self.trigger_seq = trigger_seq;
-        self.env[0].trigger(self.last_update);
+        self.env[0].trigger(trigger_time);
+        for o in self.osc.iter_mut() {
+            o.reset();
+        }
     }
 
     pub fn release(&mut self) {
