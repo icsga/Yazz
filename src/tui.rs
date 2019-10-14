@@ -87,12 +87,13 @@ static FUNCTIONS: [Selection; 4] = [
     Selection{item: Parameter::Envelope,   key: Key::Char('e'), val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
 ];
 
-static OSC_PARAMS: [Selection; 5] = [
+static OSC_PARAMS: [Selection; 6] = [
     Selection{item: Parameter::Waveform,  key: Key::Char('w'), val_range: ValueRange::ChoiceRange(&WAVEFORM), next: &[]},
     Selection{item: Parameter::Level,     key: Key::Char('l'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
     Selection{item: Parameter::Frequency, key: Key::Char('f'), val_range: ValueRange::IntRange(-24, 24), next: &[]},
     Selection{item: Parameter::Blend,     key: Key::Char('b'), val_range: ValueRange::FloatRange(0.0, 5.0), next: &[]},
     Selection{item: Parameter::Phase,     key: Key::Char('p'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
+    Selection{item: Parameter::Sync,      key: Key::Char('s'), val_range: ValueRange::IntRange(0, 1), next: &[]},
 ];
 
 static LFO_PARAMS: [Selection; 3] = [
@@ -152,7 +153,7 @@ impl Tui {
         let selected_function = SelectedItem{item_list: &FUNCTIONS, item_index: 0, value: ParameterValue::Int(1)};
         let selected_parameter = SelectedItem{item_list: &OSC_PARAMS, item_index: 0, value: ParameterValue::Int(1)};
         let temp_string = String::new();
-        let canvas = Canvas::new(200, 30);
+        let canvas = Canvas::new(100, 30);
         Tui{state,
             sender,
             ui_receiver,
@@ -242,7 +243,7 @@ impl Tui {
         self.canvas.clear();
         for (x_pos, v) in m.iter().enumerate() {
             let y_pos = ((v + 1.0) * (29.0 / 2.0)) as usize;
-            self.canvas.set(x_pos, y_pos, '*' as u8);
+            self.canvas.set(x_pos, y_pos, '∘');
         }
     }
 
@@ -298,7 +299,7 @@ impl Tui {
     }
 
     fn get_waveform(&self) {
-        let buffer = vec!(0.0; 200);
+        let buffer = vec!(0.0; 100);
         self.sender.send(SynthMessage::WaveBuffer(buffer)).unwrap();
     }
 
@@ -508,7 +509,9 @@ impl Tui {
         }
         //print!("{}", clear::UntilNewline);
         self.display_options(x_pos);
-        self.canvas.render(10, 10);
+        print!("{}{}", color::Bg(Black), color::Fg(White));
+        self.canvas.render(1, 10);
+        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         io::stdout().flush().ok();
     }
 

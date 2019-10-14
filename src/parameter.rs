@@ -17,6 +17,7 @@ pub enum Parameter {
     Blend,
     Level,
     Frequency,
+    Sync,
 
     // Filter
     Type,

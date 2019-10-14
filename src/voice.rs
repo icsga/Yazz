@@ -54,9 +54,22 @@ impl Voice {
         let amp_mod = 0.0;
         let freq_mod = 0.0;
         self.last_update = sample_clock;
+        let mut reset = false;
+        let mut freq: f32;
         for (i, osc) in self.osc.iter_mut().enumerate() {
-            let freq = (self.input_freq + freq_mod) * sound.osc[i].freq_offset;
-            result += osc.get_sample(freq, sample_clock, sound) * (self.osc_amp + amp_mod);
+            if i == 1 {
+                freq = 440.0 + freq_mod; // Fixed pitch
+            } else {
+                freq = self.input_freq + freq_mod;
+            }
+            freq *= sound.osc[i].freq_offset;
+            let (sample, wave_complete) = osc.get_sample(freq, sample_clock, sound, reset);
+            result += sample * (self.osc_amp + amp_mod);
+            if i == 0 && wave_complete && sound.osc[1].sync == 1 {
+                reset = true; // Sync next oscillator in list (osc 1)
+            } else {
+                reset = false;
+            }
         }
         result /= sound.osc[0].level + sound.osc[1].level + sound.osc[2].level;
         result *= self.env[0].get_sample(sample_clock, sound);

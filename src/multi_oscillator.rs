@@ -24,14 +24,16 @@ pub struct MultiOscData {
     pub voice_spread: f32,
     pub tune_halfsteps: i64,
     pub freq_offset: f32, // Value derived from tune_halfsteps
+    pub sync: i64,
 }
 
 impl MultiOscData {
     pub fn init(&mut self) {
-        self.select_wave(0);
-        self.set_voice_num(1);
         self.level = 1.0;
         self.phase = 0.5;
+        self.select_wave(0);
+        self.set_voice_num(1);
+        self.sync = 0;
     }
 
     pub fn select_wave(&mut self, value: usize) {
@@ -139,27 +141,14 @@ impl MultiOscillator {
     }
 
     fn get_sample_triangle(state: &State, frequency: f32, phase: f32, dt: f32) -> f32 {
-        /*
-        //if state.last_pos < 0.25 {
-        let q1 = phase / 2.0;
-        let q2 = phase;
-        let q3 = phase + ((1.0 - phase) / 2.0);
-        if state.last_pos < q1 {
-            state.last_pos / q1
-        } else if state.last_pos < q2 {
-            1.0 + (1.0 - state.last_pos / q1)
-        } else if state.last_pos < q3  {
-            (2.0 - state.last_pos / q1)
-        } else {
-            -1.0 - (3.0 - state.last_pos / q1)
-        }
-        */
         let rate_q1 = 2.0 / phase;
         let rate_q2 = 2.0 / (1.0 - phase);
-        if state.last_pos < phase {
-            (state.last_pos * rate_q1) - 1.0
+        let mut pos = state.last_pos + (phase / 2.0);
+        if pos > 1.0 { pos -= 1.0 }
+        if pos < phase {
+            (pos * rate_q1) - 1.0
         } else {
-            1.0 - ((state.last_pos - phase) * rate_q2)
+            1.0 - ((pos - phase) * rate_q2)
         }
     }
 
@@ -181,11 +170,15 @@ impl MultiOscillator {
 }
 
 impl SampleGenerator for MultiOscillator {
-    fn get_sample(&mut self, frequency: f32, sample_clock: i64, data: &SoundData) -> f32 {
+    fn get_sample(&mut self, frequency: f32, sample_clock: i64, data: &SoundData, reset: bool) -> (f32, bool) {
         let data = data.get_osc_data(self.id);
         let dt = sample_clock - self.last_update;
         let dt_f = dt as f32;
         let mut result = 0.0;
+        let mut complete = false;
+        if reset {
+            self.reset();
+        }
 
         for i in 0..data.num_voices {
             let state: &mut State = &mut self.state[i as usize];
@@ -195,7 +188,9 @@ impl SampleGenerator for MultiOscillator {
             let diff = freq_speed * dt_f;
             state.last_pos += diff;
             if state.last_pos > 1.0 {
+                // Completed one wave cycle
                 state.last_pos -= 1.0;
+                complete = true;
             }
 
             if data.sine_ratio > 0.0 {
@@ -226,7 +221,15 @@ impl SampleGenerator for MultiOscillator {
 
         }
         self.last_update += dt;
-        (result / data.num_voices as f32) * data.level
+        ((result / data.num_voices as f32) * data.level, complete)
+    }
+
+    fn reset(&mut self) {
+        for state in self.state.iter_mut() {
+            state.last_pos = 0.0;
+            state.phasor.re = 1.0;
+            state.phasor.im = 0.0;
+        }
     }
 }
 

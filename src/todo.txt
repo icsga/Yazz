@@ -6,15 +6,24 @@
 - Implement oscillators:
     - Square - Done
     - Triangle - Done
-    - Saw
-    - Noise
+    - Saw - Done
+    - Noise - Done
     - Sample
     - Wavetable
 - Implement ADSR envelope generator - Done
 - Add MIDI support - Done
-- Control parameters via key commands
+- Control parameters via key commands - Done
+- Sync - Done
 - Morphing between sounds
 - Implement GUI:
     - Number of voices
     - Oscillator type, freq, amp
     - EG settings
+
+TODO:
+- Poly/ Mono
+- Store patches
+- Modulators
+- Prettier display
+- Performance improvements
+

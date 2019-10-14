@@ -129,51 +129,24 @@ impl Synth {
         match msg.function {
             Parameter::Oscillator => {
                 match msg.parameter {
-                    Parameter::Waveform => {
-                        let value = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() };
-                        sound.osc[id].select_wave(value);
-                    }
-                    Parameter::Level => {
-                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        sound.osc[id].level = value / 100.0;
-                    }
-                    Parameter::Frequency => {
-                        let value = if let ParameterValue::Int(x) = msg.value { x } else { panic!() };
-                        sound.osc[id].set_freq_offset(value);
-                    }
-                    Parameter::Blend => {
-                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        sound.osc[id].set_ratio(value);
-                    }
-                    Parameter::Phase => {
-                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        sound.osc[id].phase = value;
-                    }
+                    Parameter::Waveform => { sound.osc[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Level => { sound.osc[id].level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
+                    Parameter::Frequency => { sound.osc[id].set_freq_offset(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Blend => { sound.osc[id].set_ratio(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Phase => { sound.osc[id].phase = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Sync => { sound.osc[id].sync = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
             Parameter::Filter => {}
-            Parameter::Amp => {
-            }
+            Parameter::Amp => {}
             Parameter::Lfo => {}
             Parameter::Envelope => {
                 match msg.parameter {
-                    Parameter::Attack => {
-                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        sound.env[id].attack = value;
-                    }
-                    Parameter::Decay => {
-                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        sound.env[id].decay = value;
-                    }
-                    Parameter::Sustain => {
-                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        sound.env[id].sustain = value / 100.0;
-                    }
-                    Parameter::Release => {
-                        let value = if let ParameterValue::Float(x) = msg.value { x } else { panic!() };
-                        sound.env[id].release = value;
-                    }
+                    Parameter::Attack => { sound.env[id].attack = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Decay => { sound.env[id].decay = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Sustain => { sound.env[id].sustain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
+                    Parameter::Release => { sound.env[id].release = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -196,11 +169,14 @@ impl Synth {
                     Parameter::Level => {
                         if let ParameterValue::Float(x) = &mut msg.value { *x = sound.osc[id].level * 100.0; } else { panic!() };
                     }
+                    Parameter::Frequency => {
+                        if let ParameterValue::Int(x) = &mut msg.value { *x = sound.osc[id].tune_halfsteps; } else { panic!() };
+                    }
                     Parameter::Phase => {
                         if let ParameterValue::Float(x) = &mut msg.value { *x = sound.osc[id].phase; } else { panic!() };
                     }
-                    Parameter::Frequency => {
-                        if let ParameterValue::Int(x) = &mut msg.value { *x = sound.osc[id].tune_halfsteps; } else { panic!() };
+                    Parameter::Sync => {
+                        if let ParameterValue::Int(x) = &mut msg.value { *x = sound.osc[id].sync; } else { panic!() };
                     }
                     _ => {}
                 }
@@ -251,8 +227,9 @@ impl Synth {
     fn handle_wave_buffer(&mut self, mut buffer: Vec<f32>) {
         let len = buffer.capacity();
         let mut osc = MultiOscillator::new(44100, 0);
-        for i in 0..200 {
-            buffer[i] = osc.get_sample(440.0, i as i64, &self.sound.lock().unwrap());
+        for i in 0..buffer.capacity() {
+            let (sample, complete) = osc.get_sample(440.0, i as i64, &self.sound.lock().unwrap(), false);
+            buffer[i] = sample;
         }
         self.sender.send(UiMessage::WaveBuffer(buffer)).unwrap();
     }
