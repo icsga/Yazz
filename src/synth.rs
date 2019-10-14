@@ -22,10 +22,12 @@ pub enum Synth2UIMessage {
 pub struct Synth {
     sample_rate: u32,
     sound: Arc<Mutex<SoundData>>,
-    voice: [Voice; 1],
+    voice: [Voice; 16],
     keymap: [f32; 127],
     triggered: bool,
-    voices_triggered: u32,
+    num_voices_triggered: u32,
+    voices_playing: u32, // Bitmap with currently playing voices
+    trigger_seq: u64,
     sender: Sender<UiMessage>,
 }
 
@@ -73,10 +75,9 @@ impl Synth {
         sound.init();
         let sound = Arc::new(Mutex::new(sound));
         let voice = [
-            Voice::new(sample_rate)
+            Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
+            Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             /*
-            Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
-            Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             */
@@ -84,8 +85,10 @@ impl Synth {
         let mut keymap: [f32; 127] = [0.0; 127];
         Synth::calculate_keymap(&mut keymap, 440.0);
         let triggered = false;
-        let voices_triggered = 0;
-        Synth{sample_rate, sound, voice, keymap, triggered, voices_triggered, sender}
+        let num_voices_triggered = 0;
+        let voices_playing = 0;
+        let trigger_seq = 0;
+        Synth{sample_rate, sound, voice, keymap, triggered, num_voices_triggered, voices_playing, trigger_seq, sender}
     }
 
     /* Starts a thread for receiving UI and MIDI messages. */
@@ -108,10 +111,24 @@ impl Synth {
     /* Called by the audio engine to get the next sample to be output. */
     pub fn get_sample(&mut self, sample_clock: i64) -> f32 {
         let mut value: f32 = 0.0;
-        for v in self.voice.iter_mut() {
-            value += v.get_sample(sample_clock, &self.sound.lock().unwrap());
+        if self.voices_playing > 0 {
+            let sound = &self.sound.lock().unwrap();
+            for i in 0..32 {
+                if self.voices_playing & (1 << i) > 0 {
+                    value += self.voice[i].get_sample(sample_clock, sound);
+                }
+            }
         }
         value
+    }
+
+    pub fn update(&mut self) {
+        self.voices_playing = 0;
+        for (i, v) in self.voice.iter_mut().enumerate() {
+            if v.is_running() {
+                self.voices_playing |= 1 << i;
+            }
+        }
     }
 
     /* Calculates the frequencies for the default keymap with equal temperament. */
@@ -124,7 +141,6 @@ impl Synth {
     /* Handles a message received from the UI. */
     fn handle_ui_message(&mut self, msg: SynthParam) {
         let mut sound = self.sound.lock().unwrap();
-        //let id = if let FunctionId::Int(x) = msg.function_id { x - 1 } else { panic!() } as usize;
         let id = msg.function_id - 1;
         match msg.function {
             Parameter::Oscillator => {
@@ -158,7 +174,6 @@ impl Synth {
 
     fn handle_ui_query(&mut self, mut msg: SynthParam) {
         let sound = self.sound.lock().unwrap();
-        //let id = if let FunctionId::Int(x) = msg.function_id { x - 1 } else { panic!() } as usize;
         let id = msg.function_id - 1;
         match msg.function {
             Parameter::Oscillator => {
@@ -210,18 +225,41 @@ impl Synth {
         match mtype {
             0x90 => {
                 let freq = self.keymap[msg.param as usize];
-                self.voice[0].set_freq(freq);
-                self.voice[0].trigger();
-                self.voices_triggered += 1;
+                let voice_id = self.get_voice();
+                self.voice[voice_id].set_key(msg.param);
+                self.voice[voice_id].set_freq(freq);
+                self.voice[voice_id].trigger(self.trigger_seq);
+                self.num_voices_triggered += 1;
+                self.trigger_seq += 1;
+                self.voices_playing |= 1 << voice_id;
             }
             0x80 => {
-                self.voices_triggered -= 1;
-                if self.voices_triggered == 0 {
-                    self.voice[0].release();
+                for (i, v) in self.voice.iter_mut().enumerate() {
+                    if v.is_triggered() && v.key == msg.param {
+                        self.num_voices_triggered -= 1;
+                        v.release();
+                        break;
+                    }
                 }
             }
             _ => ()
         }
+    }
+
+    /* Decide which voice gets to play the next note. */
+    fn get_voice(&mut self) -> usize {
+        let mut min_trigger_seq = std::u64::MAX;
+        let mut min_id = 0;
+        for (i, v) in self.voice.iter().enumerate() {
+            if !v.is_running() {
+                return i;
+            }
+            if v.trigger_seq < min_trigger_seq {
+                min_trigger_seq = v.trigger_seq;
+                min_id = i;
+            }
+        }
+        min_id
     }
 
     fn handle_wave_buffer(&mut self, mut buffer: Vec<f32>) {

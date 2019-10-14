@@ -82,9 +82,9 @@ struct Selection {
 
 static FUNCTIONS: [Selection; 4] = [
     Selection{item: Parameter::Oscillator, key: Key::Char('o'), val_range: ValueRange::IntRange(1, 3), next: &OSC_PARAMS},
+    Selection{item: Parameter::Envelope,   key: Key::Char('e'), val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
     Selection{item: Parameter::Lfo,        key: Key::Char('l'), val_range: ValueRange::IntRange(1, 3), next: &LFO_PARAMS},
     Selection{item: Parameter::Filter,     key: Key::Char('f'), val_range: ValueRange::IntRange(1, 2), next: &FILTER_PARAMS},
-    Selection{item: Parameter::Envelope,   key: Key::Char('e'), val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
 ];
 
 static OSC_PARAMS: [Selection; 6] = [
@@ -169,7 +169,7 @@ impl Tui {
         let mut get_wave = true;
         let handler = spawn(move || {
             loop {
-                get_wave = true;
+                get_wave = false;
                 let msg = tui.ui_receiver.recv().unwrap();
                 match msg {
                     UiMessage::Midi(m)  => tui.handle_midi(m),
@@ -509,9 +509,7 @@ impl Tui {
         }
         //print!("{}", clear::UntilNewline);
         self.display_options(x_pos);
-        print!("{}{}", color::Bg(Black), color::Fg(White));
-        self.canvas.render(1, 10);
-        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+        //self.display_waveform();
         io::stdout().flush().ok();
     }
 
@@ -602,5 +600,10 @@ impl Tui {
                 ValueRange::NoRange => ()
             }
         }
+    }
+    fn display_waveform(&self) {
+        print!("{}{}", color::Bg(Black), color::Fg(White));
+        self.canvas.render(1, 10);
+        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
     }
 }
