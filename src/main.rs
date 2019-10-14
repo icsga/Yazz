@@ -157,7 +157,7 @@ fn setup_audio() -> (Engine, u32) {
     println!("\rSetting up audio engine...");
     let engine = Engine::new();
     let sample_rate = engine.get_sample_rate();
-    println!("\rsample_rate: {}", sample_rate);
+    println!("\r  sample_rate: {}", sample_rate);
     println!("\r... finished");
     (engine, sample_rate)
 }

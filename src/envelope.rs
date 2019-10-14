@@ -97,4 +97,8 @@ impl Envelope {
         }
         self.state.last_value
     }
+
+    pub fn is_running(&self) -> bool {
+        self.state.is_running
+    }
 }

@@ -33,6 +33,7 @@ impl MultiOscData {
         self.phase = 0.5;
         self.select_wave(0);
         self.set_voice_num(1);
+        self. set_freq_offset(0);
         self.sync = 0;
     }
 
