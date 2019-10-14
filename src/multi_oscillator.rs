@@ -1,5 +1,5 @@
 use super::SampleGenerator;
-use super::synth::SoundData;
+use super::sound::SoundData;
 
 use std::sync::Arc;
 use rand::prelude::*;
@@ -25,16 +25,18 @@ pub struct MultiOscData {
     pub tune_halfsteps: i64,
     pub freq_offset: f32, // Value derived from tune_halfsteps
     pub sync: i64,
+    pub key_follow: i64,
 }
 
 impl MultiOscData {
     pub fn init(&mut self) {
-        self.level = 1.0;
+        self.level = 0.5;
         self.phase = 0.5;
         self.select_wave(0);
         self.set_voice_num(1);
-        self. set_freq_offset(0);
+        self.set_freq_offset(0);
         self.sync = 0;
+        self.key_follow = 1;
     }
 
     pub fn select_wave(&mut self, value: usize) {

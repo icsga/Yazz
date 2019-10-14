@@ -2,8 +2,7 @@
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 
-extern crate termion;
-
+mod canvas;
 mod engine;
 mod envelope;
 mod midi_handler;
@@ -11,36 +10,36 @@ mod multi_oscillator;
 mod oscillator;
 mod parameter;
 mod sample_generator;
+mod sound;
 mod synth;
 mod termion_wrapper;
 mod tui;
 mod voice;
-mod canvas;
 
-use engine::Engine;
-use envelope::Envelope;
-use midi_handler::MidiHandler;
-use midi_handler::MidiMessage;
-use midi_handler::MessageType;
-use oscillator::Oscillator;
-use parameter::SynthParam;
-use sample_generator::SampleGenerator;
-use multi_oscillator::MultiOscillator;
-use synth::{Synth, SoundData};
-use termion_wrapper::TermionWrapper;
-use termion::event::Key;
-use tui::Tui;
 use canvas::Canvas;
-
-use std::sync::{Arc, Mutex};
-use std::thread::JoinHandle;
+use engine::Engine;
+use envelope::{Envelope, EnvelopeData};
+use midi_handler::{MidiHandler, MidiMessage, MessageType};
+use multi_oscillator::{MultiOscillator, MultiOscData};
+use oscillator::Oscillator;
+use parameter::{Parameter, ParameterValue, SynthParam};
+use sample_generator::SampleGenerator;
+use sound::SoundData;
+use synth::Synth;
+use termion_wrapper::TermionWrapper;
+use tui::Tui;
 
 use std::error::Error;
 use std::fs::File;
 use std::io::{stdin, stdout, Write};
 use std::io::prelude::*;
 use std::path::Path;
+use std::sync::{Arc, Mutex};
+use std::thread::JoinHandle;
 use std::vec::Vec;
+
+extern crate termion;
+use termion::event::Key;
 
 extern crate midir;
 use midir::{MidiInput, MidiInputConnection, Ignore};

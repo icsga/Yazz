@@ -18,6 +18,7 @@ pub enum Parameter {
     Level,
     Frequency,
     Sync,
+    KeyFollow,
 
     // Filter
     Type,

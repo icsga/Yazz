@@ -87,13 +87,14 @@ static FUNCTIONS: [Selection; 4] = [
     Selection{item: Parameter::Filter,     key: Key::Char('f'), val_range: ValueRange::IntRange(1, 2), next: &FILTER_PARAMS},
 ];
 
-static OSC_PARAMS: [Selection; 6] = [
+static OSC_PARAMS: [Selection; 7] = [
     Selection{item: Parameter::Waveform,  key: Key::Char('w'), val_range: ValueRange::ChoiceRange(&WAVEFORM), next: &[]},
     Selection{item: Parameter::Level,     key: Key::Char('l'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
     Selection{item: Parameter::Frequency, key: Key::Char('f'), val_range: ValueRange::IntRange(-24, 24), next: &[]},
     Selection{item: Parameter::Blend,     key: Key::Char('b'), val_range: ValueRange::FloatRange(0.0, 5.0), next: &[]},
     Selection{item: Parameter::Phase,     key: Key::Char('p'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
     Selection{item: Parameter::Sync,      key: Key::Char('s'), val_range: ValueRange::IntRange(0, 1), next: &[]},
+    Selection{item: Parameter::KeyFollow, key: Key::Char('k'), val_range: ValueRange::IntRange(0, 1), next: &[]},
 ];
 
 static LFO_PARAMS: [Selection; 3] = [
