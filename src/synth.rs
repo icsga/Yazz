@@ -109,8 +109,10 @@ impl Synth {
 
     /* Handles a parameter query received from the UI. */
     fn handle_ui_query(&mut self, mut msg: SynthParam) {
-        let sound = self.sound.lock().unwrap();
-        sound.insert_value(&mut msg);
+        {
+            let sound = self.sound.lock().unwrap();
+            sound.insert_value(&mut msg);
+        }
         self.sender.send(UiMessage::Param(msg)).unwrap();
     }
 
@@ -125,7 +127,10 @@ impl Synth {
                 let voice = &mut self.voice[voice_id];
                 voice.set_key(msg.param);
                 voice.set_freq(freq);
-                voice.trigger(self.trigger_seq, self.last_clock);
+                {
+                    let sound = self.sound.lock().unwrap();
+                    voice.trigger(self.trigger_seq, self.last_clock, &sound);
+                }
                 self.num_voices_triggered += 1;
                 self.trigger_seq += 1;
                 self.voices_playing |= 1 << voice_id;
@@ -134,7 +139,8 @@ impl Synth {
                 for (i, v) in self.voice.iter_mut().enumerate() {
                     if v.is_triggered() && v.key == msg.param {
                         self.num_voices_triggered -= 1;
-                        v.release();
+                        let sound = self.sound.lock().unwrap();
+                        v.release(&sound);
                         break;
                     }
                 }
@@ -166,8 +172,9 @@ impl Synth {
     fn handle_wave_buffer(&mut self, mut buffer: Vec<f32>) {
         let len = buffer.capacity();
         let mut osc = MultiOscillator::new(44100, 0);
+        let sound = self.sound.lock().unwrap();
         for i in 0..buffer.capacity() {
-            let (sample, complete) = osc.get_sample(440.0, i as i64, &self.sound.lock().unwrap(), false);
+            let (sample, complete) = osc.get_sample(440.0, i as i64, &sound, false);
             buffer[i] = sample;
         }
         self.sender.send(UiMessage::WaveBuffer(buffer)).unwrap();

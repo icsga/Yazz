@@ -1,18 +1,24 @@
 extern crate cpal;
 extern crate failure;
 
+use super::UiMessage;
 use super::synth::Synth;
 use cpal::traits::{DeviceTrait, EventLoopTrait, HostTrait};
+
+use crossbeam_channel::Sender;
+
 use std::sync::{Arc, Mutex};
+use std::time::{SystemTime, Duration};
 
 pub struct Engine {
     sample_rate: u32,
     sample_clock: i64,
     num_channels: usize,
+    to_ui_sender: Sender<UiMessage>,
 }
 
 impl Engine {
-    pub fn new() -> Engine {
+    pub fn new(to_ui_sender: Sender<UiMessage>) -> Engine {
         //Engine::enumerate();
         let host = cpal::default_host();
         println!("\r  Chose host {:?}", host.id());
@@ -23,7 +29,7 @@ impl Engine {
         let sample_clock = 0i64;
         let num_channels = 2;
 
-        Engine{sample_rate, sample_clock, num_channels}
+        Engine{sample_rate, sample_clock, num_channels, to_ui_sender}
     }
 
     pub fn get_sample_rate(&self) -> u32 {
@@ -40,6 +46,7 @@ impl Engine {
         }
         let stream_id = event_loop.build_output_stream(&device, &format).unwrap();
         let my_synth = synth.clone();
+        let mut time = SystemTime::now();
         event_loop.play_stream(stream_id.clone()).unwrap();
 
         event_loop.run(move |id, result| {
@@ -53,6 +60,8 @@ impl Engine {
             match data {
                 cpal::StreamData::Output { buffer: cpal::UnknownTypeOutputBuffer::F32(mut buffer) } => {
                     let locked_synth = &mut synth.lock().unwrap();
+            let idle = time.elapsed().expect("Went back in time");
+            time = SystemTime::now();
                     for sample in buffer.chunks_mut(self.num_channels) {
                         self.sample_clock = self.sample_clock + 1;
                         let value = locked_synth.get_sample(self.sample_clock);
@@ -60,6 +69,9 @@ impl Engine {
                             *out = value;
                         }
                     }
+            let busy = time.elapsed().expect("Went back in time");
+            time = SystemTime::now();
+            self.to_ui_sender.send(UiMessage::EngineSync(idle, busy)).unwrap();
                     locked_synth.update(); // Update the state of the synth voices
                 },
                 _ => (),

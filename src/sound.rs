@@ -2,7 +2,9 @@ use super::envelope::EnvelopeData;
 use super::multi_oscillator::MultiOscData;
 use super::parameter::{Parameter, ParameterValue, SynthParam};
 
-#[derive(Default)]
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize, Deserialize, Default)]
 pub struct SoundData {
     pub osc: [MultiOscData; 3],
     pub env: [EnvelopeData; 2],
@@ -117,6 +119,13 @@ impl SoundData {
 
     fn insert_choice(msg: &mut SynthParam, value: usize) {
         if let ParameterValue::Choice(x) = &mut msg.value { *x = value; } else { panic!() };
+    }
+
+    pub fn write(&self, filename: &str) {
+        let serialized = serde_json::to_string(&self).unwrap();
+        println!("serialized = {}", serialized);
+        // TODO: Write to file
+        //let deserialized: SoundData = serde_json::from_str(&serialized).unwrap();
     }
 }
 

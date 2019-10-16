@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
+#![allow(unreachable_code)]
 
 mod canvas;
 mod engine;
@@ -36,6 +37,7 @@ use std::io::prelude::*;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
+use std::time::{Duration, SystemTime};
 use std::vec::Vec;
 
 extern crate termion;
@@ -51,6 +53,9 @@ use crossbeam_channel::{Sender, Receiver};
 
 extern crate rand;
 use rand::Rng;
+
+use log::{info, trace, warn};
+use flexi_logger::{Logger, opt_format};
 
 /*
 fn test_oscillator() {
@@ -88,12 +93,13 @@ fn test_oscillator() {
 }
 */
 
-/*
 fn test_envalope() {
     let sample_rate = 44100;
-    let env = Envelope::new(sample_rate as f32);
+    let mut env = Envelope::new(sample_rate as f32, 0);
     let path = Path::new("env_output.txt");
     let display = path.display();
+    let mut sound = SoundData::new();
+    sound.init();
 
     // Open a file in write-only mode, returns `io::Result<File>`
     let mut file = match File::create(&path) {
@@ -101,17 +107,22 @@ fn test_envalope() {
         Ok(file) => file,
     };
 
-    let num_samples = sample_rate;
-    env.trigger(0 as u64);
+    let num_samples = sample_rate * 2;
+    env.trigger(0 as i64, &sound.env[0]);
     for i in 0..num_samples {
-        if i == 20000 {
-            println!("Release");
-            env.release(i as u64);
+        if i == 10000 {
+            env.release(i as i64, &sound.env[0]);
         }
-        file.write_fmt(format_args!("{:.*}\n", 5, env.get_sample(i as u64))).unwrap();
+        if i == 20000 {
+            env.trigger(i as i64, &sound.env[0]);
+        }
+        let now = SystemTime::now();
+        let value = env.get_sample(i as i64, &sound.env[0]);
+        let duration = now.elapsed().expect("Sound");
+        //file.write_fmt(format_args!("{:.*} {}\n", 5, value, duration.as_nanos())).unwrap();
+        file.write_fmt(format_args!("{:.*}\n", 5, value)).unwrap();
     }
 }
-*/
 
 pub enum SynthMessage {
     Midi(MidiMessage),
@@ -125,6 +136,16 @@ pub enum UiMessage {
     Key(Key),
     Param(SynthParam),
     WaveBuffer(Vec<f32>),
+    EngineSync(Duration, Duration),
+}
+
+fn setup_logging() {
+    Logger::with_env_or_str("myprog=debug, mylib=warn")
+                            .log_to_file()
+                            .directory("log_files")
+                            .format(opt_format)
+                            .start()
+                            .unwrap();
 }
 
 fn setup_messaging() -> (Sender<UiMessage>, Receiver<UiMessage>, Sender<SynthMessage>, Receiver<SynthMessage>) {
@@ -152,9 +173,9 @@ fn setup_ui(to_synth_sender: Sender<SynthMessage>, to_ui_sender: Sender<UiMessag
     (term_handle, tui_handle)
 }
 
-fn setup_audio() -> (Engine, u32) {
+fn setup_audio(to_ui_sender: Sender<UiMessage>) -> (Engine, u32) {
     println!("\rSetting up audio engine...");
-    let engine = Engine::new();
+    let engine = Engine::new(to_ui_sender);
     let sample_rate = engine.get_sample_rate();
     println!("\r  sample_rate: {}", sample_rate);
     println!("\r... finished");
@@ -171,14 +192,18 @@ fn setup_synth(sample_rate: u32, s2u_sender: Sender<UiMessage>, synth_receiver: 
 }
 
 fn main() {
+    setup_logging();
+
     //test_oscillator();
+    //return;
+    //test_envalope();
     //return;
 
     // Do setup
     let (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver) = setup_messaging();
     let midi_connection = setup_midi(to_synth_sender.clone(), to_ui_sender.clone());
     let (term_handle, tui_handle) = setup_ui(to_synth_sender, to_ui_sender.clone(), ui_receiver);
-    let (mut engine, sample_rate) = setup_audio();
+    let (mut engine, sample_rate) = setup_audio(to_ui_sender.clone());
     let (synth, synth_handle) = setup_synth(sample_rate, to_ui_sender, synth_receiver);
 
     // Run

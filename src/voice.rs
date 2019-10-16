@@ -82,7 +82,7 @@ impl Voice {
             // Normalize level to avoid distortion
             result /= level_sum;
         }
-        result *= self.env[0].get_sample(sample_clock, sound);
+        result *= self.env[0].get_sample(sample_clock, &sound.env[0]);
         if result > 1.0 {
             panic!("Voice: {}", result);
         }
@@ -129,18 +129,20 @@ impl Voice {
         self.input_freq = freq;
     }
 
-    pub fn trigger(&mut self, trigger_seq: u64, trigger_time: i64) {
+    pub fn trigger(&mut self, trigger_seq: u64, trigger_time: i64, sound: &SoundData) {
         self.triggered = true;
         self.trigger_seq = trigger_seq;
-        self.env[0].trigger(trigger_time);
+        self.env[0].trigger(trigger_time, &sound.env[0]);
+        /*
         for o in self.osc.iter_mut() {
             o.reset();
         }
+        */
     }
 
-    pub fn release(&mut self) {
+    pub fn release(&mut self, sound: &SoundData) {
         self.triggered = false;
-        self.env[0].release(self.last_update);
+        self.env[0].release(self.last_update, &sound.env[0]);
     }
 
     pub fn is_triggered(&self) -> bool {
