@@ -73,8 +73,10 @@ impl MidiHandler {
             if message.len() == 3 {
                 let m = MidiMessage{mtype: message[0], param: message[1], value: message[2]};
                 m2s_sender.send(SynthMessage::Midi(m)).unwrap();
-                let m = MidiMessage{mtype: message[0], param: message[1], value: message[2]};
-                m2u_sender.send(UiMessage::Midi(m)).unwrap();
+                if message[0] & 0xF0 == 0xB0 {
+                    let m = MidiMessage{mtype: message[0], param: message[1], value: message[2]};
+                    m2u_sender.send(UiMessage::Midi(m)).unwrap();
+                }
             }
         }, ()).unwrap();
         conn_in

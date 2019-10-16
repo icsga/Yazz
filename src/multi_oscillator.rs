@@ -1,8 +1,9 @@
 use super::SampleGenerator;
 use super::sound::SoundData;
 
-use std::sync::Arc;
 use rand::prelude::*;
+use serde::{Serialize, Deserialize};
+use std::sync::Arc;
 
 pub struct MultiOscillator {
     sample_rate: f32,
@@ -11,7 +12,7 @@ pub struct MultiOscillator {
     state: [State; 7], // State for up to 7 oscillators running in sync
 }
 
-#[derive(Default)]
+#[derive(Serialize, Deserialize, Default)]
 pub struct MultiOscData {
     pub level: f32,
     pub phase: f32,
@@ -196,7 +197,7 @@ impl SampleGenerator for MultiOscillator {
                 complete = true;
             }
 
-            if data.sine_ratio > 0.0 {
+            //if data.sine_ratio > 0.0 {
                 result += MultiOscillator::get_sample_sine(state, frequency, dt, self.sample_rate) * data.sine_ratio;
 
                 // Periodically stabilize the phasor's amplitude.
@@ -208,23 +209,28 @@ impl SampleGenerator for MultiOscillator {
                         state.phasor = state.phasor * state.stabilizer;
                         state.last_stabilization = 0;
                 }
-            }
-            if data.tri_ratio > 0.0 {
+            //}
+            //if data.tri_ratio > 0.0 {
                 result += MultiOscillator::get_sample_triangle(state, frequency, data.phase, dt_f) * data.tri_ratio;
-            }
-            if data.saw_ratio > 0.0 {
+            //}
+            //if data.saw_ratio > 0.0 {
                 result += MultiOscillator::get_sample_saw(state, frequency, dt_f) * data.saw_ratio;
-            }
-            if data.square_ratio > 0.0 {
+            //}
+            //if data.square_ratio > 0.0 {
                 result += MultiOscillator::get_sample_square(state, frequency, data.phase, dt_f) * data.square_ratio;
-            }
-            if data.noise_ratio > 0.0 {
+            //}
+            //if data.noise_ratio > 0.0 {
                 result += MultiOscillator::get_sample_noise(state, frequency, dt_f) * data.noise_ratio;
-            }
+            //}
 
         }
         self.last_update += dt;
-        ((result / data.num_voices as f32) * data.level, complete)
+        result /= data.num_voices as f32;
+        result *= data.level;
+        if result > 1.0 {
+            result = 1.0;
+        }
+        (result, complete)
     }
 
     fn reset(&mut self) {

@@ -1,38 +1,60 @@
 use std::sync::Arc;
-use super::sound::SoundData;
 
+use serde::{Serialize, Deserialize};
+use log::{info, trace, warn};
+
+#[derive(Debug)]
 pub struct Envelope {
     sample_rate: f32,
     id: usize,
     rate_mul: f32,
-    state: EnvelopeState,
+
+    end_time: i64,
+    increment: f32,
+    last_update: i64,
+    last_value: f32,
+    is_held: bool,
+    state: State,
 }
 
-#[derive(Default)]
+#[derive(Serialize, Deserialize, Default)]
 pub struct EnvelopeData {
     pub attack: f32,
     pub decay: f32,
     pub sustain: f32,
     pub release: f32,
+    pub factor: f32,
 }
 
 impl EnvelopeData {
     pub fn init(&mut self) {
         self.attack = 50.0;
-        self.decay = 100.0;
-        self.sustain = 1.0;
-        self.release = 10.0;
+        self.decay = 50.0;
+        self.sustain = 0.5;
+        self.release = 50.0;
+        self.factor = 4.0;
     }
 }
 
-struct EnvelopeState {
-    trigger_time: i64,
-    release_time: i64,
-    release_level: f32,
-    last_update: i64,
-    last_value: f32,
-    is_held: bool,
-    is_running: bool
+#[derive(Debug)]
+enum State {
+    Idle,
+    Attack,
+    Decay,
+    Sustain,
+    Release,
+}
+
+impl State {
+    fn next(&self) -> State {
+        match self {
+            State::Idle => State::Attack,
+            State::Attack => State::Decay,
+            State::Decay => State::Sustain,
+            State::Sustain => State::Release,
+            State::Release => State::Idle,
+        }
+    }
 }
 
 impl Envelope {
@@ -40,75 +62,77 @@ impl Envelope {
         Envelope{sample_rate: sample_rate,
                  id: id,
                  rate_mul: sample_rate / 1000.0, // 1 ms
-                 state: EnvelopeState{trigger_time: 0,
-                                      release_time: 0,
-                                      release_level: 0.0,
-                                      last_update:0,
-                                      last_value: 0.0,
-                                      is_held: false,
-                                      is_running: false},
+                 increment: 0.0,
+                 end_time: 0,
+                 last_update:0,
+                 last_value: 0.0,
+                 is_held: false,
+                 state: State::Idle,
         }
     }
 
-    pub fn trigger(&mut self, sample_time: i64) {
-        self.state.trigger_time = sample_time;
-        self.state.is_held = true;
-        self.state.is_running = true;
+    pub fn trigger(&mut self, sample_time: i64, data: &EnvelopeData) {
+        self.change_state(State::Attack, sample_time, data);
     }
 
-    pub fn release(&mut self, sample_time: i64) {
-        self.state.release_time = sample_time;
-        self.state.release_level = self.state.last_value;
-        self.state.is_held = false;
+    pub fn release(&mut self, sample_time: i64, data: &EnvelopeData) {
+        self.change_state(State::Release, sample_time, data);
     }
 
-    pub fn get_sample(&mut self, sample_time: i64, data: &SoundData) -> f32 {
-        let data = data.get_env_data(self.id);
-        let attack = data.attack * self.rate_mul;
-        let decay = data.decay * self.rate_mul;
-        let release = data.release * self.rate_mul;
-        if sample_time != self.state.last_update && self.state.is_running {
-            let mut dt = (sample_time - self.state.trigger_time) as f32;
-            loop {
-                if self.state.is_held {
-                    // Attack phase
-                    if dt < attack {
-                        self.state.last_value = dt / attack;
-                        break;
-                    }
-                    // Decay phase
-                    dt -= attack;
-                    if dt < decay {
-                        let sustain_diff = 1.0 - data.sustain;
-                        self.state.last_value = (sustain_diff - ((dt / decay) * sustain_diff)) + data.sustain;
-                        break;
-                    }
-                    // Sustain phase
-                    self.state.last_value = data.sustain;
-                    break;
+    pub fn get_sample(&mut self, sample_time: i64, data: &EnvelopeData) -> f32 {
+        match self.state {
+            State::Idle => return 0.0,
+            State::Attack | State::Decay | State::Release => {
+                if sample_time >= self.end_time {
+                    self.change_state(self.state.next(), sample_time, data);
+                } else {
+                    self.last_value += self.increment;
                 }
-                // Release phase
-                dt = (sample_time - self.state.release_time) as f32;
-                if dt < release {
-                    // TODO: The case where the envelope is released before the sustain phase is
-                    // not correctly handled. We should calculate the adjusted release time
-                    // depending on the ratio of release level to sustain level.
-                    self.state.last_value = self.state.release_level - ((dt / release) * self.state.release_level);
-                    break;
-                }
-                // Envelope has finished
-                self.state.is_running = false;
-                self.state.last_value = 0.0;
-                break;
-            }
+            },
+            State::Sustain => (),
         }
-        if self.state.last_value > 1.0 {
-            panic!("\r\nEnvelope: Got value {}", self.state.last_value);
+        if self.last_value > 1.0 {
+            self.last_value = 1.0;
         }
-        self.state.last_value.powi(4)
+        self.last_value.powf(data.factor)
     }
 
     pub fn is_running(&self) -> bool {
-        self.state.is_running
+        match self.state {
+            State::Idle => false,
+            _ => true
+        }
+    }
+    fn change_state(&mut self, new_state: State, sample_time: i64, data: &EnvelopeData) {
+        info!("Changing from state {:?} -> {:?} at {}", self.state, new_state, sample_time);
+        match new_state {
+            State::Idle => self.last_value = 0.0,
+            State::Attack => {
+                self.end_time = self.calc_end_time(sample_time, data.attack);
+                self.increment = self.calc_increment(1.0, data.attack);
+                self.is_held = true;
+            },
+            State::Decay => {
+                self.end_time = self.calc_end_time(sample_time, data.decay);
+                self.increment = self.calc_increment(data.sustain, data.decay);
+            },
+            State::Sustain => {
+            },
+            State::Release => {
+                self.end_time = self.calc_end_time(sample_time, data.release);
+                self.increment = self.calc_increment(0.0, data.release);
+                self.is_held = false;
+            },
+        }
+        self.state = new_state;
+        info!("{:?}", self);
+    }
+
+    fn calc_end_time(&self, sample_time: i64, end_time: f32) -> i64 {
+        sample_time + (end_time * self.rate_mul) as i64
+    }
+
+    fn calc_increment(&self, target: f32, duration: f32) -> f32 {
+        (target - self.last_value) / (duration * self.rate_mul)
     }
 }

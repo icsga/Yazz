@@ -6,22 +6,21 @@ use super::TermionWrapper;
 use super::{UiMessage, SynthMessage};
 use super::canvas::Canvas;
 
+use crossbeam_channel::unbounded;
+use crossbeam_channel::{Sender, Receiver};
 use termion::clear;
 use termion::event::Key;
 //use termion::cursor::{DetectCursorPos, Goto};
 use termion::color;
 use termion::color::{Black, White, LightWhite, Reset, Rgb};
-use std::io::{stdout, stdin};
+
 use std::convert::TryInto;
-use std::num::ParseFloatError;
-use std::io;
-use std::io::Write;
-
-use crossbeam_channel::unbounded;
-use crossbeam_channel::{Sender, Receiver};
-
 use std::fmt::{self, Debug, Display};
+use std::io;
+use std::io::{stdout, stdin, Write};
+use std::num::ParseFloatError;
 use std::thread::spawn;
+use std::time::{Duration, SystemTime};
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 enum TuiState {
@@ -141,6 +140,11 @@ pub struct Tui {
     selected_function: SelectedItem,
     selected_parameter: SelectedItem,
 
+    sync_counter: u32,
+    idle: Duration, // Accumulated idle times of the engine
+    busy: Duration, // Accumulated busy times of the engine
+    min_idle: Duration,
+    max_busy: Duration,
     canvas: Canvas,
 
     temp_string: String,
@@ -154,6 +158,11 @@ impl Tui {
         let selected_function = SelectedItem{item_list: &FUNCTIONS, item_index: 0, value: ParameterValue::Int(1)};
         let selected_parameter = SelectedItem{item_list: &OSC_PARAMS, item_index: 0, value: ParameterValue::Int(1)};
         let temp_string = String::new();
+        let sync_counter = 0;
+        let idle = Duration::new(0, 0);
+        let busy = Duration::new(0, 0);
+        let min_idle = Duration::new(10, 0);
+        let max_busy = Duration::new(0, 0);
         let canvas = Canvas::new(100, 30);
         Tui{state,
             sender,
@@ -161,16 +170,21 @@ impl Tui {
             current_list,
             selected_function,
             selected_parameter,
+            sync_counter,
+            idle,
+            busy,
+            min_idle,
+            max_busy,
             canvas,
             temp_string
         }
     }
 
     pub fn run(mut tui: Tui) -> std::thread::JoinHandle<()> {
-        let mut get_wave = true;
+        let mut get_wave = false;
         let handler = spawn(move || {
             loop {
-                get_wave = false;
+                //get_wave = true;
                 let msg = tui.ui_receiver.recv().unwrap();
                 match msg {
                     UiMessage::Midi(m)  => tui.handle_midi(m),
@@ -180,11 +194,11 @@ impl Tui {
                         tui.handle_wavebuffer(m);
                         get_wave = false;
                     },
+                    UiMessage::EngineSync(idle, busy) => tui.handle_engine_sync(idle, busy),
                 };
                 if get_wave {
                     tui.get_waveform();
                 }
-                tui.display();
             }
         });
         handler
@@ -245,6 +259,29 @@ impl Tui {
         for (x_pos, v) in m.iter().enumerate() {
             let y_pos = ((v + 1.0) * (29.0 / 2.0)) as usize;
             self.canvas.set(x_pos, y_pos, '∘');
+        }
+    }
+
+    fn handle_engine_sync(&mut self, idle: Duration, busy: Duration) {
+        self.idle += idle;
+        self.busy += busy;
+        if idle < self.min_idle {
+            self.min_idle = idle;
+        }
+        if busy > self.max_busy {
+            self.max_busy = busy;
+        }
+        self.sync_counter += 1;
+        if self.sync_counter == 10 {
+            let display_time = SystemTime::now();
+            self.display();
+            /*
+            println!("{}Display: {:?}\r\nIdle: {:?}\r\nBusy: {:?}\r\nLast: {:?}, {:?}\r\nMin Idle: {:?}, Max Busy: {:?}",
+                     cursor::Goto(1, 5), display_time.elapsed().unwrap(), self.idle / 10, self.busy / 10, idle, busy, self.min_idle, self.max_busy);
+            self.idle = Duration::new(0, 0);
+            self.busy = Duration::new(0, 0);
+            */
+            self.sync_counter = 0;
         }
     }
 
