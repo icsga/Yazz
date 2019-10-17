@@ -6,7 +6,6 @@ use log::{info, trace, warn};
 #[derive(Debug)]
 pub struct Envelope {
     sample_rate: f32,
-    id: usize,
     rate_mul: f32,
 
     end_time: i64,
@@ -58,9 +57,8 @@ impl State {
 }
 
 impl Envelope {
-    pub fn new(sample_rate: f32, id: usize) -> Envelope {
+    pub fn new(sample_rate: f32) -> Envelope {
         Envelope{sample_rate: sample_rate,
-                 id: id,
                  rate_mul: sample_rate / 1000.0, // 1 ms
                  increment: 0.0,
                  end_time: 0,
@@ -89,7 +87,7 @@ impl Envelope {
                     self.last_value += self.increment;
                 }
             },
-            State::Sustain => (),
+            State::Sustain => self.last_value = data.sustain, // Might be updated while not is held,
         }
         if self.last_value > 1.0 {
             self.last_value = 1.0;
@@ -125,7 +123,7 @@ impl Envelope {
             },
         }
         self.state = new_state;
-        info!("{:?}", self);
+        //info!("{:?}", self);
     }
 
     fn calc_end_time(&self, sample_time: i64, end_time: f32) -> i64 {

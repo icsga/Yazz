@@ -37,6 +37,7 @@ impl Synth {
         let mut sound = SoundData::new();
         sound.init();
         let sound = Arc::new(Mutex::new(sound));
+        sound.lock().unwrap().osc[0].select_wave(1); // Triangle
         let voice = [
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),

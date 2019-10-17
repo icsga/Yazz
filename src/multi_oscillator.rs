@@ -181,7 +181,7 @@ impl SampleGenerator for MultiOscillator {
         let mut result = 0.0;
         let mut complete = false;
         if reset {
-            self.reset();
+            self.reset(sample_clock - 1);
         }
 
         for i in 0..data.num_voices {
@@ -233,12 +233,13 @@ impl SampleGenerator for MultiOscillator {
         (result, complete)
     }
 
-    fn reset(&mut self) {
+    fn reset(&mut self, sample_clock: i64) {
         for state in self.state.iter_mut() {
             state.last_pos = 0.0;
             state.phasor.re = 1.0;
             state.phasor.im = 0.0;
         }
+        self.last_update = sample_clock;
     }
 }
 
