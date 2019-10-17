@@ -73,6 +73,7 @@ impl fmt::Display for Parameter {
     }
 }
 
+#[derive(Debug)]
 pub struct SynthParam {
     pub function: Parameter,
     pub function_id: usize,

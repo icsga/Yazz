@@ -164,10 +164,10 @@ fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>) -
 
 fn setup_ui(to_synth_sender: Sender<SynthMessage>, to_ui_sender: Sender<UiMessage>, ui_receiver: Receiver<UiMessage>) -> (JoinHandle<()>, JoinHandle<()>) {
     println!("Setting up UI...");
-    let mut tui = Tui::new(to_synth_sender, ui_receiver);
+    let tui = Tui::new(to_synth_sender, ui_receiver);
     let termion = TermionWrapper::new();
     let term_handle = TermionWrapper::run(termion, to_ui_sender);
-    tui.init();
+    //tui.init();
     let tui_handle = Tui::run(tui);
     println!("\r... finished");
     (term_handle, tui_handle)
