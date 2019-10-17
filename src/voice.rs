@@ -6,6 +6,8 @@ use super::SoundData;
 
 use std::sync::Arc;
 
+use log::{info, trace, warn};
+
 pub struct Voice {
     // Components
     //osc: Box<dyn SampleGenerator + Send>,
@@ -33,8 +35,8 @@ impl Voice {
             MultiOscillator::new(sample_rate, 2),
         ];
         let env = [
-            Envelope::new(sample_rate as f32, 0),
-            Envelope::new(sample_rate as f32, 1),
+            Envelope::new(sample_rate as f32),
+            Envelope::new(sample_rate as f32),
         ];
         let amp_modulators = Vec::new();
         let freq_modulators = Vec::new();
@@ -77,6 +79,7 @@ impl Voice {
                 reset = false;
             }
         }
+        //info!("{}", result);
         let level_sum = sound.osc[0].level + sound.osc[1].level + sound.osc[2].level;
         if level_sum > 1.0 {
             // Normalize level to avoid distortion
@@ -133,11 +136,9 @@ impl Voice {
         self.triggered = true;
         self.trigger_seq = trigger_seq;
         self.env[0].trigger(trigger_time, &sound.env[0]);
-        /*
         for o in self.osc.iter_mut() {
-            o.reset();
+            o.reset(trigger_time);
         }
-        */
     }
 
     pub fn release(&mut self, sound: &SoundData) {

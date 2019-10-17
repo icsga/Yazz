@@ -95,7 +95,7 @@ fn test_oscillator() {
 
 fn test_envalope() {
     let sample_rate = 44100;
-    let mut env = Envelope::new(sample_rate as f32, 0);
+    let mut env = Envelope::new(sample_rate as f32);
     let path = Path::new("env_output.txt");
     let display = path.display();
     let mut sound = SoundData::new();
