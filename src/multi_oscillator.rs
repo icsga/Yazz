@@ -5,11 +5,13 @@ use rand::prelude::*;
 use serde::{Serialize, Deserialize};
 use std::sync::Arc;
 
+const MAX_VOICES: usize = 7;
+
 pub struct MultiOscillator {
     sample_rate: f32,
     id: usize,
     last_update: i64, // Time of last sample generation
-    state: [State; 7], // State for up to 7 oscillators running in sync
+    state: [State; MAX_VOICES], // State for up to 7 oscillators running in sync
 }
 
 #[derive(Serialize, Deserialize, Default)]
@@ -21,7 +23,7 @@ pub struct MultiOscData {
     pub saw_ratio: f32,
     pub square_ratio: f32,
     pub noise_ratio: f32,
-    pub num_voices: u32,
+    pub num_voices: i64,
     pub voice_spread: f32,
     pub tune_halfsteps: i64,
     pub freq_offset: f32, // Value derived from tune_halfsteps
@@ -71,8 +73,12 @@ impl MultiOscData {
         }
     }
 
-    pub fn set_voice_num(&mut self, voices: u32) {
-        self.num_voices = 1;
+    pub fn set_voice_num(&mut self, voices: i64) {
+        self.num_voices = if voices > MAX_VOICES as i64 { MAX_VOICES as i64 } else { voices };
+    }
+
+    pub fn set_voice_spread(&mut self, spread: f32) {
+        self.voice_spread = spread;
     }
 
     pub fn set_freq_offset(&mut self, halfsteps: i64) {
@@ -99,8 +105,9 @@ impl MultiOscData {
 
 #[derive(Copy, Clone)]
 struct State {
-    freq_offset: f32,
     last_pos: f32,
+    freq_shift: f32, // Percentage this voice is shifted from center frequency
+    level_shift: f32, // Decrease in level compared to main voice
 
     // Sinewave
     last_stabilization: i64, // Time of last stabilization
@@ -113,13 +120,14 @@ impl MultiOscillator {
     pub fn new(sample_rate: u32, id: usize) -> MultiOscillator {
         let sample_rate = sample_rate as f32;
         let last_update = 0;
-        let freq_offset = 0.0;
         let last_pos = 0.0;
+        let freq_shift = 0.0;
+        let level_shift = 1.0;
         let last_stabilization = 0;
         let phasor = num::complex::Complex::new(1.0, 0.0);
         let omega = num::complex::Complex::new(0.0, 0.0);
         let stabilizer = num::complex::Complex::new(0.0, 0.0);
-        let state = [State{freq_offset, last_pos, last_stabilization, phasor, omega, stabilizer}; 7];
+        let state = [State{last_pos, freq_shift, level_shift, last_stabilization, phasor, omega, stabilizer}; 7];
         let osc = MultiOscillator{sample_rate,
                                   id,
                                   last_update,
@@ -186,10 +194,11 @@ impl SampleGenerator for MultiOscillator {
 
         for i in 0..data.num_voices {
             let state: &mut State = &mut self.state[i as usize];
-            let freq_offset = (frequency / 100.0) * state.freq_offset;
-            let frequency = frequency + freq_offset;
+            let freq_diff = (frequency / 100.0) * (data.voice_spread * i as f32) * (1 - (i & 0x01 * 2)) as f32;
+            let frequency = frequency + freq_diff;
             let freq_speed = frequency / self.sample_rate;
             let diff = freq_speed * dt_f;
+            let mut voice_result = 0.0;
             state.last_pos += diff;
             if state.last_pos > 1.0 {
                 // Completed one wave cycle
@@ -198,7 +207,7 @@ impl SampleGenerator for MultiOscillator {
             }
 
             //if data.sine_ratio > 0.0 {
-                result += MultiOscillator::get_sample_sine(state, frequency, dt, self.sample_rate) * data.sine_ratio;
+                voice_result += MultiOscillator::get_sample_sine(state, frequency, dt, self.sample_rate) * data.sine_ratio;
 
                 // Periodically stabilize the phasor's amplitude.
                 // TODO: Move stabilization into main loop
@@ -211,21 +220,23 @@ impl SampleGenerator for MultiOscillator {
                 }
             //}
             //if data.tri_ratio > 0.0 {
-                result += MultiOscillator::get_sample_triangle(state, frequency, data.phase, dt_f) * data.tri_ratio;
+                voice_result += MultiOscillator::get_sample_triangle(state, frequency, data.phase, dt_f) * data.tri_ratio;
             //}
             //if data.saw_ratio > 0.0 {
-                result += MultiOscillator::get_sample_saw(state, frequency, dt_f) * data.saw_ratio;
+                voice_result += MultiOscillator::get_sample_saw(state, frequency, dt_f) * data.saw_ratio;
             //}
             //if data.square_ratio > 0.0 {
-                result += MultiOscillator::get_sample_square(state, frequency, data.phase, dt_f) * data.square_ratio;
+                voice_result += MultiOscillator::get_sample_square(state, frequency, data.phase, dt_f) * data.square_ratio;
             //}
             //if data.noise_ratio > 0.0 {
-                result += MultiOscillator::get_sample_noise(state, frequency, dt_f) * data.noise_ratio;
+                voice_result += MultiOscillator::get_sample_noise(state, frequency, dt_f) * data.noise_ratio;
             //}
 
+            //voice_result *= 1.0 - (i as f32 * 0.1);
+            result += voice_result;
         }
         self.last_update += dt;
-        result /= data.num_voices as f32;
+        //result /= data.num_voices as f32;
         result *= data.level;
         if result > 1.0 {
             result = 1.0;

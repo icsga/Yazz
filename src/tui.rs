@@ -45,7 +45,7 @@ fn next(current: &TuiState) -> TuiState {
         Function => FunctionIndex,
         FunctionIndex => Param,
         Param => Value,
-        Value => EventComplete,
+        Value => Param,
         EventComplete => Function
     }
 }
@@ -86,7 +86,7 @@ static FUNCTIONS: [Selection; 4] = [
     Selection{item: Parameter::Filter,     key: Key::Char('f'), val_range: ValueRange::IntRange(1, 2), next: &FILTER_PARAMS},
 ];
 
-static OSC_PARAMS: [Selection; 7] = [
+static OSC_PARAMS: [Selection; 9] = [
     Selection{item: Parameter::Waveform,  key: Key::Char('w'), val_range: ValueRange::ChoiceRange(&WAVEFORM), next: &[]},
     Selection{item: Parameter::Level,     key: Key::Char('l'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
     Selection{item: Parameter::Frequency, key: Key::Char('f'), val_range: ValueRange::IntRange(-24, 24), next: &[]},
@@ -94,6 +94,8 @@ static OSC_PARAMS: [Selection; 7] = [
     Selection{item: Parameter::Phase,     key: Key::Char('p'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
     Selection{item: Parameter::Sync,      key: Key::Char('s'), val_range: ValueRange::IntRange(0, 1), next: &[]},
     Selection{item: Parameter::KeyFollow, key: Key::Char('k'), val_range: ValueRange::IntRange(0, 1), next: &[]},
+    Selection{item: Parameter::Voices,    key: Key::Char('v'), val_range: ValueRange::IntRange(1, 7), next: &[]},
+    Selection{item: Parameter::Spread,    key: Key::Char('e'), val_range: ValueRange::FloatRange(0.0, 2.0), next: &[]},
 ];
 
 static LFO_PARAMS: [Selection; 3] = [
@@ -308,7 +310,12 @@ impl Tui {
             self.state = new_state;
             match new_state {
                 TuiState::Init => {}
-                TuiState::Function => {}
+                TuiState::Function => {
+                    // We are probably selecting a different function than
+                    // before, so we should start the parameter list at the
+                    // beginning to avoid out-of-bound errors.
+                    self.selected_parameter.item_index = 0;
+                }
                 TuiState::FunctionIndex => {}
                 TuiState::Param => {
                     self.selected_parameter.item_list = self.selected_function.item_list[self.selected_function.item_index].next;
@@ -399,13 +406,14 @@ impl Tui {
                                 }
                             },
                             '\n' => next(state),
-                            _ => *state,
+                            _ => {Tui::select_by_key(c, item, state); return *state;}
                         }
                     }
                     Key::Up        => { current += 1; *state },
                     Key::Down      => { if current > 0 { current -= 1; } *state },
                     Key::Left => previous(state),
-                    _ => TuiState::Param,
+                    Key::Right => next(state),
+                    _ => next(state),
                 };
                 Tui::update_value(item, &ParameterValue::Int(current), temp_string);
                 new_state
@@ -422,7 +430,8 @@ impl Tui {
                                 *state
                             },
                             '\n' => next(state),
-                            _ => previous(state),
+                            //_ => previous(state),
+                            _ => {Tui::select_by_key(c, item, state); return *state;}
                         }
                     }
                     Key::Up        => { current += 1.0; *state },
@@ -458,7 +467,8 @@ impl Tui {
                         previous(state)
                     }
                     Key::Char('\n') => next(state),
-                    _ => *state
+                    //_ => *state
+                    _ => {Tui::select_by_key(c, item, state); return *state;}
                 };
                 Tui::update_value(item, &ParameterValue::Choice(current), temp_string);
                 new_state

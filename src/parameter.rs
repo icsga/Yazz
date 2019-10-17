@@ -19,6 +19,8 @@ pub enum Parameter {
     Frequency,
     Sync,
     KeyFollow,
+    Voices,
+    Spread,
 
     // Filter
     Type,

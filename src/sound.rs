@@ -55,6 +55,8 @@ impl SoundData {
                     Parameter::Phase => { self.osc[id].phase = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Sync => { self.osc[id].sync = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
                     Parameter::KeyFollow => { self.osc[id].key_follow = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Voices => { self.osc[id].set_voice_num(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Spread => { self.osc[id].set_voice_spread(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
                     _ => {}
                 }
             }
@@ -87,6 +89,8 @@ impl SoundData {
                     Parameter::Phase => SoundData::insert_float(msg, self.osc[id].phase),
                     Parameter::Sync => SoundData::insert_int(msg, self.osc[id].sync),
                     Parameter::KeyFollow => SoundData::insert_int(msg, self.osc[id].key_follow),
+                    Parameter::Voices => SoundData::insert_int(msg, self.osc[id].num_voices),
+                    Parameter::Spread => SoundData::insert_float(msg, self.osc[id].voice_spread),
                     _ => {}
                 }
             }
