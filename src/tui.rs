@@ -127,7 +127,7 @@ static WAVEFORM: [Selection; 5] = [
 ];
 
 static DELAY_PARAMS: [Selection; 3] = [
-    Selection{item: Parameter::Time,      key: Key::Char('t'), val_range: ValueRange::FloatRange(0.1, 1.0), next: &[]},
+    Selection{item: Parameter::Time,      key: Key::Char('t'), val_range: ValueRange::FloatRange(0.01, 1.0), next: &[]},
     Selection{item: Parameter::Level,     key: Key::Char('l'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
     Selection{item: Parameter::Feedback,  key: Key::Char('f'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
 ];
