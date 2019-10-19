@@ -1,3 +1,4 @@
+use super::Delay;
 use super::{SynthMessage, UiMessage};
 use super::{Envelope, EnvelopeData};
 use super::{MessageType, MidiMessage};
@@ -26,6 +27,7 @@ pub struct Synth {
     sample_rate: u32,
     sound: Arc<Mutex<SoundData>>,
     voice: [Voice; 32],
+    delay: Delay,
     keymap: [f32; 127],
     num_voices_triggered: u32,
     voices_playing: u32, // Bitmap with currently playing voices
@@ -46,13 +48,14 @@ impl Synth {
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
         ];
+        let delay = Delay::new(sample_rate);
         let mut keymap: [f32; 127] = [0.0; 127];
         Synth::calculate_keymap(&mut keymap, 440.0);
         let num_voices_triggered = 0;
         let voices_playing = 0;
         let trigger_seq = 0;
         let last_clock = 0i64;
-        Synth{sample_rate, sound, voice, keymap, num_voices_triggered, voices_playing, trigger_seq, last_clock, sender}
+        Synth{sample_rate, sound, voice, delay, keymap, num_voices_triggered, voices_playing, trigger_seq, last_clock, sender}
     }
 
     /* Starts a thread for receiving UI and MIDI messages. */
@@ -75,14 +78,15 @@ impl Synth {
     /* Called by the audio engine to get the next sample to be output. */
     pub fn get_sample(&mut self, sample_clock: i64) -> f32 {
         let mut value: f32 = 0.0;
+        let sound = &self.sound.lock().unwrap();
         if self.voices_playing > 0 {
-            let sound = &self.sound.lock().unwrap();
             for i in 0..32 {
                 if self.voices_playing & (1 << i) > 0 {
                     value += self.voice[i].get_sample(sample_clock, sound);
                 }
             }
         }
+        value = self.delay.process(value, sample_clock, &sound.delay);
         self.last_clock = sample_clock;
         value
     }

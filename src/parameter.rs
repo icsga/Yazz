@@ -9,6 +9,7 @@ pub enum Parameter {
     Lfo,
     Envelope,
     Mod,
+    Delay,
     System,
 
     // Oscillator, Lfo
@@ -49,6 +50,10 @@ pub enum Parameter {
     Saw,
     Square,
     Noise,
+
+    // Delay
+    Time,
+    Feedback,
 }
 
 #[derive(Clone, Copy, Debug)]

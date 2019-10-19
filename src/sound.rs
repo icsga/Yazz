@@ -1,3 +1,4 @@
+use super::DelayData;
 use super::envelope::EnvelopeData;
 use super::multi_oscillator::MultiOscData;
 use super::parameter::{Parameter, ParameterValue, SynthParam};
@@ -8,6 +9,7 @@ use serde::{Serialize, Deserialize};
 pub struct SoundData {
     pub osc: [MultiOscData; 3],
     pub env: [EnvelopeData; 2],
+    pub delay: DelayData,
 }
 
 impl SoundData {
@@ -21,7 +23,8 @@ impl SoundData {
             EnvelopeData{..Default::default()},
             EnvelopeData{..Default::default()},
         ];
-        SoundData{osc, env}
+        let delay = DelayData{..Default::default()};
+        SoundData{osc, env, delay}
     }
 
     pub fn init(&mut self) {
@@ -33,6 +36,7 @@ impl SoundData {
         }
         self.osc[1].level = 0.0;
         self.osc[2].level = 0.0;
+        self.delay.init();
     }
 
     pub fn get_osc_data<'a>(&'a self, id: usize) -> &'a MultiOscData {
@@ -73,6 +77,14 @@ impl SoundData {
                     _ => {}
                 }
             }
+            Parameter::Delay => {
+                match msg.parameter {
+                    Parameter::Time => { self.delay.speed = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Level => { self.delay.level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Feedback => { self.delay.feedback = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    _ => {}
+                }
+            }
             Parameter::Mod => {}
             Parameter::System => {}
             _ => {}
@@ -106,7 +118,15 @@ impl SoundData {
                     Parameter::Sustain => SoundData::insert_float(msg, self.env[id].sustain),
                     Parameter::Release => SoundData::insert_float(msg, self.env[id].release),
                     Parameter::Factor => SoundData::insert_int(msg, self.env[id].factor as i64),
-                    _ => panic!()
+                    _ => {}
+                }
+            }
+            Parameter::Delay => {
+                match msg.parameter {
+                    Parameter::Time => SoundData::insert_float(msg, self.delay.speed),
+                    Parameter::Level => SoundData::insert_float(msg, self.delay.level),
+                    Parameter::Feedback => SoundData::insert_float(msg, self.delay.feedback),
+                    _ => {}
                 }
             }
             Parameter::Mod => {}
