@@ -91,7 +91,6 @@ fn test_oscillator() {
         write!(&mut file, "{} {} {} {}\n", osc.sine_ratio, osc.tri_ratio, osc.saw_ratio, osc.square_ratio).unwrap();
     }
 }
-*/
 
 fn test_envalope() {
     let sample_rate = 44100;
@@ -123,19 +122,20 @@ fn test_envalope() {
         file.write_fmt(format_args!("{:.*}\n", 5, value)).unwrap();
     }
 }
+*/
 
 pub enum SynthMessage {
     Midi(MidiMessage),
     Param(SynthParam),
     ParamQuery(SynthParam),
-    WaveBuffer(Vec<f32>),
+    SampleBuffer(Vec<f32>, SynthParam),
 }
 
 pub enum UiMessage {
     Midi(MidiMessage),
     Key(Key),
     Param(SynthParam),
-    WaveBuffer(Vec<f32>),
+    SampleBuffer(Vec<f32>, SynthParam),
     EngineSync(Duration, Duration),
 }
 

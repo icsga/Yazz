@@ -37,6 +37,7 @@ pub enum Parameter {
     Decay,
     Sustain,
     Release,
+    Factor,
 
     // Mod
     Source,
@@ -49,15 +50,6 @@ pub enum Parameter {
     Square,
     Noise,
 }
-
-/*
-// TODO: This seems to be unneeded, replace by simple int
-pub enum FunctionId {
-    Int(i64),
-    //Index(usize),
-    //NoValue
-}
-*/
 
 #[derive(Clone, Copy, Debug)]
 pub enum ParameterValue {
