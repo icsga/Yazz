@@ -16,7 +16,7 @@ pub struct Envelope {
     state: State,
 }
 
-#[derive(Serialize, Deserialize, Default)]
+#[derive(Serialize, Deserialize, Default, Debug)]
 pub struct EnvelopeData {
     pub attack: f32,
     pub decay: f32,
@@ -31,7 +31,7 @@ impl EnvelopeData {
         self.decay = 50.0;
         self.sustain = 0.7;
         self.release = 100.0;
-        self.factor = 4.0;
+        self.factor = 3.0;
     }
 }
 
@@ -102,7 +102,7 @@ impl Envelope {
         }
     }
     fn change_state(&mut self, new_state: State, sample_time: i64, data: &EnvelopeData) {
-        info!("Changing from state {:?} -> {:?} at {}", self.state, new_state, sample_time);
+        //info!("Changing from state {:?} -> {:?} at {}", self.state, new_state, sample_time);
         match new_state {
             State::Idle => self.last_value = 0.0,
             State::Attack => {
@@ -123,7 +123,6 @@ impl Envelope {
             },
         }
         self.state = new_state;
-        //info!("{:?}", self);
     }
 
     fn calc_end_time(&self, sample_time: i64, end_time: f32) -> i64 {

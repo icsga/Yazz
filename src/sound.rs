@@ -69,6 +69,7 @@ impl SoundData {
                     Parameter::Decay => { self.env[id].decay = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Sustain => { self.env[id].sustain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
                     Parameter::Release => { self.env[id].release = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Factor => { self.env[id].factor = if let ParameterValue::Int(x) = msg.value { x as f32 } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -104,6 +105,7 @@ impl SoundData {
                     Parameter::Decay => SoundData::insert_float(msg, self.env[id].decay),
                     Parameter::Sustain => SoundData::insert_float(msg, self.env[id].sustain),
                     Parameter::Release => SoundData::insert_float(msg, self.env[id].release),
+                    Parameter::Factor => SoundData::insert_int(msg, self.env[id].factor as i64),
                     _ => panic!()
                 }
             }

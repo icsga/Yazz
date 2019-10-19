@@ -1,5 +1,5 @@
 use super::{SynthMessage, UiMessage};
-use super::EnvelopeData;
+use super::{Envelope, EnvelopeData};
 use super::{MessageType, MidiMessage};
 use super::{MultiOscData, MultiOscillator};
 use super::{Parameter, ParameterValue, SynthParam};
@@ -13,6 +13,8 @@ use std::thread::spawn;
 
 use crossbeam_channel::unbounded;
 use crossbeam_channel::{Sender, Receiver};
+
+use log::{info, trace, warn};
 
 pub enum Synth2UIMessage {
     Param(SynthParam),
@@ -63,7 +65,7 @@ impl Synth {
                     SynthMessage::Param(m) => locked_synth.handle_ui_message(m),
                     SynthMessage::ParamQuery(m) => locked_synth.handle_ui_query(m),
                     SynthMessage::Midi(m)  => locked_synth.handle_midi_message(m),
-                    SynthMessage::WaveBuffer(m) => locked_synth.handle_wave_buffer(m),
+                    SynthMessage::SampleBuffer(m, p) => locked_synth.handle_sample_buffer(m, p),
                 }
             }
         });
@@ -170,14 +172,55 @@ impl Synth {
      *
      * This puts one wave cycle of the currently active sound into the buffer.
      */
-    fn handle_wave_buffer(&mut self, mut buffer: Vec<f32>) {
+    fn handle_sample_buffer(&mut self, mut buffer: Vec<f32>, param: SynthParam) {
         let len = buffer.capacity();
-        let mut osc = MultiOscillator::new(44100, 0);
-        let sound = self.sound.lock().unwrap();
-        for i in 0..buffer.capacity() {
-            let (sample, complete) = osc.get_sample(440.0, i as i64, &sound, false);
-            buffer[i] = sample;
+        match param.function {
+            Parameter::Oscillator => {
+                let mut osc = MultiOscillator::new(44100, param.function_id - 1);
+                osc.reset(0);
+                let sound = self.sound.lock().unwrap();
+                for i in 0..buffer.capacity() {
+                    let (sample, complete) = osc.get_sample(440.0, i as i64, &sound, false);
+                    buffer[i] = sample;
+                }
+            },
+            Parameter::Envelope => {
+                // Calculate lenth of envelope
+                let mut sound = self.sound.lock().unwrap();
+                let env_data = &mut sound.env[param.function_id - 1];
+                let mut len_total = env_data.attack + env_data.decay + env_data.release;
+                len_total += len_total / 3.0; // Add 25% duration for sustain, value is in ms
+                let mut release_point = len_total - env_data.release;
+                len_total *= 44.1; // Samples per second
+                release_point *= 44.1;
+                let samples_per_slot = (len_total / buffer.capacity() as f32) as usize; // Number of samples per slot in the buffer
+                let mut index: usize = 0;
+                let mut counter: usize = 0;
+                let mut env = Envelope::new(44100.0);
+                let len_total = len_total as usize;
+                let release_point = release_point as usize;
+                let mut sample = 0.0;
+                env.trigger(0, env_data);
+                for i in 0..len_total {
+                    if i == release_point {
+                        env.release(i as i64, env_data);
+                    }
+                    sample += env.get_sample(i as i64, env_data);
+                    counter += 1;
+                    if counter == samples_per_slot {
+                        sample /= samples_per_slot as f32;
+                        buffer[index] = sample;
+                        index += 1;
+                        if index == buffer.capacity() {
+                            index -= 1;
+                        }
+                        sample = 0.0;
+                        counter = 0;
+                    }
+                }
+            },
+            _ => {},
         }
-        self.sender.send(UiMessage::WaveBuffer(buffer)).unwrap();
+        self.sender.send(UiMessage::SampleBuffer(buffer, param)).unwrap();
     }
 }
