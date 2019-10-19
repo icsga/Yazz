@@ -79,7 +79,7 @@ impl SoundData {
             }
             Parameter::Delay => {
                 match msg.parameter {
-                    Parameter::Time => { self.delay.speed = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Time => { self.delay.time = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Level => { self.delay.level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Feedback => { self.delay.feedback = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
@@ -123,7 +123,7 @@ impl SoundData {
             }
             Parameter::Delay => {
                 match msg.parameter {
-                    Parameter::Time => SoundData::insert_float(msg, self.delay.speed),
+                    Parameter::Time => SoundData::insert_float(msg, self.delay.time),
                     Parameter::Level => SoundData::insert_float(msg, self.delay.level),
                     Parameter::Feedback => SoundData::insert_float(msg, self.delay.feedback),
                     _ => {}
