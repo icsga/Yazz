@@ -4,6 +4,7 @@
 #![allow(unreachable_code)]
 
 mod canvas;
+mod delay;
 mod engine;
 mod envelope;
 mod midi_handler;
@@ -18,6 +19,7 @@ mod tui;
 mod voice;
 
 use canvas::Canvas;
+use delay::{Delay, DelayData};
 use engine::Engine;
 use envelope::{Envelope, EnvelopeData};
 use midi_handler::{MidiHandler, MidiMessage, MessageType};

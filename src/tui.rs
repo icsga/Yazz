@@ -78,11 +78,12 @@ struct Selection {
 }
 
 /* Top-level menu */
-static FUNCTIONS: [Selection; 4] = [
+static FUNCTIONS: [Selection; 5] = [
     Selection{item: Parameter::Oscillator, key: Key::Char('o'), val_range: ValueRange::IntRange(1, 3), next: &OSC_PARAMS},
     Selection{item: Parameter::Envelope,   key: Key::Char('e'), val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
     Selection{item: Parameter::Lfo,        key: Key::Char('l'), val_range: ValueRange::IntRange(1, 3), next: &LFO_PARAMS},
     Selection{item: Parameter::Filter,     key: Key::Char('f'), val_range: ValueRange::IntRange(1, 2), next: &FILTER_PARAMS},
+    Selection{item: Parameter::Delay,      key: Key::Char('d'), val_range: ValueRange::IntRange(1, 1), next: &DELAY_PARAMS},
 ];
 
 static OSC_PARAMS: [Selection; 9] = [
@@ -123,6 +124,12 @@ static WAVEFORM: [Selection; 5] = [
     Selection{item: Parameter::Saw,       key: Key::Char('w'), val_range: ValueRange::NoRange, next: &[]},
     Selection{item: Parameter::Square,    key: Key::Char('q'), val_range: ValueRange::NoRange, next: &[]},
     Selection{item: Parameter::Noise ,    key: Key::Char('n'), val_range: ValueRange::NoRange, next: &[]},
+];
+
+static DELAY_PARAMS: [Selection; 3] = [
+    Selection{item: Parameter::Time,      key: Key::Char('t'), val_range: ValueRange::FloatRange(0.1, 1.0), next: &[]},
+    Selection{item: Parameter::Level,     key: Key::Char('l'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
+    Selection{item: Parameter::Feedback,  key: Key::Char('f'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
 ];
 
 #[derive(Debug)]
