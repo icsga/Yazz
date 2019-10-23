@@ -1,14 +1,15 @@
-use super::parameter::{Parameter, ParameterValue, SynthParam};
-use super::midi_handler::{MidiMessage, MessageType};
+use super::parameter::{Parameter, ParameterValue, SynthParam, ValueRange, Selection, SelectedItem, FUNCTIONS, OSC_PARAMS};
+use super::{MidiMessage, MessageType};
 use super::{UiMessage, SynthMessage};
-use super::canvas::Canvas;
+use super::Canvas;
+use super::Float;
 
 use crossbeam_channel::{Sender, Receiver};
+use log::{info, trace, warn};
+use serde::{Serialize, Deserialize};
 use termion::{clear, color, cursor};
 use termion::color::{Black, White, LightWhite, Reset, Rgb};
 use termion::event::Key;
-
-use log::{info, trace, warn};
 
 use std::convert::TryInto;
 use std::fmt::{self, Debug};
@@ -58,85 +59,6 @@ fn previous(current: TuiState) -> TuiState {
         Param => FunctionIndex,
         Value => Param,
     }
-}
-
-#[derive(Debug)]
-enum ValueRange {
-    IntRange(i64, i64),
-    FloatRange(f32, f32),
-    ChoiceRange(&'static [Selection]),
-    NoRange
-}
-
-/* Item for a list of selectable functions */
-#[derive(Debug)]
-struct Selection {
-    item: Parameter,
-    key: Key,
-    val_range: ValueRange,
-    next: &'static [Selection]
-}
-
-/* Top-level menu */
-static FUNCTIONS: [Selection; 5] = [
-    Selection{item: Parameter::Oscillator, key: Key::Char('o'), val_range: ValueRange::IntRange(1, 3), next: &OSC_PARAMS},
-    Selection{item: Parameter::Envelope,   key: Key::Char('e'), val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
-    Selection{item: Parameter::Lfo,        key: Key::Char('l'), val_range: ValueRange::IntRange(1, 3), next: &LFO_PARAMS},
-    Selection{item: Parameter::Filter,     key: Key::Char('f'), val_range: ValueRange::IntRange(1, 2), next: &FILTER_PARAMS},
-    Selection{item: Parameter::Delay,      key: Key::Char('d'), val_range: ValueRange::IntRange(1, 1), next: &DELAY_PARAMS},
-];
-
-static OSC_PARAMS: [Selection; 9] = [
-    Selection{item: Parameter::Waveform,  key: Key::Char('w'), val_range: ValueRange::ChoiceRange(&WAVEFORM), next: &[]},
-    Selection{item: Parameter::Level,     key: Key::Char('l'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
-    Selection{item: Parameter::Frequency, key: Key::Char('f'), val_range: ValueRange::IntRange(-24, 24), next: &[]},
-    Selection{item: Parameter::Blend,     key: Key::Char('b'), val_range: ValueRange::FloatRange(0.0, 5.0), next: &[]},
-    Selection{item: Parameter::Phase,     key: Key::Char('p'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
-    Selection{item: Parameter::Sync,      key: Key::Char('s'), val_range: ValueRange::IntRange(0, 1), next: &[]},
-    Selection{item: Parameter::KeyFollow, key: Key::Char('k'), val_range: ValueRange::IntRange(0, 1), next: &[]},
-    Selection{item: Parameter::Voices,    key: Key::Char('v'), val_range: ValueRange::IntRange(1, 7), next: &[]},
-    Selection{item: Parameter::Spread,    key: Key::Char('e'), val_range: ValueRange::FloatRange(0.0, 2.0), next: &[]},
-];
-
-static LFO_PARAMS: [Selection; 3] = [
-    Selection{item: Parameter::Waveform,  key: Key::Char('w'), val_range: ValueRange::IntRange(1, 3), next: &[]},
-    Selection{item: Parameter::Frequency, key: Key::Char('f'), val_range: ValueRange::FloatRange(0.0, 22000.0), next: &[]},
-    Selection{item: Parameter::Phase,     key: Key::Char('p'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
-];
-
-static FILTER_PARAMS: [Selection; 3] = [
-    Selection{item: Parameter::Type,      key: Key::Char('t'), val_range: ValueRange::IntRange(1, 3), next: &[]},
-    Selection{item: Parameter::FilterFreq,key: Key::Char('f'), val_range: ValueRange::FloatRange(0.0, 22000.0), next: &[]},
-    Selection{item: Parameter::Resonance, key: Key::Char('r'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
-];
-
-static ENV_PARAMS: [Selection; 5] = [
-    Selection{item: Parameter::Attack,  key: Key::Char('a'), val_range: ValueRange::FloatRange(0.0, 1000.0), next: &[]}, // Value = Duration in ms
-    Selection{item: Parameter::Decay,   key: Key::Char('d'), val_range: ValueRange::FloatRange(0.0, 1000.0), next: &[]},
-    Selection{item: Parameter::Sustain, key: Key::Char('s'), val_range: ValueRange::FloatRange(0.0, 100.0), next: &[]},
-    Selection{item: Parameter::Release, key: Key::Char('r'), val_range: ValueRange::FloatRange(0.0, 1000.0), next: &[]},
-    Selection{item: Parameter::Factor,  key: Key::Char('f'), val_range: ValueRange::IntRange(1, 5), next: &[]},
-];
-
-static WAVEFORM: [Selection; 5] = [
-    Selection{item: Parameter::Sine,      key: Key::Char('s'), val_range: ValueRange::NoRange, next: &[]},
-    Selection{item: Parameter::Triangle,  key: Key::Char('t'), val_range: ValueRange::NoRange, next: &[]},
-    Selection{item: Parameter::Saw,       key: Key::Char('w'), val_range: ValueRange::NoRange, next: &[]},
-    Selection{item: Parameter::Square,    key: Key::Char('q'), val_range: ValueRange::NoRange, next: &[]},
-    Selection{item: Parameter::Noise ,    key: Key::Char('n'), val_range: ValueRange::NoRange, next: &[]},
-];
-
-static DELAY_PARAMS: [Selection; 3] = [
-    Selection{item: Parameter::Time,      key: Key::Char('t'), val_range: ValueRange::FloatRange(0.01, 1.0), next: &[]},
-    Selection{item: Parameter::Level,     key: Key::Char('l'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
-    Selection{item: Parameter::Feedback,  key: Key::Char('f'), val_range: ValueRange::FloatRange(0.0, 1.0), next: &[]},
-];
-
-#[derive(Debug)]
-struct SelectedItem {
-    item_list: &'static [Selection], // The selection this item is coming from
-    item_index: usize, // Index into the selection list
-    value: ParameterValue, // ID or value of the selected item
 }
 
 pub struct Tui {
@@ -233,18 +155,18 @@ impl Tui {
         let item = &mut self.selected_param;
         match item.item_list[item.item_index].val_range {
             ValueRange::IntRange(min, max) => {
-                let inc: f32 = (max - min) as f32 / 127.0;
-                let value = min + (val as f32 * inc) as i64;
+                let inc: Float = (max - min) as Float / 127.0;
+                let value = min + (val as Float * inc) as i64;
                 Tui::update_value(item, ParameterValue::Int(value), &mut self.temp_string);
             }
             ValueRange::FloatRange(min, max) => {
-                let inc: f32 = (max - min) / 127.0;
-                let value = min + val as f32 * inc;
+                let inc: Float = (max - min) / 127.0;
+                let value = min + val as Float * inc;
                 Tui::update_value(item, ParameterValue::Float(value), &mut self.temp_string);
             }
             ValueRange::ChoiceRange(choice_list) => {
-                let inc: f32 = choice_list.len() as f32 / 127.0;
-                let value = (val as f32 * inc) as i64;
+                let inc: Float = choice_list.len() as Float / 127.0;
+                let value = (val as Float * inc) as i64;
                 Tui::update_value(item, ParameterValue::Choice(value as usize), &mut self.temp_string);
             }
             _ => ()
@@ -260,7 +182,7 @@ impl Tui {
     }
 
     /** Received a buffer with samples from the synth engine. */
-    pub fn handle_samplebuffer(&mut self, m: Vec<f32>, p: SynthParam) {
+    pub fn handle_samplebuffer(&mut self, m: Vec<Float>, p: SynthParam) {
         self.canvas.clear();
         match p.function {
             Parameter::Oscillator => {
@@ -444,7 +366,7 @@ impl Tui {
             Key::Left | Key::Backspace => ReturnCode::Cancel,
             Key::Right => ReturnCode::ValueComplete,
             Key::Char('\n') => ReturnCode::ValueComplete,
-            _ => {
+            Key::Char(c) => {
                 for (count, f) in item.item_list.iter().enumerate() {
                     if f.key == c {
                         item.item_index = count;
@@ -452,7 +374,8 @@ impl Tui {
                     }
                 }
                 ReturnCode::KeyConsumed
-            }
+            },
+            _ => ReturnCode::KeyConsumed
         }
     }
 
@@ -510,7 +433,7 @@ impl Tui {
                         match x {
                             '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.' => {
                                 temp_string.push(x);
-                                let value: Result<f32, ParseFloatError> = temp_string.parse();
+                                let value: Result<Float, ParseFloatError> = temp_string.parse();
                                 current = if let Ok(x) = value { x } else { current };
                                 ReturnCode::KeyConsumed
                             },
@@ -722,8 +645,7 @@ impl Tui {
             let mut y_item = 2;
             let list = self.selected_function.item_list;
             for item in list.iter() {
-                let k = if let Key::Char(c) = item.key { c } else { panic!(); };
-                print!("{}{} - {}", cursor::Goto(x_pos, y_item), k, item.item);
+                print!("{}{} - {}", cursor::Goto(x_pos, y_item), item.key, item.item);
                 y_item += 1;
             }
         }
@@ -736,8 +658,7 @@ impl Tui {
             let mut y_item = 2;
             let list = self.selected_param.item_list;
             for item in list.iter() {
-                let k = if let Key::Char(c) = item.key { c } else { panic!(); };
-                print!("{}{} - {}", cursor::Goto(x_pos, y_item), k, item.item);
+                print!("{}{} - {}", cursor::Goto(x_pos, y_item), item.key, item.item);
                 y_item += 1;
             }
         }

@@ -1,3 +1,5 @@
+use super::Float;
+
 use std::sync::Arc;
 
 use serde::{Serialize, Deserialize};
@@ -5,24 +7,24 @@ use log::{info, trace, warn};
 
 #[derive(Debug)]
 pub struct Envelope {
-    sample_rate: f32,
-    rate_mul: f32,
+    sample_rate: Float,
+    rate_mul: Float,
 
     end_time: i64,
-    increment: f32,
+    increment: Float,
     last_update: i64,
-    last_value: f32,
+    last_value: Float,
     is_held: bool,
     state: State,
 }
 
-#[derive(Serialize, Deserialize, Default, Debug)]
+#[derive(Serialize, Deserialize, Copy, Clone, Default, Debug)]
 pub struct EnvelopeData {
-    pub attack: f32,
-    pub decay: f32,
-    pub sustain: f32,
-    pub release: f32,
-    pub factor: f32,
+    pub attack: Float,
+    pub decay: Float,
+    pub sustain: Float,
+    pub release: Float,
+    pub factor: Float,
 }
 
 impl EnvelopeData {
@@ -57,7 +59,7 @@ impl State {
 }
 
 impl Envelope {
-    pub fn new(sample_rate: f32) -> Envelope {
+    pub fn new(sample_rate: Float) -> Envelope {
         Envelope{sample_rate: sample_rate,
                  rate_mul: sample_rate / 1000.0, // 1 ms
                  increment: 0.0,
@@ -77,7 +79,7 @@ impl Envelope {
         self.change_state(State::Release, sample_time, data);
     }
 
-    pub fn get_sample(&mut self, sample_time: i64, data: &EnvelopeData) -> f32 {
+    pub fn get_sample(&mut self, sample_time: i64, data: &EnvelopeData) -> Float {
         match self.state {
             State::Idle => return 0.0,
             State::Attack | State::Decay | State::Release => {
@@ -125,11 +127,11 @@ impl Envelope {
         self.state = new_state;
     }
 
-    fn calc_end_time(&self, sample_time: i64, end_time: f32) -> i64 {
+    fn calc_end_time(&self, sample_time: i64, end_time: Float) -> i64 {
         sample_time + (end_time * self.rate_mul) as i64
     }
 
-    fn calc_increment(&self, target: f32, duration: f32) -> f32 {
+    fn calc_increment(&self, target: Float, duration: Float) -> Float {
         (target - self.last_value) / (duration * self.rate_mul)
     }
 }

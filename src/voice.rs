@@ -1,4 +1,7 @@
 use super::Envelope;
+use super::Filter;
+use super::Float;
+use super::Lfo;
 use super::Oscillator;
 use super::SampleGenerator;
 use super::MultiOscillator;
@@ -8,22 +11,25 @@ use std::sync::Arc;
 
 use log::{info, trace, warn};
 
+pub const NUM_OSCILLATORS: usize = 3;
+pub const NUM_ENVELOPES: usize = 2;
+pub const NUM_FILTERS: usize = 2;
+pub const NUM_LFOS: usize = 2;
+
 pub struct Voice {
     // Components
     //osc: Box<dyn SampleGenerator + Send>,
-    osc: [MultiOscillator; 3],
-    env: [Envelope; 2],
-
-    // Modulators
-    amp_modulators: Vec<Box<dyn SampleGenerator + Send>>,
-    freq_modulators: Vec<Box<dyn SampleGenerator + Send>>,
+    osc: [MultiOscillator; NUM_OSCILLATORS],
+    env: [Envelope; NUM_ENVELOPES],
+    pub filter: [Filter; NUM_FILTERS],
+    lfo: [Lfo; NUM_LFOS],
 
     // Current state
     triggered: bool,
     pub trigger_seq: u64,
     pub key: u8, // Key that was pressed to trigger this voice
-    input_freq: f32, // Frequency to play as received from Synth
-    osc_amp: f32,
+    input_freq: Float, // Frequency to play as received from Synth
+    osc_amp: Float,
     last_update: i64,
 }
 
@@ -35,25 +41,28 @@ impl Voice {
             MultiOscillator::new(sample_rate, 2),
         ];
         let env = [
-            Envelope::new(sample_rate as f32),
-            Envelope::new(sample_rate as f32),
+            Envelope::new(sample_rate as Float),
+            Envelope::new(sample_rate as Float),
         ];
-        let amp_modulators = Vec::new();
-        let freq_modulators = Vec::new();
+        let filter = [
+            Filter::new(sample_rate),
+            Filter::new(sample_rate),
+        ];
+        let lfo = [
+            Lfo::new(sample_rate),
+            Lfo::new(sample_rate),
+        ];
         let triggered = false;
         let trigger_seq = 0;
         let key = 0;
         let input_freq = 440.0;
         let osc_amp = 0.5;
         let last_update = 0i64;
-        let voice = Voice{osc, env, amp_modulators, freq_modulators, triggered, trigger_seq, key, input_freq, osc_amp, last_update};
-        //let mut modu = Box::new(MultiOscillator::new(sample_rate));
-        //modu.set_ratios(0.0, 1.0, 0.0, 0.0, 0.0);
-        //voice.add_freq_mod(modu);
+        let voice = Voice{osc, env, filter, lfo, triggered, trigger_seq, key, input_freq, osc_amp, last_update};
         voice
     }
 
-    pub fn get_sample(&mut self, sample_clock: i64, sound: &SoundData) -> f32 {
+    pub fn get_sample(&mut self, sample_clock: i64, sound: &SoundData) -> Float {
         if !self.is_running() {
             return 0.0;
         }
@@ -63,7 +72,9 @@ impl Voice {
         let freq_mod = 0.0;
         self.last_update = sample_clock;
         let mut reset = false;
-        let mut freq: f32;
+        let mut freq: Float;
+
+        // Get mixed output from oscillators
         for (i, osc) in self.osc.iter_mut().enumerate() {
             if sound.osc[i].key_follow == 0 {
                 freq = 440.0 + freq_mod; // Fixed pitch
@@ -85,50 +96,25 @@ impl Voice {
             // Normalize level to avoid distortion
             result /= level_sum;
         }
+
+        // Feed it into the filter
+        // TODO: Use both filters, use different filter routings
+        result = self.filter[0].process(result, sample_clock, &sound.filter[0]);
+
+        // Apply the volume envelope
         result *= self.env[0].get_sample(sample_clock, &sound.env[0]);
         if result > 1.0 {
             panic!("Voice: {}", result);
         }
+
         result
-    }
-
-    /*
-    fn get_freq_mod(&mut self, sample_clock: i64) -> f32 {
-        let mut freq_mod = 0.0;
-        for fm in self.freq_modulators.iter_mut() {
-            freq_mod += fm.get_sample(0.25, sample_clock) * 1.0;
-        }
-        freq_mod
-    }
-
-    fn get_amp_mod(&mut self, sample_clock: i64) -> f32 {
-        let mut amp_mod = 0.0;
-        for am in self.amp_modulators.iter_mut() {
-            amp_mod += am.get_sample(1.0, sample_clock);
-        }
-        amp_mod
-    }
-    */
-
-    /*
-    pub fn set_oscillator(&mut self, osc: Box<dyn SampleGenerator + Send>) {
-        self.osc = osc;
-    }
-    */
-
-    pub fn add_freq_mod(&mut self, fm: Box<dyn SampleGenerator + Send>) {
-        self.freq_modulators.push(fm);
-    }
-
-    pub fn add_amp_mod(&mut self, am: Box<dyn SampleGenerator + Send>) {
-        self.amp_modulators.push(am);
     }
 
     pub fn set_key(&mut self, key: u8) {
         self.key = key;
     }
 
-    pub fn set_freq(&mut self, freq: f32) {
+    pub fn set_freq(&mut self, freq: Float) {
         self.input_freq = freq;
     }
 

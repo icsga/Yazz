@@ -60,8 +60,10 @@ impl Engine {
             match data {
                 cpal::StreamData::Output { buffer: cpal::UnknownTypeOutputBuffer::F32(mut buffer) } => {
                     let locked_synth = &mut synth.lock().unwrap();
-            let idle = time.elapsed().expect("Went back in time");
-            time = SystemTime::now();
+
+                    let idle = time.elapsed().expect("Went back in time");
+                    time = SystemTime::now();
+
                     for sample in buffer.chunks_mut(self.num_channels) {
                         self.sample_clock = self.sample_clock + 1;
                         let value = locked_synth.get_sample(self.sample_clock);
@@ -69,9 +71,11 @@ impl Engine {
                             *out = value;
                         }
                     }
-            let busy = time.elapsed().expect("Went back in time");
-            time = SystemTime::now();
-            self.to_ui_sender.send(UiMessage::EngineSync(idle, busy)).unwrap();
+
+                    let busy = time.elapsed().expect("Went back in time");
+                    time = SystemTime::now();
+                    self.to_ui_sender.send(UiMessage::EngineSync(idle, busy)).unwrap();
+
                     locked_synth.update(); // Update the state of the synth voices
                 },
                 _ => (),

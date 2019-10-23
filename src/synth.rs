@@ -1,12 +1,15 @@
 use super::Delay;
 use super::{SynthMessage, UiMessage};
 use super::{Envelope, EnvelopeData};
+use super::Lfo;
 use super::{MessageType, MidiMessage};
+use super::{Modulator, ModData};
 use super::{MultiOscData, MultiOscillator};
 use super::{Parameter, ParameterValue, SynthParam};
 use super::SoundData;
 use super::voice::Voice;
 use super::SampleGenerator;
+use super::Float;
 
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
@@ -17,6 +20,12 @@ use crossbeam_channel::{Sender, Receiver};
 
 use log::{info, trace, warn};
 
+const NUM_VOICES: usize = 32;
+const NUM_KEYS: usize = 127;
+const REF_FREQUENCY: Float = 440.0;
+const NUM_MODULATORS: usize = 20;
+pub const NUM_GLOBAL_LFOS: usize = 2;
+
 pub enum Synth2UIMessage {
     Param(SynthParam),
     Control(u32),
@@ -24,11 +33,20 @@ pub enum Synth2UIMessage {
 }
 
 pub struct Synth {
+    // Configuration
     sample_rate: u32,
-    sound: Arc<Mutex<SoundData>>,
-    voice: [Voice; 32],
+    sound: Arc<Mutex<SoundData>>, // Sound patch as loaded from disk
+    sound_global: SoundData,      // Sound with global modulators applied
+    sound_local: SoundData,       // Sound with voice-local modulators applied
+    modulators: Vec<Modulator>,
+    keymap: [Float; NUM_KEYS],
+
+    // Signal chain
+    voice: [Voice; NUM_VOICES],
     delay: Delay,
-    keymap: [f32; 127],
+    glfo: [Lfo; NUM_GLOBAL_LFOS],
+
+    // Current state
     num_voices_triggered: u32,
     voices_playing: u32, // Bitmap with currently playing voices
     trigger_seq: u64,
@@ -41,7 +59,19 @@ impl Synth {
         let mut sound = SoundData::new();
         sound.init();
         let sound = Arc::new(Mutex::new(sound));
-        sound.lock().unwrap().osc[0].select_wave(1); // Triangle
+        let sound_global = SoundData::new();
+        let sound_local = SoundData::new();
+        let mut modulators = vec!{};
+        let mod_data = ModData{
+            source_func: Parameter::Lfo,
+            source_func_id: 1,
+            dest_func: Parameter::Oscillator,
+            dest_func_id: 1,
+            dest_param: Parameter::Frequency,
+            amount: 0.2
+        };
+        let mod1 = Modulator::new(&mod_data);
+        modulators.push(mod1);
         let voice = [
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
@@ -49,13 +79,29 @@ impl Synth {
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
         ];
         let delay = Delay::new(sample_rate);
-        let mut keymap: [f32; 127] = [0.0; 127];
-        Synth::calculate_keymap(&mut keymap, 440.0);
+        let glfo = [
+            Lfo::new(sample_rate), Lfo::new(sample_rate)
+        ];
+        let mut keymap: [Float; NUM_KEYS] = [0.0; NUM_KEYS];
+        Synth::calculate_keymap(&mut keymap, REF_FREQUENCY);
         let num_voices_triggered = 0;
         let voices_playing = 0;
         let trigger_seq = 0;
         let last_clock = 0i64;
-        Synth{sample_rate, sound, voice, delay, keymap, num_voices_triggered, voices_playing, trigger_seq, last_clock, sender}
+        Synth{sample_rate,
+              sound,
+              sound_global,
+              sound_local,
+              modulators,
+              keymap,
+              voice,
+              delay,
+              glfo,
+              num_voices_triggered,
+              voices_playing,
+              trigger_seq,
+              last_clock,
+              sender}
     }
 
     /* Starts a thread for receiving UI and MIDI messages. */
@@ -75,10 +121,26 @@ impl Synth {
         handler
     }
 
+    fn get_global_mod_values(&mut self, sound: &mut SoundData) {
+    }
+
+    fn add_modulator(&mut self, data: &ModData) {
+        let m = Modulator::new(data);
+        self.modulators.push(m);
+    }
+
     /* Called by the audio engine to get the next sample to be output. */
-    pub fn get_sample(&mut self, sample_clock: i64) -> f32 {
-        let mut value: f32 = 0.0;
+    pub fn get_sample(&mut self, sample_clock: i64) -> Float {
+        let mut value: Float = 0.0;
+
+        // Prepare modulation values
+        // =========================
         let sound = &self.sound.lock().unwrap();
+        self.sound_global = **sound; // Initialize values to current sound. TODO: Only needed once if parameter updates update all three sounds
+        self.sound_local = **sound;
+        for m in self.modulators.iter() {
+        }
+
         if self.voices_playing > 0 {
             for i in 0..32 {
                 if self.voices_playing & (1 << i) > 0 {
@@ -102,9 +164,10 @@ impl Synth {
     }
 
     /* Calculates the frequencies for the default keymap with equal temperament. */
-    fn calculate_keymap(map: &mut[f32; 127], reference_pitch: f32) {
+    fn calculate_keymap(map: &mut[Float; 127], reference_pitch: Float) {
         for i in 0..127 {
-           map[i] = (reference_pitch / 32.0) * (2.0f32.powf((i as f32 - 9.0) / 12.0));
+            let two: Float = 2.0;
+            map[i] = (reference_pitch / 32.0) * (two.powf((i as Float - 9.0) / 12.0));
         }
     }
 
@@ -112,6 +175,10 @@ impl Synth {
     fn handle_ui_message(&mut self, msg: SynthParam) {
         let mut sound = self.sound.lock().unwrap();
         sound.set_parameter(msg);
+        // Let all components check if they need to react to a changed
+        // parameter. This allows us to keep the processing out of the
+        // audio engine thread.
+        self.voice[0].filter[0].update(&mut sound.filter[0]);
     }
 
     /* Handles a parameter query received from the UI. */
@@ -176,7 +243,7 @@ impl Synth {
      *
      * This puts one wave cycle of the currently active sound into the buffer.
      */
-    fn handle_sample_buffer(&mut self, mut buffer: Vec<f32>, param: SynthParam) {
+    fn handle_sample_buffer(&mut self, mut buffer: Vec<Float>, param: SynthParam) {
         let len = buffer.capacity();
         match param.function {
             Parameter::Oscillator => {
@@ -197,7 +264,7 @@ impl Synth {
                 let mut release_point = len_total - env_data.release;
                 len_total *= 44.1; // Samples per second
                 release_point *= 44.1;
-                let samples_per_slot = (len_total / buffer.capacity() as f32) as usize; // Number of samples per slot in the buffer
+                let samples_per_slot = (len_total / buffer.capacity() as Float) as usize; // Number of samples per slot in the buffer
                 let mut index: usize = 0;
                 let mut counter: usize = 0;
                 let mut env = Envelope::new(44100.0);
@@ -212,7 +279,7 @@ impl Synth {
                     sample += env.get_sample(i as i64, env_data);
                     counter += 1;
                     if counter == samples_per_slot {
-                        sample /= samples_per_slot as f32;
+                        sample /= samples_per_slot as Float;
                         buffer[index] = sample;
                         index += 1;
                         if index == buffer.capacity() {

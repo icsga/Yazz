@@ -2,35 +2,45 @@ extern crate num;
 
 use super::Float;
 use super::SampleGenerator;
+use super::SoundData;
 
-pub struct SineOscillator {
+pub struct LfoData {
+    frequency: Float,
+}
+
+impl LfoData {
+    pub fn init(&mut self) {
+        self.frequency = 1.0;
+    }
+}
+
+pub struct Lfo {
     sample_rate: u32,
-    last_update: u64, // Time of last sample generation
-    last_stabilization: u64, // Time of last stabilization
+    last_update: i64, // Time of last sample generation
+    last_stabilization: i64, // Time of last stabilization
     phasor: num::complex::Complex<Float>, // Phasor with current state
     omega: num::complex::Complex<Float>,
     stabilizer: num::complex::Complex<Float>
 }
 
-impl SineOscillator {
-    pub fn new(sample_rate: u32) -> SineOscillator {
+impl Lfo {
+    pub fn new(sample_rate: u32) -> Lfo {
         let last_update = 0;
         let last_stabilization = 0;
         let phasor = num::complex::Complex::new(1.0, 0.0);
         let omega = num::complex::Complex::new(0.0, 0.0);
         let stabilizer = num::complex::Complex::new(0.0, 0.0);
-        let osc = SineOscillator{sample_rate, last_update, last_stabilization, phasor, omega, stabilizer};
-        osc
+        let lfo = Lfo{sample_rate, last_update, last_stabilization, phasor, omega, stabilizer};
+        lfo
     }
-}
 
-impl SampleGenerator for SineOscillator {
     // Based on http://dsp.stackexchange.com/a/1087
-    fn get_sample(&self, frequency: Float, sample_clock: u64) -> Float {
+    fn get_sample(&mut self, sample_clock: i64, data: &LfoData, reset: bool) -> (Float, bool) {
         let dt = sample_clock - self.last_update;
 
         // Compute the angular frequency omega in radians
-        self.omega.im = 2.0 * 3.141592 * frequency / self.sample_rate as Float;
+        // TODO: Use conditional compilation to select the correct PI constant for f32/ f64
+        self.omega.im = 2.0 * std::f32::consts::PI * data.frequency / self.sample_rate as Float;
 
         // compute the complex angular coeficient
         let coefficient = self.omega.exp();
@@ -51,7 +61,13 @@ impl SampleGenerator for SineOscillator {
         // advance time
         self.last_update += dt;
         self.last_stabilization += dt;
-        self.phasor.im // return the 'sine' component of the phasor
+        (self.phasor.im, false) // return the 'sine' component of the phasor
+    }
+
+    fn reset(&mut self, sample_clock: i64) {
+        self.phasor.re = 1.0;
+        self.phasor.im = 0.0;
+        self.last_update = sample_clock;
     }
 }
 

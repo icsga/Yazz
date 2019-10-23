@@ -1,5 +1,7 @@
 extern crate term_cursor as cursor;
 
+use super::Float;
+
 use std::vec::Vec;
 
 use log::{info, trace, warn};
@@ -30,14 +32,12 @@ impl Canvas {
         self.byte[y * self.x_size + x] = val;
     }
 
-    pub fn plot(&mut self, buff: &Vec<f32>, min: f32, max: f32) {
-        let scale = self.y_size as f32 / (max - min);
+    pub fn plot(&mut self, buff: &Vec<Float>, min: Float, max: Float) {
+        let scale = self.y_size as Float / (max - min);
         let offset = min * -1.0;
-        info!("Plotting buff, min={}, max={}, scale={}, offset={}",
-              min, max, scale, offset);
         if min < 0.0 && max > 0.0 {
             // Calculate position of X axis and print it
-            let x_axis = (self.y_size as f32 / (max - min)) * (min * -1.0);
+            let x_axis = (self.y_size as Float / (max - min)) * (min * -1.0);
             self.plot_x_axis(x_axis as usize);
         }
         // Plot points
@@ -71,12 +71,11 @@ impl Canvas {
         }
     }
 
-    fn val_to_y(&self, value: f32, offset: f32, scale: f32) -> usize {
+    fn val_to_y(&self, value: Float, offset: Float, scale: Float) -> usize {
         ((value + offset) * scale) as usize
     }
 
     fn plot_x_axis(&mut self, y_pos: usize) {
-        info!("Plotting x-axis at {}", y_pos);
         for x in 0..self.x_size {
             self.set(x, y_pos, '-');
         }
