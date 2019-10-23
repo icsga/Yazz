@@ -1,9 +1,10 @@
+use super::Float;
 use super::SampleGenerator;
 
 pub struct SquareOscillator {
     sample_rate: u32,
     last_update: u64, // Time of last sample generation
-    last_pos: f32,
+    last_pos: Float,
 }
 
 impl SquareOscillator {
@@ -16,10 +17,10 @@ impl SquareOscillator {
 }
 
 impl SampleGenerator for SquareOscillator {
-    fn get_sample(&self, frequency: f32, sample_clock: u64) -> f32 {
+    fn get_sample(&self, frequency: Float, sample_clock: u64) -> Float {
         let dt = sample_clock - self.last_update;
-        let freq_speed = frequency / self.sample_rate as f32;
-        let diff = freq_speed * dt as f32;
+        let freq_speed = frequency / self.sample_rate as Float;
+        let diff = freq_speed * dt as Float;
 
         self.last_pos += diff;
         if self.last_pos > 1.0 {

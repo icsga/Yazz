@@ -1,14 +1,17 @@
 use super::DelayData;
-use super::envelope::EnvelopeData;
-use super::multi_oscillator::MultiOscData;
-use super::parameter::{Parameter, ParameterValue, SynthParam};
+use super::EnvelopeData;
+use super::FilterData;
+use super::Float;
+use super::MultiOscData;
+use super::{Parameter, ParameterValue, SynthParam};
 
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize, Default)]
+#[derive(Serialize, Deserialize, Copy, Clone, Default)]
 pub struct SoundData {
     pub osc: [MultiOscData; 3],
     pub env: [EnvelopeData; 2],
+    pub filter: [FilterData; 2],
     pub delay: DelayData,
 }
 
@@ -23,8 +26,12 @@ impl SoundData {
             EnvelopeData{..Default::default()},
             EnvelopeData{..Default::default()},
         ];
+        let filter = [
+            FilterData{..Default::default()},
+            FilterData{..Default::default()},
+        ];
         let delay = DelayData{..Default::default()};
-        SoundData{osc, env, delay}
+        SoundData{osc, env, filter, delay}
     }
 
     pub fn init(&mut self) {
@@ -33,6 +40,9 @@ impl SoundData {
         }
         for e in self.env.iter_mut() {
             e.init();
+        }
+        for f in self.filter.iter_mut() {
+            f.init();
         }
         self.osc[1].level = 0.0;
         self.osc[2].level = 0.0;
@@ -64,7 +74,14 @@ impl SoundData {
                     _ => {}
                 }
             }
-            Parameter::Filter => {}
+            Parameter::Filter => {
+                match msg.parameter {
+                    //Parameter::Type => { self.filter[id].filter_type = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Cutoff => { self.filter[id].cutoff = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Resonance => { self.filter[id].resonance = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    _ => {}
+                }
+            }
             Parameter::Amp => {}
             Parameter::Lfo => {}
             Parameter::Envelope => {
@@ -73,7 +90,7 @@ impl SoundData {
                     Parameter::Decay => { self.env[id].decay = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Sustain => { self.env[id].sustain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
                     Parameter::Release => { self.env[id].release = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Factor => { self.env[id].factor = if let ParameterValue::Int(x) = msg.value { x as f32 } else { panic!() }; }
+                    Parameter::Factor => { self.env[id].factor = if let ParameterValue::Int(x) = msg.value { x as Float } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -107,7 +124,13 @@ impl SoundData {
                     _ => {}
                 }
             }
-            Parameter::Filter => {}
+            Parameter::Filter => {
+                match msg.parameter {
+                    Parameter::Cutoff => SoundData::insert_float(msg, self.filter[id].cutoff),
+                    Parameter::Resonance => SoundData::insert_float(msg, self.filter[id].resonance),
+                    _ => {}
+                }
+            }
             Parameter::Amp => {
             }
             Parameter::Lfo => {}
@@ -139,7 +162,7 @@ impl SoundData {
         if let ParameterValue::Int(x) = &mut msg.value { *x = value; } else { panic!() };
     }
 
-    fn insert_float(msg: &mut SynthParam, value: f32) {
+    fn insert_float(msg: &mut SynthParam, value: Float) {
         if let ParameterValue::Float(x) = &mut msg.value { *x = value; } else { panic!() };
     }
 

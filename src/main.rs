@@ -7,10 +7,14 @@ mod canvas;
 mod delay;
 mod engine;
 mod envelope;
+mod filter;
+mod lfo;
 mod midi_handler;
+mod modulation;
 mod multi_oscillator;
 mod oscillator;
 mod parameter;
+mod ringbuffer;
 mod sample_generator;
 mod sound;
 mod synth;
@@ -22,15 +26,20 @@ use canvas::Canvas;
 use delay::{Delay, DelayData};
 use engine::Engine;
 use envelope::{Envelope, EnvelopeData};
+use filter::{Filter, FilterData};
+use lfo::{Lfo, LfoData};
 use midi_handler::{MidiHandler, MidiMessage, MessageType};
+use modulation::{Modulator, ModData};
 use multi_oscillator::{MultiOscillator, MultiOscData};
 use oscillator::Oscillator;
 use parameter::{Parameter, ParameterValue, SynthParam};
+use ringbuffer::Ringbuffer;
 use sample_generator::SampleGenerator;
 use sound::SoundData;
 use synth::Synth;
 use termion_wrapper::TermionWrapper;
-use tui::Tui;
+use tui::{Tui};
+use voice::Voice;
 
 use std::error::Error;
 use std::fs::File;
@@ -59,6 +68,8 @@ use rand::Rng;
 use log::{info, trace, warn};
 use flexi_logger::{Logger, opt_format};
 
+type Float = f32;
+
 /*
 fn test_oscillator() {
     let mut osc = MultiOscillator::new(44100);
@@ -86,9 +97,9 @@ fn test_oscillator() {
     */
 
     // Plot ratios
-    let step = 3.0 / num_samples as f32;
+    let step = 3.0 / num_samples as Float;
     for i in 0..num_samples {
-        osc.set_ratio(i as f32 * step);
+        osc.set_ratio(i as Float * step);
         //file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(freq, i as u64))).unwrap();
         write!(&mut file, "{} {} {} {}\n", osc.sine_ratio, osc.tri_ratio, osc.saw_ratio, osc.square_ratio).unwrap();
     }
@@ -96,7 +107,7 @@ fn test_oscillator() {
 
 fn test_envalope() {
     let sample_rate = 44100;
-    let mut env = Envelope::new(sample_rate as f32);
+    let mut env = Envelope::new(sample_rate as Float);
     let path = Path::new("env_output.txt");
     let display = path.display();
     let mut sound = SoundData::new();
@@ -130,14 +141,14 @@ pub enum SynthMessage {
     Midi(MidiMessage),
     Param(SynthParam),
     ParamQuery(SynthParam),
-    SampleBuffer(Vec<f32>, SynthParam),
+    SampleBuffer(Vec<Float>, SynthParam),
 }
 
 pub enum UiMessage {
     Midi(MidiMessage),
     Key(Key),
     Param(SynthParam),
-    SampleBuffer(Vec<f32>, SynthParam),
+    SampleBuffer(Vec<Float>, SynthParam),
     EngineSync(Duration, Duration),
 }
 

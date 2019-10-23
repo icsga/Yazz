@@ -1,40 +1,42 @@
+use super::Float;
+
 use serde::{Serialize, Deserialize};
 
 const BUFF_LEN: usize = 44100;
 
-#[derive(Serialize, Deserialize, Default, Debug)]
+#[derive(Serialize, Deserialize, Copy, Clone, Default, Debug)]
 pub struct DelayData {
-    pub level: f32,
-    pub feedback: f32,
-    pub time: f32,
+    pub level: Float,
+    pub feedback: Float,
+    pub time: Float,
 }
 
 impl DelayData {
     pub fn init(&mut self) {
-        self.level = 0.5;
+        self.level = 0.0;
         self.feedback = 0.5;
         self.time = 0.5;
     }
 }
 
 pub struct Delay {
-    sample_rate: f32,
-    bb: [f32; BUFF_LEN], // Buffer with samples
-    position: f32,       // Current read/ write position
+    sample_rate: Float,
+    bb: [Float; BUFF_LEN], // Buffer with samples
+    position: Float,       // Current read/ write position
     quant_pos: usize,    // Last position, quantized to usize
 }
 
 impl Delay {
     pub fn new(sample_rate: u32) -> Delay {
-        let sample_rate = sample_rate as f32;
+        let sample_rate = sample_rate as Float;
         let bb = [0.0; BUFF_LEN];
         let position = 0.0;
         let quant_pos = 0;
         Delay{sample_rate, bb, position, quant_pos}
     }
 
-    pub fn process(&mut self, sample: f32, sample_clock: i64, data: &DelayData) -> f32 {
-        let step = (self.bb.len() as f32 / data.time) / self.sample_rate; // The amount of samples we step forward, as float
+    pub fn process(&mut self, sample: Float, sample_clock: i64, data: &DelayData) -> Float {
+        let step = (self.bb.len() as Float / data.time) / self.sample_rate; // The amount of samples we step forward, as float
         self.position = Delay::addf(self.position, step);
         let new_quant_pos = Delay::add(self.position.round() as usize, 0); // Add 0 to get the wrapping protection
         let num_samples = Delay::diff(new_quant_pos, self.quant_pos); // Actual number of samples we will be stepping over
@@ -46,7 +48,7 @@ impl Delay {
             pos = Delay::add(pos, 1);
             sample_sum += self.bb[pos];
         }
-        sample_sum /= num_samples as f32;
+        sample_sum /= num_samples as Float;
 
         let mixed_sample = sample + sample_sum * data.level;
         pos = self.quant_pos;
@@ -64,9 +66,9 @@ impl Delay {
         value
     }
 
-    fn addf(mut value: f32, add: f32) -> f32 {
+    fn addf(mut value: Float, add: Float) -> Float {
         value += add;
-        value = if value >= BUFF_LEN as f32 { value - BUFF_LEN as f32 } else { value };
+        value = if value >= BUFF_LEN as Float { value - BUFF_LEN as Float } else { value };
         value
     }
 
