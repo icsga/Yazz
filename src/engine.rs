@@ -10,6 +10,8 @@ use crossbeam_channel::Sender;
 use std::sync::{Arc, Mutex};
 use std::time::{SystemTime, Duration};
 
+use log::{info, trace, warn};
+
 pub struct Engine {
     sample_rate: u32,
     sample_clock: i64,

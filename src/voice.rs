@@ -90,7 +90,6 @@ impl Voice {
                 reset = false;
             }
         }
-        //info!("{}", result);
         let level_sum = sound.osc[0].level + sound.osc[1].level + sound.osc[2].level;
         if level_sum > 1.0 {
             // Normalize level to avoid distortion
@@ -99,7 +98,7 @@ impl Voice {
 
         // Feed it into the filter
         // TODO: Use both filters, use different filter routings
-        result = self.filter[0].process(result, sample_clock, &sound.filter[0]);
+        //result = self.filter[0].process(result, sample_clock, &sound.filter[0]);
 
         // Apply the volume envelope
         result *= self.env[0].get_sample(sample_clock, &sound.env[0]);

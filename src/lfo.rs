@@ -4,8 +4,12 @@ use super::Float;
 use super::SampleGenerator;
 use super::SoundData;
 
+use log::{info, trace, warn};
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
 pub struct LfoData {
-    frequency: Float,
+    pub frequency: Float,
 }
 
 impl LfoData {
@@ -35,7 +39,7 @@ impl Lfo {
     }
 
     // Based on http://dsp.stackexchange.com/a/1087
-    fn get_sample(&mut self, sample_clock: i64, data: &LfoData, reset: bool) -> (Float, bool) {
+    pub fn get_sample(&mut self, sample_clock: i64, data: &LfoData, reset: bool) -> (Float, bool) {
         let dt = sample_clock - self.last_update;
 
         // Compute the angular frequency omega in radians

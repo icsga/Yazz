@@ -6,6 +6,8 @@ use rand::prelude::*;
 use serde::{Serialize, Deserialize};
 use std::sync::Arc;
 
+use log::{info, trace, warn};
+
 const MAX_VOICES: usize = 7;
 
 pub struct MultiOscillator {
@@ -15,7 +17,7 @@ pub struct MultiOscillator {
     state: [State; MAX_VOICES], // State for up to 7 oscillators running in sync
 }
 
-#[derive(Serialize, Deserialize, Copy, Clone, Default)]
+#[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
 pub struct MultiOscData {
     pub level: Float,
     pub phase: Float,

@@ -45,8 +45,9 @@ pub struct ModDest {
     pub val_max: Float,
 }
 
-static MOD_DEST: [ModDest; 1] = [
+static MOD_DEST: [ModDest; 2] = [
     ModDest{function: Parameter::Oscillator, parameter: Parameter::Frequency, val_min: -24.0, val_max: 24.0},
+    ModDest{function: Parameter::Delay, parameter: Parameter::Time, val_min: 0.0, val_max: 1.0},
 ];
 
 #[derive(Serialize, Deserialize, Default)]
@@ -82,11 +83,15 @@ impl ModData {
  *
  */
 
+#[derive(Debug)]
 pub struct Modulator {
-    source: &'static ModSource,
-    dest: &'static ModDest,
-    scale: Float,
-    offset: Float
+    pub source_func: Parameter,
+    pub source_func_id: usize,
+    pub dest_func: Parameter,
+    pub dest_func_id: usize,
+    pub dest_param: Parameter,
+    pub scale: Float,
+    pub offset: Float
 }
 
 impl Modulator {
@@ -104,14 +109,14 @@ impl Modulator {
         match source.val_range {
             ModValRange::IntRange(min, max) => {
                 scale = (dest.val_max - dest.val_min) / (max - min) as Float;
-                offset = (min as Float / scale) - dest.val_min;
+                offset = (dest.val_min - min as Float) * scale;
             }
             ModValRange::FloatRange(min, max) => {
                 scale = (dest.val_max - dest.val_min) / (max - min);
-                offset = (min / scale) - dest.val_min;
+                offset = (dest.val_min - min) * scale;
             }
         }
-        Modulator{source, dest, scale, offset}
+        Modulator{source_func: data.source_func, source_func_id: data.source_func_id, dest_func: data.dest_func, dest_func_id: data.dest_func_id, dest_param: data.dest_param, scale: scale, offset: offset}
     }
 
     fn get_mod_source(function: Parameter) -> &'static ModSource {
