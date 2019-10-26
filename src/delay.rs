@@ -1,5 +1,6 @@
 use super::Float;
 
+use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};
 
 const BUFF_LEN: usize = 44100;
@@ -30,16 +31,18 @@ impl Delay {
     pub fn new(sample_rate: u32) -> Delay {
         let sample_rate = sample_rate as Float;
         let bb = [0.0; BUFF_LEN];
-        let position = 0.0;
+        let position = 0.1;
         let quant_pos = 0;
         Delay{sample_rate, bb, position, quant_pos}
     }
 
     pub fn process(&mut self, sample: Float, sample_clock: i64, data: &DelayData) -> Float {
         let step = (self.bb.len() as Float / data.time) / self.sample_rate; // The amount of samples we step forward, as float
+        let step = Delay::addf(step, 0.0);
         self.position = Delay::addf(self.position, step);
         let new_quant_pos = Delay::add(self.position.round() as usize, 0); // Add 0 to get the wrapping protection
         let num_samples = Delay::diff(new_quant_pos, self.quant_pos); // Actual number of samples we will be stepping over
+        //info!("sample={}, time={}, step={}, position={}, new_quant_pos={}, num_samples={}", sample, data.time, step, self.position, new_quant_pos, num_samples);
 
         // Get the average of all samples we're stepping over
         let mut sample_sum = 0.0;
@@ -62,13 +65,17 @@ impl Delay {
 
     fn add(mut value: usize, add: usize) -> usize {
         value += add as usize;
-        value = if value >= BUFF_LEN { value - BUFF_LEN } else { value };
+        while value >= BUFF_LEN {
+            value -= BUFF_LEN;
+        }
         value
     }
 
     fn addf(mut value: Float, add: Float) -> Float {
         value += add;
-        value = if value >= BUFF_LEN as Float { value - BUFF_LEN as Float } else { value };
+        while value >= BUFF_LEN as Float {
+            value -= BUFF_LEN as Float ;
+        }
         value
     }
 

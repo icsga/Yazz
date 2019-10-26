@@ -59,19 +59,11 @@ impl Synth {
         let mut sound = SoundData::new();
         sound.init();
         let sound = Arc::new(Mutex::new(sound));
-        let sound_global = SoundData::new();
-        let sound_local = SoundData::new();
-        let mut modulators = vec!{};
-        let mod_data = ModData{
-            source_func: Parameter::Lfo,
-            source_func_id: 1,
-            dest_func: Parameter::Oscillator,
-            dest_func_id: 1,
-            dest_param: Parameter::Frequency,
-            amount: 0.2
-        };
-        let mod1 = Modulator::new(&mod_data);
-        modulators.push(mod1);
+        let mut sound_global = SoundData::new();
+        let mut sound_local = SoundData::new();
+        sound_global.init();
+        sound_local.init();
+        let modulators = vec!{};
         let voice = [
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
@@ -88,20 +80,32 @@ impl Synth {
         let voices_playing = 0;
         let trigger_seq = 0;
         let last_clock = 0i64;
-        Synth{sample_rate,
-              sound,
-              sound_global,
-              sound_local,
-              modulators,
-              keymap,
-              voice,
-              delay,
-              glfo,
-              num_voices_triggered,
-              voices_playing,
-              trigger_seq,
-              last_clock,
-              sender}
+        let mut synth = Synth{sample_rate,
+                          sound,
+                          sound_global,
+                          sound_local,
+                          modulators,
+                          keymap,
+                          voice,
+                          delay,
+                          glfo,
+                          num_voices_triggered,
+                          voices_playing,
+                          trigger_seq,
+                          last_clock,
+                          sender};
+
+        // Add test modulator
+        let mod_data = ModData{
+            source_func: Parameter::GlobalLfo,
+            source_func_id: 1,
+            dest_func: Parameter::Delay,
+            dest_func_id: 1,
+            dest_param: Parameter::Time,
+            amount: 0.02
+        };
+        synth.add_modulator(&mod_data);
+        synth
     }
 
     /* Starts a thread for receiving UI and MIDI messages. */
@@ -121,34 +125,61 @@ impl Synth {
         handler
     }
 
-    fn get_global_mod_values(&mut self, sound: &mut SoundData) {
-    }
-
     fn add_modulator(&mut self, data: &ModData) {
         let m = Modulator::new(data);
         self.modulators.push(m);
+        let sound = &self.sound.lock().unwrap();
+        self.sound_global = **sound; // Initialize values to current sound. TODO: Only needed once if parameter updates update all three sounds
+        self.sound_local = **sound;
     }
 
     /* Called by the audio engine to get the next sample to be output. */
     pub fn get_sample(&mut self, sample_clock: i64) -> Float {
         let mut value: Float = 0.0;
+        let sound = &self.sound.lock().unwrap();
 
         // Prepare modulation values
         // =========================
-        let sound = &self.sound.lock().unwrap();
-        self.sound_global = **sound; // Initialize values to current sound. TODO: Only needed once if parameter updates update all three sounds
-        self.sound_local = **sound;
         for m in self.modulators.iter() {
+
+            // Get modulator source output
+            let mut val: Float = match m.source_func {
+                Parameter::GlobalLfo => {
+                    let (val, reset) = self.glfo[m.source_func_id].get_sample(sample_clock, &self.sound_global.glfo[m.source_func_id], false);
+                    val
+                },
+                _ => 0.0, // TODO: This also sets non-global vars, optimize that
+            } * m.scale + m.offset;
+
+            // Get current value of target parameter
+            let msg = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::Float(val)};
+            let current = sound.get_value(&msg);
+            //info!("val={}, current={:?}", val, current);
+
+            // Update parameter in global sound data
+            val += match current {
+                ParameterValue::Int(x) => x as Float,
+                ParameterValue::Float(x) => x,
+                _ => panic!()
+            };
+
+            if val > 1.0 {
+                val = 1.0;
+            }
+            let msg = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::Float(val)};
+            //info!("{:?}", msg);
+            self.sound_global.set_parameter(msg);
         }
 
         if self.voices_playing > 0 {
             for i in 0..32 {
                 if self.voices_playing & (1 << i) > 0 {
-                    value += self.voice[i].get_sample(sample_clock, sound);
+                    value += self.voice[i].get_sample(sample_clock, &self.sound_global);
                 }
             }
         }
-        value = self.delay.process(value, sample_clock, &sound.delay);
+        value = self.delay.process(value, sample_clock, &self.sound_global.delay);
+        //value = self.delay.process(value, sample_clock, &sound.delay);
         self.last_clock = sample_clock;
         value
     }
@@ -175,6 +206,8 @@ impl Synth {
     fn handle_ui_message(&mut self, msg: SynthParam) {
         let mut sound = self.sound.lock().unwrap();
         sound.set_parameter(msg);
+        self.sound_global = *sound;
+        self.sound_local = *sound;
         // Let all components check if they need to react to a changed
         // parameter. This allows us to keep the processing out of the
         // audio engine thread.

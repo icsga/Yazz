@@ -176,7 +176,7 @@ impl Tui {
 
     /** Received a queried parameter value from the synth engine. */
     pub fn handle_param(&mut self, m: SynthParam) {
-        //info!("handle_param {} = {:?}", self.selected_param.item_list[self.selected_param.item_index].item, m);
+        info!("handle_param {} = {:?}", self.selected_param.item_list[self.selected_param.item_index].item, m);
         let item = &mut self.selected_param;
         Tui::update_value(item, m.value, &mut self.temp_string);
     }
@@ -507,7 +507,7 @@ impl Tui {
 
     /* Store a new value in the selected parameter. */
     fn update_value(item: &mut SelectedItem, val: ParameterValue, temp_string: &mut String) {
-        //info!("update_value {:?}", item);
+        info!("update_value item: {:?}\nvalue: {:?}", item, val);
         match item.item_list[item.item_index].val_range {
             ValueRange::IntRange(min, max) => {
                 let mut val = if let ParameterValue::Int(x) = val { x } else { panic!(); };
@@ -536,7 +536,7 @@ impl Tui {
                 item.value = ParameterValue::Float(val);
             }
             ValueRange::ChoiceRange(selection_list) => {
-                let mut val = if let ParameterValue::Choice(x) = val { x as usize } else { panic!(); };
+                let mut val = if let ParameterValue::Choice(x) = val { x as usize } else { panic!("{:?}", val); };
                 if val >= selection_list.len() {
                     val = selection_list.len() - 1;
                 }
