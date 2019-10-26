@@ -105,6 +105,20 @@ impl MultiOscData {
             0
         }
     }
+
+    pub fn get_ratio(&self) -> Float {
+        if self.sine_ratio > 0.0 {
+            self.tri_ratio
+        } else if self.tri_ratio > 0.0 {
+            self.saw_ratio + 1.0
+        } else if self.saw_ratio > 0.0 {
+            self.square_ratio + 2.0
+        } else if self.square_ratio > 0.0 {
+            self.noise_ratio + 3.0
+        } else {
+            0.0
+        }
+    }
 }
 
 #[derive(Copy, Clone)]
