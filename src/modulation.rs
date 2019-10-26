@@ -5,6 +5,7 @@ use super::Voice;
 use super::voice::{NUM_OSCILLATORS, NUM_ENVELOPES, NUM_LFOS};
 use super::synth::NUM_GLOBAL_LFOS;
 
+use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug)]
@@ -45,8 +46,9 @@ pub struct ModDest {
     pub val_max: Float,
 }
 
-static MOD_DEST: [ModDest; 2] = [
+static MOD_DEST: [ModDest; 3] = [
     ModDest{function: Parameter::Oscillator, parameter: Parameter::Frequency, val_min: -24.0, val_max: 24.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Blend, val_min: 0.0, val_max: 4.0},
     ModDest{function: Parameter::Delay, parameter: Parameter::Time, val_min: 0.0, val_max: 1.0},
 ];
 
@@ -91,16 +93,20 @@ pub struct Modulator {
     pub dest_func_id: usize,
     pub dest_param: Parameter,
     pub scale: Float,
-    pub offset: Float
+    pub offset: Float,
+    pub is_global: bool
 }
 
 impl Modulator {
     pub fn new(data: &ModData) -> Modulator {
+        info!("New modulator");
         // Lookup input
         let source = Modulator::get_mod_source(data.source_func);
+        info!("{:?}", source);
 
         // Lookup output
-        let dest = Modulator::get_mod_dest(data.dest_func);
+        let dest = Modulator::get_mod_dest(data.dest_func, data.dest_param);
+        info!("{:?}", dest);
 
         let scale: Float;
         let offset: Float;
@@ -109,14 +115,24 @@ impl Modulator {
         match source.val_range {
             ModValRange::IntRange(min, max) => {
                 scale = (dest.val_max - dest.val_min) / (max - min) as Float;
-                offset = (dest.val_min - min as Float) * scale;
+                //offset = (dest.val_min - min as Float) * scale;
+                offset = dest.val_min - (min as Float * scale);
             }
             ModValRange::FloatRange(min, max) => {
                 scale = (dest.val_max - dest.val_min) / (max - min);
-                offset = (dest.val_min - min) * scale;
+                offset = dest.val_min - (min * scale);
             }
         }
-        Modulator{source_func: data.source_func, source_func_id: data.source_func_id, dest_func: data.dest_func, dest_func_id: data.dest_func_id, dest_param: data.dest_param, scale: scale, offset: offset}
+        let m = Modulator{source_func: data.source_func,
+                          source_func_id: data.source_func_id,
+                          dest_func: data.dest_func,
+                          dest_func_id: data.dest_func_id,
+                          dest_param: data.dest_param,
+                          scale: scale * data.amount,
+                          offset: offset,
+                          is_global: source.is_global};
+        info!("{:?}", m);
+        m
     }
 
     fn get_mod_source(function: Parameter) -> &'static ModSource {
@@ -128,9 +144,9 @@ impl Modulator {
         panic!();
     }
 
-    fn get_mod_dest(function: Parameter) -> &'static ModDest {
+    fn get_mod_dest(function: Parameter, parameter: Parameter) -> &'static ModDest {
         for (i, d) in MOD_DEST.iter().enumerate() {
-            if d.function == function {
+            if d.function == function && d.parameter == parameter {
                 return &d;
             }
         }

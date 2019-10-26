@@ -2,7 +2,9 @@ use super::Envelope;
 use super::Filter;
 use super::Float;
 use super::Lfo;
+use super::Modulator;
 use super::Oscillator;
+use super::{Parameter, ParameterValue, SynthParam};
 use super::SampleGenerator;
 use super::MultiOscillator;
 use super::SoundData;
@@ -62,7 +64,7 @@ impl Voice {
         voice
     }
 
-    pub fn get_sample(&mut self, sample_clock: i64, sound: &SoundData) -> Float {
+    pub fn get_sample(&mut self, sample_clock: i64, modulators: &Vec<Modulator>, sound: &mut SoundData, sound_global: &SoundData) -> Float {
         if !self.is_running() {
             return 0.0;
         }
@@ -73,6 +75,39 @@ impl Voice {
         self.last_update = sample_clock;
         let mut reset = false;
         let mut freq: Float;
+
+
+        // Prepare modulation values
+        // =========================
+        for m in modulators.iter() {
+
+            // Get modulator source output
+            let mod_val: Float = match m.source_func {
+                Parameter::Lfo => {
+                    let (val, reset) = self.lfo[m.source_func_id].get_sample(sample_clock, &sound.lfo[m.source_func_id], false);
+                    val
+                },
+                _ => 0.0, // TODO: This also sets non-global vars, optimize that
+            } * m.scale + m.offset;
+
+            // Get current value of target parameter
+            let param = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::NoValue};
+            let current_val = sound_global.get_value(&param);
+            let mut val = match current_val {
+                ParameterValue::Int(x) => x as Float,
+                ParameterValue::Float(x) => x,
+                _ => panic!()
+            };
+
+            // Update value if mod source is local
+            if !m.is_global {
+                val += mod_val;
+            }
+
+            // Update parameter in global sound data
+            let param = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::Float(val)};
+            sound.set_parameter(&param);
+        }
 
         // Get mixed output from oscillators
         for (i, osc) in self.osc.iter_mut().enumerate() {

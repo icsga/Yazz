@@ -74,7 +74,7 @@ impl SoundData {
         &self.env[id]
     }
 
-    pub fn set_parameter(&mut self, msg: SynthParam) {
+    pub fn set_parameter(&mut self, msg: &SynthParam) {
         let id = msg.function_id - 1;
         match msg.function {
             Parameter::Oscillator => {
@@ -133,6 +133,7 @@ impl SoundData {
                     Parameter::Waveform => ParameterValue::Choice(self.osc[id].get_waveform() as usize),
                     Parameter::Level => ParameterValue::Float(self.osc[id].level * 100.0),
                     Parameter::Frequency => ParameterValue::Int(self.osc[id].tune_halfsteps),
+                    Parameter::Blend => ParameterValue::Float(self.osc[id].get_ratio()),
                     Parameter::Phase => ParameterValue::Float(self.osc[id].phase),
                     Parameter::Sync => ParameterValue::Int(self.osc[id].sync),
                     Parameter::KeyFollow => ParameterValue::Int(self.osc[id].key_follow),

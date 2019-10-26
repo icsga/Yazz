@@ -97,14 +97,23 @@ impl Synth {
 
         // Add test modulator
         let mod_data = ModData{
+            source_func: Parameter::Lfo,
+            source_func_id: 1,
+            dest_func: Parameter::Oscillator,
+            dest_func_id: 1,
+            dest_param: Parameter::Blend,
+            amount: 0.2
+        };
+        synth.add_modulator(&mod_data);
+        let mod_data2 = ModData{
             source_func: Parameter::GlobalLfo,
             source_func_id: 1,
             dest_func: Parameter::Delay,
             dest_func_id: 1,
             dest_param: Parameter::Time,
-            amount: 0.02
+            amount: 0.001
         };
-        synth.add_modulator(&mod_data);
+        //synth.add_modulator(&mod_data2);
         synth
     }
 
@@ -143,7 +152,7 @@ impl Synth {
         for m in self.modulators.iter() {
 
             // Get modulator source output
-            let mut val: Float = match m.source_func {
+            let mod_val: Float = match m.source_func {
                 Parameter::GlobalLfo => {
                     let (val, reset) = self.glfo[m.source_func_id].get_sample(sample_clock, &self.sound_global.glfo[m.source_func_id], false);
                     val
@@ -152,29 +161,29 @@ impl Synth {
             } * m.scale + m.offset;
 
             // Get current value of target parameter
-            let msg = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::Float(val)};
-            let current = sound.get_value(&msg);
-            //info!("val={}, current={:?}", val, current);
-
-            // Update parameter in global sound data
-            val += match current {
+            let param = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::NoValue};
+            let current_val = sound.get_value(&param);
+            let mut val = match current_val {
                 ParameterValue::Int(x) => x as Float,
                 ParameterValue::Float(x) => x,
                 _ => panic!()
             };
 
-            if val > 1.0 {
-                val = 1.0;
+            // Update value if mod source is global
+            if m.is_global {
+                val += mod_val;
             }
-            let msg = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::Float(val)};
-            //info!("{:?}", msg);
-            self.sound_global.set_parameter(msg);
+
+            // Write value to global sound data
+            let param = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::Float(val)};
+            self.sound_global.set_parameter(&param);
         }
+        //info!("{:?}\n{:?}\n{:?}", sound, self.sound_global, self.sound_local);
 
         if self.voices_playing > 0 {
             for i in 0..32 {
                 if self.voices_playing & (1 << i) > 0 {
-                    value += self.voice[i].get_sample(sample_clock, &self.sound_global);
+                    value += self.voice[i].get_sample(sample_clock, &self.modulators, &mut self.sound_local, &self.sound_global);
                 }
             }
         }
@@ -205,9 +214,10 @@ impl Synth {
     /* Handles a message received from the UI. */
     fn handle_ui_message(&mut self, msg: SynthParam) {
         let mut sound = self.sound.lock().unwrap();
-        sound.set_parameter(msg);
+        sound.set_parameter(&msg);
         self.sound_global = *sound;
         self.sound_local = *sound;
+        //info!("handle_ui_message - {:?}\n{:?}\n{:?}", sound, self.sound_global, self.sound_local);
         // Let all components check if they need to react to a changed
         // parameter. This allows us to keep the processing out of the
         // audio engine thread.
