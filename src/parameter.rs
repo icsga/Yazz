@@ -120,8 +120,7 @@ impl SynthParam {
 pub enum ValueRange {
     IntRange(i64, i64),
     FloatRange(Float, Float),
-    ChoiceRange(&'static [Selection]),
-    ModRange(&'static [Selection]),
+    ChoiceRange(&'static [MenuItem]),
     NoRange
 }
 
@@ -140,106 +139,99 @@ pub enum ModFunction {
 
 /* Item for a list of selectable functions */
 #[derive(Debug)]
-pub struct Selection {
+pub struct MenuItem {
     pub item: Parameter,
     pub key: char,
     pub val_range: ValueRange,
     pub mod_func: ModFunction,
-    pub next: &'static [Selection]
+    pub next: &'static [MenuItem]
 }
 
 /* Top-level menu */
-pub static FUNCTIONS: [Selection; 7] = [
-    Selection{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3),            mod_func: ModFunction::Source, next: &OSC_PARAMS},
-    Selection{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &ENV_PARAMS},
-    Selection{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
-    Selection{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
-    Selection{item: Parameter::Filter,     key: 'f', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::NoMod,  next: &FILTER_PARAMS},
-    Selection{item: Parameter::Delay,      key: 'd', val_range: ValueRange::IntRange(1, 1),            mod_func: ModFunction::NoMod,  next: &DELAY_PARAMS},
-    Selection{item: Parameter::Modulation, key: 'm', val_range: ValueRange::IntRange(1, 16),           mod_func: ModFunction::NoMod,  next: &MOD_PARAMS},
+pub static FUNCTIONS: [MenuItem; 7] = [
+    MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3),            mod_func: ModFunction::Source, next: &OSC_PARAMS},
+    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &ENV_PARAMS},
+    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
+    MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Filter,     key: 'f', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::NoMod,  next: &FILTER_PARAMS},
+    MenuItem{item: Parameter::Delay,      key: 'd', val_range: ValueRange::IntRange(1, 1),            mod_func: ModFunction::NoMod,  next: &DELAY_PARAMS},
+    MenuItem{item: Parameter::Modulation, key: 'm', val_range: ValueRange::IntRange(1, 16),           mod_func: ModFunction::NoMod,  next: &MOD_PARAMS},
 ];
 
-pub static OSC_PARAMS: [Selection; 9] = [
-    Selection{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::ChoiceRange(&OSC_WAVEFORM), mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Level,     key: 'l', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Frequency, key: 'f', val_range: ValueRange::IntRange(-24, 24),          mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Blend,     key: 'b', val_range: ValueRange::FloatRange(0.0, 5.0),       mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Sync,      key: 's', val_range: ValueRange::IntRange(0, 1),             mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::IntRange(0, 1),             mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Voices,    key: 'v', val_range: ValueRange::IntRange(1, 7),             mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Spread,    key: 'e', val_range: ValueRange::FloatRange(0.0, 2.0),       mod_func: ModFunction::Target, next: &[]},
+pub static OSC_PARAMS: [MenuItem; 9] = [
+    MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::ChoiceRange(&OSC_WAVEFORM), mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::IntRange(-24, 24),          mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Blend,     key: 'b', val_range: ValueRange::FloatRange(0.0, 5.0),       mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::IntRange(0, 1),             mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::IntRange(0, 1),             mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Voices,    key: 'v', val_range: ValueRange::IntRange(1, 7),             mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Spread,    key: 'e', val_range: ValueRange::FloatRange(0.0, 2.0),       mod_func: ModFunction::Target, next: &[]},
 ];
 
-pub static LFO_PARAMS: [Selection; 3] = [
-    Selection{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::ChoiceRange(&LFO_WAVEFORM), mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Frequency, key: 'f', val_range: ValueRange::FloatRange(0.0, 22000.0),   mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
+pub static LFO_PARAMS: [MenuItem; 3] = [
+    MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::ChoiceRange(&LFO_WAVEFORM), mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::FloatRange(0.0, 22000.0),   mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
 ];
 
-pub static FILTER_PARAMS: [Selection; 3] = [
-    Selection{item: Parameter::Type,      key: 't', val_range: ValueRange::IntRange(1, 3),             mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::FloatRange(0.0, 22000.0),   mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Resonance, key: 'r', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
+pub static FILTER_PARAMS: [MenuItem; 3] = [
+    MenuItem{item: Parameter::Type,      key: 't', val_range: ValueRange::IntRange(1, 3),             mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::FloatRange(0.0, 22000.0),   mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
 ];
 
-pub static ENV_PARAMS: [Selection; 5] = [
-    Selection{item: Parameter::Attack,  key: 'a', val_range: ValueRange::FloatRange(0.0, 4000.0),      mod_func: ModFunction::Target, next: &[]}, // Value = Duration in ms
-    Selection{item: Parameter::Decay,   key: 'd', val_range: ValueRange::FloatRange(0.0, 4000.0),      mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Sustain, key: 's', val_range: ValueRange::FloatRange(0.0, 100.0),       mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Release, key: 'r', val_range: ValueRange::FloatRange(0.0, 8000.0),      mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Factor,  key: 'f', val_range: ValueRange::IntRange(1, 5),               mod_func: ModFunction::Target, next: &[]},
+pub static ENV_PARAMS: [MenuItem; 5] = [
+    MenuItem{item: Parameter::Attack,  key: 'a', val_range: ValueRange::FloatRange(0.0, 4000.0),      mod_func: ModFunction::Target, next: &[]}, // Value = Duration in ms
+    MenuItem{item: Parameter::Decay,   key: 'd', val_range: ValueRange::FloatRange(0.0, 4000.0),      mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Sustain, key: 's', val_range: ValueRange::FloatRange(0.0, 100.0),       mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Release, key: 'r', val_range: ValueRange::FloatRange(0.0, 8000.0),      mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Factor,  key: 'f', val_range: ValueRange::IntRange(1, 5),               mod_func: ModFunction::Target, next: &[]},
 ];
 
-pub static OSC_WAVEFORM: [Selection; 5] = [
-    Selection{item: Parameter::Sine,      key: 's', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Triangle,  key: 't', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Saw,       key: 'w', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Square,    key: 'q', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+pub static OSC_WAVEFORM: [MenuItem; 5] = [
+    MenuItem{item: Parameter::Sine,      key: 's', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Triangle,  key: 't', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Saw,       key: 'w', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Square,    key: 'q', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
 ];
 
-pub static LFO_WAVEFORM: [Selection; 5] = [
-    Selection{item: Parameter::Sine,      key: 's', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Triangle,  key: 't', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Saw,       key: 'w', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Square,    key: 'q', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::SampleHold,key: 'h', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+pub static LFO_WAVEFORM: [MenuItem; 5] = [
+    MenuItem{item: Parameter::Sine,      key: 's', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Triangle,  key: 't', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Saw,       key: 'w', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Square,    key: 'q', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::SampleHold,key: 'h', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
 ];
 
-pub static DELAY_PARAMS: [Selection; 3] = [
-    Selection{item: Parameter::Time,      key: 't', val_range: ValueRange::FloatRange(0.01, 1.0),      mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Level,     key: 'l', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
-    Selection{item: Parameter::Feedback,  key: 'f', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
+pub static DELAY_PARAMS: [MenuItem; 3] = [
+    MenuItem{item: Parameter::Time,      key: 't', val_range: ValueRange::FloatRange(0.01, 1.0),      mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Feedback,  key: 'f', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
 ];
 
-pub static MOD_PARAMS: [Selection; 4] = [
-    Selection{item: Parameter::Source,    key: 's', val_range: ValueRange::ModRange(&MOD_SOURCES),     mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Target,    key: 't', val_range: ValueRange::ModRange(&MOD_TARGETS),     mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Amount,    key: 'a', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::NoMod,  next: &[]},
-    Selection{item: Parameter::Active,    key: 'v', val_range: ValueRange::IntRange(0, 1),             mod_func: ModFunction::NoMod,  next: &[]},
+pub static MOD_PARAMS: [MenuItem; 4] = [
+    MenuItem{item: Parameter::Source,    key: 's', val_range: ValueRange::ChoiceRange(&MOD_SOURCES),     mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Target,    key: 't', val_range: ValueRange::ChoiceRange(&MOD_TARGETS),     mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::IntRange(0, 1),             mod_func: ModFunction::NoMod,  next: &[]},
 ];
 
-pub static MOD_SOURCES: [Selection; 4] = [
-    Selection{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3),            mod_func: ModFunction::Source, next: &OSC_PARAMS},
-    Selection{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &ENV_PARAMS},
-    Selection{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
-    Selection{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
+pub static MOD_SOURCES: [MenuItem; 4] = [
+    MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3),            mod_func: ModFunction::Source, next: &OSC_PARAMS},
+    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &ENV_PARAMS},
+    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
+    MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
 ];
 
-pub static MOD_TARGETS: [Selection; 6] = [
-    Selection{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3),            mod_func: ModFunction::Source, next: &OSC_PARAMS},
-    Selection{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &ENV_PARAMS},
-    Selection{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
-    Selection{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
-    Selection{item: Parameter::Filter,     key: 'f', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::NoMod,  next: &FILTER_PARAMS},
-    Selection{item: Parameter::Delay,      key: 'd', val_range: ValueRange::IntRange(1, 1),            mod_func: ModFunction::NoMod,  next: &DELAY_PARAMS},
+pub static MOD_TARGETS: [MenuItem; 6] = [
+    MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3),            mod_func: ModFunction::Source, next: &OSC_PARAMS},
+    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &ENV_PARAMS},
+    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
+    MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::Source, next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Filter,     key: 'f', val_range: ValueRange::IntRange(1, 2),            mod_func: ModFunction::NoMod,  next: &FILTER_PARAMS},
+    MenuItem{item: Parameter::Delay,      key: 'd', val_range: ValueRange::IntRange(1, 1),            mod_func: ModFunction::NoMod,  next: &DELAY_PARAMS},
 ];
-
-#[derive(Debug)]
-pub struct SelectedItem {
-    pub item_list: &'static [Selection], // The selection this item is coming from
-    pub item_index: usize, // Index into the selection list
-    pub value: ParameterValue, // ID or value of the selected item
-}
 
