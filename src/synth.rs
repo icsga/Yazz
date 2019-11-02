@@ -22,9 +22,9 @@ use log::{info, trace, warn};
 
 const NUM_VOICES: usize = 32;
 const NUM_KEYS: usize = 127;
-const REF_FREQUENCY: Float = 440.0;
-const NUM_MODULATORS: usize = 20;
+const NUM_MODULATORS: usize = 16;
 pub const NUM_GLOBAL_LFOS: usize = 2;
+const REF_FREQUENCY: Float = 440.0;
 
 pub enum Synth2UIMessage {
     Param(SynthParam),
@@ -35,10 +35,10 @@ pub enum Synth2UIMessage {
 pub struct Synth {
     // Configuration
     sample_rate: u32,
-    sound: Arc<Mutex<SoundData>>, // Sound patch as loaded from disk
+    sound: SoundData, // Sound patch as loaded from disk
     sound_global: SoundData,      // Sound with global modulators applied
     sound_local: SoundData,       // Sound with voice-local modulators applied
-    modulators: Vec<Modulator>,
+    modulators: [Modulator; NUM_MODULATORS],
     keymap: [Float; NUM_KEYS],
 
     // Signal chain
@@ -58,12 +58,17 @@ impl Synth {
     pub fn new(sample_rate: u32, sender: Sender<UiMessage>) -> Self {
         let mut sound = SoundData::new();
         sound.init();
-        let sound = Arc::new(Mutex::new(sound));
+        //let sound = Arc::new(Mutex::new(sound));
         let mut sound_global = SoundData::new();
         let mut sound_local = SoundData::new();
         sound_global.init();
         sound_local.init();
-        let modulators = vec!{};
+        let modulators = [
+            Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
+            Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
+            Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
+            Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
+        ];
         let voice = [
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
@@ -99,21 +104,23 @@ impl Synth {
         let mod_data = ModData{
             source_func: Parameter::Lfo,
             source_func_id: 1,
-            dest_func: Parameter::Oscillator,
-            dest_func_id: 1,
-            dest_param: Parameter::Blend,
-            amount: 0.2
+            target_func: Parameter::Oscillator,
+            target_func_id: 1,
+            target_param: Parameter::Blend,
+            amount: 0.2,
+            active: true,
         };
-        synth.add_modulator(&mod_data);
+        synth.set_modulator(0, &mod_data);
         let mod_data2 = ModData{
             source_func: Parameter::GlobalLfo,
             source_func_id: 1,
-            dest_func: Parameter::Delay,
-            dest_func_id: 1,
-            dest_param: Parameter::Time,
-            amount: 0.001
+            target_func: Parameter::Delay,
+            target_func_id: 1,
+            target_param: Parameter::Time,
+            amount: 0.001,
+            active: true,
         };
-        //synth.add_modulator(&mod_data2);
+        //synth.set_modulator(1, &mod_data2);
         synth
     }
 
@@ -134,22 +141,18 @@ impl Synth {
         handler
     }
 
-    fn add_modulator(&mut self, data: &ModData) {
-        let m = Modulator::new(data);
-        self.modulators.push(m);
-        let sound = &self.sound.lock().unwrap();
-        self.sound_global = **sound; // Initialize values to current sound. TODO: Only needed once if parameter updates update all three sounds
-        self.sound_local = **sound;
+    fn set_modulator(&mut self, id: usize, data: &ModData) {
+        self.modulators[id].init(data);
+        self.sound_global = self.sound; // Initialize values to current sound. TODO: Only needed once if parameter updates update all three sounds
+        self.sound_local = self.sound;
     }
 
-    /* Called by the audio engine to get the next sample to be output. */
-    pub fn get_sample(&mut self, sample_clock: i64) -> Float {
-        let mut value: Float = 0.0;
-        let sound = &self.sound.lock().unwrap();
+    fn get_modulation_values(&mut self, sample_clock: i64) {
+        for m in self.modulators.iter_mut() {
 
-        // Prepare modulation values
-        // =========================
-        for m in self.modulators.iter() {
+            if !m.active {
+                continue;
+            }
 
             // Get modulator source output
             let mod_val: Float = match m.source_func {
@@ -161,8 +164,8 @@ impl Synth {
             } * m.scale + m.offset;
 
             // Get current value of target parameter
-            let param = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::NoValue};
-            let current_val = sound.get_value(&param);
+            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::NoValue};
+            let current_val = self.sound.get_value(&param);
             let mut val = match current_val {
                 ParameterValue::Int(x) => x as Float,
                 ParameterValue::Float(x) => x,
@@ -175,11 +178,18 @@ impl Synth {
             }
 
             // Write value to global sound data
-            let param = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::Float(val)};
+            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::Float(val)};
             self.sound_global.set_parameter(&param);
         }
-        //info!("{:?}\n{:?}\n{:?}", sound, self.sound_global, self.sound_local);
+    }
 
+    /* Called by the audio engine to get the next sample to be output. */
+    pub fn get_sample(&mut self, sample_clock: i64) -> Float {
+        let mut value: Float = 0.0;
+
+        self.get_modulation_values(sample_clock);
+
+        // Get sample of all active voices
         if self.voices_playing > 0 {
             for i in 0..32 {
                 if self.voices_playing & (1 << i) > 0 {
@@ -187,8 +197,10 @@ impl Synth {
                 }
             }
         }
+
+        // Pass sample into global effects
         value = self.delay.process(value, sample_clock, &self.sound_global.delay);
-        //value = self.delay.process(value, sample_clock, &sound.delay);
+
         self.last_clock = sample_clock;
         value
     }
@@ -213,23 +225,20 @@ impl Synth {
 
     /* Handles a message received from the UI. */
     fn handle_ui_message(&mut self, msg: SynthParam) {
-        let mut sound = self.sound.lock().unwrap();
-        sound.set_parameter(&msg);
-        self.sound_global = *sound;
-        self.sound_local = *sound;
+        info!("handle_ui_message - {:?}", msg);
+        self.sound.set_parameter(&msg);
+        self.sound_global = self.sound;
+        self.sound_local = self.sound;
         //info!("handle_ui_message - {:?}\n{:?}\n{:?}", sound, self.sound_global, self.sound_local);
         // Let all components check if they need to react to a changed
         // parameter. This allows us to keep the processing out of the
         // audio engine thread.
-        self.voice[0].filter[0].update(&mut sound.filter[0]);
+        self.voice[0].filter[0].update(&mut self.sound.filter[0]);
     }
 
     /* Handles a parameter query received from the UI. */
     fn handle_ui_query(&mut self, mut msg: SynthParam) {
-        {
-            let sound = self.sound.lock().unwrap();
-            sound.insert_value(&mut msg);
-        }
+        self.sound.insert_value(&mut msg);
         self.sender.send(UiMessage::Param(msg)).unwrap();
     }
 
@@ -244,10 +253,7 @@ impl Synth {
                 let voice = &mut self.voice[voice_id];
                 voice.set_key(msg.param);
                 voice.set_freq(freq);
-                {
-                    let sound = self.sound.lock().unwrap();
-                    voice.trigger(self.trigger_seq, self.last_clock, &sound);
-                }
+                voice.trigger(self.trigger_seq, self.last_clock, &self.sound);
                 self.num_voices_triggered += 1;
                 self.trigger_seq += 1;
                 self.voices_playing |= 1 << voice_id;
@@ -256,8 +262,7 @@ impl Synth {
                 for (i, v) in self.voice.iter_mut().enumerate() {
                     if v.is_triggered() && v.key == msg.param {
                         self.num_voices_triggered -= 1;
-                        let sound = self.sound.lock().unwrap();
-                        v.release(&sound);
+                        v.release(&self.sound);
                         break;
                     }
                 }
@@ -292,16 +297,14 @@ impl Synth {
             Parameter::Oscillator => {
                 let mut osc = MultiOscillator::new(44100, param.function_id - 1);
                 osc.reset(0);
-                let sound = self.sound.lock().unwrap();
                 for i in 0..buffer.capacity() {
-                    let (sample, complete) = osc.get_sample(440.0, i as i64, &sound, false);
+                    let (sample, complete) = osc.get_sample(440.0, i as i64, &self.sound, false);
                     buffer[i] = sample;
                 }
             },
             Parameter::Envelope => {
                 // Calculate lenth of envelope
-                let mut sound = self.sound.lock().unwrap();
-                let env_data = &mut sound.env[param.function_id - 1];
+                let env_data = &mut self.sound.env[param.function_id - 1];
                 let mut len_total = env_data.attack + env_data.decay + env_data.release;
                 len_total += len_total / 3.0; // Add 25% duration for sustain, value is in ms
                 let mut release_point = len_total - env_data.release;

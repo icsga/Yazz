@@ -3,9 +3,11 @@ use super::EnvelopeData;
 use super::FilterData;
 use super::Float;
 use super::LfoData;
+use super::ModData;
 use super::MultiOscData;
 use super::{Parameter, ParameterValue, SynthParam};
 
+use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
@@ -16,6 +18,7 @@ pub struct SoundData {
     pub lfo: [LfoData; 2],
     pub glfo: [LfoData; 2],
     pub delay: DelayData,
+    pub modul: [ModData; 16],
 }
 
 impl SoundData {
@@ -42,7 +45,13 @@ impl SoundData {
             LfoData{..Default::default()},
         ];
         let delay = DelayData{..Default::default()};
-        SoundData{osc, env, filter, lfo, glfo, delay}
+        let modul = [
+            ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()},
+            ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()},
+            ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()},
+            ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()},
+        ];
+        SoundData{osc, env, filter, lfo, glfo, delay, modul}
     }
 
     pub fn init(&mut self) {
@@ -119,7 +128,15 @@ impl SoundData {
                     _ => {}
                 }
             }
-            Parameter::Mod => {}
+            Parameter::Modulation => {
+                match msg.parameter {
+                    Parameter::Source => { if let ParameterValue::Function(x) = msg.value { self.modul[id].set_source(&x); } else { panic!() }; }
+                    Parameter::Target => { if let ParameterValue::Param(x) = msg.value { self.modul[id].set_target(&x); } else { panic!() }; }
+                    Parameter::Amount => { self.modul[id].amount = if let ParameterValue::Float(x) = msg.value { x } else { panic!("{:?}", msg.value) }; }
+                    Parameter::Active => { self.modul[id].active = if let ParameterValue::Int(x) = msg.value { x > 0 } else { panic!() }; }
+                    _ => {}
+                }
+            }
             Parameter::System => {}
             _ => {}
         }
@@ -169,8 +186,16 @@ impl SoundData {
                     _ => {panic!();}
                 }
             }
-            Parameter::Mod => {panic!();}
-            Parameter::System => {panic!();}
+            Parameter::Modulation => {
+                match param.parameter {
+                    Parameter::Source => ParameterValue::Function(self.modul[id].get_source()),
+                    Parameter::Target => ParameterValue::Param(self.modul[id].get_target()),
+                    Parameter::Amount => ParameterValue::Float(self.modul[id].amount),
+                    Parameter::Active => ParameterValue::Int(if self.modul[id].active { 1 } else { 0 }),
+                    _ => {panic!();}
+                }
+            }
+            Parameter::System => ParameterValue::NoValue,
             _ => {panic!();}
         }
     }

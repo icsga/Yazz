@@ -1,4 +1,4 @@
-use super::parameter::{Parameter, ParameterValue, SynthParam, ValueRange, Selection, SelectedItem, FUNCTIONS, OSC_PARAMS};
+use super::parameter::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRange, Selection, SelectedItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
 use super::{MidiMessage, MessageType};
 use super::{UiMessage, SynthMessage};
 use super::Canvas;
@@ -25,6 +25,9 @@ enum TuiState {
     FunctionIndex,
     Param,
     Value,
+    ValueSubFunction,
+    ValueSubFunctionIndex,
+    ValueSubParam,
 }
 
 enum ReturnCode {
@@ -48,6 +51,9 @@ fn next(current: TuiState) -> TuiState {
         FunctionIndex => Param,
         Param => Value,
         Value => Param,
+        ValueSubFunction => ValueSubFunctionIndex,
+        ValueSubFunctionIndex => ValueSubParam,
+        ValueSubParam => ValueSubFunction,
     }
 }
 
@@ -58,6 +64,9 @@ fn previous(current: TuiState) -> TuiState {
         FunctionIndex => Function,
         Param => FunctionIndex,
         Value => Param,
+        ValueSubFunction => Param,
+        ValueSubFunctionIndex => ValueSubFunction,
+        ValueSubParam => ValueSubFunctionIndex,
     }
 }
 
@@ -68,9 +77,10 @@ pub struct Tui {
     ui_receiver: Receiver<UiMessage>,
 
     // TUI handling
-    current_list: &'static [Selection],
     selected_function: SelectedItem,
     selected_param: SelectedItem,
+    selected_sub_function: SelectedItem,
+    selected_sub_param: SelectedItem,
 
     sync_counter: u32,
     idle: Duration, // Accumulated idle times of the engine
@@ -85,9 +95,10 @@ pub struct Tui {
 impl Tui {
     pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> Tui {
         let state = TuiState::Function;
-        let current_list = &FUNCTIONS;
         let selected_function = SelectedItem{item_list: &FUNCTIONS, item_index: 0, value: ParameterValue::Int(1)};
         let selected_param = SelectedItem{item_list: &OSC_PARAMS, item_index: 0, value: ParameterValue::Int(1)};
+        let selected_sub_function = SelectedItem{item_list: &MOD_SOURCES, item_index: 0, value: ParameterValue::Int(1)};
+        let selected_sub_param = SelectedItem{item_list: &MOD_SOURCES, item_index: 0, value: ParameterValue::Int(1)};
         let temp_string = String::new();
         let sync_counter = 0;
         let idle = Duration::new(0, 0);
@@ -98,9 +109,10 @@ impl Tui {
         Tui{state,
             sender,
             ui_receiver,
-            current_list,
             selected_function,
             selected_param,
+            selected_sub_function,
+            selected_sub_param,
             sync_counter,
             idle,
             busy,
@@ -121,9 +133,9 @@ impl Tui {
             loop {
                 let msg = tui.ui_receiver.recv().unwrap();
                 match msg {
-                    UiMessage::Midi(m)  => tui.handle_midi(m),
-                    UiMessage::Key(m) => tui.handle_input(m),
-                    UiMessage::Param(m) => tui.handle_param(m),
+                    UiMessage::Midi(m)  => tui.handle_midi_event(m),
+                    UiMessage::Key(m) => tui.handle_user_input(m),
+                    UiMessage::Param(m) => tui.handle_synth_param(m),
                     UiMessage::SampleBuffer(m, p) => tui.handle_samplebuffer(m, p),
                     UiMessage::EngineSync(idle, busy) => tui.handle_engine_sync(idle, busy),
                 };
@@ -132,8 +144,8 @@ impl Tui {
         handler
     }
 
-    /** MIDI message received */
-    pub fn handle_midi(&mut self, m: MidiMessage) {
+    /* MIDI message received */
+    fn handle_midi_event(&mut self, m: MidiMessage) {
         match m.get_message_type() {
             MessageType::ControlChg => {
                 if m.param == 0x01 { // ModWheel
@@ -151,6 +163,9 @@ impl Tui {
             TuiState::FunctionIndex => (),
             TuiState::Param => self.change_state(TuiState::Value),
             TuiState::Value => (),
+            TuiState::ValueSubFunction => self.change_state(TuiState::ValueSubFunctionIndex),
+            TuiState::ValueSubFunctionIndex => (),
+            TuiState::ValueSubParam => (),
         }
         let item = &mut self.selected_param;
         match item.item_list[item.item_index].val_range {
@@ -174,15 +189,15 @@ impl Tui {
         self.send_event();
     }
 
-    /** Received a queried parameter value from the synth engine. */
-    pub fn handle_param(&mut self, m: SynthParam) {
-        info!("handle_param {} = {:?}", self.selected_param.item_list[self.selected_param.item_index].item, m);
+    /* Received a queried parameter value from the synth engine. */
+    fn handle_synth_param(&mut self, m: SynthParam) {
+        info!("handle_synth_param {} = {:?}", self.selected_param.item_list[self.selected_param.item_index].item, m);
         let item = &mut self.selected_param;
         Tui::update_value(item, m.value, &mut self.temp_string);
     }
 
-    /** Received a buffer with samples from the synth engine. */
-    pub fn handle_samplebuffer(&mut self, m: Vec<Float>, p: SynthParam) {
+    /* Received a buffer with samples from the synth engine. */
+    fn handle_samplebuffer(&mut self, m: Vec<Float>, p: SynthParam) {
         self.canvas.clear();
         match p.function {
             Parameter::Oscillator => {
@@ -224,12 +239,12 @@ impl Tui {
         }
     }
 
-    /** Received a keyboard event from the terminal. */
-    pub fn handle_input(&mut self, c: termion::event::Key) {
+    /* Received a keyboard event from the terminal. */
+    fn handle_user_input(&mut self, c: termion::event::Key) {
         let mut key_consumed = false;
 
         while !key_consumed {
-            //info!("handle_input {:?}", c);
+            info!("handle_user_input {:?}", c);
             key_consumed = true;
             let new_state = match self.state {
 
@@ -277,9 +292,12 @@ impl Tui {
                     }
                 },
 
-                // Update the parameter value
+                // Select the parameter value
                 TuiState::Value => {
-                    match Tui::get_value(&mut self.selected_param, c, &mut self.temp_string) {
+                    // Hack: For modulator settings, we need to pass in a different struct, since
+                    // that requires additional submenus.
+                    let item = &mut self.selected_param;
+                    match Tui::get_value(item, c, &mut self.temp_string) {
                         ReturnCode::KeyConsumed   => self.state,
                         ReturnCode::ValueUpdated  => { // Value has changed to a valid value, update synth
                             self.send_event();
@@ -298,16 +316,85 @@ impl Tui {
                         }
                     }
                 }
+
+                TuiState::ValueSubFunction => {
+                    match Tui::select_item(&mut self.selected_sub_function, c) {
+                        ReturnCode::KeyConsumed | ReturnCode::ValueUpdated  => self.state,       // Selection updated
+                        ReturnCode::KeyMissmatch                            => self.state,       // Ignore key that doesn't match a selection
+                        ReturnCode::ValueComplete                           => next(self.state), // Function selected
+                        ReturnCode::Cancel => {
+                            // Stop updating the value, back to parameter selection
+                            previous(self.state)
+                        }
+                    }
+                },
+
+                // Select which item in the function group to edit (Oscillator 1, 2, 3, ...)
+                TuiState::ValueSubFunctionIndex => {
+                    match Tui::get_value(&mut self.selected_sub_function, c, &mut self.temp_string) {
+                        ReturnCode::KeyConsumed   => self.state,           // Key has been used, but value hasn't changed
+                        ReturnCode::ValueUpdated  => self.state,           // Selection not complete yet
+                        ReturnCode::ValueComplete => {                     // Parameter has been selected
+                            let item = &mut self.selected_param;
+                            match item.item_list[item.item_index].item {
+                                Parameter::Source => {
+                                    // Finished getting the modulation source
+                                    let item = &self.selected_sub_function;
+                                    let mut func_id = if let ParameterValue::Int(x) = item.value { x as usize } else { panic!() };
+                                    if func_id == 0 { func_id = 1; }
+                                    self.selected_param.value = ParameterValue::Function(FunctionId{function: item.item_list[item.item_index].item, function_id: func_id});
+                                    self.send_event();
+                                    previous(self.state)
+                                }
+                                Parameter::Target => {
+                                    let mut item = &mut self.selected_sub_param;
+                                    item.item_list = item.item_list[item.item_index].next;
+                                    Tui::select_param(item);
+                                    self.query_current_value();
+                                    next(self.state)
+                                }
+                                Parameter::Amount => previous(self.state),
+                                _ => panic!("{:?}", item.item_list[item.item_index].item),
+                            }
+
+                        },
+                        ReturnCode::KeyMissmatch  => self.state,           // Ignore unmatched keys
+                        ReturnCode::Cancel        => previous(self.state), // Abort function index selection
+                    }
+                },
+
+                // Select the parameter of the function to edit (Waveshape, Frequency, ...)
+                TuiState::ValueSubParam => {
+                    match Tui::select_item(&mut self.selected_sub_param, c) {
+                        ReturnCode::KeyConsumed   => self.state,           // Value has changed, but not complete yet
+                        ReturnCode::ValueUpdated  => {                     // Pararmeter selection updated
+                            Tui::select_param(&mut self.selected_sub_param);
+                            self.query_current_value();
+                            self.state
+                        },
+                        ReturnCode::ValueComplete => {
+                            let func = &self.selected_sub_function;
+                            let func_id = if let ParameterValue::Int(x) = func.value { x as usize } else { panic!() };
+                            let param = &self.selected_sub_param;
+                            self.selected_param.value = ParameterValue::Param(ParamId{function: func.item_list[func.item_index].item,
+                                                                                         function_id: func_id,
+                                                                                         parameter: param.item_list[param.item_index].item});
+                            self.send_event();
+                            next(self.state)
+                        },
+                        ReturnCode::KeyMissmatch  => self.state,           // Ignore invalid key
+                        ReturnCode::Cancel        => previous(self.state), // Cancel parameter selection
+                    }
+                },
+
             };
             self.change_state(new_state);
         }
     }
 
     /* Change the state of the input state machine. */
-    fn change_state(&mut self, new_state: TuiState) {
-        //info!("change_state {} -> {}", self.state, new_state);
+    fn change_state(&mut self, mut new_state: TuiState) {
         if new_state != self.state {
-            self.state = new_state;
             match new_state {
                 TuiState::Function => {
                     // We are probably selecting a different function than
@@ -317,19 +404,57 @@ impl Tui {
                 }
                 TuiState::FunctionIndex => {}
                 TuiState::Param => {}
-                TuiState::Value => {}
+                TuiState::Value => {
+                    // For modulation parameters, we need to enter a special
+                    // sub state
+                    let f = &self.selected_function;
+                    if f.item_list[f.item_index].item == Parameter::Modulation {
+                        let p = &self.selected_param;
+                        match p.item_list[p.item_index].item {
+                            Parameter::Source => {
+                                new_state = TuiState::ValueSubFunction;
+                                self.selected_sub_function.item_list = &MOD_SOURCES;
+                            },
+                            Parameter::Target =>  {
+                                new_state = TuiState::ValueSubFunction;
+                                self.selected_sub_function.item_list = &MOD_TARGETS;
+                            },
+                            Parameter::Amount => (),
+                            _ => panic!(),
+                        }
+                        let val = if let ParameterValue::Param(p) = f.value { p } else { panic!("{:?}", f.value) };
+                        self.selected_sub_function.item_index = val.function_id;
+                    }
+                }
+                TuiState::ValueSubFunction => {}
+                TuiState::ValueSubFunctionIndex => {
+                    let item = &self.selected_sub_function;
+                    if item.item_list[item.item_index].item == Parameter::Modulation {
+                        let item = &self.selected_sub_param;
+                        match item.item_list[item.item_index].item {
+                            Parameter::Source => new_state = TuiState::ValueSubFunction,
+                            Parameter::Target =>  new_state = TuiState::ValueSubParam,
+                            Parameter::Amount => (),
+                            _ => panic!(),
+                        }
+                    }
+                }
+                TuiState::ValueSubParam => {}
             }
+            info!("change_state {} -> {}", self.state, new_state);
+            self.state = new_state;
         }
     }
 
-    /* Queries the current value of the selected parameter, since we don't keep a local copy. */
+    /* Queries the current value of the selected parameter from the synth engine, since we don't
+     * keep a local copy. */
     fn query_current_value(&self) {
         let function = &self.selected_function.item_list[self.selected_function.item_index];
         let function_id = if let ParameterValue::Int(x) = &self.selected_function.value { *x as usize } else { panic!() };
         let parameter = &self.selected_param.item_list[self.selected_param.item_index];
         let param_val = &self.selected_param.value;
         let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
-        //info!("query_current_value {:?}", param);
+        info!("query_current_value {:?}", param);
         self.sender.send(SynthMessage::ParamQuery(param)).unwrap();
     }
 
@@ -347,10 +472,12 @@ impl Tui {
         self.sender.send(SynthMessage::SampleBuffer(buffer, param)).unwrap();
     }
 
-    /* Select one of the items of functions or parameters. */
+    /* Select one of the items of functions or parameters.
+     *
+     * Called when a new user input is received and we're in the right state for function selection.
+     */
     fn select_item(item: &mut SelectedItem, c: termion::event::Key) -> ReturnCode {
-        //info!("select_item {:?}", item.item_list[item.item_index].item);
-        match c {
+        let result = match c {
             Key::Up => {
                 if item.item_index < item.item_list.len() - 1 {
                     item.item_index += 1;
@@ -376,7 +503,9 @@ impl Tui {
                 ReturnCode::KeyConsumed
             },
             _ => ReturnCode::KeyConsumed
-        }
+        };
+        info!("select_item {:?}", item.item_list[item.item_index].item);
+        result
     }
 
     /* Construct the value of the selected item.
@@ -386,7 +515,7 @@ impl Tui {
      * - Adjusting current value with Up or Down keys
      */
     fn get_value(item: &mut SelectedItem, c: termion::event::Key, temp_string: &mut String) -> ReturnCode {
-        //info!("get_value {:?}", c);
+        info!("get_value {:?}", item.item_list[item.item_index].item);
         match item.item_list[item.item_index].val_range {
             ValueRange::IntRange(min, max) => {
                 let mut current = if let ParameterValue::Int(x) = item.value { x } else { panic!() };
@@ -482,32 +611,45 @@ impl Tui {
                 }
                 result
             },
+            ValueRange::ModRange(choice_list) => {
+                Tui::select_item(item, c)
+            }
             _ => panic!(),
         }
     }
 
     /* Select the parameter chosen by input. */
     fn select_param(item: &mut SelectedItem) {
-        //info!("select_param {:?}", item.item_list[item.item_index].item);
-        // The value in the selected parameter needs to point to the right type
+        info!("select_param {:?}", item.item_list[item.item_index].item);
+        let param = item.item_list[item.item_index].item;
+
+        // The value in the selected parameter needs to point to the right type.
+        // Initialize it with the minimum.
         let val_range = &item.item_list[item.item_index].val_range;
-        match val_range {
+        item.value = match val_range {
             ValueRange::IntRange(min, _) => {
-                item.value = ParameterValue::Int(*min);
+                ParameterValue::Int(*min)
             }
             ValueRange::FloatRange(min, _) => {
-                item.value = ParameterValue::Float(*min);
+                ParameterValue::Float(*min)
             }
             ValueRange::ChoiceRange(choice_list) => {
-                item.value = ParameterValue::Choice(0);
+                ParameterValue::Choice(0)
             }
-            _ => ()
+            ValueRange::ModRange(choice_list) => {
+                match param {
+                    Parameter::Source => ParameterValue::Function(FunctionId{..Default::default()}),
+                    Parameter::Target => ParameterValue::Param(ParamId{..Default::default()}),
+                    _ => panic!(),
+                }
+            }
+            _ => ParameterValue::NoValue
         }
     }
 
     /* Store a new value in the selected parameter. */
     fn update_value(item: &mut SelectedItem, val: ParameterValue, temp_string: &mut String) {
-        info!("update_value item: {:?}\nvalue: {:?}", item, val);
+        info!("update_value item: {:?}, value: {:?}", item.item_list[item.item_index].item, val);
         match item.item_list[item.item_index].val_range {
             ValueRange::IntRange(min, max) => {
                 let mut val = if let ParameterValue::Int(x) = val { x } else { panic!(); };
@@ -542,6 +684,18 @@ impl Tui {
                 }
                 item.value = ParameterValue::Choice(val);
             }
+            ValueRange::ModRange(selection_list) => {
+                match val {
+                    ParameterValue::Function(x) => {
+                        item.value = val;
+                    }
+                    ParameterValue::Param(x) => {
+                        item.value = val;
+                    }
+                    _ => panic!(),
+                }
+                item.value = val;
+            }
             ValueRange::NoRange => {}
         };
     }
@@ -562,21 +716,57 @@ impl Tui {
     /** Display the UI. */
     fn display(&self) {
         let mut x_pos: u16 = 1;
+        let mut display_state = TuiState::Function;
         print!("{}{}", clear::All, cursor::Goto(1, 1));
-        self.display_function();
-        if self.state == TuiState::FunctionIndex {
-            x_pos = 12;
+        loop {
+            match display_state {
+                TuiState::Function => {
+                    Tui::display_function(&self.selected_function, self.state == TuiState::Function);
+                }
+                TuiState::FunctionIndex => {
+                    Tui::display_function_index(&self.selected_function, self.state == TuiState::FunctionIndex);
+                    x_pos = 12;
+                }
+                TuiState::Param => {
+                    Tui::display_param(&self.selected_param, self.state == TuiState::Param);
+                    x_pos = 14;
+                }
+                _ => break,
+            }
+            if display_state == self.state {
+                break;
+            }
+            display_state = next(display_state);
         }
-        self.display_function_index();
-        if self.state == TuiState::Param || self.state == TuiState::Value {
-            if self.state == TuiState::Param {
-                x_pos = 14;
+        match self.state {
+            TuiState::Value => {
+                    Tui::display_value(&self.selected_param, self.state == TuiState::Value);
+                    x_pos = 23;
             }
-            self.display_param();
-            if self.state == TuiState::Value {
-                x_pos = 23;
+            TuiState::ValueSubFunction | TuiState::ValueSubFunctionIndex | TuiState::ValueSubParam => {
+                display_state = TuiState::ValueSubFunction;
+                loop {
+                    match display_state {
+                        TuiState::ValueSubFunction => {
+                            Tui::display_function(&self.selected_sub_function, true);
+                            x_pos = 30;
+                        }
+                        TuiState::ValueSubFunctionIndex => {
+                            Tui::display_function_index(&self.selected_sub_function, true);
+                            x_pos = 32;
+                        }
+                        TuiState::ValueSubParam => {
+                            Tui::display_param(&self.selected_sub_param, true);
+                        }
+                        _ => (),
+                    }
+                    if display_state == self.state {
+                        break;
+                    }
+                    display_state = next(display_state);
+                }
             }
-            self.display_value();
+            _ => ()
         }
         //print!("{}", clear::UntilNewline);
         self.display_options(x_pos);
@@ -584,58 +774,62 @@ impl Tui {
         io::stdout().flush().ok();
     }
 
-    fn display_function(&self) {
-        if self.state == TuiState::Function {
+    fn display_function(func: &SelectedItem, selected: bool) {
+        if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         } else {
             print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         }
-        print!("{}", self.selected_function.item_list[self.selected_function.item_index].item);
-        if self.state == TuiState::Function {
+        print!("{}", func.item_list[func.item_index].item);
+        if selected {
             print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         }
     }
 
-    fn display_function_index(&self) {
-        if self.state == TuiState::FunctionIndex {
+    fn display_function_index(func: &SelectedItem, selected: bool) {
+        if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
-        let function_id = if let ParameterValue::Int(x) = &self.selected_function.value { *x as usize } else { panic!() };
+        let function_id = if let ParameterValue::Int(x) = &func.value { *x as usize } else { panic!() };
         print!(" {}", function_id);
-        if self.state == TuiState::FunctionIndex {
+        if selected {
             print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         }
     }
 
-    fn display_param(&self) {
-        let item = &self.selected_param;
-        if self.state == TuiState::Param {
+    fn display_param(param: &SelectedItem, selected: bool) {
+        if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
-        print!(" {}", item.item_list[item.item_index].item);
-        if self.state == TuiState::Param {
+        print!(" {}", param.item_list[param.item_index].item);
+        if selected {
             print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         }
     }
 
-    fn display_value(&self) {
-        let item = &self.selected_param;
-        if self.state == TuiState::Value {
+    fn display_value(param: &SelectedItem, selected: bool) {
+        if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
-        match item.value {
+        match param.value {
             ParameterValue::Int(x) => print!(" {}", x),
             ParameterValue::Float(x) => print!(" {}", x),
             ParameterValue::Choice(x) => {
-                let item = &item.item_list[item.item_index];
+                let item = &param.item_list[param.item_index];
                 let range = &item.val_range;
                 let selection = if let ValueRange::ChoiceRange(list) = range { list } else { panic!() };
                 let item = selection[x].item;
                 print!(" {}", item);
             },
+            ParameterValue::Function(x) => {
+                print!(" {:?}", x.function);
+            },
+            ParameterValue::Param(x) => {
+                print!(" {:?}", x.function);
+            },
             _ => ()
         }
-        if self.state == TuiState::Value {
+        if selected {
             print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         }
     }
@@ -668,10 +862,19 @@ impl Tui {
                 ValueRange::IntRange(min, max) => print!("{}{} - {}", cursor::Goto(x_pos, 2), min, max),
                 ValueRange::FloatRange(min, max) => print!("{}{} - {}", cursor::Goto(x_pos, 2), min, max),
                 ValueRange::ChoiceRange(list) => print!("{}1 - {}", cursor::Goto(x_pos, 2), list.len()),
+                ValueRange::ModRange(list) => {
+                    let mut y_item = 2;
+                    let list = self.selected_sub_param.item_list;
+                    for item in list.iter() {
+                        print!("{}{} - {}", cursor::Goto(x_pos, y_item), item.key, item.item);
+                        y_item += 1;
+                    }
+                }
                 ValueRange::NoRange => ()
             }
         }
     }
+
     fn display_samplebuff(&self) {
         print!("{}{}", color::Bg(Black), color::Fg(White));
         self.canvas.render(1, 10);

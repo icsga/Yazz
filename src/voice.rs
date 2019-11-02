@@ -64,7 +64,7 @@ impl Voice {
         voice
     }
 
-    pub fn get_sample(&mut self, sample_clock: i64, modulators: &Vec<Modulator>, sound: &mut SoundData, sound_global: &SoundData) -> Float {
+    pub fn get_sample(&mut self, sample_clock: i64, modulators: &[Modulator], sound: &mut SoundData, sound_global: &SoundData) -> Float {
         if !self.is_running() {
             return 0.0;
         }
@@ -81,6 +81,10 @@ impl Voice {
         // =========================
         for m in modulators.iter() {
 
+            if !m.active {
+                continue;
+            }
+
             // Get modulator source output
             let mod_val: Float = match m.source_func {
                 Parameter::Lfo => {
@@ -91,7 +95,7 @@ impl Voice {
             } * m.scale + m.offset;
 
             // Get current value of target parameter
-            let param = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::NoValue};
+            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::NoValue};
             let current_val = sound_global.get_value(&param);
             let mut val = match current_val {
                 ParameterValue::Int(x) => x as Float,
@@ -105,7 +109,7 @@ impl Voice {
             }
 
             // Update parameter in global sound data
-            let param = SynthParam{function: m.dest_func, function_id: m.dest_func_id, parameter: m.dest_param, value: ParameterValue::Float(val)};
+            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::Float(val)};
             sound.set_parameter(&param);
         }
 
