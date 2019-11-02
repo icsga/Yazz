@@ -44,8 +44,9 @@ impl Canvas {
         let mut prev = self.val_to_y(buff[0], offset, scale);
         for (x_pos, value) in buff.iter().enumerate() {
             let y_pos = self.val_to_y(*value, offset, scale);
+            // info!("xpos={}, ypos={}, offset={}, scale={}, prev={}", x_pos, y_pos, offset, scale, prev);
 
-            let diff: i64 = Canvas::abs((y_pos - prev) as i64);
+            let diff: i64 = Canvas::diff(y_pos, prev);
             if diff > 1 {
                 // Current and previous values are more than one row apart, fill the space between
                 let (x1, from, x2, to) = Canvas::sort(x_pos - 1, prev, x_pos, y_pos);
@@ -81,8 +82,9 @@ impl Canvas {
         }
     }
 
-    fn abs(value: i64) -> i64 {
-        if value < 0 { value * -1 } else { value }
+    fn diff(a: usize, b: usize) -> i64 {
+        let result = if a > b { a - b } else { b - a };
+        result as i64
     }
 
     fn sort(x_a: usize, y_a: usize, x_b: usize, y_b: usize) -> (usize, usize, usize, usize) {

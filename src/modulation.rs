@@ -1,6 +1,6 @@
 use super::Float;
 use super::Parameter;
-use super::SynthParam;
+use super::{SynthParam, ParamId, FunctionId};
 use super::Voice;
 use super::voice::{NUM_OSCILLATORS, NUM_ENVELOPES, NUM_LFOS};
 use super::synth::NUM_GLOBAL_LFOS;
@@ -52,19 +52,39 @@ static MOD_DEST: [ModDest; 3] = [
     ModDest{function: Parameter::Delay, parameter: Parameter::Time, val_min: 0.0, val_max: 1.0},
 ];
 
-#[derive(Serialize, Deserialize, Default)]
+#[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
 pub struct ModData {
     pub source_func: Parameter,
     pub source_func_id: usize,
-    pub dest_func: Parameter,
-    pub dest_func_id: usize,
-    pub dest_param: Parameter,
+    pub target_func: Parameter,
+    pub target_func_id: usize,
+    pub target_param: Parameter,
     pub amount: Float,
+    pub active: bool,
 }
 
 impl ModData {
     pub fn new() -> ModData {
         ModData{..Default::default()}
+    }
+
+    pub fn set_source(&mut self, func: &FunctionId) {
+        self.source_func = func.function;
+        self.source_func_id = func.function_id;
+    }
+
+    pub fn set_target(&mut self, param: &ParamId) {
+        self.target_func = param.function;
+        self.target_func_id = param.function_id;
+        self.target_param = param.parameter;
+    }
+
+    pub fn get_source(&self) -> FunctionId {
+        FunctionId{function: self.source_func, function_id: self.source_func_id, ..Default::default()}
+    }
+
+    pub fn get_target(&self) -> ParamId {
+        ParamId{function: self.target_func, function_id: self.target_func_id, parameter: self.target_param}
     }
 }
 
@@ -85,27 +105,29 @@ impl ModData {
  *
  */
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Modulator {
+    pub active: bool,
     pub source_func: Parameter,
     pub source_func_id: usize,
-    pub dest_func: Parameter,
-    pub dest_func_id: usize,
-    pub dest_param: Parameter,
+    pub target_func: Parameter,
+    pub target_func_id: usize,
+    pub target_param: Parameter,
     pub scale: Float,
     pub offset: Float,
     pub is_global: bool
 }
 
 impl Modulator {
-    pub fn new(data: &ModData) -> Modulator {
-        info!("New modulator");
+    pub fn init(&mut self, data: &ModData) {
+        info!("Initializing modulator");
+
         // Lookup input
         let source = Modulator::get_mod_source(data.source_func);
         info!("{:?}", source);
 
         // Lookup output
-        let dest = Modulator::get_mod_dest(data.dest_func, data.dest_param);
+        let dest = Modulator::get_mod_dest(data.target_func, data.target_param);
         info!("{:?}", dest);
 
         let scale: Float;
@@ -123,16 +145,15 @@ impl Modulator {
                 offset = dest.val_min - (min * scale);
             }
         }
-        let m = Modulator{source_func: data.source_func,
-                          source_func_id: data.source_func_id,
-                          dest_func: data.dest_func,
-                          dest_func_id: data.dest_func_id,
-                          dest_param: data.dest_param,
-                          scale: scale * data.amount,
-                          offset: offset,
-                          is_global: source.is_global};
-        info!("{:?}", m);
-        m
+        self.active = data.active;
+        self.source_func =  data.source_func;
+        self.source_func_id =  data.source_func_id;
+        self.target_func =  data.target_func;
+        self.target_func_id =  data.target_func_id;
+        self.target_param =  data.target_param;
+        self.scale =  scale * data.amount;
+        self.offset =  offset;
+        self.is_global = source.is_global;
     }
 
     fn get_mod_source(function: Parameter) -> &'static ModSource {
