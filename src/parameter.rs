@@ -116,11 +116,13 @@ impl SynthParam {
     }
 }
 
+/** Enum for ranges of valid values */
 #[derive(Debug)]
 pub enum ValueRange {
-    IntRange(i64, i64),
-    FloatRange(Float, Float),
-    ChoiceRange(&'static [MenuItem]),
+    IntRange(i64, i64),               // Range (min, max) of integer values
+    FloatRange(Float, Float),         // Range (min, max) of float values
+    ChoiceRange(&'static [MenuItem]), // A list of items to choose from
+    ParamRange(&'static [MenuItem]),  // A list of (function-id-param) parameter entries
     NoRange
 }
 
@@ -213,8 +215,8 @@ pub static DELAY_PARAMS: [MenuItem; 3] = [
 ];
 
 pub static MOD_PARAMS: [MenuItem; 4] = [
-    MenuItem{item: Parameter::Source,    key: 's', val_range: ValueRange::ChoiceRange(&MOD_SOURCES),     mod_func: ModFunction::NoMod,  next: &[]},
-    MenuItem{item: Parameter::Target,    key: 't', val_range: ValueRange::ChoiceRange(&MOD_TARGETS),     mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Source,    key: 's', val_range: ValueRange::ParamRange(&MOD_SOURCES),   mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Target,    key: 't', val_range: ValueRange::ParamRange(&MOD_TARGETS),   mod_func: ModFunction::NoMod,  next: &[]},
     MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::NoMod,  next: &[]},
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::IntRange(0, 1),             mod_func: ModFunction::NoMod,  next: &[]},
 ];
