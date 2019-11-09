@@ -1,3 +1,7 @@
+use std::rc::Rc;
+
+use super::Scheme;
+
 pub type Index = u16;
 
 pub trait Widget {
@@ -5,6 +9,7 @@ pub trait Widget {
     fn set_width(&mut self, width: Index) -> bool;
     fn set_height(&mut self, height: Index) -> bool;
     fn set_dirty(&mut self, is_dirty: bool);
+    fn set_color_scheme(&mut self, colors: Rc<Scheme>);
     fn is_dirty(&self) -> bool;
     fn get_position(&self) -> (Index, Index); // x, y
     fn get_size(&self) -> (Index, Index); // width, height

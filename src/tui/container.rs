@@ -3,6 +3,7 @@ use std::rc::Rc;
 
 use super::ChildWidget;
 use super::Index;
+use super::Scheme;
 use super::Widget;
 
 pub type ContainerRef = Rc<RefCell<Container>>;
@@ -69,6 +70,12 @@ impl Widget for Container {
 
     fn set_dirty(&mut self, is_dirty: bool) {
         self.dirty = is_dirty;
+    }
+
+    fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
+        for c in self.children.iter_mut() {
+            c.set_color_scheme(colors.clone());
+        }
     }
 
     fn is_dirty(&self) -> bool {

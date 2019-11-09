@@ -1,4 +1,5 @@
 mod child_widget;
+mod color;
 mod container;
 mod controller;
 mod dial;
@@ -12,6 +13,7 @@ extern crate termion;
 use termion::{clear, cursor};
 
 use child_widget::ChildWidget;
+use color::Scheme;
 use container::Container;
 use controller::Controller;
 use dial::Dial;
@@ -27,15 +29,15 @@ fn main() {
 
     let dial = Dial::new(Value::Float(0.0), Value::Float(5.0), Value::Float(3.14));
     c.add_child(dial.clone(), 2, 2);
-    controller.add_observer(1, dial);
+    controller.add_observer(&1, dial);
 
-    let label = Label::new("TestMe");
+    let label = Label::new("TestMe", 6);
     c.add_child(label.clone(), 2, 4);
-    controller.add_observer(2, label);
+    controller.add_observer(&2, label);
 
     c.draw();
-    controller.update(1, Value::Float(0.99));
-    controller.update(2, Value::Str("NewTest"));
+    controller.update(&1, Value::Float(0.99));
+    controller.update(&2, Value::Str("NewTest"));
     c.set_position(1, 5);
     c.draw();
 }

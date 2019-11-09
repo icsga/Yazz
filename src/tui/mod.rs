@@ -1,6 +1,7 @@
 pub mod bar;
 pub mod canvas;
 mod child_widget;
+pub mod color;
 pub mod container;
 pub mod controller;
 pub mod dial;
@@ -14,6 +15,7 @@ mod widget;
 
 use bar::Bar;
 use canvas::Canvas;
+use color::Scheme;
 use container::{Container, ContainerRef};
 use controller::Controller;
 use child_widget::ChildWidget;

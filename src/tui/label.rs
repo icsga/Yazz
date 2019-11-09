@@ -2,10 +2,10 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use termion::{color, cursor};
-use termion::color::{Black, White};
 
 use super::Index;
 use super::Observer;
+use super::Scheme;
 use super::{Value, get_str};
 use super::Widget;
 
@@ -18,6 +18,7 @@ pub struct Label {
     height: Index,
     value: Value,
     dirty: bool,
+    colors: Rc<Scheme>,
 }
 
 impl Label {
@@ -28,7 +29,8 @@ impl Label {
         let height = 1;
         let value = Value::Str(value);
         let dirty = false;
-        Rc::new(RefCell::new(Label{pos_x, pos_y, width, height, value, dirty}))
+        let colors = Rc::new(Scheme::new());
+        Rc::new(RefCell::new(Label{pos_x, pos_y, width, height, value, dirty, colors}))
     }
 }
 
@@ -65,6 +67,10 @@ impl Widget for Label {
         self.dirty = is_dirty;
     }
 
+    fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
+        self.colors = colors;
+    }
+
     fn is_dirty(&self) -> bool {
         self.dirty
     }
@@ -78,7 +84,7 @@ impl Widget for Label {
     }
 
     fn draw(&self) {
-        print!("{}{}{}{}", cursor::Goto(self.pos_x, self.pos_y), color::Bg(White), color::Fg(Black), get_str(&self.value));
+        print!("{}{}{}{}", cursor::Goto(self.pos_x, self.pos_y), color::Bg(self.colors.bg_light), color::Fg(self.colors.fg_dark), get_str(&self.value));
     }
 }
 
