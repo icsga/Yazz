@@ -1,9 +1,11 @@
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 
 use super::ChildWidget;
 use super::Index;
 use super::Widget;
+
+pub type ContainerRef = Rc<RefCell<Container>>;
 
 pub struct Container {
     pos_x: Index,
@@ -15,7 +17,9 @@ pub struct Container {
 }
 
 impl Container {
-    pub fn new(pos_x: Index, pos_y: Index, width: Index, height: Index) -> Container {
+    pub fn new(width: Index, height: Index) -> Container {
+        let pos_x: Index = 0;
+        let pos_y: Index = 0;
         let dirty = true;
         let children = vec!{};
         Container{pos_x, pos_y, width, height, dirty, children}

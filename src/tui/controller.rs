@@ -4,6 +4,8 @@ use std::cell::RefCell;
 use std::cmp::Eq;
 use std::hash::Hash;
 
+use log::{info, trace, warn};
+
 use super::Observer;
 use super::Value;
 

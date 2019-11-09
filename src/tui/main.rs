@@ -23,13 +23,13 @@ use widget::{Widget, Index};
 fn main() {
     print!("{}{}", clear::All, cursor::Goto(1, 1));
     let mut controller: Controller<i32> = Controller::new();
-    let mut c = Container::new(1, 1, 20, 20);
+    let mut c = Container::new(20, 20);
 
-    let dial = Dial::new(0, 0, Value::Float(0.0), Value::Float(5.0), Value::Float(3.14));
+    let dial = Dial::new(Value::Float(0.0), Value::Float(5.0), Value::Float(3.14));
     c.add_child(dial.clone(), 2, 2);
     controller.add_observer(1, dial);
 
-    let label = Label::new(0, 0, Value::Str("TestMe"));
+    let label = Label::new("TestMe");
     c.add_child(label.clone(), 2, 4);
     controller.add_observer(2, label);
 

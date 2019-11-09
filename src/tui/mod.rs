@@ -1,3 +1,4 @@
+pub mod bar;
 pub mod canvas;
 mod child_widget;
 pub mod container;
@@ -5,14 +6,21 @@ pub mod controller;
 pub mod dial;
 pub mod label;
 mod observer;
+mod surface;
 pub mod termion_wrapper;
 pub mod tui;
 pub mod value;
 mod widget;
 
+use bar::Bar;
 use canvas::Canvas;
+use container::{Container, ContainerRef};
+use controller::Controller;
 use child_widget::ChildWidget;
-use observer::Observer;
+use dial::Dial;
+use label::Label;
+use observer::{Observer, ObserverRef};
+use surface::Surface;
 pub use tui::Tui;
 use value::{Value, get_int, get_float, get_str};
 use widget::{Index, Widget};
