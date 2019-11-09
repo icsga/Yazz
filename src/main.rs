@@ -3,44 +3,27 @@
 #![allow(unused_variables)]
 #![allow(unreachable_code)]
 
-mod canvas;
-mod delay;
-mod engine;
-mod envelope;
-mod filter;
-mod lfo;
 mod midi_handler;
 mod modulation;
-mod multi_oscillator;
-mod oscillator;
 mod parameter;
 //mod param_selection;
 mod ringbuffer;
-mod sample_generator;
 mod sound;
 mod synth;
-mod termion_wrapper;
 mod tui;
-mod voice;
+
+use synth::*;
+use tui::*;
 
 use canvas::Canvas;
-use delay::{Delay, DelayData};
-use engine::Engine;
-use envelope::{Envelope, EnvelopeData};
-use filter::{Filter, FilterData};
-use lfo::{Lfo, LfoData};
 use midi_handler::{MidiHandler, MidiMessage, MessageType};
 use modulation::{Modulator, ModData};
-use multi_oscillator::{MultiOscillator, MultiOscData};
-use oscillator::Oscillator;
-use parameter::{Parameter, ParameterValue, SynthParam, ParamId, FunctionId, MenuItem};
-//use param_selection::ParamSelection;
+use parameter::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
 use ringbuffer::Ringbuffer;
-use sample_generator::SampleGenerator;
 use sound::SoundData;
-use synth::Synth;
+use synth::*;
 use termion_wrapper::TermionWrapper;
-use tui::{Tui};
+use tui::*;
 use voice::Voice;
 
 use std::error::Error;
