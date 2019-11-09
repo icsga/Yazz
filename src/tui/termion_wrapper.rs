@@ -1,7 +1,7 @@
 
 use termion::clear;
 use termion::cursor;
-use termion::cursor::{DetectCursorPos, Goto};
+use termion::cursor::{DetectCursorPos, Goto, Hide};
 use termion::event::Key;
 use termion::input::TermRead;
 use termion::raw::{IntoRawMode, RawTerminal};
@@ -16,14 +16,13 @@ use std::thread::spawn;
 
 pub struct TermionWrapper {
     stdout: RawTerminal<std::io::Stdout>,
-    //stdout: std::io::Stdout,
 }
 
 impl TermionWrapper {
     pub fn new() -> TermionWrapper {
+        println!("{}", cursor::Hide);
         TermionWrapper{
-            stdout: stdout().into_raw_mode().unwrap(),
-            //stdout: stdout(),
+            stdout: stdout().into_raw_mode().unwrap()
         }
     }
 

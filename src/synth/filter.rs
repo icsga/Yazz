@@ -67,6 +67,5 @@ impl Filter {
         data.b0 = y;
         data.b1 = y;
         data.a1 = y - 1.0;
-        info!("Filter: y={}, b0={}, b1={}, a1={}", y, data.b0, data.b1, data.a1);
     }
 }

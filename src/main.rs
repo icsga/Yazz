@@ -23,7 +23,6 @@ use ringbuffer::Ringbuffer;
 use sound::SoundData;
 use synth::*;
 use termion_wrapper::TermionWrapper;
-use tui::*;
 use voice::Voice;
 
 use std::error::Error;
@@ -164,7 +163,7 @@ fn setup_ui(to_synth_sender: Sender<SynthMessage>, to_ui_sender: Sender<UiMessag
     println!("Setting up UI...");
     let termion = TermionWrapper::new();
     let term_handle = TermionWrapper::run(termion, to_ui_sender);
-    let tui_handle = Tui::run(Tui::new(to_synth_sender, ui_receiver));
+    let tui_handle = Tui::run(to_synth_sender, ui_receiver);
     println!("\r... finished");
     (term_handle, tui_handle)
 }

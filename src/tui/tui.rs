@@ -1,9 +1,12 @@
 use super::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
 use super::Canvas;
 use super::Float;
+use super::Label;
 use super::{MidiMessage, MessageType};
 use super::SoundData;
 use super::{UiMessage, SynthMessage};
+use super::surface::Surface;
+use super::Value;
 
 use crossbeam_channel::{Sender, Receiver};
 use log::{info, trace, warn};
@@ -92,6 +95,9 @@ pub struct Tui {
     selector: ParamSelector,
     sub_selector: ParamSelector,
 
+    // Actual UI
+    window: Surface,
+
     sync_counter: u32,
     idle: Duration, // Accumulated idle times of the engine
     busy: Duration, // Accumulated busy times of the engine
@@ -112,6 +118,7 @@ impl Tui {
         let sub_func_selection = ItemSelection{item_list: &FUNCTIONS, item_index: 0, value: ValueHolder::Value(ParameterValue::Int(1))};
         let sub_param_selection = ItemSelection{item_list: &OSC_PARAMS, item_index: 0, value: ValueHolder::Value(ParameterValue::Int(1))};
         let sub_selector = ParamSelector{state: TuiState::Function, func_selection: sub_func_selection, param_selection: sub_param_selection, value: ValueHolder::Value(ParameterValue::Int(0))};
+        let mut window = Surface::new();
         let temp_string = String::new();
         let sync_counter = 0;
         let idle = Duration::new(0, 0);
@@ -121,10 +128,13 @@ impl Tui {
         let canvas = Canvas::new(100, 30);
         let mut sound = SoundData::new();
         sound.init();
+        window.set_position(1, 10);
+
         Tui{sender,
             ui_receiver,
             selector,
             sub_selector,
+            window,
             sync_counter,
             idle,
             busy,
@@ -141,8 +151,9 @@ impl Tui {
      * This thread receives messages from the terminal, the MIDI port, the
      * synth engine and the audio engine.
      */
-    pub fn run(mut tui: Tui) -> std::thread::JoinHandle<()> {
+    pub fn run(to_synth_sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
+            let mut tui = Tui::new(to_synth_sender, ui_receiver);
             loop {
                 let msg = tui.ui_receiver.recv().unwrap();
                 match msg {
@@ -641,6 +652,7 @@ impl Tui {
 
     /* Send an updated value to the synth engine. */
     fn send_event(&mut self) {
+        // Update sound data
         let function = &self.selector.func_selection.item_list[self.selector.func_selection.item_index];
         let function_id = if let ValueHolder::Value(ParameterValue::Int(x)) = &self.selector.func_selection.value { *x as usize } else { panic!() };
         let parameter = &self.selector.param_selection.item_list[self.selector.param_selection.item_index];
@@ -648,8 +660,20 @@ impl Tui {
         let val = if let ValueHolder::Value(v) = *param_val { v } else { panic!() };
         let param = SynthParam::new(function.item, function_id, parameter.item, val);
         self.sound.set_parameter(&param);
+
+        // Send new value to synth engine
         //info!("send_event {:?}", param);
         self.sender.send(SynthMessage::Param(param)).unwrap();
+
+        // Update UI
+        let param_id = ParamId{function: function.item, function_id: function_id, parameter: parameter.item};
+        let value = match val {
+            ParameterValue::Float(v) => Value::Float(v.into()),
+            ParameterValue::Int(v) => Value::Int(v),
+            ParameterValue::Choice(v) => Value::Int(v.try_into().unwrap()),
+            _ => return
+        };
+        self.window.update_value(param_id, value);
     }
 
     /* ====================================================================== */
@@ -690,9 +714,8 @@ impl Tui {
         self.display_options(x_pos);
         //self.display_samplebuff();
 
-
-        self.display_test(self.sound.osc[0].phase);
-
+        //self.display_test(self.sound.osc[0].phase);
+        self.window.draw();
 
         io::stdout().flush().ok();
     }

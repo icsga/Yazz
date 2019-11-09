@@ -4,7 +4,7 @@ use std::fmt::{self, Debug, Display};
 
 use serde::{Serialize, Deserialize};
 
-#[derive(PartialEq, Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(PartialEq, Clone, Copy, Debug, Eq, Hash, Serialize, Deserialize)]
 pub enum Parameter {
     // Function
     Oscillator,
@@ -79,7 +79,7 @@ pub struct FunctionId {
     pub function_id: usize,
 }
 
-#[derive(Clone, Copy, Debug, Default)]
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct ParamId {
     pub function: Parameter,
     pub function_id: usize,

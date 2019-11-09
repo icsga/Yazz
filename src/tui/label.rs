@@ -1,8 +1,8 @@
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 
 use termion::{color, cursor};
-use termion::color::{Black, White, Rgb};
+use termion::color::{Black, White};
 
 use super::Index;
 use super::Observer;
@@ -21,10 +21,12 @@ pub struct Label {
 }
 
 impl Label {
-    pub fn new(pos_x: Index, pos_y: Index, value: Value) -> LabelRef {
-        let s = get_str(&value);
-        let width = s.len() as Index;
+    pub fn new(value: &'static str) -> LabelRef {
+        let pos_x: Index = 0;
+        let pos_y: Index = 0;
+        let width = value.len() as Index;
         let height = 1;
+        let value = Value::Str(value);
         let dirty = false;
         Rc::new(RefCell::new(Label{pos_x, pos_y, width, height, value, dirty}))
     }
@@ -83,5 +85,6 @@ impl Widget for Label {
 impl Observer for Label {
     fn update(&mut self, value: Value) {
         self.value = value;
+        self.set_dirty(true);
     }
 }
