@@ -2,10 +2,10 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use termion::{color, cursor};
-use termion::color::{Black, White, Rgb};
 
 use super::Index;
 use super::Observer;
+use super::Scheme;
 use super::{Value, get_int, get_float};
 use super::Widget;
 
@@ -20,6 +20,7 @@ pub struct Bar {
     max: Value,
     value: Value,
     dirty: bool,
+    colors: Rc<Scheme>,
 }
 
 impl Bar {
@@ -29,7 +30,8 @@ impl Bar {
         let width = 10;
         let height = 1;
         let dirty = false;
-        Rc::new(RefCell::new(Bar{pos_x, pos_y, width, height, min, max, value, dirty}))
+        let colors = Rc::new(Scheme::new());
+        Rc::new(RefCell::new(Bar{pos_x, pos_y, width, height, min, max, value, dirty, colors}))
     }
 
     fn get_length(&self, value: &Value) -> usize {
@@ -92,6 +94,10 @@ impl Widget for Bar {
         self.dirty = is_dirty;
     }
 
+    fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
+        self.colors = colors;
+    }
+
     fn is_dirty(&self) -> bool {
         self.dirty
     }
@@ -107,7 +113,7 @@ impl Widget for Bar {
     fn draw(&self) {
         let index = self.get_length(&self.value);
         // TODO: Optimize by using array
-        print!("{}{}", cursor::Goto(self.pos_x, self.pos_y), color::Bg(Rgb(255, 255, 255)));
+        print!("{}{}{}", cursor::Goto(self.pos_x, self.pos_y), color::Bg(self.colors.bg_light), color::Fg(self.colors.fg_dark2));
         for i in 0..index {
             print!("‾");
         }

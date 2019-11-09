@@ -2,6 +2,7 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use super::Index;
+use super::Scheme;
 use super::Widget;
 
 pub struct ChildWidget {
@@ -47,6 +48,10 @@ impl Widget for ChildWidget {
 
     fn set_dirty(&mut self, is_dirty: bool) {
         self.child.borrow_mut().set_dirty(is_dirty);
+    }
+
+    fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
+        self.child.borrow_mut().set_color_scheme(colors);
     }
 
     fn is_dirty(&self) -> bool {

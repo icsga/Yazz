@@ -2,10 +2,10 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use termion::{color, cursor};
-use termion::color::{Black, White, Rgb};
 
 use super::Index;
 use super::Observer;
+use super::Scheme;
 use super::{Value, get_int, get_float};
 use super::Widget;
 
@@ -20,6 +20,7 @@ pub struct Dial {
     max: Value,
     value: Value,
     dirty: bool,
+    colors: Rc<Scheme>,
 }
 
 impl Dial {
@@ -29,7 +30,8 @@ impl Dial {
         let width = 2;
         let height = 2;
         let dirty = false;
-        Rc::new(RefCell::new(Dial{pos_x, pos_y, width, height, min, max, value, dirty}))
+        let colors = Rc::new(Scheme::new());
+        Rc::new(RefCell::new(Dial{pos_x, pos_y, width, height, min, max, value, dirty, colors}))
     }
 
     pub fn get_index(&self, value: &Value) -> usize {
@@ -92,6 +94,10 @@ impl Widget for Dial {
         self.dirty = is_dirty;
     }
 
+    fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
+        self.colors = colors;
+    }
+
     fn is_dirty(&self) -> bool {
         self.dirty
     }
@@ -119,7 +125,7 @@ impl Widget for Dial {
             _ => "  ",
             //_ => "  ",
         };
-        print!("{}{}{}{}", cursor::Goto(self.pos_x, self.pos_y), color::Bg(White), color::Fg(Black), chars);
+        print!("{}{}{}{}", cursor::Goto(self.pos_x, self.pos_y), color::Bg(self.colors.bg_light2), color::Fg(self.colors.fg_dark2), chars);
         let chars = match index {
             0 => "/ ",
             1 => "▔ ",
@@ -132,7 +138,7 @@ impl Widget for Dial {
             _ => " \\",
             //_ => " ▏",
         };
-        print!("{}{}{}", cursor::Goto(self.pos_x, self.pos_y + 1), chars, color::Bg(Rgb(255, 255, 255)));
+        print!("{}{}", cursor::Goto(self.pos_x, self.pos_y + 1), chars);
     }
 }
 

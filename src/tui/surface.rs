@@ -4,23 +4,26 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use log::{info, trace, warn};
+use termion::{color, cursor};
 
 use super::{Parameter, ParamId};
-use super::{Bar, Container, ContainerRef, Controller, Dial, Index, Label, ObserverRef, Value, Widget};
+use super::{Bar, Container, ContainerRef, Controller, Dial, Index, Label, ObserverRef, Scheme, Value, Widget};
 
 pub struct Surface {
     window: Container,
     controller: Controller<ParamId>,
     mod_targets: HashMap<ParamId, ObserverRef>, // Maps the modulation indicator to the corresponding parameter key
+    colors: Rc<Scheme>,
 }
 
 impl Surface {
     pub fn new() -> Surface {
         let window = Container::new(100, 60);
         let controller = Controller::new();
-        let mod_targets = HashMap::new();
-        let mut this = Surface{window, controller, mod_targets};
         let mod_targets: HashMap<ParamId, ObserverRef> = HashMap::new();
+        let colors = Rc::new(Scheme::new());
+        let mut this = Surface{window, controller, mod_targets, colors};
+
         let mut key = ParamId{function: Parameter::Oscillator, function_id: 1, parameter: Parameter::Level};
 
         let osc1_level = this.new_mod_dial_float("Level", 0.0, 100.0, 0.0, &key);
@@ -35,6 +38,7 @@ impl Surface {
         this.window.add_child(osc1_blend, 1, 7);
 
         this.window.set_position(1, 1);
+        this.window.set_color_scheme(this.colors.clone());
         this
     }
 
@@ -44,6 +48,7 @@ impl Surface {
 
     pub fn draw(&self) {
         self.window.draw();
+        print!("{}{}", color::Bg(self.colors.bg_light), color::Fg(self.colors.fg_dark));
     }
 
     pub fn update_value(&mut self, key: &ParamId, value: Value) {
