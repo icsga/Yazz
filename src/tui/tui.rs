@@ -673,7 +673,7 @@ impl Tui {
             ParameterValue::Choice(v) => Value::Int(v.try_into().unwrap()),
             _ => return
         };
-        self.window.update_value(param_id, value);
+        self.window.update_value(&param_id, value);
     }
 
     /* ====================================================================== */

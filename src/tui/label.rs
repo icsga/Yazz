@@ -21,10 +21,10 @@ pub struct Label {
 }
 
 impl Label {
-    pub fn new(value: &'static str) -> LabelRef {
+    pub fn new(value: &'static str, size: Index) -> LabelRef {
         let pos_x: Index = 0;
         let pos_y: Index = 0;
-        let width = value.len() as Index;
+        let width = size;
         let height = 1;
         let value = Value::Str(value);
         let dirty = false;
