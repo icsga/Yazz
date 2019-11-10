@@ -31,13 +31,13 @@ fn main() {
     c.add_child(dial.clone(), 2, 2);
     controller.add_observer(&1, dial);
 
-    let label = Label::new("TestMe", 6);
+    let label = Label::new("TestMe".to_string(), 6);
     c.add_child(label.clone(), 2, 4);
     controller.add_observer(&2, label);
 
     c.draw();
     controller.update(&1, Value::Float(0.99));
-    controller.update(&2, Value::Str("NewTest"));
+    controller.update(&2, Value::Str("NewTest".to_string()));
     c.set_position(1, 5);
     c.draw();
 }
