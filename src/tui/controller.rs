@@ -10,7 +10,7 @@ use super::Observer;
 use super::Value;
 
 pub struct Controller<Key: Copy + Eq + Hash> {
-    observers: HashMap<Key, Rc<RefCell<dyn Observer>>>,
+    pub observers: HashMap<Key, Rc<RefCell<dyn Observer>>>,
 }
 
 impl<Key: Copy + Eq + Hash> Controller<Key> {

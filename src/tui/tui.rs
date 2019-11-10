@@ -129,6 +129,7 @@ impl Tui {
         let mut sound = SoundData::new();
         sound.init();
         window.set_position(1, 10);
+        window.update_all(&sound);
 
         Tui{sender,
             ui_receiver,
