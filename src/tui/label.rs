@@ -22,7 +22,7 @@ pub struct Label {
 }
 
 impl Label {
-    pub fn new(value: &'static str, size: Index) -> LabelRef {
+    pub fn new(value: String, size: Index) -> LabelRef {
         let pos_x: Index = 0;
         let pos_y: Index = 0;
         let width = size;
