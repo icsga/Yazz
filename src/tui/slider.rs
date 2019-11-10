@@ -9,13 +9,9 @@ use super::Scheme;
 use super::{Value, get_int, get_float};
 use super::Widget;
 
-type DialRef = Rc<RefCell<Dial>>;
+pub type SliderRef = Rc<RefCell<Slider>>;
 
-/** A circular dial representing a value.
- *
- * Can have logarithmic scaling to improve visibility of smaller values.
- */
-pub struct Dial {
+pub struct Slider {
     pos_x: Index,
     pos_y: Index,
     width: Index,
@@ -28,20 +24,16 @@ pub struct Dial {
     colors: Rc<Scheme>,
 }
 
-impl Dial {
-    pub fn new(min: Value, max: Value, value: Value) -> DialRef {
+impl Slider {
+    pub fn new(min: Value, max: Value, value: Value) -> SliderRef {
         let pos_x: Index = 0;
         let pos_y: Index = 0;
-        let width = 2;
-        let height = 2;
+        let width = 1;
+        let height = 4;
         let dirty = false;
         let colors = Rc::new(Scheme::new());
         let logarithmic = false;
-        Rc::new(RefCell::new(Dial{pos_x, pos_y, width, height, min, max, value, dirty, logarithmic, colors}))
-    }
-
-    pub fn set_logarithmic(&mut self, l: bool) {
-        self.logarithmic = l;
+        Rc::new(RefCell::new(Slider{pos_x, pos_y, width, height, min, max, value, dirty, logarithmic, colors}))
     }
 
     pub fn get_index(&self, value: &Value) -> usize {
@@ -63,7 +55,7 @@ impl Dial {
         }
         let offset = min * -1.0;
         let range = max - min;
-        let scale = 8.0 / range;
+        let scale = (self.height * 8) as f64 / range;
         let mut value = fvalue + offset;
         if self.logarithmic {
             // Using a logarithmic curve makes smaller values easier to see.
@@ -74,10 +66,14 @@ impl Dial {
         let index = (value * scale) as usize;
         index
     }
+
+    pub fn set_logarithmic(&mut self, l: bool) {
+        self.logarithmic = l;
+    }
 }
 
-impl Widget for Dial {
-    /** Set the dial's position.
+impl Widget for Slider {
+    /** Set the Slider's position.
      *
      * TODO: Check that new position is valid
      */
@@ -87,7 +83,7 @@ impl Widget for Dial {
         true
     }
 
-    /** Set dial's width.
+    /** Set Slider's width.
      *
      * TODO: Check that width is valid
      */
@@ -96,7 +92,7 @@ impl Widget for Dial {
         true
     }
 
-    /** Set dial's height.
+    /** Set Slider's height.
      *
      * TODO: Check that height is valid
      */
@@ -126,38 +122,29 @@ impl Widget for Dial {
     }
 
     fn draw(&self) {
-        let index = self.get_index(&self.value);
-        // TODO: Optimize by using array
-        let chars = match index {
-            0 => "  ",
-            1 => "  ",
-            2 => "▁ ",
-            3 => "\\ ",
-            4 => " ▏",
-            5 => " /",
-            6 => " ▁",
-            7 => "  ",
-            _ => "  ",
-            //_ => "  ",
-        };
-        print!("{}{}{}{}", cursor::Goto(self.pos_x, self.pos_y), color::Bg(self.colors.bg_light2), color::Fg(self.colors.fg_dark2), chars);
-        let chars = match index {
-            0 => "/ ",
-            1 => "▔ ",
-            2 => "  ",
-            3 => "  ",
-            4 => "  ",
-            5 => "  ",
-            6 => "  ",
-            7 => " ▔",
-            _ => " \\",
-            //_ => " ▏",
-        };
-        print!("{}{}", cursor::Goto(self.pos_x, self.pos_y + 1), chars);
+        let mut index = self.get_index(&self.value);
+        print!("{}{}", color::Bg(self.colors.bg_light2), color::Fg(self.colors.fg_dark2));
+        for i in 0..self.height {
+            let chars = if index >= 8 { "█" } else {
+                match index % 8 {
+                    0 =>  " ",
+                    1 => "▁",
+                    2 => "▂",
+                    3 => "▃",
+                    4 => "▄",
+                    5 => "▅",
+                    6 => "▆",
+                    7 => "▇",
+                    _ => panic!(),
+                }
+            };
+            index = if index > 8 { index - 8 } else { 0 };
+            print!("{}{}", cursor::Goto(self.pos_x, self.pos_y + (3 - i)), chars);
+        }
     }
 }
 
-impl Observer for Dial {
+impl Observer for Slider {
     fn update(&mut self, value: Value) {
         self.value = value;
         self.set_dirty(true);
@@ -165,24 +152,24 @@ impl Observer for Dial {
 }
 
 #[test]
-fn test_dial_translation() {
+fn test_slider_translation() {
     // =====
     // Float
     // =====
     // Case 1: 0.0 - 1.0
-    let d = Dial::new(Value::Float(0.0), Value::Float(1.0), Value::Float(0.0));
+    let d = Slider::new(Value::Float(0.0), Value::Float(1.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(0.0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Float(0.5)), 4);
     assert_eq!(d.borrow().get_index(&Value::Float(1.0)), 8);
 
     // Case 2: -1.0 - 1.0
-    let d = Dial::new(Value::Float(-1.0), Value::Float(1.0), Value::Float(0.0));
+    let d = Slider::new(Value::Float(-1.0), Value::Float(1.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(-1.0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Float(0.0)), 4);
     assert_eq!(d.borrow().get_index(&Value::Float(1.0)), 8);
 
     // Case 3: 2.0 - 10.0
-    let d = Dial::new(Value::Float(2.0), Value::Float(10.0), Value::Float(0.0));
+    let d = Slider::new(Value::Float(2.0), Value::Float(10.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(2.0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Float(6.0)), 4);
     assert_eq!(d.borrow().get_index(&Value::Float(10.0)), 8);
@@ -191,19 +178,19 @@ fn test_dial_translation() {
     // Int
     // ===
     // Case 1: 0 - 8
-    let d = Dial::new(Value::Int(0), Value::Int(8), Value::Int(0));
+    let d = Slider::new(Value::Int(0), Value::Int(8), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Int(4)), 4);
     assert_eq!(d.borrow().get_index(&Value::Int(8)), 8);
 
     // Case 2: -4 - 4
-    let d = Dial::new(Value::Int(-4), Value::Int(4), Value::Int(0));
+    let d = Slider::new(Value::Int(-4), Value::Int(4), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(-4)), 0);
     assert_eq!(d.borrow().get_index(&Value::Int(0)), 4);
     assert_eq!(d.borrow().get_index(&Value::Int(4)), 8);
 
     // Case 3: 2 - 10
-    let d = Dial::new(Value::Int(2), Value::Int(10), Value::Int(0));
+    let d = Slider::new(Value::Int(2), Value::Int(10), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(2)), 0);
     assert_eq!(d.borrow().get_index(&Value::Int(6)), 4);
     assert_eq!(d.borrow().get_index(&Value::Int(10)), 8);

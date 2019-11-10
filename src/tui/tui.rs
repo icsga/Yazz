@@ -534,6 +534,22 @@ impl Tui {
                 }
                 result
             },
+            ValueRange::ParamRange(choice_list) => {
+                let mut current = if let ValueHolder::Value(ParameterValue::Choice(x)) = item.value { x } else { panic!() };
+                let result = match c {
+                    Key::Up         => {current += 1; ReturnCode::ValueUpdated },
+                    Key::Down       => if current > 0 { current -= 1; ReturnCode::ValueUpdated } else { ReturnCode::KeyConsumed },
+                    Key::Left | Key::Backspace => ReturnCode::Cancel,
+                    Key::Right      => ReturnCode::ValueComplete,
+                    Key::Char('\n') => ReturnCode::ValueComplete,
+                    _ => ReturnCode::KeyMissmatch,
+                };
+                match result {
+                    ReturnCode::ValueUpdated | ReturnCode::ValueComplete => Tui::update_value(item, ParameterValue::Choice(current), temp_string),
+                    _ => (),
+                }
+                result
+            },
             _ => panic!(),
         }
     }

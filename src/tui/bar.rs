@@ -11,6 +11,10 @@ use super::Widget;
 
 type BarRef = Rc<RefCell<Bar>>;
 
+/** A horizontal bar representing a value.
+ *
+ * Can have logarithmic scaling to improve visibility of smaller values.
+ */
 pub struct Bar {
     pos_x: Index,
     pos_y: Index,
@@ -20,6 +24,7 @@ pub struct Bar {
     max: Value,
     value: Value,
     dirty: bool,
+    logarithmic: bool, // Use logarithmic curve for values
     colors: Rc<Scheme>,
 }
 
@@ -30,34 +35,44 @@ impl Bar {
         let width = 10;
         let height = 1;
         let dirty = false;
+        let logarithmic = false;
         let colors = Rc::new(Scheme::new());
-        Rc::new(RefCell::new(Bar{pos_x, pos_y, width, height, min, max, value, dirty, colors}))
+        Rc::new(RefCell::new(Bar{pos_x, pos_y, width, height, min, max, value, dirty, logarithmic, colors}))
+    }
+
+    pub fn set_logarithmic(&mut self, l: bool) {
+        self.logarithmic = l;
     }
 
     fn get_length(&self, value: &Value) -> usize {
+        let min: f64;
+        let max: f64;
+        let fvalue: f64;
         match value {
             Value::Int(v) => {
-                let min = get_int(&self.min);
-                let max = get_int(&self.max);
-                let offset = min * -1;
-                let range = (max - min) as f64;
-                let scale = self.width as f64 / range;
-                let value = (v + offset) as f64;
-                let length = (value * scale) as usize;
-                length
+                min = get_int(&self.min) as f64;
+                max = get_int(&self.max) as f64;
+                fvalue = *v as f64;
             }
             Value::Float(v) => {
-                let min = get_float(&self.min);
-                let max = get_float(&self.max);
-                let offset = min * -1.0;
-                let range = max - min;
-                let scale = self.width as f64 / range;
-                let value = v + offset;
-                let length = (value * scale) as usize;
-                length
+                min = get_float(&self.min);
+                max = get_float(&self.max);
+                fvalue = *v;
             }
             Value::Str(_) => panic!(),
         }
+        let offset = min * -1.0;
+        let range = max - min;
+        let scale = 8.0 / range;
+        let mut value = fvalue + offset;
+        if self.logarithmic {
+            // Using a logarithmic curve makes smaller values easier to see.
+            let percent = value / range;
+            let factor = percent.sqrt().sqrt(); // TODO: Slow, find a nicer way
+            value = factor * range;
+        }
+        let length = (value * scale) as usize;
+        length
     }
 }
 
