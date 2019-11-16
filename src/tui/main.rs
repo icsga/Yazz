@@ -20,7 +20,7 @@ use dial::Dial;
 use label::Label;
 use observer::Observer;
 use value::{Value, get_int, get_float, get_str};
-use widget::{Widget, Index};
+use widget::{Index, Widget, WidgetProperties};
 
 fn main() {
     print!("{}{}", clear::All, cursor::Goto(1, 1));

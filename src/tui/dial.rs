@@ -3,11 +3,9 @@ use std::rc::Rc;
 
 use termion::{color, cursor};
 
-use super::Index;
 use super::Observer;
-use super::Scheme;
 use super::{Value, get_int, get_float};
-use super::Widget;
+use super::{Widget, WidgetProperties};
 
 type DialRef = Rc<RefCell<Dial>>;
 
@@ -16,28 +14,20 @@ type DialRef = Rc<RefCell<Dial>>;
  * Can have logarithmic scaling to improve visibility of smaller values.
  */
 pub struct Dial {
-    pos_x: Index,
-    pos_y: Index,
-    width: Index,
-    height: Index,
+    props: WidgetProperties,
     min: Value,
     max: Value,
     value: Value,
-    dirty: bool,
     logarithmic: bool, // Use logarithmic curve for values
-    colors: Rc<Scheme>,
 }
 
 impl Dial {
     pub fn new(min: Value, max: Value, value: Value) -> DialRef {
-        let pos_x: Index = 0;
-        let pos_y: Index = 0;
         let width = 2;
         let height = 2;
-        let dirty = false;
-        let colors = Rc::new(Scheme::new());
+        let props = WidgetProperties::new(width, height);
         let logarithmic = false;
-        Rc::new(RefCell::new(Dial{pos_x, pos_y, width, height, min, max, value, dirty, logarithmic, colors}))
+        Rc::new(RefCell::new(Dial{props, min, max, value, logarithmic}))
     }
 
     pub fn set_logarithmic(&mut self, l: bool) {
@@ -77,52 +67,8 @@ impl Dial {
 }
 
 impl Widget for Dial {
-    /** Set the dial's position.
-     *
-     * TODO: Check that new position is valid
-     */
-    fn set_position(&mut self, x: Index, y: Index) -> bool {
-        self.pos_x = x;
-        self.pos_y = y;
-        true
-    }
-
-    /** Set dial's width.
-     *
-     * TODO: Check that width is valid
-     */
-    fn set_width(&mut self, width: Index) -> bool {
-        self.width = width;
-        true
-    }
-
-    /** Set dial's height.
-     *
-     * TODO: Check that height is valid
-     */
-    fn set_height(&mut self, height: Index) -> bool {
-        self.height = height;
-        true
-    }
-
-    fn set_dirty(&mut self, is_dirty: bool) {
-        self.dirty = is_dirty;
-    }
-
-    fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
-        self.colors = colors;
-    }
-
-    fn is_dirty(&self) -> bool {
-        self.dirty
-    }
-
-    fn get_position(&self) -> (Index, Index) {
-        (self.pos_x, self.pos_y)
-    }
-
-    fn get_size(&self) -> (Index, Index) {
-        (self.width, self.height)
+    fn get_widget_properties<'a>(&'a mut self) -> &'a mut WidgetProperties {
+        return &mut self.props;
     }
 
     fn draw(&self) {
@@ -140,7 +86,7 @@ impl Widget for Dial {
             _ => "  ",
             //_ => "  ",
         };
-        print!("{}{}{}{}", cursor::Goto(self.pos_x, self.pos_y), color::Bg(self.colors.bg_light2), color::Fg(self.colors.fg_dark2), chars);
+        print!("{}{}{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_light2), color::Fg(self.props.colors.fg_dark2), chars);
         let chars = match index {
             0 => "/ ",
             1 => "▔ ",
@@ -153,7 +99,7 @@ impl Widget for Dial {
             _ => " \\",
             //_ => " ▏",
         };
-        print!("{}{}", cursor::Goto(self.pos_x, self.pos_y + 1), chars);
+        print!("{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y + 1), chars);
     }
 }
 

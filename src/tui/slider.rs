@@ -3,37 +3,27 @@ use std::rc::Rc;
 
 use termion::{color, cursor};
 
-use super::Index;
 use super::Observer;
-use super::Scheme;
 use super::{Value, get_int, get_float};
-use super::Widget;
+use super::{Widget, WidgetProperties};
 
 pub type SliderRef = Rc<RefCell<Slider>>;
 
 pub struct Slider {
-    pos_x: Index,
-    pos_y: Index,
-    width: Index,
-    height: Index,
+    props: WidgetProperties,
     min: Value,
     max: Value,
     value: Value,
-    dirty: bool,
     logarithmic: bool, // Use logarithmic curve for values
-    colors: Rc<Scheme>,
 }
 
 impl Slider {
     pub fn new(min: Value, max: Value, value: Value) -> SliderRef {
-        let pos_x: Index = 0;
-        let pos_y: Index = 0;
         let width = 1;
         let height = 4;
-        let dirty = false;
-        let colors = Rc::new(Scheme::new());
+        let props = WidgetProperties::new(width, height);
         let logarithmic = false;
-        Rc::new(RefCell::new(Slider{pos_x, pos_y, width, height, min, max, value, dirty, logarithmic, colors}))
+        Rc::new(RefCell::new(Slider{props, min, max, value, logarithmic}))
     }
 
     pub fn get_index(&self, value: &Value) -> usize {
@@ -55,7 +45,7 @@ impl Slider {
         }
         let offset = min * -1.0;
         let range = max - min;
-        let scale = (self.height * 8) as f64 / range;
+        let scale = (self.props.height * 8) as f64 / range;
         let mut value = fvalue + offset;
         if self.logarithmic {
             // Using a logarithmic curve makes smaller values easier to see.
@@ -73,58 +63,14 @@ impl Slider {
 }
 
 impl Widget for Slider {
-    /** Set the Slider's position.
-     *
-     * TODO: Check that new position is valid
-     */
-    fn set_position(&mut self, x: Index, y: Index) -> bool {
-        self.pos_x = x;
-        self.pos_y = y;
-        true
-    }
-
-    /** Set Slider's width.
-     *
-     * TODO: Check that width is valid
-     */
-    fn set_width(&mut self, width: Index) -> bool {
-        self.width = width;
-        true
-    }
-
-    /** Set Slider's height.
-     *
-     * TODO: Check that height is valid
-     */
-    fn set_height(&mut self, height: Index) -> bool {
-        self.height = height;
-        true
-    }
-
-    fn set_dirty(&mut self, is_dirty: bool) {
-        self.dirty = is_dirty;
-    }
-
-    fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
-        self.colors = colors;
-    }
-
-    fn is_dirty(&self) -> bool {
-        self.dirty
-    }
-
-    fn get_position(&self) -> (Index, Index) {
-        (self.pos_x, self.pos_y)
-    }
-
-    fn get_size(&self) -> (Index, Index) {
-        (self.width, self.height)
+    fn get_widget_properties<'a>(&'a mut self) -> &'a mut WidgetProperties {
+        return &mut self.props;
     }
 
     fn draw(&self) {
         let mut index = self.get_index(&self.value);
-        print!("{}{}", color::Bg(self.colors.bg_light2), color::Fg(self.colors.fg_dark2));
-        for i in 0..self.height {
+        print!("{}{}", color::Bg(self.props.colors.bg_light2), color::Fg(self.props.colors.fg_dark2));
+        for i in 0..self.props.height {
             let chars = if index >= 8 { "█" } else {
                 match index % 8 {
                     0 =>  " ",
@@ -139,7 +85,7 @@ impl Widget for Slider {
                 }
             };
             index = if index > 8 { index - 8 } else { 0 };
-            print!("{}{}", cursor::Goto(self.pos_x, self.pos_y + (3 - i)), chars);
+            print!("{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y + (3 - i)), chars);
         }
     }
 }

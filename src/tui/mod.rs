@@ -27,7 +27,7 @@ use slider::{Slider, SliderRef};
 use surface::Surface;
 pub use tui::Tui;
 use value::{Value, get_int, get_float, get_str};
-use widget::{Index, Widget};
+use widget::{Index, Widget, WidgetProperties};
 
 use super::Float;
 use super::MessageType;

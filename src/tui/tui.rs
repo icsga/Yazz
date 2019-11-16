@@ -59,6 +59,7 @@ fn previous(current: TuiState) -> TuiState {
     }
 }
 
+#[derive(PartialEq)]
 enum ReturnCode {
     KeyConsumed,   // Key has been used, but value is not updated yet
     ValueUpdated,  // Key has been used and value has changed to a valid value
@@ -86,6 +87,11 @@ pub struct ParamSelector {
     func_selection: ItemSelection,
     param_selection: ItemSelection,
     value: ValueHolder,
+
+    // Used for modulation source/ target: When reaching this state, the value
+    // is complete. For normal parameters, this will be Value, for modulation
+    // parameters it is either FunctionIndex or Parameter.
+    target_state: TuiState,
 
     temp_string: String,
     sub_selector: Option<Rc<RefCell<ParamSelector>>>,
@@ -120,11 +126,23 @@ impl Tui {
         let sub_func_selection = ItemSelection{item_list: &FUNCTIONS, item_index: 0, value: ValueHolder::Value(ParameterValue::Int(1))};
         let sub_param_selection = ItemSelection{item_list: &OSC_PARAMS, item_index: 0, value: ValueHolder::Value(ParameterValue::Int(1))};
         let temp_string = String::new();
-        let sub_selector = ParamSelector{state: TuiState::Function, func_selection: sub_func_selection, param_selection: sub_param_selection, value: ValueHolder::Value(ParameterValue::Int(0)), temp_string: temp_string, sub_selector: Option::None};
+        let sub_selector = ParamSelector{state: TuiState::Function,
+                                         func_selection: sub_func_selection,
+                                         param_selection: sub_param_selection,
+                                         value: ValueHolder::Value(ParameterValue::Int(0)),
+                                         target_state: TuiState::FunctionIndex,
+                                         temp_string: temp_string,
+                                         sub_selector: Option::None};
         let func_selection = ItemSelection{item_list: &FUNCTIONS, item_index: 0, value: ValueHolder::Value(ParameterValue::Int(1))};
         let param_selection = ItemSelection{item_list: &OSC_PARAMS, item_index: 0, value: ValueHolder::Value(ParameterValue::Int(1))};
         let temp_string = String::new();
-        let selector = ParamSelector{state: TuiState::Function, func_selection: func_selection, param_selection: param_selection, value: ValueHolder::Value(ParameterValue::Int(0)), temp_string: temp_string, sub_selector: Option::Some(Rc::new(RefCell::new(sub_selector)))};
+        let selector = ParamSelector{state: TuiState::Function,
+                                     func_selection: func_selection,
+                                     param_selection: param_selection,
+                                     value: ValueHolder::Value(ParameterValue::Int(0)),
+                                     target_state: TuiState::Value,
+                                     temp_string: temp_string,
+                                     sub_selector: Option::Some(Rc::new(RefCell::new(sub_selector)))};
         let mut window = Surface::new();
         let temp_string = String::new();
         let sync_counter = 0;
@@ -299,10 +317,17 @@ impl Tui {
                     match Tui::get_value(s, c, sound) {
                         ReturnCode::KeyConsumed   => s.state,           // Key has been used, but value hasn't changed
                         ReturnCode::ValueUpdated  => s.state,           // Selection not complete yet
-                        ReturnCode::ValueComplete => {                     // Parameter has been selected
-                            s.param_selection.item_list = s.func_selection.item_list[s.func_selection.item_index].next;
-                            Tui::select_param(&mut s, sound);
-                            next(s.state)
+                        ReturnCode::ValueComplete => {                  // Parameter has been selected
+                            // For modulation source or target, we might be finished here with
+                            // getting the value. Compare current state to expected target state.
+                            if s.state == s.target_state {
+                                value_change_finished = true;
+                                previous(s.state)
+                            } else {
+                                s.param_selection.item_list = s.func_selection.item_list[s.func_selection.item_index].next;
+                                Tui::select_param(&mut s, sound);
+                                next(s.state)
+                            }
                         },
                         ReturnCode::KeyMissmatch  => s.state,           // Ignore unmatched keys
                         ReturnCode::Cancel        => previous(s.state), // Abort function index selection
@@ -318,8 +343,15 @@ impl Tui {
                             s.state
                         },
                         ReturnCode::ValueComplete => {                     // Prepare to read the value
-                            Tui::select_param(&mut s, sound);
-                            next(s.state)
+                            // For modulation source or target, we might be finished here with
+                            // getting the value. Compare current state to expected target state.
+                            if s.state == s.target_state {
+                                value_change_finished = true;
+                                previous(s.state)
+                            } else {
+                                Tui::select_param(&mut s, sound);
+                                next(s.state)
+                            }
                         },
                         ReturnCode::KeyMissmatch  => s.state,           // Ignore invalid key
                         ReturnCode::Cancel        => previous(s.state), // Cancel parameter selection
@@ -552,19 +584,30 @@ impl Tui {
                 }
                 result
             },
-            ValueRange::ParamRange(choice_list) => {
+            ValueRange::ParamRange(_) => {
                 // Pass key to sub selector
-                match &mut s.sub_selector {
+                let result = match &mut s.sub_selector {
                     Some(sub) => {
+                        info!("Calling sub-selector!");
                         let value_finished = Tui::handle_user_input(&mut sub.borrow_mut(), c, sound);
                         if value_finished {
+                            info!("Value finished!");
                             ReturnCode::ValueComplete
                         } else {
                             ReturnCode::ValueUpdated
                         }
                     },
                     None => panic!(),
+                };
+                if result == ReturnCode::ValueComplete {
+
+                    // Du bist hier: Irgendwie Function und Parameter aus dem Sub-Selector rausholen und an update_value senden
+
+                    // Pack up result
+                    // Tui::update_value(item, ParameterValue::Choice(current), &mut s.temp_string),
+
                 }
+                result
             },
             _ => panic!(),
         }
