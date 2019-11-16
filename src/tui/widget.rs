@@ -1,8 +1,10 @@
+use std::cell::RefCell;
 use std::rc::Rc;
 
 use super::Scheme;
 
 pub type Index = u16;
+pub type WidgetRef = Rc<RefCell<dyn Widget>>;
 
 pub struct WidgetProperties {
     pub pos_x: Index,
@@ -67,8 +69,8 @@ pub trait Widget {
     // -------------------------------------------
     // Must be implemented by the deriving Widgets
 
-    fn get_widget_properties<'a>(&'a mut self) -> &'a mut WidgetProperties;
-
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties;
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties;
     fn draw(&self);
 
     // -------------------------------------------
@@ -77,23 +79,23 @@ pub trait Widget {
     // Default implementations forward to WidgetProperties
 
     fn set_position(&mut self, x: Index, y: Index) -> bool {
-        return self.get_widget_properties().set_position(x, y);
+        return self.get_widget_properties_mut().set_position(x, y);
     }
 
     fn set_width(&mut self, width: Index) -> bool {
-        return self.get_widget_properties().set_width(width);
+        return self.get_widget_properties_mut().set_width(width);
     }
 
     fn set_height(&mut self, height: Index) -> bool {
-        return self.get_widget_properties().set_height(height);
+        return self.get_widget_properties_mut().set_height(height);
     }
 
     fn set_dirty(&mut self, is_dirty: bool) {
-        return self.get_widget_properties().set_dirty(is_dirty);
+        return self.get_widget_properties_mut().set_dirty(is_dirty);
     }
 
     fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
-        return self.get_widget_properties().set_color_scheme(colors);
+        return self.get_widget_properties_mut().set_color_scheme(colors);
     }
 
     fn is_dirty(&self) -> bool {

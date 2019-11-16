@@ -7,7 +7,7 @@ use log::{info, trace, warn};
 use termion::{color, cursor};
 
 use super::{Parameter, ParamId, ParameterValue, SynthParam, SoundData};
-use super::{Bar, Container, ContainerRef, Controller, Dial, Index, Label, ObserverRef, Scheme, Slider, Value, Widget};
+use super::{Bar, Button, Container, ContainerRef, Controller, Dial, Index, Label, ObserverRef, Scheme, Slider, Value, Widget};
 
 pub struct Surface {
     window: Container,
@@ -34,6 +34,12 @@ impl Surface {
         this.add_env(&mut env.borrow_mut(), 1, 0, 0);
         this.add_env(&mut env.borrow_mut(), 2, 20, 0);
         this.window.add_child(env, 1, 16);
+
+        let lfo = Rc::new(RefCell::new(Container::new(94, 15)));
+        this.add_lfo(&mut lfo.borrow_mut(), 1, 0, 0);
+        this.add_lfo(&mut lfo.borrow_mut(), 2, 15, 0);
+        this.add_lfo(&mut lfo.borrow_mut(), 3, 30, 0);
+        this.window.add_child(lfo, 46, 16);
 
         this.window.set_position(1, 1);
         this.window.set_color_scheme(this.colors.clone());
@@ -96,10 +102,14 @@ impl Surface {
         Rc::new(RefCell::new(c))
     }
 
-    fn set_key(key: &mut ParamId, func: Parameter, func_id: usize, param: Parameter) {
-        key.function = func;
-        key.function_id = func_id;
-        key.parameter = param;
+    fn new_option(&mut self, label: &'static str, status: i64, key: &ParamId) -> ContainerRef {
+        let mut c = Container::new(10, 1);
+        let label = Label::new(label.to_string(), 8);
+        let button = Button::new(Value::Int(status));
+        self.controller.add_observer(key, button.clone());
+        c.add_child(label, 0, 0);
+        c.add_child(button, 10, 0);
+        Rc::new(RefCell::new(c))
     }
 
     fn add_multi_osc(&mut self, target: &mut Container, func_id: usize, x_offset: Index, y_offset: Index) {
@@ -113,29 +123,39 @@ impl Surface {
         let osc_wave = self.new_mod_dial_int("Waveform", 0, 4, 0, false, &key);
         target.add_child(osc_wave, x_offset, 1 + y_offset);
 
-        Surface::set_key(&mut key, Parameter::Oscillator, func_id, Parameter::Level);
+        key.set(Parameter::Oscillator, func_id, Parameter::Level);
         let osc_level = self.new_mod_dial_float("Level", 0.0, 100.0, 0.0, false, &key);
         target.add_child(osc_level, x_offset, 4 + y_offset);
 
-        Surface::set_key(&mut key, Parameter::Oscillator, func_id, Parameter::Frequency);
+        key.set(Parameter::Oscillator, func_id, Parameter::Frequency);
         let osc_freq = self.new_mod_dial_int("Pitch", -24, 24, 0, false, &key);
         target.add_child(osc_freq, x_offset, 7 + y_offset);
 
-        Surface::set_key(&mut key, Parameter::Oscillator, func_id, Parameter::Blend);
+        key.set(Parameter::Oscillator, func_id, Parameter::Blend);
         let osc_blend = self.new_mod_dial_float("Blend", 0.0, 5.0, 0.0, false, &key);
         target.add_child(osc_blend, x_offset, 10 + y_offset);
 
-        Surface::set_key(&mut key, Parameter::Oscillator, func_id, Parameter::Phase);
+        key.set(Parameter::Oscillator, func_id, Parameter::Phase);
         let osc_phase = self.new_mod_dial_float("Phase", 0.0, 1.0, 0.0, false, &key);
         target.add_child(osc_phase, 14 + x_offset, 1 + y_offset);
 
-        Surface::set_key(&mut key, Parameter::Oscillator, func_id, Parameter::Voices);
+        key.set(Parameter::Oscillator, func_id, Parameter::Voices);
         let osc_voices = self.new_mod_dial_int("Voices", 1, 7, 1, false, &key);
         target.add_child(osc_voices, 14 + x_offset, 4 + y_offset);
 
-        Surface::set_key(&mut key, Parameter::Oscillator, func_id, Parameter::Spread);
+        key.set(Parameter::Oscillator, func_id, Parameter::Spread);
         let osc_spread = self.new_mod_dial_float("Spread", 0.0, 2.0, 0.0, false, &key);
         target.add_child(osc_spread, 14 + x_offset, 7 + y_offset);
+
+        key.set(Parameter::Oscillator, func_id, Parameter::KeyFollow);
+        let osc_sync = self.new_option("KeyFollow", 0, &key);
+        target.add_child(osc_sync, 14 + x_offset, 11 + y_offset);
+
+        if func_id == 2 {
+            key.set(Parameter::Oscillator, func_id, Parameter::Sync);
+            let osc_sync = self.new_option("Sync", 0, &key);
+            target.add_child(osc_sync, x_offset, 13 + y_offset);
+        }
     }
 
     fn add_env(&mut self, target: &mut Container, func_id: usize, x_offset: Index, y_offset: Index) {
@@ -149,17 +169,33 @@ impl Surface {
         let env_attack = self.new_mod_slider_float("A", 0.0, 4000.0, 0.0, true, &key);
         target.add_child(env_attack, x_offset, 1 + y_offset);
 
-        Surface::set_key(&mut key, Parameter::Envelope, func_id, Parameter::Decay);
+        key.set(Parameter::Envelope, func_id, Parameter::Decay);
         let env_decay = self.new_mod_slider_float("D", 0.0, 4000.0, 0.0, true, &key);
         target.add_child(env_decay, 4 + x_offset, 1 + y_offset);
 
-        Surface::set_key(&mut key, Parameter::Envelope, func_id, Parameter::Sustain);
+        key.set(Parameter::Envelope, func_id, Parameter::Sustain);
         let env_sustain = self.new_mod_slider_float("S", 0.0, 100.0, 0.0, false, &key);
         target.add_child(env_sustain, 8 + x_offset, 1 + y_offset);
 
-        Surface::set_key(&mut key, Parameter::Envelope, func_id, Parameter::Release);
+        key.set(Parameter::Envelope, func_id, Parameter::Release);
         let env_release = self.new_mod_slider_float("R", 0.0, 8000.0, 0.0, true, &key);
         target.add_child(env_release, 12 + x_offset, 1 + y_offset);
+    }
+
+    fn add_lfo(&mut self, target: &mut Container, func_id: usize, x_offset: Index, y_offset: Index) {
+        let mut title = "LFO ".to_string();
+        title.push(((func_id as u8) + '0' as u8) as char);
+        let len = title.len();
+        let title = Label::new(title, len as Index);
+        target.add_child(title, x_offset, y_offset);
+
+        let mut key = ParamId{function: Parameter::Oscillator, function_id: func_id, parameter: Parameter::Waveform};
+        let osc_wave = self.new_mod_dial_int("Waveform", 0, 4, 0, false, &key);
+        target.add_child(osc_wave, x_offset, 1 + y_offset);
+
+        key.set(Parameter::Oscillator, func_id, Parameter::Frequency);
+        let osc_freq = self.new_mod_dial_int("Speed", -24, 24, 0, false, &key);
+        target.add_child(osc_freq, x_offset, 4 + y_offset);
     }
 
     fn param_to_widget_value(value: &ParameterValue) -> Value {

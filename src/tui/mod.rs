@@ -1,6 +1,6 @@
 pub mod bar;
+pub mod button;
 pub mod canvas;
-mod child_widget;
 pub mod color;
 pub mod container;
 pub mod controller;
@@ -15,11 +15,11 @@ pub mod value;
 mod widget;
 
 use bar::Bar;
+use button::Button;
 use canvas::Canvas;
 use color::Scheme;
 use container::{Container, ContainerRef};
 use controller::Controller;
-use child_widget::ChildWidget;
 use dial::Dial;
 use label::Label;
 use observer::{Observer, ObserverRef};
@@ -27,7 +27,7 @@ use slider::{Slider, SliderRef};
 use surface::Surface;
 pub use tui::Tui;
 use value::{Value, get_int, get_float, get_str};
-use widget::{Index, Widget, WidgetProperties};
+use widget::{Index, Widget, WidgetProperties, WidgetRef};
 
 use super::Float;
 use super::MessageType;

@@ -63,8 +63,12 @@ impl Slider {
 }
 
 impl Widget for Slider {
-    fn get_widget_properties<'a>(&'a mut self) -> &'a mut WidgetProperties {
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties {
         return &mut self.props;
+    }
+
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties {
+        return &self.props;
     }
 
     fn draw(&self) {
