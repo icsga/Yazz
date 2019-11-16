@@ -86,6 +86,14 @@ pub struct ParamId {
     pub parameter: Parameter
 }
 
+impl ParamId {
+    pub fn set(&mut self, func: Parameter, func_id: usize, param: Parameter) {
+        self.function = func;
+        self.function_id = func_id;
+        self.parameter = param;
+    }
+}
+
 #[derive(Clone, Copy, Debug)]
 pub enum ParameterValue {
     Int(i64),

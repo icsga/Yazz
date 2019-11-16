@@ -1,4 +1,4 @@
-mod child_widget;
+mod button;
 mod color;
 mod container;
 mod controller;
@@ -12,7 +12,6 @@ extern crate termion;
 
 use termion::{clear, cursor};
 
-use child_widget::ChildWidget;
 use color::Scheme;
 use container::Container;
 use controller::Controller;
@@ -20,7 +19,7 @@ use dial::Dial;
 use label::Label;
 use observer::Observer;
 use value::{Value, get_int, get_float, get_str};
-use widget::{Index, Widget, WidgetProperties};
+use widget::{Index, Widget, WidgetProperties, WidgetRef};
 
 fn main() {
     print!("{}{}", clear::All, cursor::Goto(1, 1));
