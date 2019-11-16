@@ -3,7 +3,7 @@ use std::rc::Rc;
 
 use super::Index;
 use super::Scheme;
-use super::Widget;
+use super::{Widget, WidgetProperties};
 
 pub struct ChildWidget {
     pos_x: Index, // Relative position inside a container
@@ -28,6 +28,10 @@ impl ChildWidget {
 }
 
 impl Widget for ChildWidget {
+    fn get_widget_properties<'a>(&'a mut self) -> &'a mut WidgetProperties {
+        return self.child.borrow_mut().get_widget_properties();
+    }
+
     /** Calculate and update the position of the child.
      *
      * We expect the Container to pass it's own position.

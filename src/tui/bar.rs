@@ -3,11 +3,9 @@ use std::rc::Rc;
 
 use termion::{color, cursor};
 
-use super::Index;
 use super::Observer;
-use super::Scheme;
 use super::{Value, get_int, get_float};
-use super::Widget;
+use super::{Widget, WidgetProperties};
 
 type BarRef = Rc<RefCell<Bar>>;
 
@@ -16,28 +14,20 @@ type BarRef = Rc<RefCell<Bar>>;
  * Can have logarithmic scaling to improve visibility of smaller values.
  */
 pub struct Bar {
-    pos_x: Index,
-    pos_y: Index,
-    width: Index,
-    height: Index,
+    props: WidgetProperties,
     min: Value,
     max: Value,
     value: Value,
-    dirty: bool,
     logarithmic: bool, // Use logarithmic curve for values
-    colors: Rc<Scheme>,
 }
 
 impl Bar {
     pub fn new(min: Value, max: Value, value: Value) -> BarRef {
-        let pos_x: Index = 0;
-        let pos_y: Index = 0;
         let width = 10;
         let height = 1;
-        let dirty = false;
+        let props = WidgetProperties::new(width, height);
         let logarithmic = false;
-        let colors = Rc::new(Scheme::new());
-        Rc::new(RefCell::new(Bar{pos_x, pos_y, width, height, min, max, value, dirty, logarithmic, colors}))
+        Rc::new(RefCell::new(Bar{props, min, max, value, logarithmic}))
     }
 
     pub fn set_logarithmic(&mut self, l: bool) {
@@ -77,58 +67,14 @@ impl Bar {
 }
 
 impl Widget for Bar {
-    /** Set the bar's position.
-     *
-     * TODO: Check that new position is valid
-     */
-    fn set_position(&mut self, x: Index, y: Index) -> bool {
-        self.pos_x = x;
-        self.pos_y = y;
-        true
-    }
-
-    /** Set bar's width.
-     *
-     * TODO: Check that width is valid
-     */
-    fn set_width(&mut self, width: Index) -> bool {
-        self.width = width;
-        true
-    }
-
-    /** Set bar's height.
-     *
-     * TODO: Check that height is valid
-     */
-    fn set_height(&mut self, height: Index) -> bool {
-        self.height = height;
-        true
-    }
-
-    fn set_dirty(&mut self, is_dirty: bool) {
-        self.dirty = is_dirty;
-    }
-
-    fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
-        self.colors = colors;
-    }
-
-    fn is_dirty(&self) -> bool {
-        self.dirty
-    }
-
-    fn get_position(&self) -> (Index, Index) {
-        (self.pos_x, self.pos_y)
-    }
-
-    fn get_size(&self) -> (Index, Index) {
-        (self.width, self.height)
+    fn get_widget_properties<'a>(&'a mut self) -> &'a mut WidgetProperties {
+        return &mut self.props;
     }
 
     fn draw(&self) {
         let index = self.get_length(&self.value);
         // TODO: Optimize by using array
-        print!("{}{}{}", cursor::Goto(self.pos_x, self.pos_y), color::Bg(self.colors.bg_light), color::Fg(self.colors.fg_dark2));
+        print!("{}{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_light), color::Fg(self.props.colors.fg_dark2));
         for i in 0..index {
             print!("‾");
         }
