@@ -12,6 +12,7 @@ mod surface;
 pub mod termion_wrapper;
 pub mod tui;
 pub mod value;
+pub mod value_display;
 mod widget;
 
 use bar::Bar;
@@ -27,6 +28,7 @@ use slider::{Slider, SliderRef};
 use surface::Surface;
 pub use tui::Tui;
 use value::{Value, get_int, get_float, get_str};
+use value_display::{ValueDisplay, ValueDisplayRef};
 use widget::{Index, Widget, WidgetProperties, WidgetRef};
 
 use super::Float;

@@ -7,7 +7,7 @@ use log::{info, trace, warn};
 use termion::{color, cursor};
 
 use super::{Parameter, ParamId, ParameterValue, SynthParam, SoundData};
-use super::{Bar, Button, Container, ContainerRef, Controller, Dial, Index, Label, ObserverRef, Scheme, Slider, Value, Widget};
+use super::{Bar, Button, Container, ContainerRef, Controller, Dial, Index, Label, ObserverRef, Scheme, Slider, Value, ValueDisplay, Widget};
 
 pub struct Surface {
     window: Container,
@@ -18,28 +18,43 @@ pub struct Surface {
 
 impl Surface {
     pub fn new() -> Surface {
-        let window = Container::new(100, 60);
+        let window = Container::new();
         let controller = Controller::new();
         let mod_targets: HashMap<ParamId, ObserverRef> = HashMap::new();
         let colors = Rc::new(Scheme::new());
         let mut this = Surface{window, controller, mod_targets, colors};
 
-        let osc = Rc::new(RefCell::new(Container::new(94, 15)));
+        let osc = Rc::new(RefCell::new(Container::new()));
+        osc.borrow_mut().enable_border(true);
         this.add_multi_osc(&mut osc.borrow_mut(), 1, 0, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 2, 31, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 3, 63, 0);
         this.add_child(osc, 1, 1);
 
-        let env = Rc::new(RefCell::new(Container::new(94, 13)));
-        this.add_env(&mut env.borrow_mut(), 1, 0, 0);
-        this.add_env(&mut env.borrow_mut(), 2, 20, 0);
-        this.add_child(env, 1, 16);
+        let env = Rc::new(RefCell::new(Container::new()));
+        env.borrow_mut().enable_border(true);
+        this.add_env(&mut env.borrow_mut(), 1, 1, 0);
+        let (x, _) = env.borrow().get_size();
+        this.add_env(&mut env.borrow_mut(), 2, x + 3, 0);
+        let (env_width, _) = env.borrow().get_size();
+        let (_, y) = this.window.get_size();
+        this.add_child(env, 1, y + 1);
 
-        let lfo = Rc::new(RefCell::new(Container::new(94, 15)));
-        this.add_lfo(&mut lfo.borrow_mut(), 1, 0, 0);
-        this.add_lfo(&mut lfo.borrow_mut(), 2, 15, 0);
-        this.add_lfo(&mut lfo.borrow_mut(), 3, 30, 0);
-        this.add_child(lfo, 46, 16);
+        let lfo = Rc::new(RefCell::new(Container::new()));
+        lfo.borrow_mut().enable_border(true);
+        this.add_lfo(&mut lfo.borrow_mut(), 1, 1, 0);
+        let (x, _) = lfo.borrow().get_size();
+        this.add_lfo(&mut lfo.borrow_mut(), 2, x + 2, 0);
+        let (x, _) = lfo.borrow().get_size();
+        this.add_lfo(&mut lfo.borrow_mut(), 3, x + 2, 0);
+        let (lfo_width, _) = lfo.borrow().get_size();
+        this.add_child(lfo, env_width + 2, y + 1);
+
+        let sysinfo = Rc::new(RefCell::new(Container::new()));
+        sysinfo.borrow_mut().enable_border(true);
+        this.add_sysinfo(&mut sysinfo.borrow_mut(), 1, 0);
+        this.add_child(sysinfo, env_width + lfo_width + 4, y + 1);
+
 
         this.window.set_position(1, 1);
         this.window.set_color_scheme(this.colors.clone());
@@ -57,6 +72,9 @@ impl Surface {
     pub fn set_dirty(&mut self, is_dirty: bool) {
         self.window.set_dirty(is_dirty);
     }
+    pub fn get_size(&self) -> (Index, Index) {
+        self.window.get_size()
+    }
 
     pub fn draw(&mut self) {
         self.window.draw();
@@ -69,7 +87,7 @@ impl Surface {
     }
 
     fn new_mod_dial_float(&mut self, label: &'static str, min: f64, max: f64, value: f64, log: bool, key: &ParamId) -> ContainerRef {
-        let mut c = Container::new(19, 3);
+        let mut c = Container::new();
         let label = Label::new(label.to_string(), 10);
         let dial = Dial::new(Value::Float(min), Value::Float(max), Value::Float(value));
         dial.borrow_mut().set_logarithmic(log);
@@ -83,7 +101,7 @@ impl Surface {
     }
 
     fn new_mod_dial_int(&mut self, label: &'static str, min: i64, max: i64, value: i64, log: bool, key: &ParamId) -> ContainerRef {
-        let mut c = Container::new(13, 3);
+        let mut c = Container::new();
         let label = Label::new(label.to_string(), 8);
         let dial = Dial::new(Value::Int(min), Value::Int(max), Value::Int(value));
         dial.borrow_mut().set_logarithmic(log);
@@ -98,8 +116,9 @@ impl Surface {
 
     fn new_mod_slider_float(&mut self, label: &'static str, min: f64, max: f64, value: f64, log: bool, key: &ParamId) -> ContainerRef {
         // TODO: Add vertical modulation indicator
-        let mut c = Container::new(10, 5);
-        let label = Label::new(label.to_string(), 8);
+        let mut c = Container::new();
+        let len = label.len() as Index;
+        let label = Label::new(label.to_string(), len);
         let slider = Slider::new(Value::Float(min), Value::Float(max), Value::Float(value));
         slider.borrow_mut().set_logarithmic(log);
         //let modul = Slider::new(Value::Float(0.0), Value::Float(100.0), Value::Float(0.0));
@@ -111,8 +130,19 @@ impl Surface {
         Rc::new(RefCell::new(c))
     }
 
+    fn new_label_value(&mut self, label: &'static str, value: i64, key: &ParamId) -> ContainerRef {
+        let mut c = Container::new();
+        let len = label.len() as Index;
+        let label = Label::new(label.to_string(), len);
+        let val_display = ValueDisplay::new(Value::Int(value));
+        self.controller.add_observer(key, val_display.clone());
+        c.add_child(label, 0, 1);
+        c.add_child(val_display, len + 1, 1);
+        Rc::new(RefCell::new(c))
+    }
+
     fn new_option(&mut self, label: &'static str, status: i64, key: &ParamId) -> ContainerRef {
-        let mut c = Container::new(10, 1);
+        let mut c = Container::new();
         let label = Label::new(label.to_string(), 8);
         let button = Button::new(Value::Int(status));
         self.controller.add_observer(key, button.clone());
@@ -207,6 +237,21 @@ impl Surface {
         target.add_child(osc_freq, x_offset, 4 + y_offset);
     }
 
+    fn add_sysinfo(&mut self, target: &mut Container, x_offset: Index, y_offset: Index) {
+        let title = "System";
+        let len = title.len();
+        let title = Label::new(title.to_string(), len as Index);
+        target.add_child(title, x_offset, y_offset);
+
+        let mut key = ParamId{function: Parameter::System, function_id: 0, parameter: Parameter::Busy};
+        let busy_value = self.new_label_value("Busy", 0, &key);
+        target.add_child(busy_value, x_offset, 1 + y_offset);
+
+        key.set(Parameter::System, 0, Parameter::Idle);
+        let idle_value = self.new_label_value("Idle", 0, &key);
+        target.add_child(idle_value, x_offset, 2 + y_offset);
+    }
+
     fn param_to_widget_value(value: &ParameterValue) -> Value {
         match value {
             ParameterValue::Int(v) => Value::Int(*v),
@@ -220,6 +265,7 @@ impl Surface {
         for (key, item) in self.controller.observers.iter_mut() {
             let param = SynthParam::new(key.function, key.function_id, key.parameter, ParameterValue::NoValue);
             let value = sound.get_value(&param);
+            if let ParameterValue::NoValue = value { continue; };
             let value = Surface::param_to_widget_value(&value);
             item.borrow_mut().update(value);
         }
