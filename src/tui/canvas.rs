@@ -49,17 +49,15 @@ impl Canvas {
             self.plot_x_axis(x_axis as Index);
         }
         // Plot points
-        //let mut prev = self.val_to_y(buff[0], offset, scale_y);
-        let mut x_pos: Index = 0;
-        let mut current_x_pos: Index = 0;
+        let mut prev_y_pos = self.val_to_y(buff[0], offset, scale_y);
+        let mut prev_x_pos: Index = 0;
         let mut y_accu: Float = 0.0;
         let mut y_num_values = 0.0;
         for (i, value) in buff.iter().enumerate() {
-            //let y_pos = self.val_to_y(*value, offset, scale_y);
             let x_pos = (i as Float * scale_x) as Index;
             y_accu += *value;
             y_num_values += 1.0;
-            if x_pos == current_x_pos {
+            if x_pos == prev_x_pos {
                 // Accumulate values
                 continue;
             } else {
@@ -69,31 +67,30 @@ impl Canvas {
                 y_num_values = 0.0;
                 let y_pos = self.val_to_y(mean, offset, scale_y);
 
+
+                /*
+                let diff: i64 = Canvas::diff(y_pos, prev_y_pos);
+                if diff > 1 {
+                    // Current and previous values are more than one row apart, fill the space between
+                    let (x1, from, x2, to) = Canvas::sort(x_pos as Index - 1, prev_y_pos, x_pos as Index, y_pos);
+                    let halfpoint = from + (diff / 2) as Index;
+                    for i in from..halfpoint {
+                        self.set(x1, i, '|');
+                    }
+                    for i in halfpoint..to {
+                        self.set(x2, i, '|');
+                    }
+
+                }
+                */
+
                 // Stretch value over skipped places if needed
-                for x in current_x_pos..x_pos {
+                for x in prev_x_pos..x_pos {
                     self.set(x as Index, y_pos, '∘');
                 }
-                current_x_pos = x_pos;
+                prev_x_pos = x_pos;
+                prev_y_pos = y_pos;
             }
-            // info!("xpos={}, ypos={}, offset={}, scale_y={}, prev={}", x_pos, y_pos, offset, scale_y, prev);
-
-            /*
-            let diff: i64 = Canvas::diff(y_pos, prev);
-            if diff > 1 {
-                // Current and previous values are more than one row apart, fill the space between
-                let (x1, from, x2, to) = Canvas::sort(x_pos as Index - 1, prev, x_pos as Index, y_pos);
-                let halfpoint = from + (diff / 2) as Index;
-                for i in from..halfpoint {
-                    self.set(x1, i, '|');
-                }
-                for i in halfpoint..to {
-                    self.set(x2, i, '|');
-                }
-
-            }
-            self.set(x_pos as Index, y_pos, '∘');
-            */
-            //prev = y_pos;
         }
         self.props.set_dirty(true);
     }

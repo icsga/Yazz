@@ -54,9 +54,14 @@ impl Surface {
         self.window.set_position(x, y);
     }
 
-    pub fn draw(&self) {
+    pub fn set_dirty(&mut self, is_dirty: bool) {
+        self.window.set_dirty(is_dirty);
+    }
+
+    pub fn draw(&mut self) {
         self.window.draw();
         print!("{}{}", color::Bg(self.colors.bg_light), color::Fg(self.colors.fg_dark));
+        self.window.set_dirty(false);
     }
 
     pub fn update_value(&mut self, key: &ParamId, value: Value) {

@@ -105,6 +105,7 @@ pub struct Tui {
     // TUI handling
     selector: ParamSelector,
     //sub_selector: ParamSelector,
+    selection_changed: bool,
 
     // Actual UI
     window: Surface,
@@ -143,6 +144,7 @@ impl Tui {
                                      target_state: TuiState::Value,
                                      temp_string: temp_string,
                                      sub_selector: Option::Some(Rc::new(RefCell::new(sub_selector)))};
+        let selection_changed = true;
         let mut window = Surface::new();
         let temp_string = String::new();
         let sync_counter = 0;
@@ -153,7 +155,7 @@ impl Tui {
         let canvas = Canvas::new(50, 20);
         let mut sound = SoundData::new();
         sound.init();
-        window.set_position(1, 10);
+        window.set_position(1, 3);
         window.update_all(&sound);
         window.add_child(canvas.clone(), 1, 23);
 
@@ -161,6 +163,7 @@ impl Tui {
             ui_receiver,
             selector,
             //sub_selector,
+            selection_changed,
             window,
             sync_counter,
             idle,
@@ -189,6 +192,7 @@ impl Tui {
                         if Tui::handle_user_input(&mut tui.selector, m, &mut tui.sound) {
                             tui.send_event();
                         }
+                        tui.selection_changed = true;
                     },
                     UiMessage::Param(m) => tui.handle_synth_param(m),
                     UiMessage::SampleBuffer(m, p) => tui.handle_samplebuffer(m, p),
@@ -756,11 +760,16 @@ impl Tui {
     /* ====================================================================== */
 
     /** Display the UI. */
-    fn display(&self) {
-        print!("{}{}", clear::All, cursor::Goto(1, 1));
-        Tui::display_selector(&self.selector);
+    fn display(&mut self) {
+        if self.selection_changed {
+            print!("{}", clear::All);
+            self.selection_changed = false;
+            self.window.set_dirty(true);
+        }
 
         self.window.draw();
+
+        Tui::display_selector(&self.selector);
 
         io::stdout().flush().ok();
     }
@@ -768,6 +777,7 @@ impl Tui {
     fn display_selector(s: &ParamSelector) {
         let mut display_state = TuiState::Function;
         let mut x_pos: u16 = 1;
+        print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
         loop {
             match display_state {
                 TuiState::Function => {
@@ -867,6 +877,7 @@ impl Tui {
     }
 
     fn display_options(s: &ParamSelector, x_pos: u16) {
+        print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         if s.state == TuiState::Function {
             let mut y_item = 2;
             let list = s.func_selection.item_list;
@@ -898,6 +909,7 @@ impl Tui {
                 ValueRange::NoRange => ()
             }
         }
+        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
     }
 
     /*

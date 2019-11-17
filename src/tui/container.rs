@@ -60,9 +60,15 @@ impl Widget for Container {
         }
     }
 
+    fn set_dirty(&mut self, is_dirty: bool) {
+        for child in self.children.iter() {
+            child.borrow_mut().set_dirty(is_dirty);
+        }
+    }
+
     fn is_dirty(&self) -> bool {
-        for c in self.children.iter() {
-            if c.borrow().is_dirty() {
+        for child in self.children.iter() {
+            if child.borrow().is_dirty() {
                 return true;
             }
         }
@@ -71,7 +77,9 @@ impl Widget for Container {
 
     fn draw(&self) {
         for child in self.children.iter() {
-            child.borrow_mut().draw();
+            if child.borrow().is_dirty() {
+                child.borrow_mut().draw();
+            }
         }
     }
 }
