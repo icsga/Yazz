@@ -29,8 +29,9 @@ pub struct Voice {
     // Current state
     triggered: bool,
     pub trigger_seq: u64,
-    pub key: u8, // Key that was pressed to trigger this voice
-    input_freq: Float, // Frequency to play as received from Synth
+    pub key: u8,          // Key that was pressed to trigger this voice
+    velocity: u8,         // Velocity of NoteOn event
+    input_freq: Float,    // Frequency to play as received from Synth
     osc_amp: Float,
     last_update: i64,
 }
@@ -57,10 +58,11 @@ impl Voice {
         let triggered = false;
         let trigger_seq = 0;
         let key = 0;
+        let velocity = 0;
         let input_freq = 440.0;
         let osc_amp = 0.5;
         let last_update = 0i64;
-        let voice = Voice{osc, env, filter, lfo, triggered, trigger_seq, key, input_freq, osc_amp, last_update};
+        let voice = Voice{osc, env, filter, lfo, triggered, trigger_seq, key, velocity, input_freq, osc_amp, last_update};
         voice
     }
 
@@ -156,6 +158,10 @@ impl Voice {
         self.input_freq = freq;
     }
 
+    pub fn set_velocity(&mut self, velocity: u8) {
+        self.velocity = velocity;
+    }
+
     pub fn trigger(&mut self, trigger_seq: u64, trigger_time: i64, sound: &SoundData) {
         self.triggered = true;
         self.trigger_seq = trigger_seq;
@@ -165,7 +171,7 @@ impl Voice {
         }
     }
 
-    pub fn release(&mut self, sound: &SoundData) {
+    pub fn release(&mut self, velocity: u8, sound: &SoundData) {
         self.triggered = false;
         self.env[0].release(self.last_update, &sound.env[0]);
     }

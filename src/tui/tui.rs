@@ -2,7 +2,7 @@ use super::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRan
 use super::Canvas;
 use super::Float;
 use super::Label;
-use super::{MidiMessage, MessageType};
+use super::{MidiMessage};
 use super::SoundData;
 use super::{UiMessage, SynthMessage};
 use super::surface::Surface;
@@ -206,10 +206,10 @@ impl Tui {
 
     /* MIDI message received */
     fn handle_midi_event(&mut self, m: MidiMessage) {
-        match m.get_message_type() {
-            MessageType::ControlChg => {
-                if m.param == 0x01 { // ModWheel
-                    self.handle_control_change(m.value as i64);
+        match m {
+            MidiMessage::ControlChg{channel, controller, value} => {
+                if controller == 0x01 { // ModWheel
+                    self.handle_control_change(value as i64);
                 }
             },
             _ => ()

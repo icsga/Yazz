@@ -20,7 +20,6 @@ pub use sample_generator::SampleGenerator;
 pub use synth::{Synth, NUM_GLOBAL_LFOS};
 
 use super::Float;
-use super::MessageType;
 use super::MidiMessage;
 use super::{Modulator, ModData};
 use super::{Parameter, ParameterValue, SynthParam, ParamId, FunctionId, MenuItem};

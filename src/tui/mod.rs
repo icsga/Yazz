@@ -32,7 +32,6 @@ use value_display::{ValueDisplay, ValueDisplayRef};
 use widget::{Index, Widget, WidgetProperties, WidgetRef};
 
 use super::Float;
-use super::MessageType;
 use super::MidiMessage;
 use super::SoundData;
 use super::SynthMessage;
