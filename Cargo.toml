@@ -25,7 +25,3 @@ flexi_logger = "0.14"
 [[bin]]
 name = "synth"
 path = "src/main.rs"
-
-[[bin]]
-name = "tui_test"
-path = "src/tui/main.rs"

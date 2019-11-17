@@ -157,7 +157,8 @@ impl Tui {
         sound.init();
         window.set_position(1, 3);
         window.update_all(&sound);
-        window.add_child(canvas.clone(), 1, 23);
+        let (_, y) = window.get_size();
+        window.add_child(canvas.clone(), 1, y);
 
         Tui{sender,
             ui_receiver,
@@ -192,7 +193,7 @@ impl Tui {
                         if Tui::handle_user_input(&mut tui.selector, m, &mut tui.sound) {
                             tui.send_event();
                         }
-                        tui.selection_changed = true;
+                        tui.selection_changed = true; // Trigger full UI redraw
                     },
                     UiMessage::Param(m) => tui.handle_synth_param(m),
                     UiMessage::SampleBuffer(m, p) => tui.handle_samplebuffer(m, p),
@@ -281,15 +282,21 @@ impl Tui {
             self.max_busy = busy;
         }
         self.sync_counter += 1;
-        if self.sync_counter == 10 {
+        if self.sync_counter == 20 {
             let display_time = SystemTime::now();
             self.display();
-            /*
-            println!("{}Display: {:?}\r\nIdle: {:?}\r\nBusy: {:?}\r\nLast: {:?}, {:?}\r\nMin Idle: {:?}, Max Busy: {:?}",
-                     cursor::Goto(1, 5), display_time.elapsed().unwrap(), self.idle / 10, self.busy / 10, idle, busy, self.min_idle, self.max_busy);
+            let idle = self.idle / self.sync_counter;
+            let busy = self.busy / self.sync_counter;
+            //println!("{}Display: {:?}\r\nIdle: {:?}\r\nBusy: {:?}\r\nLast: {:?}, {:?}\r\nMin Idle: {:?}, Max Busy: {:?}",
+                     //cursor::Goto(1, 5), display_time.elapsed().unwrap(), self.idle / 10, self.busy / 10, idle, busy, self.min_idle, self.max_busy);
+            let value = Value::Int(idle.as_micros() as i64);
+            let key = ParamId{function: Parameter::System, function_id: 0, parameter: Parameter::Idle};
+            self.window.update_value(&key, value);
+            let value = Value::Int(busy.as_micros() as i64);
+            let key = ParamId{function: Parameter::System, function_id: 0, parameter: Parameter::Busy};
+            self.window.update_value(&key, value);
             self.idle = Duration::new(0, 0);
             self.busy = Duration::new(0, 0);
-            */
             self.sync_counter = 0;
             self.query_samplebuffer();
         }
@@ -877,34 +884,35 @@ impl Tui {
     }
 
     fn display_options(s: &ParamSelector, x_pos: u16) {
-        print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+        //print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+        print!("{}{}", color::Bg(Black), color::Fg(LightWhite));
         if s.state == TuiState::Function {
             let mut y_item = 2;
             let list = s.func_selection.item_list;
             for item in list.iter() {
-                print!("{}{} - {}", cursor::Goto(x_pos, y_item), item.key, item.item);
+                print!("{} {} - {} ", cursor::Goto(x_pos, y_item), item.key, item.item);
                 y_item += 1;
             }
         }
         if s.state == TuiState::FunctionIndex {
             let item = &s.func_selection.item_list[s.func_selection.item_index];
             let (min, max) = if let ValueRange::IntRange(min, max) = item.val_range { (min, max) } else { panic!() };
-            print!("{}{} - {}", cursor::Goto(x_pos, 2), min, max);
+            print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max);
         }
         if s.state == TuiState::Param {
             let mut y_item = 2;
             let list = s.param_selection.item_list;
             for item in list.iter() {
-                print!("{}{} - {}", cursor::Goto(x_pos, y_item), item.key, item.item);
+                print!("{} {} - {} ", cursor::Goto(x_pos, y_item), item.key, item.item);
                 y_item += 1;
             }
         }
         if s.state == TuiState::Value {
             let range = &s.param_selection.item_list[s.param_selection.item_index].val_range;
             match range {
-                ValueRange::IntRange(min, max) => print!("{}{} - {}", cursor::Goto(x_pos, 2), min, max),
-                ValueRange::FloatRange(min, max) => print!("{}{} - {}", cursor::Goto(x_pos, 2), min, max),
-                ValueRange::ChoiceRange(list) => print!("{}1 - {}", cursor::Goto(x_pos, 2), list.len()),
+                ValueRange::IntRange(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
+                ValueRange::FloatRange(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
+                ValueRange::ChoiceRange(list) => print!("{} 1 - {} ", cursor::Goto(x_pos, 2), list.len()),
                 ValueRange::ParamRange(list) => (),
                 ValueRange::NoRange => ()
             }

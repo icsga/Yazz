@@ -1,6 +1,8 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
+use termion::{color, cursor};
+
 use super::Index;
 use super::Scheme;
 use super::{Widget, WidgetProperties, WidgetRef};
@@ -9,20 +11,63 @@ pub type ContainerRef = Rc<RefCell<Container>>;
 
 pub struct Container {
     props: WidgetProperties,
+    draw_border: bool,
     children: Vec<WidgetRef>,
 }
 
 impl Container {
-    pub fn new(width: Index, height: Index) -> Container {
-        let props = WidgetProperties::new(width, height);
+    pub fn new() -> Container {
+        let props = WidgetProperties::new(0, 0);
+        let draw_border = false;
         let children = vec!{};
-        Container{props, children}
+        Container{props, draw_border, children}
     }
 
     pub fn add_child<C: Widget + 'static>(&mut self, child: Rc<RefCell<C>>, pos_x: Index, pos_y: Index) {
-        child.borrow_mut().set_position(self.props.pos_x + pos_x, self.props.pos_y + pos_y); // Update child with current absolute position
+        // Check if we need to leave space for drawing the border
+        let x_offset = if self.draw_border { 1 } else { 0 };
+        let y_offset = if self.draw_border { 1 } else { 0 };
+        // Update child with current absolute position
+        child.borrow_mut().set_position(self.props.pos_x + pos_x + x_offset,
+                                        self.props.pos_y + pos_y + y_offset);
+        let (child_width, child_height) = child.borrow().get_size();
+        let x_size = pos_x + child_width + x_offset * 2;
+        //let y_size = pos_y + child_height + y_offset * 2;
+        let y_size = pos_y + child_height + y_offset;
+        let (width, height) = self.props.get_size();
+        if x_size > width {
+            self.props.set_width(x_size);
+        }
+        if y_size > height {
+            self.props.set_height(y_size);
+        }
         self.children.push(child);
     }
+
+    pub fn enable_border(&mut self, enable: bool) {
+        self.draw_border = enable;
+    }
+
+    fn draw_border(&self) {
+        print!("{}{}{}┌", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_light), color::Fg(self.props.colors.fg_dark));
+        let x_start = self.props.pos_x;
+        let x_end = x_start + self.props.width;
+        let y_start = self.props.pos_y;
+        let y_end = y_start + self.props.height;
+        for x in  (x_start + 1)..(x_end) {
+            print!("─");
+        }
+        print!("┐");
+        for y in (y_start + 1)..(y_end) {
+            print!("{}│{}│", cursor::Goto(x_start, y), cursor::Goto(x_end, y));
+        }
+        print!("{}└", cursor::Goto(x_start, y_end));
+        for x in  (x_start + 1)..(x_end) {
+            print!("─");
+        }
+        print!("┘");
+    }
+
 }
 
 impl Widget for Container {
@@ -76,6 +121,9 @@ impl Widget for Container {
     }
 
     fn draw(&self) {
+        if self.draw_border {
+            self.draw_border();
+        }
         for child in self.children.iter() {
             if child.borrow().is_dirty() {
                 child.borrow_mut().draw();

@@ -66,7 +66,11 @@ pub enum Parameter {
     // MIDI parameters
     KeyValue,
     KeyAttack,
-    Aftertouch
+    Aftertouch,
+
+    // System parameters
+    Idle,
+    Busy,
 }
 
 impl Default for Parameter {
