@@ -34,7 +34,8 @@ impl Widget for Button {
     }
 
     fn draw(&self) {
-        let value = if let Value::Int(x) = self.value { x } else { panic!() };
+        //let value = if let Value::Int(x) = self.value { x } else { panic!() };
+        let value = get_int(&self.value);
         let chars = if value > 0 { "▣" } else { "□" };
         print!("{}{}{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_light2), color::Fg(self.props.colors.fg_dark2), chars);
     }
