@@ -28,22 +28,26 @@ impl Surface {
         this.add_multi_osc(&mut osc.borrow_mut(), 1, 0, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 2, 31, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 3, 63, 0);
-        this.window.add_child(osc, 1, 1);
+        this.add_child(osc, 1, 1);
 
         let env = Rc::new(RefCell::new(Container::new(94, 13)));
         this.add_env(&mut env.borrow_mut(), 1, 0, 0);
         this.add_env(&mut env.borrow_mut(), 2, 20, 0);
-        this.window.add_child(env, 1, 16);
+        this.add_child(env, 1, 16);
 
         let lfo = Rc::new(RefCell::new(Container::new(94, 15)));
         this.add_lfo(&mut lfo.borrow_mut(), 1, 0, 0);
         this.add_lfo(&mut lfo.borrow_mut(), 2, 15, 0);
         this.add_lfo(&mut lfo.borrow_mut(), 3, 30, 0);
-        this.window.add_child(lfo, 46, 16);
+        this.add_child(lfo, 46, 16);
 
         this.window.set_position(1, 1);
         this.window.set_color_scheme(this.colors.clone());
         this
+    }
+
+    pub fn add_child<C: Widget + 'static>(&mut self, child: Rc<RefCell<C>>, pos_x: Index, pos_y: Index) {
+        self.window.add_child(child, pos_x, pos_y);
     }
 
     pub fn set_position(&mut self, x: Index, y: Index) {

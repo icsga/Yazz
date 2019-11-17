@@ -114,7 +114,7 @@ pub struct Tui {
     busy: Duration, // Accumulated busy times of the engine
     min_idle: Duration,
     max_busy: Duration,
-    canvas: Canvas,
+    canvas: Rc<RefCell<Canvas>>,
     sound: SoundData, // Sound patch as loaded from disk
 
     temp_string: String,
@@ -150,11 +150,12 @@ impl Tui {
         let busy = Duration::new(0, 0);
         let min_idle = Duration::new(10, 0);
         let max_busy = Duration::new(0, 0);
-        let canvas = Canvas::new(100, 30);
+        let canvas = Canvas::new(50, 20);
         let mut sound = SoundData::new();
         sound.init();
         window.set_position(1, 10);
         window.update_all(&sound);
+        window.add_child(canvas.clone(), 1, 23);
 
         Tui{sender,
             ui_receiver,
@@ -249,13 +250,13 @@ impl Tui {
 
     /* Received a buffer with samples from the synth engine. */
     fn handle_samplebuffer(&mut self, m: Vec<Float>, p: SynthParam) {
-        self.canvas.clear();
+        self.canvas.borrow_mut().clear();
         match p.function {
             Parameter::Oscillator => {
-                self.canvas.plot(&m, -1.0, 1.0);
+                self.canvas.borrow_mut().plot(&m, -1.0, 1.0);
             }
             Parameter::Envelope => {
-                self.canvas.plot(&m, 0.0, 1.0);
+                self.canvas.borrow_mut().plot(&m, 0.0, 1.0);
             }
             _ => {}
         }
@@ -899,9 +900,11 @@ impl Tui {
         }
     }
 
+    /*
     fn display_samplebuff(&self) {
         print!("{}{}", color::Bg(Black), color::Fg(White));
         self.canvas.render(1, 10);
         print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
     }
+    */
 }
