@@ -16,7 +16,7 @@ use synth::*;
 use tui::*;
 
 use canvas::Canvas;
-use midi_handler::{MidiHandler, MidiMessage, MessageType};
+use midi_handler::{MidiHandler, MidiMessage};
 use modulation::{Modulator, ModData};
 use parameter::*;
 //use parameter::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};

@@ -2,7 +2,7 @@ use super::Delay;
 use super::{SynthMessage, UiMessage};
 use super::{Envelope, EnvelopeData};
 use super::Lfo;
-use super::{MessageType, MidiMessage};
+use super::MidiMessage;
 use super::{Modulator, ModData};
 use super::{MultiOscData, MultiOscillator};
 use super::{Parameter, ParameterValue, SynthParam};
@@ -244,30 +244,37 @@ impl Synth {
 
     /* Handles a received MIDI message. */
     fn handle_midi_message(&mut self, msg: MidiMessage) {
-        let channel = msg.mtype & 0x0F;
-        let mtype: u8 = msg.mtype & 0xF0;
-        match mtype {
-            0x90 => { // NoteOn
-                let freq = self.keymap[msg.param as usize];
-                let voice_id = self.select_voice();
-                let voice = &mut self.voice[voice_id];
-                voice.set_key(msg.param);
-                voice.set_freq(freq);
-                voice.trigger(self.trigger_seq, self.last_clock, &self.sound);
-                self.num_voices_triggered += 1;
-                self.trigger_seq += 1;
-                self.voices_playing |= 1 << voice_id;
+        match msg {
+            MidiMessage::NoteOn{channel, key, velocity} => self.handle_note_on(key, velocity),
+            MidiMessage::NoteOff{channel, key, velocity} => self.handle_note_off(key, velocity),
+            MidiMessage::KeyAT{channel, key, pressure} => (),
+            MidiMessage::ControlChg{channel, controller, value} => (),
+            MidiMessage::ProgramChg{channel, program} => (),
+            MidiMessage::ChannelAT{channel, pressure} => (),
+            MidiMessage::PitchWheel{channel, pitch} => (),
+        }
+    }
+
+    fn handle_note_on(&mut self, key: u8, velocity: u8) {
+        let freq = self.keymap[key as usize];
+        let voice_id = self.select_voice();
+        let voice = &mut self.voice[voice_id];
+        voice.set_key(key);
+        voice.set_freq(freq);
+        voice.set_velocity(velocity);
+        voice.trigger(self.trigger_seq, self.last_clock, &self.sound);
+        self.num_voices_triggered += 1;
+        self.trigger_seq += 1;
+        self.voices_playing |= 1 << voice_id;
+    }
+
+    fn handle_note_off(&mut self, key: u8, velocity: u8) {
+        for (i, v) in self.voice.iter_mut().enumerate() {
+            if v.is_triggered() && v.key == key {
+                self.num_voices_triggered -= 1;
+                v.release(velocity, &self.sound);
+                break;
             }
-            0x80 => { // NoteOff
-                for (i, v) in self.voice.iter_mut().enumerate() {
-                    if v.is_triggered() && v.key == msg.param {
-                        self.num_voices_triggered -= 1;
-                        v.release(&self.sound);
-                        break;
-                    }
-                }
-            }
-            _ => ()
         }
     }
 
