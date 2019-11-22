@@ -104,7 +104,6 @@ impl Envelope {
         }
     }
     fn change_state(&mut self, new_state: State, sample_time: i64, data: &EnvelopeData) {
-        //info!("Changing from state {:?} -> {:?} at {}", self.state, new_state, sample_time);
         match new_state {
             State::Idle => self.last_value = 0.0,
             State::Attack => {

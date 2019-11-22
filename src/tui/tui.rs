@@ -372,15 +372,16 @@ impl Tui {
 
                 // Select the parameter value
                 TuiState::Value => {
-                    // Hack: For modulator settings, we need to pass in a different struct, since
-                    // that requires additional submenus.
                     match Tui::get_value(s, c, sound) {
                         ReturnCode::KeyConsumed   => s.state,
                         ReturnCode::ValueUpdated  => { // Value has changed to a valid value, update synth
                             value_change_finished = true;
                             s.state
                         },
-                        ReturnCode::ValueComplete => previous(s.state), // Value has changed and will not be updated again
+                        ReturnCode::ValueComplete => {
+                            value_change_finished = true;
+                            previous(s.state) // Value has changed and will not be updated again
+                        },
                         ReturnCode::KeyMissmatch  => {
                             // Key can't be used for value, so it probably is the short cut for a
                             // different parameter. Switch to parameter state and try again.
@@ -596,28 +597,46 @@ impl Tui {
                 }
                 result
             },
-            ValueRange::ParamRange(_) => {
+            ValueRange::FuncRange(_) | ValueRange::ParamRange(_) => {
                 // Pass key to sub selector
                 let result = match &mut s.sub_selector {
                     Some(sub) => {
                         info!("Calling sub-selector!");
                         let value_finished = Tui::handle_user_input(&mut sub.borrow_mut(), c, sound);
+                        info!("Sub-selector finished!");
                         if value_finished {
                             info!("Value finished!");
                             ReturnCode::ValueComplete
                         } else {
-                            ReturnCode::ValueUpdated
+                            ReturnCode::KeyConsumed
                         }
                     },
                     None => panic!(),
                 };
                 if result == ReturnCode::ValueComplete {
-
-                    // Du bist hier: Irgendwie Function und Parameter aus dem Sub-Selector rausholen und an update_value senden
-
-                    // Pack up result
-                    // Tui::update_value(item, ParameterValue::Choice(current), &mut s.temp_string),
-
+                    let selector = if let Some(selector) = &s.sub_selector {selector} else {panic!()};
+                    let selector = selector.borrow();
+                    match s.param_selection.value {
+                        ValueHolder::Value(ref mut val) => {
+                            match val {
+                                ParameterValue::Function(ref mut v) => {
+                                    let s_f = &selector.func_selection;
+                                    v.function = s_f.item_list[s_f.item_index].item;
+                                    v.function_id = if let ValueHolder::Value(ParameterValue::Int(x)) = s_f.value { x as usize } else { panic!() };
+                                },
+                                ParameterValue::Param(ref mut v) => {
+                                    let s_f = &selector.func_selection;
+                                    v.function = s_f.item_list[s_f.item_index].item;
+                                    v.function_id = if let ValueHolder::Value(ParameterValue::Int(x)) = s_f.value { x as usize } else { panic!() };
+                                    let s_p = &selector.param_selection;
+                                    v.parameter = s_p.item_list[s_p.item_index].item;
+                                },
+                                _ => panic!(),
+                            }
+                        },
+                        _ => panic!(),
+                    };
+                    info!("Selector value = {:?}", s.param_selection.value);
                 }
                 result
             },
@@ -640,40 +659,23 @@ impl Tui {
         // The value in the selected parameter needs to point to the right type.
         // Initialize it with the minimum.
         let value = sound.get_value(&param);
+        info!("Sound has value {:?}", value);
         selector.param_selection.value = match value {
             ParameterValue::Int(_) => ValueHolder::Value(value),
             ParameterValue::Float(_) => ValueHolder::Value(value),
             ParameterValue::Choice(_) => ValueHolder::Value(value),
-            ParameterValue::Function(_) => ValueHolder::Value(value),
-            ParameterValue::Param(_) => ValueHolder::Value(value),
+            ParameterValue::Function(_) => {
+                let sub_sel = if let Some(ref selector) = selector.sub_selector {selector} else {panic!()};
+                sub_sel.borrow_mut().target_state = TuiState::FunctionIndex;
+                ValueHolder::Value(value)
+            },
+            ParameterValue::Param(_) => {
+                let sub_sel = if let Some(ref selector) = selector.sub_selector {selector} else {panic!()};
+                sub_sel.borrow_mut().target_state = TuiState::Param;
+                ValueHolder::Value(value)
+            },
             ParameterValue::NoValue => panic!(),
         };
-        /*
-        let val_range = &item.item_list[item.item_index].val_range;
-        item.value = match val_range {
-            ValueRange::IntRange(min, _) => {
-                ValueHolder::Value(ParameterValue::Int(*min))
-            }
-            ValueRange::FloatRange(min, _) => {
-                ValueHolder::Value(ParameterValue::Float(*min))
-            }
-            ValueRange::ChoiceRange(choice_list) => {
-                ValueHolder::Value(ParameterValue::Choice(0))
-            }
-            ValueRange::ParamRange(choice_list) => {
-                /*
-                let sub_selector = ParamSelector{state: TuiState::Function, func_selection: sub_func_selection, param_selection: sub_param_selection, value: ValueHolder::Value(ParameterValue::Int(0))};
-                match param {
-                    Parameter::Source => ValueHolder::SubSelection(),
-                    Parameter::Target => ValueHolder::SubSelection(),
-                    _ => panic!(),
-                }
-                */
-                ValueHolder::Value(ParameterValue::Choice(0))
-            }
-            _ => ValueHolder::Value(ParameterValue::NoValue)
-        }
-        */
     }
 
     /* Store a new value in the selected parameter. */
@@ -713,10 +715,13 @@ impl Tui {
                 }
                 selection.value = ValueHolder::Value(ParameterValue::Choice(val));
             }
-            ValueRange::ParamRange(selection_list) => {
+            ValueRange::FuncRange(selection_list) | ValueRange::ParamRange(selection_list) => {
+                // These never get called. SubSelector always operates on Int(x)
+                /*
                 // ParamRange is used for choosing a combination of function-function_id-parameter.
                 match val {
                     ParameterValue::Function(x) => {
+                        info!("Updating function");
                         if let ValueHolder::SubSelection(sub) = &mut selection.value {
                             Tui::update_value(&mut sub.func_selection, val, temp_string);
                         } else {
@@ -724,6 +729,7 @@ impl Tui {
                         }
                     }
                     ParameterValue::Param(x) => {
+                        info!("Updating parameter");
                         if let ValueHolder::SubSelection(sub) = &mut selection.value {
                             Tui::update_value(&mut sub.func_selection, val, temp_string);
                             Tui::update_value(&mut sub.param_selection, val, temp_string);
@@ -733,6 +739,8 @@ impl Tui {
                     }
                     _ => panic!(),
                 }
+                */
+                panic!();
             }
             ValueRange::NoRange => {}
         };
@@ -776,6 +784,7 @@ impl Tui {
 
         self.window.draw();
 
+        print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
         Tui::display_selector(&self.selector);
 
         io::stdout().flush().ok();
@@ -784,7 +793,6 @@ impl Tui {
     fn display_selector(s: &ParamSelector) {
         let mut display_state = TuiState::Function;
         let mut x_pos: u16 = 1;
-        print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
         loop {
             match display_state {
                 TuiState::Function => {
@@ -913,6 +921,7 @@ impl Tui {
                 ValueRange::IntRange(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
                 ValueRange::FloatRange(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
                 ValueRange::ChoiceRange(list) => print!("{} 1 - {} ", cursor::Goto(x_pos, 2), list.len()),
+                ValueRange::FuncRange(list) => (),
                 ValueRange::ParamRange(list) => (),
                 ValueRange::NoRange => ()
             }
