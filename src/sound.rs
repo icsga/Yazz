@@ -46,10 +46,10 @@ impl SoundData {
         ];
         let delay = DelayData{..Default::default()};
         let modul = [
-            ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()},
-            ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()},
-            ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()},
-            ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()}, ModData{..Default::default()},
+            ModData::new(), ModData::new(), ModData::new(), ModData::new(),
+            ModData::new(), ModData::new(), ModData::new(), ModData::new(),
+            ModData::new(), ModData::new(), ModData::new(), ModData::new(),
+            ModData::new(), ModData::new(), ModData::new(), ModData::new(),
         ];
         SoundData{osc, env, filter, lfo, glfo, delay, modul}
     }
@@ -88,42 +88,55 @@ impl SoundData {
         match msg.function {
             Parameter::Oscillator => {
                 match msg.parameter {
-                    Parameter::Waveform => { self.osc[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Level => { self.osc[id].level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
+                    Parameter::Waveform =>  { self.osc[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Level =>     { self.osc[id].level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
                     Parameter::Frequency => { self.osc[id].set_freq_offset(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Blend => { self.osc[id].set_ratio(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Phase => { self.osc[id].phase = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Sync => { self.osc[id].sync = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Blend =>     { self.osc[id].set_ratio(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Phase =>     { self.osc[id].phase = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Sync =>      { self.osc[id].sync = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
                     Parameter::KeyFollow => { self.osc[id].key_follow = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Voices => { self.osc[id].set_voice_num(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Spread => { self.osc[id].set_voice_spread(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Voices =>    { self.osc[id].set_voice_num(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Spread =>    { self.osc[id].set_voice_spread(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
                     _ => {}
                 }
             }
             Parameter::Filter => {
                 match msg.parameter {
-                    //Parameter::Type => { self.filter[id].filter_type = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Cutoff => { self.filter[id].cutoff = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    //Parameter::Type =>    { self.filter[id].filter_type = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Cutoff =>    { self.filter[id].cutoff = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Resonance => { self.filter[id].resonance = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
             Parameter::Amp => {}
-            Parameter::Lfo => {}
+            Parameter::Lfo => {
+                match msg.parameter {
+                    Parameter::Waveform =>  { self.lfo[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Frequency => { self.lfo[id].frequency = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    _ => {}
+                }
+            }
+            Parameter::GlobalLfo => {
+                match msg.parameter {
+                    Parameter::Waveform =>  { self.lfo[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Frequency => { self.lfo[id].frequency = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    _ => {}
+                }
+            }
             Parameter::Envelope => {
                 match msg.parameter {
-                    Parameter::Attack => { self.env[id].attack = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Decay => { self.env[id].decay = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Attack =>  { self.env[id].attack = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Decay =>   { self.env[id].decay = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Sustain => { self.env[id].sustain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Release => { self.env[id].release = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Factor => { self.env[id].factor = if let ParameterValue::Int(x) = msg.value { x as Float } else { panic!() }; }
+                    Parameter::Factor =>  { self.env[id].factor = if let ParameterValue::Int(x) = msg.value { x as Float } else { panic!() }; }
                     _ => {}
                 }
             }
             Parameter::Delay => {
                 match msg.parameter {
-                    Parameter::Time => { self.delay.time = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Level => { self.delay.level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Time =>     { self.delay.time = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Level =>    { self.delay.level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Feedback => { self.delay.feedback = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
@@ -167,7 +180,20 @@ impl SoundData {
                 }
             }
             Parameter::Amp => {panic!();}
-            Parameter::Lfo => {panic!();}
+            Parameter::Lfo => {
+                match param.parameter {
+                    Parameter::Waveform =>  ParameterValue::Choice(self.lfo[id].get_waveform() as usize),
+                    Parameter::Frequency => ParameterValue::Float(self.lfo[id].frequency),
+                    _ => {panic!();}
+                }
+            }
+            Parameter::GlobalLfo => {
+                match param.parameter {
+                    Parameter::Waveform =>  ParameterValue::Choice(self.lfo[id].get_waveform() as usize),
+                    Parameter::Frequency => ParameterValue::Float(self.lfo[id].frequency),
+                    _ => {panic!();}
+                }
+            }
             Parameter::Envelope => {
                 match param.parameter {
                     Parameter::Attack => ParameterValue::Float(self.env[id].attack),
