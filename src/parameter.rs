@@ -200,7 +200,7 @@ pub static FILTER_PARAMS: [MenuItem; 3] = [
 pub static ENV_PARAMS: [MenuItem; 5] = [
     MenuItem{item: Parameter::Attack,  key: 'a', val_range: ValueRange::FloatRange(0.0, 4000.0),      mod_func: ModFunction::Target, next: &[]}, // Value = Duration in ms
     MenuItem{item: Parameter::Decay,   key: 'd', val_range: ValueRange::FloatRange(0.0, 4000.0),      mod_func: ModFunction::Target, next: &[]},
-    MenuItem{item: Parameter::Sustain, key: 's', val_range: ValueRange::FloatRange(0.0, 100.0),       mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Sustain, key: 's', val_range: ValueRange::FloatRange(0.0, 1.0),         mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Release, key: 'r', val_range: ValueRange::FloatRange(0.0, 8000.0),      mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Factor,  key: 'f', val_range: ValueRange::IntRange(1, 5),               mod_func: ModFunction::Target, next: &[]},
 ];
