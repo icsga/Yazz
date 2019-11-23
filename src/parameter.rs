@@ -150,8 +150,6 @@ pub enum ModFunction {
     NoMod,
 }
 
-
-
 /* Item for a list of selectable functions */
 #[derive(Debug)]
 pub struct MenuItem {
@@ -213,11 +211,12 @@ pub static OSC_WAVEFORM: [MenuItem; 5] = [
     MenuItem{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
 ];
 
-pub static LFO_WAVEFORM: [MenuItem; 5] = [
+pub static LFO_WAVEFORM: [MenuItem; 6] = [
     MenuItem{item: Parameter::Sine,      key: 's', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
     MenuItem{item: Parameter::Triangle,  key: 't', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
     MenuItem{item: Parameter::Saw,       key: 'w', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
     MenuItem{item: Parameter::Square,    key: 'q', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
     MenuItem{item: Parameter::SampleHold,key: 'h', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
 ];
 

@@ -46,10 +46,13 @@ pub struct ModDest {
     pub val_max: Float,
 }
 
-static MOD_DEST: [ModDest; 3] = [
+static MOD_DEST: [ModDest; 6] = [
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Level,     val_min: 0.0,   val_max: 100.0},
     ModDest{function: Parameter::Oscillator, parameter: Parameter::Frequency, val_min: -24.0, val_max: 24.0},
-    ModDest{function: Parameter::Oscillator, parameter: Parameter::Blend, val_min: 0.0, val_max: 4.0},
-    ModDest{function: Parameter::Delay, parameter: Parameter::Time, val_min: 0.0, val_max: 1.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Blend,     val_min: 0.0,   val_max: 5.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Phase,     val_min: 0.0,   val_max: 1.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Voices,    val_min: 1.0,   val_max: 7.0},
+    ModDest{function: Parameter::Delay,      parameter: Parameter::Time,      val_min: 0.0,   val_max: 1.0},
 ];
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
@@ -61,22 +64,72 @@ pub struct ModData {
     pub target_param: Parameter,
     pub amount: Float,
     pub active: bool,
+    pub is_global: bool,
+    pub scale: Float,
+    pub offset: Float,
 }
 
 impl ModData {
     pub fn new() -> ModData {
-        ModData{..Default::default()}
+        let source_func = Parameter::Lfo;
+        let source_func_id = 1;
+        let target_func = Parameter::Oscillator;
+        let target_func_id = 1;
+        let target_param = Parameter::Level;
+        let amount = 0.0;
+        let active = false;
+        let is_global = false;
+        let scale = 0.0;
+        let offset = 0.0;
+        ModData{source_func, source_func_id, target_func, target_func_id, target_param, amount, active, is_global, scale, offset}
     }
 
     pub fn set_source(&mut self, func: &FunctionId) {
         self.source_func = func.function;
         self.source_func_id = func.function_id;
+        self.update();
     }
 
     pub fn set_target(&mut self, param: &ParamId) {
         self.target_func = param.function;
         self.target_func_id = param.function_id;
         self.target_param = param.parameter;
+        self.update();
+    }
+
+    pub fn update(&mut self) {
+        info!("Updating modulator {:?}", self);
+
+        // Lookup input
+        let source = ModData::get_mod_source(self.source_func);
+        info!("{:?}", source);
+
+        // Lookup output
+        let dest = ModData::get_mod_dest(self.target_func, self.target_param);
+        info!("{:?}", dest);
+
+        let scale: Float;
+        let offset: Float;
+
+        // Calculate scale factor and offset
+        match source.val_range {
+            ModValRange::IntRange(min, max) => {
+                scale = (dest.val_max - dest.val_min) / (max - min) as Float;
+                //offset = (dest.val_min - min as Float) * scale;
+                offset = dest.val_min - (min as Float * scale);
+                info!("min={}, max={}, dest_min={}, dest_max={}, scale={}, offset={}",
+                    min, max, dest.val_min, dest.val_max, scale, offset);
+            }
+            ModValRange::FloatRange(min, max) => {
+                scale = (dest.val_max - dest.val_min) / (max - min);
+                offset = dest.val_min - (min * scale);
+                info!("min={}, max={}, dest_min={}, dest_max={}, scale={}, offset={}",
+                    min, max, dest.val_min, dest.val_max, scale, offset);
+            }
+        }
+        self.scale =  scale * self.amount;
+        self.offset =  offset;
+        self.is_global = source.is_global;
     }
 
     pub fn get_source(&self) -> FunctionId {
@@ -85,6 +138,24 @@ impl ModData {
 
     pub fn get_target(&self) -> ParamId {
         ParamId{function: self.target_func, function_id: self.target_func_id, parameter: self.target_param}
+    }
+
+    fn get_mod_source(function: Parameter) -> &'static ModSource {
+        for (i, s) in MOD_SOURCE.iter().enumerate() {
+            if s.function == function {
+                return &s;
+            }
+        }
+        panic!();
+    }
+
+    fn get_mod_dest(function: Parameter, parameter: Parameter) -> &'static ModDest {
+        for (i, d) in MOD_DEST.iter().enumerate() {
+            if d.function == function && d.parameter == parameter {
+                return &d;
+            }
+        }
+        panic!("{:?}, {:?}", function, parameter);
     }
 }
 
@@ -107,70 +178,7 @@ impl ModData {
 
 #[derive(Debug, Default)]
 pub struct Modulator {
-    pub active: bool,
-    pub source_func: Parameter,
-    pub source_func_id: usize,
-    pub target_func: Parameter,
-    pub target_func_id: usize,
-    pub target_param: Parameter,
-    pub scale: Float,
-    pub offset: Float,
-    pub is_global: bool
 }
 
 impl Modulator {
-    pub fn init(&mut self, data: &ModData) {
-        info!("Initializing modulator");
-
-        // Lookup input
-        let source = Modulator::get_mod_source(data.source_func);
-        info!("{:?}", source);
-
-        // Lookup output
-        let dest = Modulator::get_mod_dest(data.target_func, data.target_param);
-        info!("{:?}", dest);
-
-        let scale: Float;
-        let offset: Float;
-
-        // Calculate scale factor and offset
-        match source.val_range {
-            ModValRange::IntRange(min, max) => {
-                scale = (dest.val_max - dest.val_min) / (max - min) as Float;
-                //offset = (dest.val_min - min as Float) * scale;
-                offset = dest.val_min - (min as Float * scale);
-            }
-            ModValRange::FloatRange(min, max) => {
-                scale = (dest.val_max - dest.val_min) / (max - min);
-                offset = dest.val_min - (min * scale);
-            }
-        }
-        self.active = data.active;
-        self.source_func =  data.source_func;
-        self.source_func_id =  data.source_func_id;
-        self.target_func =  data.target_func;
-        self.target_func_id =  data.target_func_id;
-        self.target_param =  data.target_param;
-        self.scale =  scale * data.amount;
-        self.offset =  offset;
-        self.is_global = source.is_global;
-    }
-
-    fn get_mod_source(function: Parameter) -> &'static ModSource {
-        for (i, s) in MOD_SOURCE.iter().enumerate() {
-            if s.function == function {
-                return &s;
-            }
-        }
-        panic!();
-    }
-
-    fn get_mod_dest(function: Parameter, parameter: Parameter) -> &'static ModDest {
-        for (i, d) in MOD_DEST.iter().enumerate() {
-            if d.function == function && d.parameter == parameter {
-                return &d;
-            }
-        }
-        panic!();
-    }
 }

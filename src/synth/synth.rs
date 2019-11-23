@@ -35,10 +35,10 @@ pub enum Synth2UIMessage {
 pub struct Synth {
     // Configuration
     sample_rate: u32,
-    sound: SoundData, // Sound patch as loaded from disk
-    sound_global: SoundData,      // Sound with global modulators applied
-    sound_local: SoundData,       // Sound with voice-local modulators applied
-    modulators: [Modulator; NUM_MODULATORS],
+    sound: SoundData,        // Sound patch as loaded from disk
+    sound_global: SoundData, // Sound with global modulators applied
+    sound_local: SoundData,  // Sound with voice-local modulators applied
+    modulators: [Modulator; NUM_MODULATORS], // Probably don't need this
     keymap: [Float; NUM_KEYS],
 
     // Signal chain
@@ -85,7 +85,7 @@ impl Synth {
         let voices_playing = 0;
         let trigger_seq = 0;
         let last_clock = 0i64;
-        let mut synth = Synth{sample_rate,
+        let synth = Synth{sample_rate,
                           sound,
                           sound_global,
                           sound_local,
@@ -100,6 +100,7 @@ impl Synth {
                           last_clock,
                           sender};
 
+        /*
         // Add test modulator
         let mod_data = ModData{
             source_func: Parameter::Lfo,
@@ -121,6 +122,7 @@ impl Synth {
             active: true,
         };
         //synth.set_modulator(1, &mod_data2);
+        */
         synth
     }
 
@@ -141,14 +143,16 @@ impl Synth {
         handler
     }
 
+    /*
     fn set_modulator(&mut self, id: usize, data: &ModData) {
         self.modulators[id].init(data);
         self.sound_global = self.sound; // Initialize values to current sound. TODO: Only needed once if parameter updates update all three sounds
         self.sound_local = self.sound;
     }
+    */
 
-    fn get_modulation_values(&mut self, sample_clock: i64) {
-        for m in self.modulators.iter_mut() {
+    fn get_modulation_values(glfo: &mut [Lfo], sample_clock: i64, sound: &SoundData, sound_global: &mut SoundData) {
+        for m in sound.modul.iter() {
 
             if !m.active {
                 continue;
@@ -157,7 +161,8 @@ impl Synth {
             // Get modulator source output
             let mod_val: Float = match m.source_func {
                 Parameter::GlobalLfo => {
-                    let (val, reset) = self.glfo[m.source_func_id].get_sample(sample_clock, &self.sound_global.glfo[m.source_func_id], false);
+                    let (val, reset) = glfo[m.source_func_id].get_sample(sample_clock, &sound_global.glfo[m.source_func_id], false);
+                    info!("Global LFO {}", val);
                     val
                 },
                 _ => 0.0, // TODO: This also sets non-global vars, optimize that
@@ -165,7 +170,7 @@ impl Synth {
 
             // Get current value of target parameter
             let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::NoValue};
-            let current_val = self.sound.get_value(&param);
+            let current_val = sound.get_value(&param).clone();
             let mut val = match current_val {
                 ParameterValue::Int(x) => x as Float,
                 ParameterValue::Float(x) => x,
@@ -179,7 +184,7 @@ impl Synth {
 
             // Write value to global sound data
             let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::Float(val)};
-            self.sound_global.set_parameter(&param);
+            sound_global.set_parameter(&param);
         }
     }
 
@@ -187,13 +192,13 @@ impl Synth {
     pub fn get_sample(&mut self, sample_clock: i64) -> Float {
         let mut value: Float = 0.0;
 
-        self.get_modulation_values(sample_clock);
+        Synth::get_modulation_values(&mut self.glfo, sample_clock, &self.sound, &mut self.sound_global);
 
         // Get sample of all active voices
         if self.voices_playing > 0 {
             for i in 0..32 {
                 if self.voices_playing & (1 << i) > 0 {
-                    value += self.voice[i].get_sample(sample_clock, &self.modulators, &mut self.sound_local, &self.sound_global);
+                    value += self.voice[i].get_sample(sample_clock, &self.modulators, &self.sound, &self.sound_global, &mut self.sound_local);
                 }
             }
         }

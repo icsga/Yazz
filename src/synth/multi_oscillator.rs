@@ -163,7 +163,7 @@ impl MultiOscillator {
         let coefficient = state.omega.exp();
 
         for _ in 0..dt {
-                state.phasor *= coefficient;
+            state.phasor *= coefficient;
         }
 
         state.last_stabilization += dt;
