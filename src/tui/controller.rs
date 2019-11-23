@@ -23,8 +23,8 @@ impl<Key: Copy + Eq + Hash> Controller<Key> {
         self.observers.insert(*key, observer);
     }
 
-    pub fn update(&self, key: &Key, value: Value) {
-        self.observers[key].borrow_mut().update(value);
+    pub fn update(&mut self, key: &Key, value: Value) {
+        self.observers.entry(*key).and_modify(|e| e.borrow_mut().update(value));
     }
 }
 

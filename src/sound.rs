@@ -114,7 +114,7 @@ impl SoundData {
                 match msg.parameter {
                     Parameter::Attack => { self.env[id].attack = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Decay => { self.env[id].decay = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Sustain => { self.env[id].sustain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
+                    Parameter::Sustain => { self.env[id].sustain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Release => { self.env[id].release = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Factor => { self.env[id].factor = if let ParameterValue::Int(x) = msg.value { x as Float } else { panic!() }; }
                     _ => {}
