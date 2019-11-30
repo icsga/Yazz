@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::hash::Hash;
 use std::rc::Rc;
 
 use termion::{color, cursor};
@@ -7,23 +8,23 @@ use super::Index;
 use super::Scheme;
 use super::{Widget, WidgetProperties, WidgetRef};
 
-pub type ContainerRef = Rc<RefCell<Container>>;
+pub type ContainerRef<Key> = Rc<RefCell<Container<Key>>>;
 
-pub struct Container {
-    props: WidgetProperties,
+pub struct Container<Key: Copy + Eq + Hash> {
+    props: WidgetProperties<Key>,
     draw_border: bool,
-    children: Vec<WidgetRef>,
+    children: Vec<WidgetRef<Key>>,
 }
 
-impl Container {
-    pub fn new() -> Container {
+impl<Key: Copy + Eq + Hash> Container<Key> {
+    pub fn new() -> Container<Key> {
         let props = WidgetProperties::new(0, 0);
         let draw_border = false;
         let children = vec!{};
         Container{props, draw_border, children}
     }
 
-    pub fn add_child<C: Widget + 'static>(&mut self, child: Rc<RefCell<C>>, pos_x: Index, pos_y: Index) {
+    pub fn add_child<C: Widget<Key> + 'static>(&mut self, child: Rc<RefCell<C>>, pos_x: Index, pos_y: Index) {
         // Check if we need to leave space for drawing the border
         let x_offset = if self.draw_border { 1 } else { 0 };
         let y_offset = if self.draw_border { 1 } else { 0 };
@@ -68,16 +69,26 @@ impl Container {
         print!("┘");
     }
 
+    /** Get widget at given position. */
+    pub fn get_at_pos(&self, x: Index, y: Index) -> Option<Key> {
+        if self.is_inside(x, y) {
+            for c in self.children.iter() {
+                let result = c.borrow().get_at_pos(x, y);
+                if let Some(key) = result { return result; };
+            }
+        }
+        return None;
+    }
 }
 
-impl Widget for Container {
+impl<Key: Copy + Eq + Hash> Widget<Key> for Container<Key> {
     // TODO: Implement dynamic resizing of children
 
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties {
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
         return &mut self.props;
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties {
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
         return &self.props;
     }
 

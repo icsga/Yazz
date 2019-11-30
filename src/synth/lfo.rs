@@ -176,7 +176,7 @@ impl Lfo {
         (result, complete)
     }
 
-    fn reset(&mut self, sample_clock: i64) {
+    pub fn reset(&mut self, sample_clock: i64) {
         self.last_update = sample_clock;
         self.position = 0.0;
         self.phasor.re = 1.0;

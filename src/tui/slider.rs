@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::hash::Hash;
 use std::rc::Rc;
 
 use termion::{color, cursor};
@@ -7,18 +8,18 @@ use super::Observer;
 use super::{Value, get_int, get_float};
 use super::{Widget, WidgetProperties};
 
-pub type SliderRef = Rc<RefCell<Slider>>;
+pub type SliderRef<Key> = Rc<RefCell<Slider<Key>>>;
 
-pub struct Slider {
-    props: WidgetProperties,
+pub struct Slider<Key: Copy + Eq + Hash> {
+    props: WidgetProperties<Key>,
     min: Value,
     max: Value,
     value: Value,
     logarithmic: bool, // Use logarithmic curve for values
 }
 
-impl Slider {
-    pub fn new(min: Value, max: Value, value: Value) -> SliderRef {
+impl<Key: Copy + Eq + Hash> Slider<Key> {
+    pub fn new(min: Value, max: Value, value: Value) -> SliderRef<Key> {
         let width = 1;
         let height = 4;
         let props = WidgetProperties::new(width, height);
@@ -62,12 +63,12 @@ impl Slider {
     }
 }
 
-impl Widget for Slider {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties {
+impl<Key: Copy + Eq + Hash> Widget<Key> for Slider<Key> {
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
         return &mut self.props;
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties {
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
         return &self.props;
     }
 
@@ -94,7 +95,7 @@ impl Widget for Slider {
     }
 }
 
-impl Observer for Slider {
+impl<Key: Copy + Eq + Hash> Observer for Slider<Key> {
     fn update(&mut self, value: Value) {
         self.value = value;
         self.set_dirty(true);
@@ -107,19 +108,19 @@ fn test_slider_translation() {
     // Float
     // =====
     // Case 1: 0.0 - 1.0
-    let d = Slider::new(Value::Float(0.0), Value::Float(1.0), Value::Float(0.0));
+    let d: SliderRef<i32> = Slider::new(Value::Float(0.0), Value::Float(1.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(0.0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Float(0.5)), 4);
     assert_eq!(d.borrow().get_index(&Value::Float(1.0)), 8);
 
     // Case 2: -1.0 - 1.0
-    let d = Slider::new(Value::Float(-1.0), Value::Float(1.0), Value::Float(0.0));
+    let d: SliderRef<i32> = Slider::new(Value::Float(-1.0), Value::Float(1.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(-1.0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Float(0.0)), 4);
     assert_eq!(d.borrow().get_index(&Value::Float(1.0)), 8);
 
     // Case 3: 2.0 - 10.0
-    let d = Slider::new(Value::Float(2.0), Value::Float(10.0), Value::Float(0.0));
+    let d: SliderRef<i32> = Slider::new(Value::Float(2.0), Value::Float(10.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(2.0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Float(6.0)), 4);
     assert_eq!(d.borrow().get_index(&Value::Float(10.0)), 8);
@@ -128,19 +129,19 @@ fn test_slider_translation() {
     // Int
     // ===
     // Case 1: 0 - 8
-    let d = Slider::new(Value::Int(0), Value::Int(8), Value::Int(0));
+    let d: SliderRef<i32> = Slider::new(Value::Int(0), Value::Int(8), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Int(4)), 4);
     assert_eq!(d.borrow().get_index(&Value::Int(8)), 8);
 
     // Case 2: -4 - 4
-    let d = Slider::new(Value::Int(-4), Value::Int(4), Value::Int(0));
+    let d: SliderRef<i32> = Slider::new(Value::Int(-4), Value::Int(4), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(-4)), 0);
     assert_eq!(d.borrow().get_index(&Value::Int(0)), 4);
     assert_eq!(d.borrow().get_index(&Value::Int(4)), 8);
 
     // Case 3: 2 - 10
-    let d = Slider::new(Value::Int(2), Value::Int(10), Value::Int(0));
+    let d: SliderRef<i32> = Slider::new(Value::Int(2), Value::Int(10), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(2)), 0);
     assert_eq!(d.borrow().get_index(&Value::Int(6)), 4);
     assert_eq!(d.borrow().get_index(&Value::Int(10)), 8);

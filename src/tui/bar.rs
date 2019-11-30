@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::hash::Hash;
 use std::rc::Rc;
 
 use termion::{color, cursor};
@@ -7,22 +8,22 @@ use super::Observer;
 use super::{Value, get_int, get_float};
 use super::{Widget, WidgetProperties};
 
-type BarRef = Rc<RefCell<Bar>>;
+type BarRef<Key> = Rc<RefCell<Bar<Key>>>;
 
 /** A horizontal bar representing a value.
  *
  * Can have logarithmic scaling to improve visibility of smaller values.
  */
-pub struct Bar {
-    props: WidgetProperties,
+pub struct Bar<Key: Copy + Eq + Hash> {
+    props: WidgetProperties<Key>,
     min: Value,
     max: Value,
     value: Value,
     logarithmic: bool, // Use logarithmic curve for values
 }
 
-impl Bar {
-    pub fn new(min: Value, max: Value, value: Value) -> BarRef {
+impl<Key: Copy + Eq + Hash> Bar<Key> {
+    pub fn new(min: Value, max: Value, value: Value) -> BarRef<Key> {
         let width = 10;
         let height = 1;
         let props = WidgetProperties::new(width, height);
@@ -66,12 +67,12 @@ impl Bar {
     }
 }
 
-impl Widget for Bar {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties {
+impl<Key: Copy + Eq + Hash> Widget<Key> for Bar<Key> {
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
         return &mut self.props;
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties {
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
         return &self.props;
     }
 
@@ -85,7 +86,7 @@ impl Widget for Bar {
     }
 }
 
-impl Observer for Bar {
+impl<Key: Copy + Eq + Hash> Observer for Bar<Key> {
     fn update(&mut self, value: Value) {
         self.value = value;
         self.set_dirty(true);
@@ -98,19 +99,19 @@ fn test_bar_translation() {
     // Float
     // =====
     // Case 1: 0.0 - 1.0
-    let b = Bar::new(Value::Float(0.0), Value::Float(1.0), Value::Float(0.0));
+    let b: BarRef<i32> = Bar::new(Value::Float(0.0), Value::Float(1.0), Value::Float(0.0));
     assert_eq!(b.borrow().get_length(&Value::Float(0.0)), 0);
     assert_eq!(b.borrow().get_length(&Value::Float(0.5)), 5);
     assert_eq!(b.borrow().get_length(&Value::Float(1.0)), 10);
 
     // Case 2: -1.0 - 1.0
-    let b = Bar::new(Value::Float(-1.0), Value::Float(1.0), Value::Float(0.0));
+    let b: BarRef<i32> = Bar::new(Value::Float(-1.0), Value::Float(1.0), Value::Float(0.0));
     assert_eq!(b.borrow().get_length(&Value::Float(-1.0)), 0);
     assert_eq!(b.borrow().get_length(&Value::Float(0.0)), 5);
     assert_eq!(b.borrow().get_length(&Value::Float(1.0)), 10);
 
     // Case 3: 2.0 - 10.0
-    let b = Bar::new(Value::Float(2.0), Value::Float(10.0), Value::Float(0.0));
+    let b: BarRef<i32> = Bar::new(Value::Float(2.0), Value::Float(10.0), Value::Float(0.0));
     assert_eq!(b.borrow().get_length(&Value::Float(2.0)), 0);
     assert_eq!(b.borrow().get_length(&Value::Float(6.0)), 5);
     assert_eq!(b.borrow().get_length(&Value::Float(10.0)), 10);
@@ -119,19 +120,19 @@ fn test_bar_translation() {
     // Int
     // ===
     // Case 1: 0 - 8
-    let b = Bar::new(Value::Int(0), Value::Int(8), Value::Int(0));
+    let b: BarRef<i32> = Bar::new(Value::Int(0), Value::Int(8), Value::Int(0));
     assert_eq!(b.borrow().get_length(&Value::Int(0)), 0);
     assert_eq!(b.borrow().get_length(&Value::Int(4)), 5);
     assert_eq!(b.borrow().get_length(&Value::Int(8)), 10);
 
     // Case 2: -4 - 4
-    let b = Bar::new(Value::Int(-4), Value::Int(4), Value::Int(0));
+    let b: BarRef<i32> = Bar::new(Value::Int(-4), Value::Int(4), Value::Int(0));
     assert_eq!(b.borrow().get_length(&Value::Int(-4)), 0);
     assert_eq!(b.borrow().get_length(&Value::Int(0)), 5);
     assert_eq!(b.borrow().get_length(&Value::Int(4)), 10);
 
     // Case 3: 2 - 10
-    let b = Bar::new(Value::Int(2), Value::Int(10), Value::Int(0));
+    let b: BarRef<i32> = Bar::new(Value::Int(2), Value::Int(10), Value::Int(0));
     assert_eq!(b.borrow().get_length(&Value::Int(2)), 0);
     assert_eq!(b.borrow().get_length(&Value::Int(6)), 5);
     assert_eq!(b.borrow().get_length(&Value::Int(10)), 10);

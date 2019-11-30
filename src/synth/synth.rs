@@ -161,12 +161,12 @@ impl Synth {
             // Get modulator source output
             let mod_val: Float = match m.source_func {
                 Parameter::GlobalLfo => {
-                    let (val, reset) = glfo[m.source_func_id].get_sample(sample_clock, &sound_global.glfo[m.source_func_id], false);
+                    let (val, reset) = glfo[m.source_func_id - 1].get_sample(sample_clock, &sound_global.glfo[m.source_func_id - 1], false);
                     info!("Global LFO {}", val);
                     val
                 },
                 _ => 0.0, // TODO: This also sets non-global vars, optimize that
-            } * m.scale + m.offset;
+            } * m.scale;
 
             // Get current value of target parameter
             let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::NoValue};

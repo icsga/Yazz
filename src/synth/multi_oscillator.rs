@@ -40,7 +40,7 @@ impl MultiOscData {
         self.phase = 0.5;
         self.select_wave(0);
         self.set_voice_num(1);
-        self.set_freq_offset(0);
+        self.set_halfsteps(0);
         self.sync = 0;
         self.key_follow = 1;
     }
@@ -84,10 +84,14 @@ impl MultiOscData {
         self.voice_spread = spread;
     }
 
-    pub fn set_freq_offset(&mut self, halfsteps: i64) {
+    pub fn set_halfsteps(&mut self, halfsteps: i64) {
         self.tune_halfsteps = halfsteps;
         let inc: Float = 1.059463;
         self.freq_offset = inc.powf(halfsteps as Float);
+    }
+
+    pub fn set_freq_offset(&mut self, offset: Float) {
+        self.freq_offset = offset;
     }
 
     pub fn get_waveform(&self) -> i64 {

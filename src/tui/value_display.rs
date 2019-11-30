@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::hash::Hash;
 use std::rc::Rc;
 
 use termion::{color, cursor};
@@ -7,16 +8,16 @@ use super::Observer;
 use super::{Value, get_int, get_float};
 use super::{Widget, WidgetProperties};
 
-pub type ValueDisplayRef = Rc<RefCell<ValueDisplay>>;
+pub type ValueDisplayRef<Key> = Rc<RefCell<ValueDisplay<Key>>>;
 
 /** A label displayin a numerical value. */
-pub struct ValueDisplay {
-    props: WidgetProperties,
+pub struct ValueDisplay<Key: Copy + Eq + Hash> {
+    props: WidgetProperties<Key>,
     value: Value,
 }
 
-impl ValueDisplay {
-    pub fn new(value: Value) -> ValueDisplayRef {
+impl<Key: Copy + Eq + Hash> ValueDisplay<Key> {
+    pub fn new(value: Value) -> ValueDisplayRef<Key> {
         let width = 8;
         let height = 1;
         let props = WidgetProperties::new(width, height);
@@ -24,12 +25,12 @@ impl ValueDisplay {
     }
 }
 
-impl Widget for ValueDisplay {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties {
+impl<Key: Copy + Eq + Hash> Widget<Key> for ValueDisplay<Key> {
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
         return &mut self.props;
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties {
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
         return &self.props;
     }
 
@@ -39,7 +40,7 @@ impl Widget for ValueDisplay {
     }
 }
 
-impl Observer for ValueDisplay {
+impl<Key: Copy + Eq + Hash> Observer for ValueDisplay<Key> {
     fn update(&mut self, value: Value) {
         self.value = value;
         self.set_dirty(true);

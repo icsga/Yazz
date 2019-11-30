@@ -1,5 +1,5 @@
 use super::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
-use super::Canvas;
+use super::{Canvas, CanvasRef};
 use super::Float;
 use super::Label;
 use super::{MidiMessage};
@@ -109,7 +109,7 @@ pub struct Tui {
     busy: Duration, // Accumulated busy times of the engine
     min_idle: Duration,
     max_busy: Duration,
-    canvas: Rc<RefCell<Canvas>>,
+    canvas: CanvasRef<ParamId>,
     sound: SoundData, // Sound patch as loaded from disk
 
     temp_string: String,
@@ -118,7 +118,7 @@ pub struct Tui {
 impl Tui {
     pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> Tui {
         let state = TuiState::Function;
-        let sub_func_selection = ItemSelection{item_list: &FUNCTIONS, item_index: 0, value: ParameterValue::Int(1)};
+        let sub_func_selection = ItemSelection{item_list: &MOD_SOURCES, item_index: 0, value: ParameterValue::Int(1)};
         let sub_param_selection = ItemSelection{item_list: &OSC_PARAMS, item_index: 0, value: ParameterValue::Int(1)};
         let temp_string = String::new();
         let sub_selector = ParamSelector{state: TuiState::Function,
@@ -146,7 +146,7 @@ impl Tui {
         let busy = Duration::new(0, 0);
         let min_idle = Duration::new(10, 0);
         let max_busy = Duration::new(0, 0);
-        let canvas = Canvas::new(50, 20);
+        let canvas: CanvasRef<ParamId> = Canvas::new(50, 20);
         let mut sound = SoundData::new();
         sound.init();
         window.set_position(1, 3);
@@ -166,8 +166,8 @@ impl Tui {
             min_idle,
             max_busy,
             canvas,
-            temp_string,
             sound,
+            temp_string,
         }
     }
 
@@ -176,19 +176,25 @@ impl Tui {
      * This thread receives messages from the terminal, the MIDI port, the
      * synth engine and the audio engine.
      */
-    pub fn run(to_synth_sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> std::thread::JoinHandle<()> {
+    pub fn run(to_synth_sender: Sender<SynthMessage>,
+               ui_receiver: Receiver<UiMessage>) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
             let mut tui = Tui::new(to_synth_sender, ui_receiver);
             loop {
                 let msg = tui.ui_receiver.recv().unwrap();
                 match msg {
-                    UiMessage::Midi(m)  => tui.handle_midi_event(m),
+                    UiMessage::Midi(m)  => tui.handle_midi_event(&m),
                     UiMessage::Key(m) => {
                         if Tui::handle_user_input(&mut tui.selector, m, &mut tui.sound) {
                             tui.send_event();
                         }
                         tui.selection_changed = true; // Trigger full UI redraw
                     },
+                    UiMessage::MousePress{x, y} |
+                    UiMessage::MouseHold{x, y} |
+                    UiMessage::MouseRelease{x, y} => {
+                        tui.window.handle_event(&msg);
+                    }
                     UiMessage::Param(m) => tui.handle_synth_param(m),
                     UiMessage::SampleBuffer(m, p) => tui.handle_samplebuffer(m, p),
                     UiMessage::EngineSync(idle, busy) => tui.handle_engine_sync(idle, busy),
@@ -199,8 +205,8 @@ impl Tui {
     }
 
     /* MIDI message received */
-    fn handle_midi_event(&mut self, m: MidiMessage) {
-        match m {
+    fn handle_midi_event(&mut self, m: &MidiMessage) {
+        match *m {
             MidiMessage::ControlChg{channel, controller, value} => {
                 if controller == 0x01 { // ModWheel
                     self.handle_control_change(value as i64);

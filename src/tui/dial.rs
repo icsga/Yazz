@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::hash::Hash;
 use std::rc::Rc;
 
 use termion::{color, cursor};
@@ -7,22 +8,22 @@ use super::Observer;
 use super::{Value, get_int, get_float};
 use super::{Widget, WidgetProperties};
 
-type DialRef = Rc<RefCell<Dial>>;
+type DialRef<Key> = Rc<RefCell<Dial<Key>>>;
 
 /** A circular dial representing a value.
  *
  * Can have logarithmic scaling to improve visibility of smaller values.
  */
-pub struct Dial {
-    props: WidgetProperties,
+pub struct Dial<Key: Copy + Eq + Hash> {
+    props: WidgetProperties<Key>,
     min: Value,
     max: Value,
     value: Value,
     logarithmic: bool, // Use logarithmic curve for values
 }
 
-impl Dial {
-    pub fn new(min: Value, max: Value, value: Value) -> DialRef {
+impl<Key: Copy + Eq + Hash> Dial<Key> {
+    pub fn new(min: Value, max: Value, value: Value) -> DialRef<Key> {
         let width = 2;
         let height = 2;
         let props = WidgetProperties::new(width, height);
@@ -66,12 +67,12 @@ impl Dial {
     }
 }
 
-impl Widget for Dial {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties {
+impl<Key: Copy + Eq + Hash> Widget<Key> for Dial<Key> {
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
         return &mut self.props;
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties {
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
         return &self.props;
     }
 
@@ -107,11 +108,17 @@ impl Widget for Dial {
     }
 }
 
-impl Observer for Dial {
+impl<Key: Copy + Eq + Hash> Observer for Dial<Key> {
     fn update(&mut self, value: Value) {
         self.value = value;
         self.set_dirty(true);
     }
+
+    /*
+    fn handle_mouse_event(&mut self, msg: &MouseMessage) {
+        self.value = self.get_widget_properties().update_mouse(msg);
+    }
+    */
 }
 
 #[test]
@@ -120,19 +127,19 @@ fn test_dial_translation() {
     // Float
     // =====
     // Case 1: 0.0 - 1.0
-    let d = Dial::new(Value::Float(0.0), Value::Float(1.0), Value::Float(0.0));
+    let d: DialRef<i32> = Dial::new(Value::Float(0.0), Value::Float(1.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(0.0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Float(0.5)), 4);
     assert_eq!(d.borrow().get_index(&Value::Float(1.0)), 8);
 
     // Case 2: -1.0 - 1.0
-    let d = Dial::new(Value::Float(-1.0), Value::Float(1.0), Value::Float(0.0));
+    let d: DialRef<i32> = Dial::new(Value::Float(-1.0), Value::Float(1.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(-1.0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Float(0.0)), 4);
     assert_eq!(d.borrow().get_index(&Value::Float(1.0)), 8);
 
     // Case 3: 2.0 - 10.0
-    let d = Dial::new(Value::Float(2.0), Value::Float(10.0), Value::Float(0.0));
+    let d: DialRef<i32> = Dial::new(Value::Float(2.0), Value::Float(10.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(2.0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Float(6.0)), 4);
     assert_eq!(d.borrow().get_index(&Value::Float(10.0)), 8);
@@ -141,19 +148,19 @@ fn test_dial_translation() {
     // Int
     // ===
     // Case 1: 0 - 8
-    let d = Dial::new(Value::Int(0), Value::Int(8), Value::Int(0));
+    let d: DialRef<i32> = Dial::new(Value::Int(0), Value::Int(8), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(0)), 0);
     assert_eq!(d.borrow().get_index(&Value::Int(4)), 4);
     assert_eq!(d.borrow().get_index(&Value::Int(8)), 8);
 
     // Case 2: -4 - 4
-    let d = Dial::new(Value::Int(-4), Value::Int(4), Value::Int(0));
+    let d: DialRef<i32> = Dial::new(Value::Int(-4), Value::Int(4), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(-4)), 0);
     assert_eq!(d.borrow().get_index(&Value::Int(0)), 4);
     assert_eq!(d.borrow().get_index(&Value::Int(4)), 8);
 
     // Case 3: 2 - 10
-    let d = Dial::new(Value::Int(2), Value::Int(10), Value::Int(0));
+    let d: DialRef<i32> = Dial::new(Value::Int(2), Value::Int(10), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(2)), 0);
     assert_eq!(d.borrow().get_index(&Value::Int(6)), 4);
     assert_eq!(d.borrow().get_index(&Value::Int(10)), 8);
