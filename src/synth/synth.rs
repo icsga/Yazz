@@ -57,10 +57,9 @@ pub struct Synth {
 impl Synth {
     pub fn new(sample_rate: u32, sender: Sender<UiMessage>) -> Self {
         let mut sound = SoundData::new();
-        sound.init();
-        //let sound = Arc::new(Mutex::new(sound));
         let mut sound_global = SoundData::new();
         let mut sound_local = SoundData::new();
+        sound.init();
         sound_global.init();
         sound_local.init();
         let modulators = [
@@ -99,30 +98,6 @@ impl Synth {
                           trigger_seq,
                           last_clock,
                           sender};
-
-        /*
-        // Add test modulator
-        let mod_data = ModData{
-            source_func: Parameter::Lfo,
-            source_func_id: 1,
-            target_func: Parameter::Oscillator,
-            target_func_id: 1,
-            target_param: Parameter::Blend,
-            amount: 0.2,
-            active: true,
-        };
-        synth.set_modulator(0, &mod_data);
-        let mod_data2 = ModData{
-            source_func: Parameter::GlobalLfo,
-            source_func_id: 1,
-            target_func: Parameter::Delay,
-            target_func_id: 1,
-            target_param: Parameter::Time,
-            amount: 0.001,
-            active: true,
-        };
-        //synth.set_modulator(1, &mod_data2);
-        */
         synth
     }
 
@@ -134,7 +109,6 @@ impl Synth {
                 let mut locked_synth = synth.lock().unwrap();
                 match msg {
                     SynthMessage::Param(m) => locked_synth.handle_ui_message(m),
-                    SynthMessage::ParamQuery(m) => locked_synth.handle_ui_query(m),
                     SynthMessage::Midi(m)  => locked_synth.handle_midi_message(m),
                     SynthMessage::SampleBuffer(m, p) => locked_synth.handle_sample_buffer(m, p),
                 }
@@ -143,17 +117,8 @@ impl Synth {
         handler
     }
 
-    /*
-    fn set_modulator(&mut self, id: usize, data: &ModData) {
-        self.modulators[id].init(data);
-        self.sound_global = self.sound; // Initialize values to current sound. TODO: Only needed once if parameter updates update all three sounds
-        self.sound_local = self.sound;
-    }
-    */
-
     fn get_modulation_values(glfo: &mut [Lfo], sample_clock: i64, sound: &SoundData, sound_global: &mut SoundData) {
         for m in sound.modul.iter() {
-
             if !m.active {
                 continue;
             }
@@ -239,12 +204,6 @@ impl Synth {
         // parameter. This allows us to keep the processing out of the
         // audio engine thread.
         self.voice[0].filter[0].update(&mut self.sound.filter[0]);
-    }
-
-    /* Handles a parameter query received from the UI. */
-    fn handle_ui_query(&mut self, mut msg: SynthParam) {
-        self.sound.insert_value(&mut msg);
-        self.sender.send(UiMessage::Param(msg)).unwrap();
     }
 
     /* Handles a received MIDI message. */
