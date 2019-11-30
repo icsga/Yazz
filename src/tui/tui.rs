@@ -4,9 +4,11 @@ use super::Float;
 use super::Label;
 use super::{MidiMessage};
 use super::SoundData;
+use super::SoundBank;
 use super::{UiMessage, SynthMessage};
 use super::surface::Surface;
 use super::Value;
+use super::{SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION};
 
 use crossbeam_channel::{Sender, Receiver};
 use log::{info, trace, warn};
@@ -110,7 +112,10 @@ pub struct Tui {
     min_idle: Duration,
     max_busy: Duration,
     canvas: CanvasRef<ParamId>,
+
+    bank: SoundBank,  // Bank with sound patches
     sound: SoundData, // Sound patch as loaded from disk
+    selected_sound: usize,
 
     temp_string: String,
 }
@@ -147,7 +152,9 @@ impl Tui {
         let min_idle = Duration::new(10, 0);
         let max_busy = Duration::new(0, 0);
         let canvas: CanvasRef<ParamId> = Canvas::new(50, 20);
+        let bank = SoundBank::new(SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION);
         let mut sound = SoundData::new();
+        let selected_sound = 0;
         sound.init();
         window.set_position(1, 3);
         window.update_all(&sound);
@@ -166,7 +173,9 @@ impl Tui {
             min_idle,
             max_busy,
             canvas,
+            bank,
             sound,
+            selected_sound,
             temp_string,
         }
     }
@@ -185,8 +194,27 @@ impl Tui {
                 match msg {
                     UiMessage::Midi(m)  => tui.handle_midi_event(&m),
                     UiMessage::Key(m) => {
-                        if Tui::handle_user_input(&mut tui.selector, m, &mut tui.sound) {
-                            tui.send_event();
+                        match m {
+                            Key::F(1) => {
+                                // Read bank from disk
+                                tui.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
+                                // Change to sound 0
+                                tui.selected_sound = 0;
+                                tui.sound = *tui.bank.get_sound(tui.selected_sound);
+                                let sound_copy = tui.sound;
+                                tui.sender.send(SynthMessage::Sound(sound_copy)).unwrap();
+                            },
+                            Key::F(2) => {
+                                // Copy current sound to selected sound in bank
+                                tui.bank.set_sound(tui.selected_sound, &tui.sound);
+                                // Write bank to disk
+                                tui.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
+                            },
+                            _ => {
+                                if Tui::handle_user_input(&mut tui.selector, m, &mut tui.sound) {
+                                    tui.send_event();
+                                }
+                            }
                         }
                         tui.selection_changed = true; // Trigger full UI redraw
                     },

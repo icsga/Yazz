@@ -8,6 +8,7 @@ mod modulation;
 mod parameter;
 mod ringbuffer;
 mod sound;
+mod storage;
 mod synth;
 mod tui;
 
@@ -20,6 +21,7 @@ use modulation::{Modulator, ModData};
 use parameter::*;
 use ringbuffer::Ringbuffer;
 use sound::SoundData;
+use storage::SoundBank;
 use synth::*;
 use tui::Index;
 use termion_wrapper::TermionWrapper;
@@ -52,11 +54,16 @@ use rand::Rng;
 use log::{info, trace, warn};
 use flexi_logger::{Logger, opt_format};
 
+
+pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.1";
+pub const SOUND_DATA_VERSION: &'static str = "0.0.1";
+
 type Float = f32;
 
 pub enum SynthMessage {
     Midi(MidiMessage),
     Param(SynthParam),
+    Sound(SoundData),
     SampleBuffer(Vec<Float>, SynthParam),
 }
 
