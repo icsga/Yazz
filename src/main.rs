@@ -6,7 +6,6 @@
 mod midi_handler;
 mod modulation;
 mod parameter;
-//mod param_selection;
 mod ringbuffer;
 mod sound;
 mod synth;
@@ -19,7 +18,6 @@ use canvas::{Canvas, CanvasRef};
 use midi_handler::{MidiHandler, MidiMessage};
 use modulation::{Modulator, ModData};
 use parameter::*;
-//use parameter::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
 use ringbuffer::Ringbuffer;
 use sound::SoundData;
 use synth::*;
@@ -56,77 +54,9 @@ use flexi_logger::{Logger, opt_format};
 
 type Float = f32;
 
-/*
-fn test_oscillator() {
-    let mut osc = MultiOscillator::new(44100);
-    let path = Path::new("osc_output.txt");
-    let display = path.display();
-    let modulator = MultiOscillator::new(44100);
-
-    // Open a file in write-only mode, returns `io::Result<File>`
-    let mut file = match File::create(&path) {
-        Err(why) => panic!("couldn't create {}: {}", display, why.description()),
-        Ok(file) => file,
-    };
-
-    //osc.set_ratios(0.5, 0.0, 0.5, 0.0);
-    let freq = 440.0;
-    //let num_samples = ((44000.0 / freq) * 2.0) as usize;
-    let num_samples_per_wave = (44000.0 / freq) as usize;
-    let num_samples = num_samples_per_wave * 4;
-    /*
-    for i in 0..num_samples {
-        let mod_val = (modulator.get_sample(1.0, i as u64) + 1.0) * 0.5;
-        osc.set_ratio(mod_val);
-        file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(freq, i as u64))).unwrap();
-    }
-    */
-
-    // Plot ratios
-    let step = 3.0 / num_samples as Float;
-    for i in 0..num_samples {
-        osc.set_ratio(i as Float * step);
-        //file.write_fmt(format_args!("{:.*}\n", 5, osc.get_sample(freq, i as u64))).unwrap();
-        write!(&mut file, "{} {} {} {}\n", osc.sine_ratio, osc.tri_ratio, osc.saw_ratio, osc.square_ratio).unwrap();
-    }
-}
-
-fn test_envalope() {
-    let sample_rate = 44100;
-    let mut env = Envelope::new(sample_rate as Float);
-    let path = Path::new("env_output.txt");
-    let display = path.display();
-    let mut sound = SoundData::new();
-    sound.init();
-
-    // Open a file in write-only mode, returns `io::Result<File>`
-    let mut file = match File::create(&path) {
-        Err(why) => panic!("couldn't create {}: {}", display, why.description()),
-        Ok(file) => file,
-    };
-
-    let num_samples = sample_rate * 2;
-    env.trigger(0 as i64, &sound.env[0]);
-    for i in 0..num_samples {
-        if i == 10000 {
-            env.release(i as i64, &sound.env[0]);
-        }
-        if i == 20000 {
-            env.trigger(i as i64, &sound.env[0]);
-        }
-        let now = SystemTime::now();
-        let value = env.get_sample(i as i64, &sound.env[0]);
-        let duration = now.elapsed().expect("Sound");
-        //file.write_fmt(format_args!("{:.*} {}\n", 5, value, duration.as_nanos())).unwrap();
-        file.write_fmt(format_args!("{:.*}\n", 5, value)).unwrap();
-    }
-}
-*/
-
 pub enum SynthMessage {
     Midi(MidiMessage),
     Param(SynthParam),
-    ParamQuery(SynthParam),
     SampleBuffer(Vec<Float>, SynthParam),
 }
 
@@ -193,11 +123,6 @@ fn setup_synth(sample_rate: u32, s2u_sender: Sender<UiMessage>, synth_receiver: 
 
 fn main() {
     setup_logging();
-
-    //test_oscillator();
-    //return;
-    //test_envalope();
-    //return;
 
     // Do setup
     let (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver) = setup_messaging();

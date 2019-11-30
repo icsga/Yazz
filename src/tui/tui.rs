@@ -413,19 +413,6 @@ impl Tui {
         }
     }
 
-    /** Gets the current value of the selected parameter from the sound data. */
-    fn query_current_value(&self) {
-        let f_s = &self.selector.func_selection;
-        let function = &f_s.item_list[f_s.item_index];
-        let function_id = if let ParameterValue::Int(x) = &f_s.value { *x as usize } else { panic!() };
-        let p_s = &self.selector.param_selection;
-        let parameter = &p_s.item_list[p_s.item_index];
-        let param_val = &p_s.value;
-        let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
-        info!("query_current_value {:?}", param);
-        self.sender.send(SynthMessage::ParamQuery(param)).unwrap();
-    }
-
     /* Queries a samplebuffer from the synth engine to display.
      *
      * The samplebuffer can contain wave shapes or envelopes.
