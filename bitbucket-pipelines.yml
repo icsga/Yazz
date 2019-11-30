@@ -8,6 +8,8 @@ image: rust:1.34
 pipelines:
   default:
     - step:
-        script: # Modify the commands below to build your repository.
+        script:
+          - apt-get update
+          - apt-get install -y libasound2-dev
           - cargo build -v --release
           - cargo test -v
