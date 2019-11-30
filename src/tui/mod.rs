@@ -36,6 +36,8 @@ pub use widget::{Index, Widget, WidgetProperties, WidgetRef};
 use super::Float;
 use super::MidiMessage;
 use super::SoundData;
+use super::SoundBank;
 use super::SynthMessage;
 use super::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
 use super::UiMessage;
+use super::{SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION};

@@ -110,6 +110,7 @@ impl Synth {
                 match msg {
                     SynthMessage::Param(m) => locked_synth.handle_ui_message(m),
                     SynthMessage::Midi(m)  => locked_synth.handle_midi_message(m),
+                    SynthMessage::Sound(s) => locked_synth.handle_sound_update(&s),
                     SynthMessage::SampleBuffer(m, p) => locked_synth.handle_sample_buffer(m, p),
                 }
             }
@@ -217,6 +218,12 @@ impl Synth {
             MidiMessage::ChannelAT{channel, pressure} => (),
             MidiMessage::PitchWheel{channel, pitch} => (),
         }
+    }
+
+    fn handle_sound_update(&mut self, sound: &SoundData) {
+        self.sound = *sound;
+        self.sound_global = self.sound;
+        self.sound_local = self.sound;
     }
 
     fn handle_note_on(&mut self, key: u8, velocity: u8) {

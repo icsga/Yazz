@@ -248,7 +248,7 @@ impl SoundData {
         let serialized = serde_json::to_string(&self).unwrap();
         println!("serialized = {}", serialized);
         // TODO: Write to file
-        //let deserialized: SoundData = serde_json::from_str(&serialized).unwrap();
+        let deserialized: SoundData = serde_json::from_str(&serialized).unwrap();
     }
 }
 
