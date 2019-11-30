@@ -108,22 +108,23 @@ fn test_slider_translation() {
     // Float
     // =====
     // Case 1: 0.0 - 1.0
+    // Slider has default height of 4, so a value range of 0 - 32
     let d: SliderRef<i32> = Slider::new(Value::Float(0.0), Value::Float(1.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(0.0)), 0);
-    assert_eq!(d.borrow().get_index(&Value::Float(0.5)), 4);
-    assert_eq!(d.borrow().get_index(&Value::Float(1.0)), 8);
+    assert_eq!(d.borrow().get_index(&Value::Float(0.5)), 16);
+    assert_eq!(d.borrow().get_index(&Value::Float(1.0)), 32);
 
     // Case 2: -1.0 - 1.0
     let d: SliderRef<i32> = Slider::new(Value::Float(-1.0), Value::Float(1.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(-1.0)), 0);
-    assert_eq!(d.borrow().get_index(&Value::Float(0.0)), 4);
-    assert_eq!(d.borrow().get_index(&Value::Float(1.0)), 8);
+    assert_eq!(d.borrow().get_index(&Value::Float(0.0)), 16);
+    assert_eq!(d.borrow().get_index(&Value::Float(1.0)), 32);
 
     // Case 3: 2.0 - 10.0
     let d: SliderRef<i32> = Slider::new(Value::Float(2.0), Value::Float(10.0), Value::Float(0.0));
     assert_eq!(d.borrow().get_index(&Value::Float(2.0)), 0);
-    assert_eq!(d.borrow().get_index(&Value::Float(6.0)), 4);
-    assert_eq!(d.borrow().get_index(&Value::Float(10.0)), 8);
+    assert_eq!(d.borrow().get_index(&Value::Float(6.0)), 16);
+    assert_eq!(d.borrow().get_index(&Value::Float(10.0)), 32);
 
     // ===
     // Int
@@ -131,18 +132,18 @@ fn test_slider_translation() {
     // Case 1: 0 - 8
     let d: SliderRef<i32> = Slider::new(Value::Int(0), Value::Int(8), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(0)), 0);
-    assert_eq!(d.borrow().get_index(&Value::Int(4)), 4);
-    assert_eq!(d.borrow().get_index(&Value::Int(8)), 8);
+    assert_eq!(d.borrow().get_index(&Value::Int(4)), 16);
+    assert_eq!(d.borrow().get_index(&Value::Int(8)), 32);
 
     // Case 2: -4 - 4
     let d: SliderRef<i32> = Slider::new(Value::Int(-4), Value::Int(4), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(-4)), 0);
-    assert_eq!(d.borrow().get_index(&Value::Int(0)), 4);
-    assert_eq!(d.borrow().get_index(&Value::Int(4)), 8);
+    assert_eq!(d.borrow().get_index(&Value::Int(0)), 16);
+    assert_eq!(d.borrow().get_index(&Value::Int(4)), 32);
 
     // Case 3: 2 - 10
     let d: SliderRef<i32> = Slider::new(Value::Int(2), Value::Int(10), Value::Int(0));
     assert_eq!(d.borrow().get_index(&Value::Int(2)), 0);
-    assert_eq!(d.borrow().get_index(&Value::Int(6)), 4);
-    assert_eq!(d.borrow().get_index(&Value::Int(10)), 8);
+    assert_eq!(d.borrow().get_index(&Value::Int(6)), 16);
+    assert_eq!(d.borrow().get_index(&Value::Int(10)), 32);
 }
