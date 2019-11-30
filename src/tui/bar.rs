@@ -54,7 +54,7 @@ impl<Key: Copy + Eq + Hash> Bar<Key> {
         }
         let offset = min * -1.0;
         let range = max - min;
-        let scale = 8.0 / range;
+        let scale = self.props.width as f64 / range;
         let mut value = fvalue + offset;
         if self.logarithmic {
             // Using a logarithmic curve makes smaller values easier to see.
