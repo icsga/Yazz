@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::hash::Hash;
 use std::rc::Rc;
 
 use termion::{color, cursor};
@@ -7,16 +8,16 @@ use super::Observer;
 use super::{Value, get_int};
 use super::{Widget, WidgetProperties};
 
-type ButtonRef = Rc<RefCell<Button>>;
+type ButtonRef<Key> = Rc<RefCell<Button<Key>>>;
 
 /** A button for boolean values */
-pub struct Button {
-    props: WidgetProperties,
+pub struct Button<Key: Copy + Eq + Hash> {
+    props: WidgetProperties<Key>,
     value: Value,
 }
 
-impl Button {
-    pub fn new(value: Value) -> ButtonRef {
+impl<Key: Copy + Eq + Hash> Button<Key> {
+    pub fn new(value: Value) -> ButtonRef<Key> {
         let width = 1;
         let height = 1;
         let props = WidgetProperties::new(width, height);
@@ -24,12 +25,12 @@ impl Button {
     }
 }
 
-impl Widget for Button {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties {
+impl<Key: Copy + Eq + Hash> Widget<Key> for Button<Key> {
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
         return &mut self.props;
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties {
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
         return &self.props;
     }
 
@@ -41,7 +42,7 @@ impl Widget for Button {
     }
 }
 
-impl Observer for Button {
+impl<Key: Copy + Eq + Hash> Observer for Button<Key> {
     fn update(&mut self, value: Value) {
         self.value = value;
         self.set_dirty(true);

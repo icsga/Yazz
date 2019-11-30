@@ -15,7 +15,7 @@ mod tui;
 use synth::*;
 use tui::*;
 
-use canvas::Canvas;
+use canvas::{Canvas, CanvasRef};
 use midi_handler::{MidiHandler, MidiMessage};
 use modulation::{Modulator, ModData};
 use parameter::*;
@@ -23,6 +23,7 @@ use parameter::*;
 use ringbuffer::Ringbuffer;
 use sound::SoundData;
 use synth::*;
+use tui::Index;
 use termion_wrapper::TermionWrapper;
 use voice::Voice;
 
@@ -132,6 +133,9 @@ pub enum SynthMessage {
 pub enum UiMessage {
     Midi(MidiMessage),
     Key(Key),
+    MousePress{x: Index, y: Index},
+    MouseHold{x: Index, y: Index},
+    MouseRelease{x: Index, y: Index},
     Param(SynthParam),
     SampleBuffer(Vec<Float>, SynthParam),
     EngineSync(Duration, Duration),

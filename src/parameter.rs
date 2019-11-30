@@ -23,6 +23,7 @@ pub enum Parameter {
     Blend,
     Level,
     Frequency,
+    Finetune,
     Sync,
     KeyFollow,
     Voices,
@@ -91,6 +92,10 @@ pub struct ParamId {
 }
 
 impl ParamId {
+    pub fn new(function: Parameter, function_id: usize, parameter: Parameter) -> ParamId {
+        ParamId{function, function_id, parameter}
+    }
+
     pub fn set(&mut self, func: Parameter, func_id: usize, param: Parameter) {
         self.function = func;
         self.function_id = func_id;
@@ -171,10 +176,11 @@ pub static FUNCTIONS: [MenuItem; 7] = [
     MenuItem{item: Parameter::Modulation, key: 'm', val_range: ValueRange::IntRange(1, 16),           mod_func: ModFunction::NoMod,  next: &MOD_PARAMS},
 ];
 
-pub static OSC_PARAMS: [MenuItem; 9] = [
+pub static OSC_PARAMS: [MenuItem; 10] = [
     MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::ChoiceRange(&OSC_WAVEFORM), mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::IntRange(-24, 24),          mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::IntRange(-100, 100),        mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Blend,     key: 'b', val_range: ValueRange::FloatRange(0.0, 5.0),       mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::IntRange(0, 1),             mod_func: ModFunction::Target, next: &[]},
@@ -183,10 +189,10 @@ pub static OSC_PARAMS: [MenuItem; 9] = [
     MenuItem{item: Parameter::Spread,    key: 'e', val_range: ValueRange::FloatRange(0.0, 2.0),       mod_func: ModFunction::Target, next: &[]},
 ];
 
-pub static LFO_PARAMS: [MenuItem; 3] = [
+pub static LFO_PARAMS: [MenuItem; 2] = [
     MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::ChoiceRange(&LFO_WAVEFORM), mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::FloatRange(0.0, 22000.0),   mod_func: ModFunction::Target, next: &[]},
-    MenuItem{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
+    //MenuItem{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
 ];
 
 pub static FILTER_PARAMS: [MenuItem; 3] = [

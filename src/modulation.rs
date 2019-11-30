@@ -47,12 +47,12 @@ pub struct ModDest {
 }
 
 static MOD_DEST: [ModDest; 6] = [
-    ModDest{function: Parameter::Oscillator, parameter: Parameter::Level,     val_min: 0.0,   val_max: 100.0},
-    ModDest{function: Parameter::Oscillator, parameter: Parameter::Frequency, val_min: -24.0, val_max: 24.0},
-    ModDest{function: Parameter::Oscillator, parameter: Parameter::Blend,     val_min: 0.0,   val_max: 5.0},
-    ModDest{function: Parameter::Oscillator, parameter: Parameter::Phase,     val_min: 0.0,   val_max: 1.0},
-    ModDest{function: Parameter::Oscillator, parameter: Parameter::Voices,    val_min: 1.0,   val_max: 7.0},
-    ModDest{function: Parameter::Delay,      parameter: Parameter::Time,      val_min: 0.0,   val_max: 1.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Level,      val_min: 0.0,   val_max: 100.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Finetune,   val_min: -1.0, val_max: 1.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Blend,      val_min: 0.0,   val_max: 5.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Phase,      val_min: 0.0,   val_max: 1.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Voices,     val_min: 1.0,   val_max: 7.0},
+    ModDest{function: Parameter::Delay,      parameter: Parameter::Time,       val_min: 0.0,   val_max: 1.0},
 ];
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
@@ -97,16 +97,17 @@ impl ModData {
         self.update();
     }
 
-    pub fn update(&mut self) {
-        info!("Updating modulator {:?}", self);
+    pub fn set_amount(&mut self, amount: Float) {
+        self.amount = amount;
+        self.update();
+    }
 
+    pub fn update(&mut self) {
         // Lookup input
         let source = ModData::get_mod_source(self.source_func);
-        info!("{:?}", source);
 
         // Lookup output
         let dest = ModData::get_mod_dest(self.target_func, self.target_param);
-        info!("{:?}", dest);
 
         let scale: Float;
         let offset: Float;
@@ -130,6 +131,7 @@ impl ModData {
         self.scale =  scale * self.amount;
         self.offset =  offset;
         self.is_global = source.is_global;
+        info!("Updated modulator {:?}", self);
     }
 
     pub fn get_source(&self) -> FunctionId {

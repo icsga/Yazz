@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::hash::Hash;
 use std::rc::Rc;
 
 use termion::{color, cursor};
@@ -8,15 +9,15 @@ use super::Observer;
 use super::{Value, get_str};
 use super::{Widget, WidgetProperties};
 
-type LabelRef = Rc<RefCell<Label>>;
+type LabelRef<Key> = Rc<RefCell<Label<Key>>>;
 
-pub struct Label {
-    props: WidgetProperties,
+pub struct Label<Key: Copy + Eq + Hash> {
+    props: WidgetProperties<Key>,
     value: Value,
 }
 
-impl Label {
-    pub fn new(value: String, size: Index) -> LabelRef {
+impl<Key: Copy + Eq + Hash> Label<Key> {
+    pub fn new(value: String, size: Index) -> LabelRef<Key> {
         let width = size;
         let height = 1;
         let props = WidgetProperties::new(width, height);
@@ -25,12 +26,12 @@ impl Label {
     }
 }
 
-impl Widget for Label {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties {
+impl<Key: Copy + Eq + Hash> Widget<Key> for Label<Key> {
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
         return &mut self.props;
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties {
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
         return &self.props;
     }
 
@@ -43,7 +44,7 @@ impl Widget for Label {
     }
 }
 
-impl Observer for Label {
+impl<Key: Copy + Eq + Hash> Observer for Label<Key> {
     fn update(&mut self, value: Value) {
         self.value = value;
         self.set_dirty(true);

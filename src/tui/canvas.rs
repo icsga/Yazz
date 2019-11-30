@@ -1,4 +1,5 @@
 use std::cell::RefCell;
+use std::hash::Hash;
 use std::rc::Rc;
 use std::vec::Vec;
 
@@ -9,15 +10,15 @@ use super::{Index, Widget, WidgetProperties};
 
 use log::{info, trace, warn};
 
-type CanvasRef = Rc<RefCell<Canvas>>;
+pub type CanvasRef<Key> = Rc<RefCell<Canvas<Key>>>;
 
-pub struct Canvas {
-    props: WidgetProperties,
+pub struct Canvas<Key: Copy + Eq + Hash> {
+    props: WidgetProperties<Key>,
     byte: Vec<char>,
 }
 
-impl Canvas {
-    pub fn new(width: Index, height: Index) -> CanvasRef {
+impl<Key: Copy + Eq + Hash> Canvas<Key> {
+    pub fn new(width: Index, height: Index) -> CanvasRef<Key> {
         let byte = vec!{' '; (width * height) as usize};
         let props = WidgetProperties::new(width, height);
         Rc::new(RefCell::new(Canvas{props, byte}))
@@ -49,7 +50,7 @@ impl Canvas {
             self.plot_x_axis(x_axis as Index);
         }
         // Plot points
-        let mut prev_y_pos = self.val_to_y(buff[0], offset, scale_y);
+        //let mut prev_y_pos = self.val_to_y(buff[0], offset, scale_y);
         let mut prev_x_pos: Index = 0;
         let mut y_accu: Float = 0.0;
         let mut y_num_values = 0.0;
@@ -89,7 +90,7 @@ impl Canvas {
                     self.set(x as Index, y_pos, '∘');
                 }
                 prev_x_pos = x_pos;
-                prev_y_pos = y_pos;
+                //prev_y_pos = y_pos;
             }
         }
         self.props.set_dirty(true);
@@ -117,12 +118,12 @@ impl Canvas {
     }
 }
 
-impl Widget for Canvas {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties {
+impl<Key: Copy + Eq + Hash> Widget<Key> for Canvas<Key> {
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
         return &mut self.props;
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties {
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
         return &self.props;
     }
 

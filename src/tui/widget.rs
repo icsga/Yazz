@@ -1,12 +1,14 @@
 use std::cell::RefCell;
+use std::hash::Hash;
 use std::rc::Rc;
 
-use super::Scheme;
+use super::{MouseMessage, Scheme};
 
 pub type Index = u16;
-pub type WidgetRef = Rc<RefCell<dyn Widget>>;
+pub type WidgetRef<T> = Rc<RefCell<dyn Widget<T>>>;
 
-pub struct WidgetProperties {
+pub struct WidgetProperties<Key: Copy + Eq + Hash> {
+    key: Option<Key>,
     pub pos_x: Index,
     pub pos_y: Index,
     pub width: Index,
@@ -15,13 +17,13 @@ pub struct WidgetProperties {
     pub colors: Rc<Scheme>,
 }
 
-impl WidgetProperties {
-    pub fn new(width: Index, height: Index) -> WidgetProperties {
+impl<Key: Copy + Eq + Hash> WidgetProperties<Key> {
+    pub fn new(width: Index, height: Index) -> WidgetProperties<Key> {
         let pos_x: Index = 0;
         let pos_y: Index = 0;
         let dirty = false;
         let colors = Rc::new(Scheme::new());
-        WidgetProperties{pos_x, pos_y, width, height, dirty, colors}
+        WidgetProperties{key: None, pos_x, pos_y, width, height, dirty, colors}
     }
 
     pub fn set_position(&mut self, x: Index, y: Index) -> bool {
@@ -51,6 +53,10 @@ impl WidgetProperties {
         self.colors = colors;
     }
 
+    pub fn set_key(&mut self, key: &Key) {
+        self.key = Some(key.clone());
+    }
+
     pub fn is_dirty(&self) -> bool {
         self.dirty
     }
@@ -62,15 +68,31 @@ impl WidgetProperties {
     pub fn get_size(&self) -> (Index, Index) {
         (self.width, self.height)
     }
+
+    pub fn is_inside(&self, x: Index, y: Index) -> bool {
+        if x >= self.pos_x &&
+                x <= self.pos_x + self.width &&
+                y >= self.pos_y &&
+                y <= self.pos_y + self.height {
+            true
+        } else {
+            false
+        }
+    }
+
+    /*
+    pub fn get_mouse_offset(&self, msg: &MouseMessage) -> (Index, Index) {
+    }
+    */
 }
 
-pub trait Widget {
+pub trait Widget<Key: Copy + Eq + Hash> {
 
     // -------------------------------------------
     // Must be implemented by the deriving Widgets
 
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties;
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties;
+    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key>;
+    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key>;
     fn draw(&self);
 
     // -------------------------------------------
@@ -91,19 +113,39 @@ pub trait Widget {
     }
 
     fn set_dirty(&mut self, is_dirty: bool) {
-        return self.get_widget_properties_mut().set_dirty(is_dirty);
+        self.get_widget_properties_mut().set_dirty(is_dirty);
     }
 
     fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
-        return self.get_widget_properties_mut().set_color_scheme(colors);
+        self.get_widget_properties_mut().set_color_scheme(colors);
+    }
+
+    fn set_key(&mut self, key: &Key) {
+        self.get_widget_properties_mut().set_key(key);
     }
 
     fn is_dirty(&self) -> bool {
         return self.get_widget_properties().is_dirty();
     }
 
+    fn is_inside(&self, x: Index, y: Index) -> bool {
+        return self.get_widget_properties().is_inside(x, y);
+    }
+
     fn get_position(&self) -> (Index, Index) { // x, y
         return self.get_widget_properties().get_position();
+    }
+
+    fn get_key(&self) -> Option<Key> {
+        self.get_widget_properties().key
+    }
+
+    fn get_at_pos(&self, x: Index, y: Index) -> Option<Key> {
+        if self.is_inside(x, y) {
+            self.get_key()
+        } else {
+            None
+        }
     }
 
     fn get_size(&self) -> (Index, Index) { // width, height

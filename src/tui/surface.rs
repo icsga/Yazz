@@ -1,18 +1,22 @@
 // Implements the control surface of the synth
 use std::collections::HashMap;
 use std::cell::RefCell;
+use std::hash::Hash;
 use std::rc::Rc;
 
 use log::{info, trace, warn};
 use termion::{color, cursor};
 
-use super::{Parameter, ParamId, ParameterValue, SynthParam, SoundData};
-use super::{Bar, Button, Container, ContainerRef, Controller, Dial, Index, Label, ObserverRef, Scheme, Slider, Value, ValueDisplay, Widget};
+use super::{Parameter, ParamId, ParameterValue, SynthParam, SoundData, UiMessage};
+use super::{Bar, Button, Container, ContainerRef, Controller, Dial, Index,
+            Label, MouseHandler, ObserverRef, Scheme, Slider, Value,
+            ValueDisplay, Widget};
 
 pub struct Surface {
-    window: Container,
+    window: Container<ParamId>,
     controller: Controller<ParamId>,
     mod_targets: HashMap<ParamId, ObserverRef>, // Maps the modulation indicator to the corresponding parameter key
+    mouse_handler: MouseHandler<ParamId>,
     colors: Rc<Scheme>,
 }
 
@@ -21,17 +25,22 @@ impl Surface {
         let window = Container::new();
         let controller = Controller::new();
         let mod_targets: HashMap<ParamId, ObserverRef> = HashMap::new();
+        let mouse_handler = MouseHandler::new();
         let colors = Rc::new(Scheme::new());
-        let mut this = Surface{window, controller, mod_targets, colors};
+        let mut this = Surface{window,
+                               controller,
+                               mod_targets,
+                               mouse_handler,
+                               colors};
 
-        let osc = Rc::new(RefCell::new(Container::new()));
+        let osc: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         osc.borrow_mut().enable_border(true);
         this.add_multi_osc(&mut osc.borrow_mut(), 1, 0, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 2, 31, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 3, 63, 0);
         this.add_child(osc, 1, 1);
 
-        let env = Rc::new(RefCell::new(Container::new()));
+        let env: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         env.borrow_mut().enable_border(true);
         this.add_env(&mut env.borrow_mut(), 1, 1, 0);
         let (x, _) = env.borrow().get_size();
@@ -40,7 +49,7 @@ impl Surface {
         let (_, y) = this.window.get_size();
         this.add_child(env, 1, y + 1);
 
-        let lfo = Rc::new(RefCell::new(Container::new()));
+        let lfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         lfo.borrow_mut().enable_border(true);
         this.add_lfo(&mut lfo.borrow_mut(), 1, 1, 0);
         let (x, _) = lfo.borrow().get_size();
@@ -50,18 +59,19 @@ impl Surface {
         let (lfo_width, _) = lfo.borrow().get_size();
         this.add_child(lfo, env_width + 2, y + 1);
 
-        let sysinfo = Rc::new(RefCell::new(Container::new()));
+        let sysinfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         sysinfo.borrow_mut().enable_border(true);
         this.add_sysinfo(&mut sysinfo.borrow_mut(), 1, 0);
         this.add_child(sysinfo, env_width + lfo_width + 4, y + 1);
-
 
         this.window.set_position(1, 1);
         this.window.set_color_scheme(this.colors.clone());
         this
     }
 
-    pub fn add_child<C: Widget + 'static>(&mut self, child: Rc<RefCell<C>>, pos_x: Index, pos_y: Index) {
+    pub fn add_child<C>(&mut self, child: Rc<RefCell<C>>, pos_x: Index, pos_y: Index)
+        where C: Widget<ParamId> + 'static
+    {
         self.window.add_child(child, pos_x, pos_y);
     }
 
@@ -78,7 +88,8 @@ impl Surface {
 
     pub fn draw(&mut self) {
         self.window.draw();
-        print!("{}{}", color::Bg(self.colors.bg_light), color::Fg(self.colors.fg_dark));
+        print!("{}{}", color::Bg(self.colors.bg_light),
+                       color::Fg(self.colors.fg_dark));
         self.window.set_dirty(false);
     }
 
@@ -86,11 +97,22 @@ impl Surface {
         self.controller.update(key, value);
     }
 
-    fn new_mod_dial_float(&mut self, label: &'static str, min: f64, max: f64, value: f64, log: bool, key: &ParamId) -> ContainerRef {
+    pub fn handle_event(&mut self, msg: &UiMessage) {
+        //self.mouse_handler.handle_event(msg, &self.window, &self.controller);
+    }
+
+    fn new_mod_dial_float(&mut self,
+                          label: &'static str,
+                          min: f64,
+                          max: f64,
+                          value: f64,
+                          log: bool,
+                          key: &ParamId) -> ContainerRef<ParamId> {
         let mut c = Container::new();
         let label = Label::new(label.to_string(), 10);
         let dial = Dial::new(Value::Float(min), Value::Float(max), Value::Float(value));
         dial.borrow_mut().set_logarithmic(log);
+        dial.borrow_mut().set_key(key);
         let modul = Bar::new(Value::Float(0.0), Value::Float(100.0), Value::Float(0.0));
         self.controller.add_observer(key, dial.clone());
         self.mod_targets.insert(*key, modul.clone());
@@ -100,11 +122,18 @@ impl Surface {
         Rc::new(RefCell::new(c))
     }
 
-    fn new_mod_dial_int(&mut self, label: &'static str, min: i64, max: i64, value: i64, log: bool, key: &ParamId) -> ContainerRef {
+    fn new_mod_dial_int(&mut self,
+                        label: &'static str,
+                        min: i64,
+                        max: i64,
+                        value: i64,
+                        log: bool,
+                        key: &ParamId) -> ContainerRef<ParamId> {
         let mut c = Container::new();
         let label = Label::new(label.to_string(), 8);
         let dial = Dial::new(Value::Int(min), Value::Int(max), Value::Int(value));
         dial.borrow_mut().set_logarithmic(log);
+        dial.borrow_mut().set_key(key);
         let modul = Bar::new(Value::Float(0.0), Value::Float(100.0), Value::Float(0.0));
         self.controller.add_observer(key, dial.clone());
         self.mod_targets.insert(*key, modul.clone());
@@ -114,7 +143,13 @@ impl Surface {
         Rc::new(RefCell::new(c))
     }
 
-    fn new_mod_slider_float(&mut self, label: &'static str, min: f64, max: f64, value: f64, log: bool, key: &ParamId) -> ContainerRef {
+    fn new_mod_slider_float(&mut self,
+                            label: &'static str,
+                            min: f64,
+                            max: f64,
+                            value: f64,
+                            log: bool,
+                            key: &ParamId) -> ContainerRef<ParamId> {
         // TODO: Add vertical modulation indicator
         let mut c = Container::new();
         let len = label.len() as Index;
@@ -130,7 +165,10 @@ impl Surface {
         Rc::new(RefCell::new(c))
     }
 
-    fn new_label_value(&mut self, label: &'static str, value: i64, key: &ParamId) -> ContainerRef {
+    fn new_label_value(&mut self,
+                       label: &'static str,
+                       value: i64,
+                       key: &ParamId) -> ContainerRef<ParamId> {
         let mut c = Container::new();
         let len = label.len() as Index;
         let label = Label::new(label.to_string(), len);
@@ -141,7 +179,10 @@ impl Surface {
         Rc::new(RefCell::new(c))
     }
 
-    fn new_option(&mut self, label: &'static str, status: i64, key: &ParamId) -> ContainerRef {
+    fn new_option(&mut self,
+                  label: &'static str,
+                  status: i64,
+                  key: &ParamId) -> ContainerRef<ParamId> {
         let mut c = Container::new();
         let label = Label::new(label.to_string(), 8);
         let button = Button::new(Value::Int(status));
@@ -151,14 +192,18 @@ impl Surface {
         Rc::new(RefCell::new(c))
     }
 
-    fn add_multi_osc(&mut self, target: &mut Container, func_id: usize, x_offset: Index, y_offset: Index) {
+    fn add_multi_osc(&mut self,
+                     target: &mut Container<ParamId>,
+                     func_id: usize,
+                     x_offset: Index,
+                     y_offset: Index) {
         let mut title = "Oscillator ".to_string();
         title.push(((func_id as u8) + '0' as u8) as char);
         let len = title.len();
         let title = Label::new(title, len as Index);
         target.add_child(title, 10 + x_offset, y_offset);
 
-        let mut key = ParamId{function: Parameter::Oscillator, function_id: func_id, parameter: Parameter::Waveform};
+        let mut key = ParamId::new(Parameter::Oscillator, func_id, Parameter::Waveform);
         let osc_wave = self.new_mod_dial_int("Waveform", 0, 4, 0, false, &key);
         target.add_child(osc_wave, x_offset, 1 + y_offset);
 
@@ -197,14 +242,18 @@ impl Surface {
         }
     }
 
-    fn add_env(&mut self, target: &mut Container, func_id: usize, x_offset: Index, y_offset: Index) {
+    fn add_env(&mut self,
+               target: &mut Container<ParamId>,
+               func_id: usize,
+               x_offset: Index,
+               y_offset: Index) {
         let mut title = "Envelope ".to_string();
         title.push(((func_id as u8) + '0' as u8) as char);
         let len = title.len();
         let title = Label::new(title, len as Index);
         target.add_child(title, x_offset, y_offset);
 
-        let mut key = ParamId{function: Parameter::Envelope, function_id: func_id, parameter: Parameter::Attack};
+        let mut key = ParamId::new(Parameter::Envelope, func_id, Parameter::Attack);
         let env_attack = self.new_mod_slider_float("A", 0.0, 4000.0, 0.0, true, &key);
         target.add_child(env_attack, x_offset, 1 + y_offset);
 
@@ -221,14 +270,18 @@ impl Surface {
         target.add_child(env_release, 12 + x_offset, 1 + y_offset);
     }
 
-    fn add_lfo(&mut self, target: &mut Container, func_id: usize, x_offset: Index, y_offset: Index) {
+    fn add_lfo(&mut self,
+               target: &mut Container<ParamId>,
+               func_id: usize,
+               x_offset: Index,
+               y_offset: Index) {
         let mut title = "LFO ".to_string();
         title.push(((func_id as u8) + '0' as u8) as char);
         let len = title.len();
         let title = Label::new(title, len as Index);
         target.add_child(title, x_offset, y_offset);
 
-        let mut key = ParamId{function: Parameter::Oscillator, function_id: func_id, parameter: Parameter::Waveform};
+        let mut key = ParamId::new(Parameter::Oscillator, func_id, Parameter::Waveform);
         let osc_wave = self.new_mod_dial_int("Waveform", 0, 4, 0, false, &key);
         target.add_child(osc_wave, x_offset, 1 + y_offset);
 
@@ -237,13 +290,16 @@ impl Surface {
         target.add_child(osc_freq, x_offset, 4 + y_offset);
     }
 
-    fn add_sysinfo(&mut self, target: &mut Container, x_offset: Index, y_offset: Index) {
+    fn add_sysinfo(&mut self,
+                   target: &mut Container<ParamId>,
+                   x_offset: Index,
+                   y_offset: Index) {
         let title = "System";
         let len = title.len();
         let title = Label::new(title.to_string(), len as Index);
         target.add_child(title, x_offset, y_offset);
 
-        let mut key = ParamId{function: Parameter::System, function_id: 0, parameter: Parameter::Busy};
+        let mut key = ParamId::new(Parameter::System, 0, Parameter::Busy);
         let busy_value = self.new_label_value("Busy", 0, &key);
         target.add_child(busy_value, x_offset, 1 + y_offset);
 
@@ -263,7 +319,10 @@ impl Surface {
 
     pub fn update_all(&mut self, sound: &SoundData) {
         for (key, item) in self.controller.observers.iter_mut() {
-            let param = SynthParam::new(key.function, key.function_id, key.parameter, ParameterValue::NoValue);
+            let param = SynthParam::new(key.function,
+                                        key.function_id,
+                                        key.parameter,
+                                        ParameterValue::NoValue);
             let value = sound.get_value(&param);
             if let ParameterValue::NoValue = value { continue; };
             let value = Surface::param_to_widget_value(&value);

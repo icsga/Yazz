@@ -73,7 +73,6 @@ impl Voice {
         let mut result = 0.0;
         //let amp_mod = self.get_amp_mod(sample_clock);
         let amp_mod = 0.0;
-        let freq_mod = 0.0;
         self.last_update = sample_clock;
         let mut reset = false;
         let mut freq: Float;
@@ -90,11 +89,14 @@ impl Voice {
             // Get modulator source output
             let mod_val: Float = match m.source_func {
                 Parameter::Lfo => {
-                    let (val, reset) = self.lfo[m.source_func_id].get_sample(sample_clock, &sound_local.lfo[m.source_func_id], false);
+                    let (val, reset) = self.lfo[m.source_func_id - 1].get_sample(sample_clock, &sound_local.lfo[m.source_func_id - 1], false);
                     val
                 },
+                Parameter::Envelope => {
+                    self.env[m.source_func_id - 1].get_sample(sample_clock, &sound_local.env[m.source_func_id - 1])
+                }
                 _ => 0.0, // TODO: This also sets non-global vars, optimize that
-            } * m.scale + m.offset;
+            } * m.scale;
 
             // Get current value of target parameter
             let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::NoValue};
@@ -108,6 +110,7 @@ impl Voice {
             // Update value if mod source is local
             if !m.is_global {
                 val += mod_val;
+                info!("val={}, mod_val={}", val, mod_val);
             }
 
             // Update parameter in voice sound data
@@ -118,9 +121,9 @@ impl Voice {
         // Get mixed output from oscillators
         for (i, osc) in self.osc.iter_mut().enumerate() {
             if sound_local.osc[i].key_follow == 0 {
-                freq = 440.0 + freq_mod; // Fixed pitch
+                freq = 440.0;
             } else {
-                freq = self.input_freq + freq_mod;
+                freq = self.input_freq;
             }
             freq *= sound_local.osc[i].freq_offset;
             let (sample, wave_complete) = osc.get_sample(freq, sample_clock, sound_local, reset);
@@ -165,15 +168,22 @@ impl Voice {
     pub fn trigger(&mut self, trigger_seq: u64, trigger_time: i64, sound: &SoundData) {
         self.triggered = true;
         self.trigger_seq = trigger_seq;
-        self.env[0].trigger(trigger_time, &sound.env[0]);
-        for o in self.osc.iter_mut() {
-            o.reset(trigger_time);
+        for i in 0..NUM_ENVELOPES {
+            self.env[i].trigger(trigger_time, &sound.env[i]);
+        }
+        for osc in self.osc.iter_mut() {
+            osc.reset(trigger_time);
+        }
+        for lfo in self.lfo.iter_mut() {
+            lfo.reset(trigger_time);
         }
     }
 
     pub fn release(&mut self, velocity: u8, sound: &SoundData) {
         self.triggered = false;
-        self.env[0].release(self.last_update, &sound.env[0]);
+        for i in 0..NUM_ENVELOPES {
+            self.env[i].release(self.last_update, &sound.env[i]);
+        }
     }
 
     pub fn is_triggered(&self) -> bool {
