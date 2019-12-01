@@ -24,7 +24,7 @@ impl MidiHandler {
         let input = String::new();
         let mut midi_in = MidiInput::new("midir reading input").unwrap();
         midi_in.ignore(Ignore::None);
-        let in_port = 1;
+        let in_port = 0;
         let in_port_name = midi_in.port_name(in_port).unwrap();
         let conn_in = midi_in.connect(in_port, "midir-read-input", move |stamp, message, _| {
             if message.len() >= 2 {

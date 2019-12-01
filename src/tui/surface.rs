@@ -262,7 +262,7 @@ impl Surface {
         target.add_child(env_decay, 4 + x_offset, 1 + y_offset);
 
         key.set(Parameter::Envelope, func_id, Parameter::Sustain);
-        let env_sustain = self.new_mod_slider_float("S", 0.0, 100.0, 0.0, false, &key);
+        let env_sustain = self.new_mod_slider_float("S", 0.0, 1.0, 0.0, false, &key);
         target.add_child(env_sustain, 8 + x_offset, 1 + y_offset);
 
         key.set(Parameter::Envelope, func_id, Parameter::Release);
