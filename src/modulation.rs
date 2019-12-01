@@ -48,7 +48,7 @@ pub struct ModDest {
 
 static MOD_DEST: [ModDest; 6] = [
     ModDest{function: Parameter::Oscillator, parameter: Parameter::Level,      val_min: 0.0,   val_max: 100.0},
-    ModDest{function: Parameter::Oscillator, parameter: Parameter::Finetune,   val_min: -1.0, val_max: 1.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::Finetune,   val_min: 0.0,   val_max: 1200.0},
     ModDest{function: Parameter::Oscillator, parameter: Parameter::Blend,      val_min: 0.0,   val_max: 5.0},
     ModDest{function: Parameter::Oscillator, parameter: Parameter::Phase,      val_min: 0.0,   val_max: 1.0},
     ModDest{function: Parameter::Oscillator, parameter: Parameter::Voices,     val_min: 1.0,   val_max: 7.0},

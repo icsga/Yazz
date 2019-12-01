@@ -91,7 +91,7 @@ impl SoundData {
                     Parameter::Waveform =>  { self.osc[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
                     Parameter::Level =>     { self.osc[id].level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
                     Parameter::Frequency => { self.osc[id].set_halfsteps(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Finetune =>  { self.osc[id].set_freq_offset(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Finetune =>  { self.osc[id].set_cents(if let ParameterValue::Float(x) = msg.value { x / 100.0 } else { panic!() }); }
                     Parameter::Blend =>     { self.osc[id].set_ratio(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
                     Parameter::Phase =>     { self.osc[id].phase = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Sync =>      { self.osc[id].sync = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
@@ -164,7 +164,7 @@ impl SoundData {
                     Parameter::Waveform => ParameterValue::Choice(self.osc[id].get_waveform() as usize),
                     Parameter::Level => ParameterValue::Float(self.osc[id].level * 100.0),
                     Parameter::Frequency => ParameterValue::Int(self.osc[id].tune_halfsteps),
-                    Parameter::Finetune => ParameterValue::Float(self.osc[id].freq_offset),
+                    Parameter::Finetune => ParameterValue::Float(self.osc[id].tune_cents * 100.0),
                     Parameter::Blend => ParameterValue::Float(self.osc[id].get_ratio()),
                     Parameter::Phase => ParameterValue::Float(self.osc[id].phase),
                     Parameter::Sync => ParameterValue::Int(self.osc[id].sync),

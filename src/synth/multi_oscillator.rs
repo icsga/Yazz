@@ -29,6 +29,7 @@ pub struct MultiOscData {
     pub num_voices: i64,
     pub voice_spread: Float,
     pub tune_halfsteps: i64,
+    pub tune_cents: Float,
     pub freq_offset: Float, // Value derived from tune_halfsteps
     pub sync: i64,
     pub key_follow: i64,
@@ -86,12 +87,17 @@ impl MultiOscData {
 
     pub fn set_halfsteps(&mut self, halfsteps: i64) {
         self.tune_halfsteps = halfsteps;
-        let inc: Float = 1.059463;
-        self.freq_offset = inc.powf(halfsteps as Float);
+        self.calc_freq_offset();
     }
 
-    pub fn set_freq_offset(&mut self, offset: Float) {
-        self.freq_offset = offset;
+    pub fn set_cents(&mut self, cents: Float) {
+        self.tune_cents = cents;
+        self.calc_freq_offset();
+    }
+
+    fn calc_freq_offset(&mut self) {
+        let inc: Float = 1.059463;
+        self.freq_offset = inc.powf(self.tune_halfsteps as Float + self.tune_cents);
     }
 
     pub fn get_waveform(&self) -> i64 {

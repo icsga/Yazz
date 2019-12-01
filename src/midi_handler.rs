@@ -1,10 +1,11 @@
 use midir::{MidiInput, MidiInputConnection, Ignore};
 
 use crossbeam_channel::{Sender, Receiver};
+use log::{info, trace, warn};
 
 use super::{SynthMessage, UiMessage};
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub enum MidiMessage {
     NoteOff    {channel: u8, key: u8, velocity: u8},
     NoteOn     {channel: u8, key: u8, velocity: u8},
@@ -26,12 +27,16 @@ impl MidiHandler {
         let in_port = 1;
         let in_port_name = midi_in.port_name(in_port).unwrap();
         let conn_in = midi_in.connect(in_port, "midir-read-input", move |stamp, message, _| {
-            if message.len() == 3 {
+            if message.len() >= 2 {
                 let m = MidiHandler::get_midi_message(message);
+                info!("MidiMessage: {:?}", m);
                 m2s_sender.send(SynthMessage::Midi(m.clone())).unwrap();
-                if message[0] & 0xF0 == 0xB0 {
+                let command = message[0] & 0xF0;
+                if command == 0xB0 || command == 0xC0 {
                     m2u_sender.send(UiMessage::Midi(m)).unwrap();
                 }
+            } else {
+                info!("Got MIDI message with len {}", message.len());
             }
         }, ()).unwrap();
         conn_in
@@ -41,7 +46,10 @@ impl MidiHandler {
         let mtype = message[0] & 0xF0;
         let channel = message[0] & 0x0F;
         let param = message[1];
-        let value = message[2];
+        let mut value = 0;
+        if message.len() > 2 {
+            value = message[2];
+        }
         match message[0] & 0xF0 {
             0x90 => MidiMessage::NoteOn{channel: channel, key: param, velocity: value},
             0x80 => MidiMessage::NoteOff{channel: channel, key: param, velocity: value},
