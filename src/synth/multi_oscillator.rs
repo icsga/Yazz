@@ -30,14 +30,14 @@ pub struct MultiOscData {
     pub voice_spread: Float,
     pub tune_halfsteps: i64,
     pub tune_cents: Float,
-    pub freq_offset: Float, // Value derived from tune_halfsteps
+    pub freq_offset: Float, // Value derived from tune_halfsteps and tune_cents
     pub sync: i64,
     pub key_follow: i64,
 }
 
 impl MultiOscData {
     pub fn init(&mut self) {
-        self.level = 0.5;
+        self.level = 0.92;
         self.phase = 0.5;
         self.select_wave(0);
         self.set_voice_num(1);
@@ -46,6 +46,7 @@ impl MultiOscData {
         self.key_follow = 1;
     }
 
+    /** Select a single waveform. */
     pub fn select_wave(&mut self, value: usize) {
         match value {
             0 => self.set_ratios(1.0, 0.0, 0.0, 0.0, 0.0),
@@ -57,6 +58,7 @@ impl MultiOscData {
         }
     }
 
+    /** Select a free mix of all waveforms. */
     pub fn set_ratios(&mut self, sine_ratio: Float, tri_ratio: Float, saw_ratio: Float, square_ratio: Float, noise_ratio: Float) {
         self.sine_ratio = sine_ratio;
         self.tri_ratio = tri_ratio;
@@ -65,6 +67,7 @@ impl MultiOscData {
         self.noise_ratio = noise_ratio;
     }
 
+    /** Select a mix of up to two waveforms. */
     pub fn set_ratio(&mut self, ratio: Float) {
         if ratio <= 1.0 {
             self.set_ratios(1.0 - ratio, ratio, 0.0, 0.0, 0.0);
@@ -77,24 +80,29 @@ impl MultiOscData {
         }
     }
 
+    /** Number of detuned voices per oscillator. */
     pub fn set_voice_num(&mut self, voices: i64) {
         self.num_voices = if voices > MAX_VOICES as i64 { MAX_VOICES as i64 } else { voices };
     }
 
+    /** Detune amount per voice. */
     pub fn set_voice_spread(&mut self, spread: Float) {
         self.voice_spread = spread;
     }
 
+    /** Coarse tuning of oscillator (+/- 2 octaves). */
     pub fn set_halfsteps(&mut self, halfsteps: i64) {
         self.tune_halfsteps = halfsteps;
         self.calc_freq_offset();
     }
 
+    /** Fine tuning of oscillator (0 - 1 octave). */
     pub fn set_cents(&mut self, cents: Float) {
         self.tune_cents = cents;
         self.calc_freq_offset();
     }
 
+    /** Calculate resulting frequence of tuning settings. */
     fn calc_freq_offset(&mut self) {
         let inc: Float = 1.059463;
         self.freq_offset = inc.powf(self.tune_halfsteps as Float + self.tune_cents);
@@ -135,10 +143,10 @@ impl MultiOscData {
 struct State {
     last_pos: Float,
     freq_shift: Float, // Percentage this voice is shifted from center frequency
-    level_shift: Float, // Decrease in level compared to main voice
+    level_shift: Float, // Decrease in level compared to main voice (TODO)
 
     // Sinewave
-    last_stabilization: i64, // Time of last stabilization
+    stabilization_counter: i64, // Time of last stabilization
     phasor: num::complex::Complex<Float>, // Phasor with current state
     omega: num::complex::Complex<Float>,
     stabilizer: num::complex::Complex<Float>
@@ -151,11 +159,11 @@ impl MultiOscillator {
         let last_pos = 0.0;
         let freq_shift = 0.0;
         let level_shift = 1.0;
-        let last_stabilization = 0;
+        let stabilization_counter = 0;
         let phasor = num::complex::Complex::new(1.0, 0.0);
         let omega = num::complex::Complex::new(0.0, 0.0);
         let stabilizer = num::complex::Complex::new(0.0, 0.0);
-        let state = [State{last_pos, freq_shift, level_shift, last_stabilization, phasor, omega, stabilizer}; 7];
+        let state = [State{last_pos, freq_shift, level_shift, stabilization_counter, phasor, omega, stabilizer}; 7];
         let osc = MultiOscillator{sample_rate,
                                   id,
                                   last_update,
@@ -175,12 +183,21 @@ impl MultiOscillator {
         for _ in 0..dt {
             state.phasor *= coefficient;
         }
+        state.stabilization_counter += dt;
 
-        state.last_stabilization += dt;
-        state.phasor.im // return the 'sine' component of the phasor
+        // Periodically stabilize the phasor's amplitude.
+        if state.stabilization_counter > 500 {
+                let a = state.phasor.re;
+                let b = state.phasor.im;
+                state.stabilizer.re = (3.0 - a.powi(2) - b.powi(2)) / 2.0;
+                state.phasor = state.phasor * state.stabilizer;
+                state.stabilization_counter = 0;
+        }
+
+        state.phasor.im // return the sine component of the phasor
     }
 
-    fn get_sample_triangle(state: &State, frequency: Float, phase: Float, dt: Float) -> Float {
+    fn get_sample_triangle(state: &State, phase: Float, dt: Float) -> Float {
         let rate_q1 = 2.0 / phase;
         let rate_q2 = 2.0 / (1.0 - phase);
         let mut pos = state.last_pos + (phase / 2.0);
@@ -192,11 +209,11 @@ impl MultiOscillator {
         }
     }
 
-    fn get_sample_saw(state: &State, frequency: Float, dt: Float) -> Float {
+    fn get_sample_saw(state: &State, dt: Float) -> Float {
         1.0 - (state.last_pos * 2.0)
     }
 
-    fn get_sample_square(state: &State, frequency: Float, phase: Float, dt: Float) -> Float {
+    fn get_sample_square(state: &State, phase: Float, dt: Float) -> Float {
         if state.last_pos < phase {
             1.0
         } else {
@@ -204,7 +221,7 @@ impl MultiOscillator {
         }
     }
 
-    fn get_sample_noise(state: &State, frequency: Float, dt: Float) -> Float {
+    fn get_sample_noise() -> Float {
         (rand::random::<Float>() * 2.0) - 1.0
     }
 }
@@ -231,40 +248,22 @@ impl SampleGenerator for MultiOscillator {
             if state.last_pos > 1.0 {
                 // Completed one wave cycle
                 state.last_pos -= 1.0;
-                complete = true;
+                complete = true; // Sync signal for other oscillators
             }
 
-            //if data.sine_ratio > 0.0 {
+            if data.sine_ratio > 0.0 {
                 voice_result += MultiOscillator::get_sample_sine(state, frequency, dt, self.sample_rate) * data.sine_ratio;
-
-                // Periodically stabilize the phasor's amplitude.
-                // TODO: Move stabilization into main loop
-                if state.last_stabilization > 500 {
-                        let a = state.phasor.re;
-                        let b = state.phasor.im;
-                        state.stabilizer.re = (3.0 - a.powi(2) - b.powi(2)) / 2.0;
-                        state.phasor = state.phasor * state.stabilizer;
-                        state.last_stabilization = 0;
-                }
-            //}
-            //if data.tri_ratio > 0.0 {
-                voice_result += MultiOscillator::get_sample_triangle(state, frequency, data.phase, dt_f) * data.tri_ratio;
-            //}
-            //if data.saw_ratio > 0.0 {
-                voice_result += MultiOscillator::get_sample_saw(state, frequency, dt_f) * data.saw_ratio;
-            //}
-            //if data.square_ratio > 0.0 {
-                voice_result += MultiOscillator::get_sample_square(state, frequency, data.phase, dt_f) * data.square_ratio;
-            //}
-            //if data.noise_ratio > 0.0 {
-                voice_result += MultiOscillator::get_sample_noise(state, frequency, dt_f) * data.noise_ratio;
-            //}
+            }
+            voice_result += MultiOscillator::get_sample_triangle(state, data.phase, dt_f) * data.tri_ratio;
+            voice_result += MultiOscillator::get_sample_saw(state, dt_f) * data.saw_ratio;
+            voice_result += MultiOscillator::get_sample_square(state, data.phase, dt_f) * data.square_ratio;
+            voice_result += MultiOscillator::get_sample_noise() * data.noise_ratio;
 
             //voice_result *= 1.0 - (i as Float * 0.1);
             result += voice_result;
         }
         self.last_update += dt;
-        //result /= data.num_voices as Float;
+        //result /= data.num_voices as Float; // TODO: Scale level to number of active voices
         result *= data.level;
         if result > 1.0 {
             result = 1.0;
