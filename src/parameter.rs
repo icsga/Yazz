@@ -180,7 +180,7 @@ pub static OSC_PARAMS: [MenuItem; 10] = [
     MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::ChoiceRange(&OSC_WAVEFORM), mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::IntRange(-24, 24),          mod_func: ModFunction::Target, next: &[]},
-    MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::IntRange(-100, 100),        mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::FloatRange(0.0, 1200.0),    mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Blend,     key: 'b', val_range: ValueRange::FloatRange(0.0, 5.0),       mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::IntRange(0, 1),             mod_func: ModFunction::Target, next: &[]},

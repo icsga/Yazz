@@ -198,11 +198,7 @@ impl Tui {
                             Key::F(1) => {
                                 // Read bank from disk
                                 tui.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
-                                // Change to sound 0
-                                tui.selected_sound = 0;
-                                tui.sound = *tui.bank.get_sound(tui.selected_sound);
-                                let sound_copy = tui.sound;
-                                tui.sender.send(SynthMessage::Sound(sound_copy)).unwrap();
+                                tui.select_sound(0);
                             },
                             Key::F(2) => {
                                 // Copy current sound to selected sound in bank
@@ -232,6 +228,20 @@ impl Tui {
         handler
     }
 
+    fn select_sound(&mut self, mut sound_index: usize) {
+        info!("select_sound {}", sound_index);
+        if sound_index > 127 {
+            sound_index = 127;
+        }
+        self.selected_sound = sound_index;
+        self.sound = *self.bank.get_sound(self.selected_sound);
+        // Send new sound to synth engine
+        let sound_copy = self.sound;
+        self.sender.send(SynthMessage::Sound(sound_copy)).unwrap();
+        // Update display
+        self.window.update_all(&self.sound);
+    }
+
     /* MIDI message received */
     fn handle_midi_event(&mut self, m: &MidiMessage) {
         match *m {
@@ -240,6 +250,7 @@ impl Tui {
                     self.handle_control_change(value as i64);
                 }
             },
+            MidiMessage::ProgramChg{channel, program} => self.select_sound(program as usize - 1),
             _ => ()
         }
     }
