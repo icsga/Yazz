@@ -63,6 +63,7 @@ pub enum Parameter {
     // Delay
     Time,
     Feedback,
+    Tone,
 
     // MIDI parameters
     KeyValue,
@@ -226,10 +227,11 @@ pub static LFO_WAVEFORM: [MenuItem; 6] = [
     MenuItem{item: Parameter::SampleHold,key: 'h', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
 ];
 
-pub static DELAY_PARAMS: [MenuItem; 3] = [
+pub static DELAY_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Time,      key: 't', val_range: ValueRange::FloatRange(0.01, 1.0),      mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Feedback,  key: 'f', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Tone,      key: 'o', val_range: ValueRange::FloatRange(100.0, 5000.0),  mod_func: ModFunction::Target, next: &[]},
 ];
 
 pub static MOD_PARAMS: [MenuItem; 4] = [

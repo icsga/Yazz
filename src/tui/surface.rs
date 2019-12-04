@@ -35,6 +35,7 @@ impl Surface {
 
         let osc: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         osc.borrow_mut().enable_border(true);
+        this.window.enable_border(true);
         this.add_multi_osc(&mut osc.borrow_mut(), 1, 0, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 2, 31, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 3, 63, 0);
@@ -328,6 +329,10 @@ impl Surface {
             let value = Surface::param_to_widget_value(&value);
             item.borrow_mut().update(value);
         }
+    }
+
+    pub fn set_sound_info(&mut self, program: usize, name: &str) {
+        self.window.set_title(name);
     }
 }
 

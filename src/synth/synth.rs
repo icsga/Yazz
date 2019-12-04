@@ -205,6 +205,7 @@ impl Synth {
         // parameter. This allows us to keep the processing out of the
         // audio engine thread.
         self.voice[0].filter[0].update(&mut self.sound.filter[0]);
+        self.delay.update(&self.sound.delay);
     }
 
     /* Handles a received MIDI message. */

@@ -15,10 +15,10 @@ pub struct SoundData {
     pub osc: [MultiOscData; 3],
     pub env: [EnvelopeData; 2],
     pub filter: [FilterData; 2],
+    pub modul: [ModData; 16],
     pub lfo: [LfoData; 2],
     pub glfo: [LfoData; 2],
     pub delay: DelayData,
-    pub modul: [ModData; 16],
 }
 
 impl SoundData {
@@ -139,6 +139,7 @@ impl SoundData {
                     Parameter::Time =>     { self.delay.time = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Level =>    { self.delay.level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Feedback => { self.delay.feedback = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Tone =>     { self.delay.tone = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -211,6 +212,7 @@ impl SoundData {
                     Parameter::Time => ParameterValue::Float(self.delay.time),
                     Parameter::Level => ParameterValue::Float(self.delay.level),
                     Parameter::Feedback => ParameterValue::Float(self.delay.feedback),
+                    Parameter::Tone => ParameterValue::Float(self.delay.tone),
                     _ => {panic!();}
                 }
             }

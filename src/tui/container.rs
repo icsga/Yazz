@@ -11,6 +11,7 @@ use super::{Widget, WidgetProperties, WidgetRef};
 pub type ContainerRef<Key> = Rc<RefCell<Container<Key>>>;
 
 pub struct Container<Key: Copy + Eq + Hash> {
+    title: String,
     props: WidgetProperties<Key>,
     draw_border: bool,
     children: Vec<WidgetRef<Key>>,
@@ -18,10 +19,11 @@ pub struct Container<Key: Copy + Eq + Hash> {
 
 impl<Key: Copy + Eq + Hash> Container<Key> {
     pub fn new() -> Container<Key> {
+        let title = "".to_string();
         let props = WidgetProperties::new(0, 0);
         let draw_border = false;
         let children = vec!{};
-        Container{props, draw_border, children}
+        Container{title, props, draw_border, children}
     }
 
     pub fn add_child<C: Widget<Key> + 'static>(&mut self, child: Rc<RefCell<C>>, pos_x: Index, pos_y: Index) {
@@ -49,15 +51,36 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         self.draw_border = enable;
     }
 
+    pub fn set_title(&mut self, title: &str) {
+        self.title = format!("┤ {} ├", title.to_string());
+    }
+
     fn draw_border(&self) {
         print!("{}{}{}┌", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_light), color::Fg(self.props.colors.fg_dark));
+
+        // Overall position of frame
         let x_start = self.props.pos_x;
         let x_end = x_start + self.props.width;
         let y_start = self.props.pos_y;
         let y_end = y_start + self.props.height;
-        for x in  (x_start + 1)..(x_end) {
+
+        // Calculate position and width of container title, if any
+        let title_len = self.title.len() - 4; // Unicode chars have wrong len. TODO: Handle case where title is longer than width
+        let x_middle_left = (self.props.width / 2) - (title_len / 2) as Index;
+        let mut x_middle_right = (self.props.width / 2) + (title_len / 2) as Index;
+        if (x_middle_left - x_start) + title_len as Index + (x_end - x_middle_right) > self.props.width {
+            x_middle_right += 1;
+        }
+
+        // Draw upper line and title
+        for x in  (x_start + 1)..(x_middle_left) {
             print!("─");
         }
+        print!("{}", self.title);
+        for x in  (x_middle_right)..(x_end) {
+            print!("─");
+        }
+
         print!("┐");
         for y in (y_start + 1)..(y_end) {
             print!("{}│{}│", cursor::Goto(x_start, y), cursor::Goto(x_end, y));

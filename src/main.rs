@@ -21,7 +21,7 @@ use modulation::{Modulator, ModData};
 use parameter::*;
 use ringbuffer::Ringbuffer;
 use sound::SoundData;
-use storage::SoundBank;
+use storage::{SoundBank, SoundPatch};
 use synth::*;
 use tui::Index;
 use termion_wrapper::TermionWrapper;

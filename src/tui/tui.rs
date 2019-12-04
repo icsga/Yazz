@@ -4,7 +4,7 @@ use super::Float;
 use super::Label;
 use super::{MidiMessage};
 use super::SoundData;
-use super::SoundBank;
+use super::{SoundBank, SoundPatch};
 use super::{UiMessage, SynthMessage};
 use super::surface::Surface;
 use super::Value;
@@ -113,8 +113,8 @@ pub struct Tui {
     max_busy: Duration,
     canvas: CanvasRef<ParamId>,
 
-    bank: SoundBank,  // Bank with sound patches
-    sound: SoundData, // Sound patch as loaded from disk
+    bank: SoundBank,   // Bank with sound patches
+    sound: SoundPatch, // Current sound patch as loaded from disk
     selected_sound: usize,
 
     temp_string: String,
@@ -153,31 +153,32 @@ impl Tui {
         let max_busy = Duration::new(0, 0);
         let canvas: CanvasRef<ParamId> = Canvas::new(50, 20);
         let bank = SoundBank::new(SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION);
-        let mut sound = SoundData::new();
+        let sound = SoundPatch::new();
         let selected_sound = 0;
-        sound.init();
         window.set_position(1, 3);
-        window.update_all(&sound);
+        window.update_all(&sound.data);
         let (_, y) = window.get_size();
         window.add_child(canvas.clone(), 1, y);
 
-        Tui{sender,
-            ui_receiver,
-            selector,
-            //sub_selector,
-            selection_changed,
-            window,
-            sync_counter,
-            idle,
-            busy,
-            min_idle,
-            max_busy,
-            canvas,
-            bank,
-            sound,
-            selected_sound,
-            temp_string,
-        }
+        let mut tui = Tui{sender,
+                          ui_receiver,
+                          selector,
+                          //sub_selector,
+                          selection_changed,
+                          window,
+                          sync_counter,
+                          idle,
+                          busy,
+                          min_idle,
+                          max_busy,
+                          canvas,
+                          bank,
+                          sound,
+                          selected_sound,
+                          temp_string,
+                          };
+        tui.select_sound(0);
+        tui
     }
 
     /** Start input handling thread.
@@ -207,7 +208,7 @@ impl Tui {
                                 tui.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
                             },
                             _ => {
-                                if Tui::handle_user_input(&mut tui.selector, m, &mut tui.sound) {
+                                if Tui::handle_user_input(&mut tui.selector, m, &mut tui.sound.data) {
                                     tui.send_event();
                                 }
                             }
@@ -234,12 +235,15 @@ impl Tui {
             sound_index = 127;
         }
         self.selected_sound = sound_index;
-        self.sound = *self.bank.get_sound(self.selected_sound);
+        let sound_ref: &SoundPatch = self.bank.get_sound(self.selected_sound);
+        self.sound.name = sound_ref.name.clone();
+        self.sound.data = sound_ref.data;
         // Send new sound to synth engine
-        let sound_copy = self.sound;
+        let sound_copy = self.sound.data;
         self.sender.send(SynthMessage::Sound(sound_copy)).unwrap();
         // Update display
-        self.window.update_all(&self.sound);
+        self.window.set_sound_info(self.selected_sound, &self.sound.name);
+        self.window.update_all(&self.sound.data);
     }
 
     /* MIDI message received */
@@ -741,7 +745,7 @@ impl Tui {
         let parameter = &self.selector.param_selection.item_list[self.selector.param_selection.item_index];
         let param_val = &self.selector.param_selection.value;
         let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
-        self.sound.set_parameter(&param);
+        self.sound.data.set_parameter(&param);
 
         // Send new value to synth engine
         //info!("send_event {:?}", param);
