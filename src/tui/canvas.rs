@@ -50,7 +50,7 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
             self.plot_x_axis(x_axis as Index);
         }
         // Plot points
-        //let mut prev_y_pos = self.val_to_y(buff[0], offset, scale_y);
+        let mut prev_y_pos = self.val_to_y(buff[0], offset, scale_y);
         let mut prev_x_pos: Index = 0;
         let mut y_accu: Float = 0.0;
         let mut y_num_values = 0.0;
@@ -58,7 +58,7 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
             let x_pos = (i as Float * scale_x) as Index;
             y_accu += *value;
             y_num_values += 1.0;
-            if x_pos == prev_x_pos {
+            if x_pos == prev_x_pos && prev_x_pos > 0 {
                 // Accumulate values
                 continue;
             } else {
@@ -69,28 +69,44 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
                 let y_pos = self.val_to_y(mean, offset, scale_y);
 
 
-                /*
-                let diff: i64 = Canvas::diff(y_pos, prev_y_pos);
+                let diff: i64 = Self::diff(y_pos, prev_y_pos);
                 if diff > 1 {
                     // Current and previous values are more than one row apart, fill the space between
-                    let (x1, from, x2, to) = Canvas::sort(x_pos as Index - 1, prev_y_pos, x_pos as Index, y_pos);
+                    let end_y_pos: Index;
+                    let start_y_pos: Index;
+                    if y_pos > prev_y_pos {
+                        start_y_pos = prev_y_pos + 1;
+                        end_y_pos = y_pos;
+                    } else {
+                        start_y_pos = prev_y_pos;
+                        end_y_pos = y_pos + 1;
+                    };
+                    let (x1, from, x2, to) = Self::sort(x_pos as Index, start_y_pos, x_pos as Index, end_y_pos);
                     let halfpoint = from + (diff / 2) as Index;
+                    /*
                     for i in from..halfpoint {
                         self.set(x1, i, '|');
                     }
                     for i in halfpoint..to {
                         self.set(x2, i, '|');
                     }
+                    */
+                    for i in from..to {
+                        self.set(x1, i, '|');
+                    }
 
                 }
-                */
 
                 // Stretch value over skipped places if needed
-                for x in prev_x_pos..x_pos {
-                    self.set(x as Index, y_pos, '∘');
+                if x_pos - prev_x_pos > 1 {
+                    for x in prev_x_pos..x_pos {
+                        self.set(x as Index, y_pos, '∘');
+                    }
+                } else {
+                    self.set(x_pos, y_pos, '∘');
                 }
                 prev_x_pos = x_pos;
-                //prev_y_pos = y_pos;
+                prev_y_pos = y_pos;
             }
         }
         self.props.set_dirty(true);
