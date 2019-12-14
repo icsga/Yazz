@@ -82,17 +82,8 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
                         end_y_pos = y_pos + 1;
                     };
                     let (x1, from, x2, to) = Self::sort(x_pos as Index, start_y_pos, x_pos as Index, end_y_pos);
-                    let halfpoint = from + (diff / 2) as Index;
-                    /*
-                    for i in from..halfpoint {
-                        self.set(x1, i, '|');
-                    }
-                    for i in halfpoint..to {
-                        self.set(x2, i, '|');
-                    }
-                    */
                     for i in from..to {
-                        self.set(x1, i, '|');
+                        self.set(x1, i, '⋅');
                     }
 
                 }

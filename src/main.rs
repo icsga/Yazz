@@ -128,8 +128,26 @@ fn setup_synth(sample_rate: u32, s2u_sender: Sender<UiMessage>, synth_receiver: 
     (synth, synth_handle)
 }
 
+fn save_wave() -> std::io::Result<()> {
+    let mut osc = MultiOscillator::new(44100, 0);
+    let mut data = SoundData::new();
+    data.init();
+    data.osc[0].select_wave(1);
+    data.osc[0].num_voices = 1;
+    data.osc[0].level = 1.0;
+    let mut file = File::create("synth_data.csv")?;
+    file.write_all(b"time,sample\n");
+    for i in 0..441 {
+        let (sample, reset) = osc.get_sample(100.0, i, &data, false);
+        let s = format!("{}, {:?}\n", i, sample);
+        file.write_all(s.as_bytes())?;
+    }
+    Ok(())
+}
+
 fn main() {
     setup_logging();
+    //save_wave().unwrap();
 
     // Do setup
     let (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver) = setup_messaging();
