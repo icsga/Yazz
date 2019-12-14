@@ -55,7 +55,7 @@ use log::{info, trace, warn};
 use flexi_logger::{Logger, opt_format};
 
 
-pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.1";
+pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.2";
 pub const SOUND_DATA_VERSION: &'static str = "0.0.1";
 
 type Float = f32;
@@ -128,6 +128,7 @@ fn setup_synth(sample_rate: u32, s2u_sender: Sender<UiMessage>, synth_receiver: 
     (synth, synth_handle)
 }
 
+/*
 fn save_wave() -> std::io::Result<()> {
     let mut osc = MultiOscillator::new(44100, 0);
     let mut data = SoundData::new();
@@ -136,10 +137,23 @@ fn save_wave() -> std::io::Result<()> {
     data.osc[0].num_voices = 1;
     data.osc[0].level = 1.0;
     let mut file = File::create("synth_data.csv")?;
-    file.write_all(b"time,sample\n");
+    file.write_all(b"time,sample\n")?;
     for i in 0..441 {
         let (sample, reset) = osc.get_sample(100.0, i, &data, false);
         let s = format!("{}, {:?}\n", i, sample);
+        file.write_all(s.as_bytes())?;
+    }
+    Ok(())
+}
+*/
+
+fn save_wave() -> std::io::Result<()> {
+    let osc = WavetableOscillator::new(44100, 0);
+    let mut file = File::create("synth_data.csv")?;
+    let mut table = [0.0; 2097];
+    WavetableOscillator::insert_saw(&mut table, 10.0, 44100.0);
+    for i in 0..table.len() {
+        let s = format!("{}, {:?}\n", i, table[i]);
         file.write_all(s.as_bytes())?;
     }
     Ok(())

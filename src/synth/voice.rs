@@ -6,7 +6,7 @@ use super::Modulator;
 use super::Oscillator;
 use super::{Parameter, ParameterValue, SynthParam};
 use super::SampleGenerator;
-use super::MultiOscillator;
+use super::{MultiOscillator, WavetableOscillator};
 use super::SoundData;
 
 use std::sync::Arc;
@@ -21,7 +21,7 @@ pub const NUM_LFOS: usize = 2;
 pub struct Voice {
     // Components
     //osc: Box<dyn SampleGenerator + Send>,
-    osc: [MultiOscillator; NUM_OSCILLATORS],
+    osc: [WavetableOscillator; NUM_OSCILLATORS],
     env: [Envelope; NUM_ENVELOPES],
     pub filter: [Filter; NUM_FILTERS],
     lfo: [Lfo; NUM_LFOS],
@@ -38,10 +38,11 @@ pub struct Voice {
 
 impl Voice {
     pub fn new(sample_rate: u32) -> Self {
+        /*
         let osc = [
-            MultiOscillator::new(sample_rate, 0),
-            MultiOscillator::new(sample_rate, 1),
-            MultiOscillator::new(sample_rate, 2),
+            WavetableOscillator::new(sample_rate, 0),
+            WavetableOscillator::new(sample_rate, 1),
+            WavetableOscillator::new(sample_rate, 2),
         ];
         let env = [
             Envelope::new(sample_rate as Float),
@@ -55,6 +56,7 @@ impl Voice {
             Lfo::new(sample_rate),
             Lfo::new(sample_rate),
         ];
+        */
         let triggered = false;
         let trigger_seq = 0;
         let key = 0;
@@ -62,7 +64,23 @@ impl Voice {
         let input_freq = 440.0;
         let osc_amp = 0.5;
         let last_update = 0i64;
-        let voice = Voice{osc, env, filter, lfo, triggered, trigger_seq, key, velocity, input_freq, osc_amp, last_update};
+        let voice = Voice{
+                osc: [WavetableOscillator::new(sample_rate, 0),
+                    WavetableOscillator::new(sample_rate, 1),
+                    WavetableOscillator::new(sample_rate, 2)],
+                env: [Envelope::new(sample_rate as Float),
+                      Envelope::new(sample_rate as Float)],
+                filter: [Filter::new(sample_rate),
+                         Filter::new(sample_rate)],
+                lfo: [Lfo::new(sample_rate),
+                      Lfo::new(sample_rate)],
+                triggered,
+                trigger_seq,
+                key,
+                velocity,
+                input_freq,
+                osc_amp,
+                last_update};
         voice
     }
 
@@ -110,7 +128,6 @@ impl Voice {
             // Update value if mod source is local
             if !m.is_global {
                 val += mod_val;
-                info!("val={}, mod_val={}", val, mod_val);
             }
 
             // Update parameter in voice sound data
