@@ -21,7 +21,7 @@ use crossbeam_channel::{Sender, Receiver};
 use log::{info, trace, warn};
 
 const NUM_VOICES: usize = 32;
-const NUM_KEYS: usize = 127;
+const NUM_KEYS: usize = 128;
 const NUM_MODULATORS: usize = 16;
 pub const NUM_GLOBAL_LFOS: usize = 2;
 const REF_FREQUENCY: Float = 440.0;
@@ -68,12 +68,14 @@ impl Synth {
             Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
             Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
         ];
+        /*
         let voice = [
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
             Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
         ];
+        */
         let delay = Delay::new(sample_rate);
         let glfo = [
             Lfo::new(sample_rate), Lfo::new(sample_rate)
@@ -84,21 +86,24 @@ impl Synth {
         let voices_playing = 0;
         let trigger_seq = 0;
         let last_clock = 0i64;
-        let synth = Synth{sample_rate,
-                          sound,
-                          sound_global,
-                          sound_local,
-                          modulators,
-                          keymap,
-                          voice,
-                          delay,
-                          glfo,
-                          num_voices_triggered,
-                          voices_playing,
-                          trigger_seq,
-                          last_clock,
-                          sender};
-        synth
+        Synth{
+            sample_rate,
+            sound,
+            sound_global,
+            sound_local,
+            modulators,
+            keymap,
+            voice: [Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
+                    Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
+                    Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
+                    Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate)],
+            delay,
+            glfo,
+            num_voices_triggered,
+            voices_playing,
+            trigger_seq,
+            last_clock,
+            sender}
     }
 
     /* Starts a thread for receiving UI and MIDI messages. */
@@ -187,8 +192,8 @@ impl Synth {
     }
 
     /* Calculates the frequencies for the default keymap with equal temperament. */
-    fn calculate_keymap(map: &mut[Float; 127], reference_pitch: Float) {
-        for i in 0..127 {
+    fn calculate_keymap(map: &mut[Float; 128], reference_pitch: Float) {
+        for i in 0..128 {
             let two: Float = 2.0;
             map[i] = (reference_pitch / 32.0) * (two.powf((i as Float - 9.0) / 12.0));
         }
@@ -228,6 +233,7 @@ impl Synth {
     }
 
     fn handle_note_on(&mut self, key: u8, velocity: u8) {
+        info!("Note: {}", key);
         let freq = self.keymap[key as usize];
         let voice_id = self.select_voice();
         let voice = &mut self.voice[voice_id];

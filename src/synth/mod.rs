@@ -9,6 +9,7 @@ pub mod oscillator;
 pub mod sample_generator;
 pub mod synth;
 pub mod voice;
+pub mod wt_oscillator;
 
 pub use delay::{Delay, DelayData};
 pub use engine::Engine;
@@ -20,6 +21,7 @@ pub use onepole::OnePole;
 pub use oscillator::Oscillator;
 pub use sample_generator::SampleGenerator;
 pub use synth::{Synth, NUM_GLOBAL_LFOS};
+pub use wt_oscillator::{WavetableOscillator, WavetableOscData};
 
 use super::Float;
 use super::MidiMessage;
