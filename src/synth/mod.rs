@@ -21,7 +21,7 @@ pub use onepole::OnePole;
 pub use oscillator::Oscillator;
 pub use sample_generator::SampleGenerator;
 pub use synth::{Synth, NUM_GLOBAL_LFOS};
-pub use wt_oscillator::{WavetableOscillator, WavetableOscData};
+pub use wt_oscillator::{WtOsc, WtOscData};
 
 use super::Float;
 use super::MidiMessage;

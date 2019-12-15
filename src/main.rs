@@ -145,19 +145,19 @@ fn save_wave() -> std::io::Result<()> {
     }
     Ok(())
 }
-*/
 
 fn save_wave() -> std::io::Result<()> {
-    let osc = WavetableOscillator::new(44100, 0);
+    let osc = WtOsc::new(44100, 0);
     let mut file = File::create("synth_data.csv")?;
     let mut table = [0.0; 2097];
-    WavetableOscillator::insert_saw(&mut table, 10.0, 44100.0);
+    WtOsc::insert_saw(&mut table, 10.0, 44100.0);
     for i in 0..table.len() {
         let s = format!("{}, {:?}\n", i, table[i]);
         file.write_all(s.as_bytes())?;
     }
     Ok(())
 }
+*/
 
 fn main() {
     setup_logging();
