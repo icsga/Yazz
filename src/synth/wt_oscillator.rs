@@ -11,7 +11,7 @@ use log::{info, trace, warn};
 const MAX_VOICES: usize = 7;
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
-pub struct WavetableOscData {
+pub struct WtOscData {
     pub level: Float,
     pub phase: Float,
     pub sine_ratio: Float,
@@ -28,7 +28,7 @@ pub struct WavetableOscData {
     pub key_follow: i64,
 }
 
-impl WavetableOscData {
+impl WtOscData {
     pub fn init(&mut self) {
         self.level = 0.92;
         self.phase = 0.5;
@@ -133,8 +133,9 @@ impl WavetableOscData {
 }
 
 const NUM_TABLES: usize = 11;
-const NUM_SAMPLES_PER_TABLE: usize = (2048 + 1); // Add one sample for easier interpolation on last sample
-const TABLE_SIZE: usize = NUM_SAMPLES_PER_TABLE * NUM_TABLES;
+const NUM_SAMPLES_PER_TABLE: usize = 2048;
+const NUM_VALUES_PER_TABLE: usize = (NUM_SAMPLES_PER_TABLE + 1); // Add one sample for easier interpolation on last sample
+const TABLE_SIZE: usize = NUM_VALUES_PER_TABLE * NUM_TABLES;
 
 #[derive(Copy, Clone)]
 struct State {
@@ -143,7 +144,7 @@ struct State {
     level_shift: Float, // Decrease in level compared to main voice (TODO)
 }
 
-pub struct WavetableOscillator {
+pub struct WtOsc {
     sample_rate: Float,
     id: usize,
     last_update: i64, // Time of last sample generation
@@ -154,8 +155,20 @@ pub struct WavetableOscillator {
     table_square: Vec<Float>,
 }
 
-impl WavetableOscillator {
-    pub fn new(sample_rate: u32, id: usize) -> WavetableOscillator {
+/** Wavetable oscillator implementation.
+ *
+ * The WT oscillator uses multiple tables per waveform to avoid aliasing. Each
+ * table is filled by adding all harmonics that will not exceed the Nyquist
+ * frequency for the given usable range of the table (one octave).
+ */
+impl WtOsc {
+
+    /** Create a new wavetable oscillator.
+     *
+     * \param sample_rate The global sample rate of the synth
+     * \param id The voice ID of the oscillator (0 - 2)
+     */
+    pub fn new(sample_rate: u32, id: usize) -> WtOsc {
         let sample_rate = sample_rate as Float;
         let last_update = 0;
         let last_pos = 0.0;
@@ -166,7 +179,7 @@ impl WavetableOscillator {
         let table_tri = vec![0.0; TABLE_SIZE];
         let table_saw = vec![0.0; TABLE_SIZE];
         let table_square = vec![0.0; TABLE_SIZE];
-        let mut osc = WavetableOscillator{sample_rate,
+        let mut osc = WtOsc{sample_rate,
                                           id,
                                           last_update,
                                           state,
@@ -179,56 +192,62 @@ impl WavetableOscillator {
         osc
     }
 
-    /** Calculates the number of non-aliasing partials for one octave. */
-    fn calc_num_partials(base_freq: Float, sample_freq: Float) -> usize {
-        info!("Calculating partials for frequency {} Hz with sample frequency {} Hz", base_freq, sample_freq);
+    /** Calculates the number of non-aliasing harmonics for one octave.
+     *
+     * Calculates all the harmonics for the octave starting at base_freq that
+     * do not exceed the Nyquist frequency.
+     */
+    fn calc_num_harmonics(base_freq: Float, sample_freq: Float) -> usize {
+        info!("Calculating harmonics for frequency {} Hz with sample frequency {} Hz", base_freq, sample_freq);
         let nyquist_freq = sample_freq / 2.0;
         let mut part_freq = base_freq * 2.0;
         let mut prev_part = part_freq;
-        let mut num_partials = 0.0;
+        let mut num_harmonics = 0.0;
         while part_freq < nyquist_freq {
-            num_partials += 1.0;
+            num_harmonics += 1.0;
             prev_part = part_freq;
-            part_freq = base_freq * (num_partials + 2.0);
+            part_freq = base_freq * (num_harmonics + 2.0);
         }
-        info!("Got {} partials, highest at {} Hz ", num_partials as usize, prev_part);
-        num_partials as usize
+        info!("Got {} harmonics, highest at {} Hz ", num_harmonics as usize, prev_part);
+        num_harmonics as usize
     }
 
-    /** Add a sine wave with given frequency and amplitude to the buffer.
+    /** Add a wave with given frequency to the wave in a table.
      *
-     * Frequency is relative to the buffer length. The last sample of the table
-     * gets the same value as the first for faster interpolation.
+     * Frequency is relative to the buffer length, so a value of 1 will put one
+     * wave period into the table. The values are added to the values already
+     * in the table. Giving a negative amplitude will subtract the values.
+     *
+     * The last sample in the table receives the same value as the first, to
+     * allow more efficient interpolation (eliminates the need for index
+     * wrapping).
+     *
+     * wave_func is a function receiving an input in the range [0:1] and
+     * returning a value in the same range.
      */
-    pub fn add_sine_wave(table: &mut [Float], freq: Float, amplitude: Float) {
+    fn add_wave(table: &mut [Float], freq: Float, amplitude: Float, wave_func: fn(Float) -> Float) {
         let num_samples = table.len() - 1;
         let mult = freq * 2.0 * std::f32::consts::PI;
         let mut position: Float;
         for i in 0..num_samples {
             position = mult * (i as Float / num_samples as Float);
-            table[i] = table[i] + f32::sin(position) * amplitude;
+            table[i] = table[i] + wave_func(position) * amplitude;
         }
         table[table.len() - 1] = table[0]; // Add extra sample for interpolation
     }
 
-    /** Add a cosine wave with given frequency and amplitude to the buffer.
-     *
-     * Frequency is relative to the buffer length. The last sample of the table
-     * gets the same value as the first for faster interpolation.
-     */
-    pub fn add_cosine_wave(table: &mut [Float], freq: Float, amplitude: Float) {
-        let num_samples = table.len() - 1;
-        let mult = freq * 2.0 * std::f32::consts::PI;
-        let mut position: Float;
-        for i in 0..num_samples {
-            position = mult * (i as Float / num_samples as Float);
-            table[i] = table[i] + f32::cos(position) * amplitude;
-        }
-        table[table.len() - 1] = table[0]; // Add extra sample for interpolation
+    /** Add a sine wave with given frequency and amplitude to the buffer. */
+    fn add_sine_wave(table: &mut [Float], freq: Float, amplitude: Float) {
+        WtOsc::add_wave(table, freq, amplitude, f32::sin);
     }
 
-    /** Normalizes samples in a buffer to the range [1.0,-1.0] */
-    pub fn normalize(table: &mut [Float]) {
+    /** Add a cosine wave with given frequency and amplitude to the buffer. */
+    fn add_cosine_wave(table: &mut [Float], freq: Float, amplitude: Float) {
+        WtOsc::add_wave(table, freq, amplitude, f32::cos);
+    }
+
+    /** Normalizes samples in a buffer to the range [-1.0,1.0] */
+    fn normalize(table: &mut [Float]) {
         let mut max = 0.0;
         let mut current: Float;
         for i in 0..table.len() {
@@ -242,70 +261,118 @@ impl WavetableOscillator {
         }
     }
 
-    pub fn insert_sine(table: &mut [Float], start_freq: Float, sample_freq: Float) {
-        WavetableOscillator::add_sine_wave(table, 1.0, 1.0);
+    /** Insert a sine wave into the given table. */
+    fn insert_sine(table: &mut [Float], start_freq: Float, sample_freq: Float) {
+        WtOsc::add_sine_wave(table, 1.0, 1.0);
     }
 
-    pub fn insert_saw(table: &mut [Float], start_freq: Float, sample_freq: Float) {
-        let num_partials = WavetableOscillator::calc_num_partials(start_freq * 2.0, sample_freq);
+    /** Insert a saw wave into the given table.
+     *
+     * Adds all odd harmonics, subtracts all even harmonics, with reciprocal
+     * amplitude.
+     */
+    fn insert_saw(table: &mut [Float], start_freq: Float, sample_freq: Float) {
+        let num_harmonics = WtOsc::calc_num_harmonics(start_freq * 2.0, sample_freq);
         let mut sign: Float;
-        for i in 1..num_partials + 1 {
+        for i in 1..num_harmonics + 1 {
             sign = if (i & 1) == 0 { 1.0 } else { -1.0 };
-            WavetableOscillator::add_sine_wave(table, i as Float, 1.0 / i as Float * sign);
+            WtOsc::add_sine_wave(table, i as Float, 1.0 / i as Float * sign);
         }
-        WavetableOscillator::normalize(table);
+        WtOsc::normalize(table);
     }
 
-    pub fn insert_saw_2(table: &mut [Float], start_freq: Float, sample_freq: Float) {
-        let num_partials = WavetableOscillator::calc_num_partials(start_freq * 2.0, sample_freq);
-        for i in 1..num_partials + 1 {
-            WavetableOscillator::add_sine_wave(table, i as Float, 1.0 / i as Float);
+    /** Insert a saw wave into the given table.
+     *
+     * Adds all harmonics. Should be wrong, but sounds the same.
+     */
+    fn insert_saw_2(table: &mut [Float], start_freq: Float, sample_freq: Float) {
+        let num_harmonics = WtOsc::calc_num_harmonics(start_freq * 2.0, sample_freq);
+        for i in 1..num_harmonics + 1 {
+            WtOsc::add_sine_wave(table, i as Float, 1.0 / i as Float);
         }
-        WavetableOscillator::normalize(table);
+        WtOsc::normalize(table);
     }
 
-    pub fn insert_tri(table: &mut [Float], start_freq: Float, sample_freq: Float) {
-        let num_partials = WavetableOscillator::calc_num_partials(start_freq * 2.0, sample_freq);
-        for i in (1..num_partials + 1).step_by(2) {
-            WavetableOscillator::add_cosine_wave(table, i as Float, 1.0 / ((i * i) as Float));
+    /** Insert a triangular wave into the given table.
+     *
+     * Adds odd cosine harmonics with squared odd reciprocal amplitude.
+     */
+    fn insert_tri(table: &mut [Float], start_freq: Float, sample_freq: Float) {
+        let num_harmonics = WtOsc::calc_num_harmonics(start_freq * 2.0, sample_freq);
+        for i in (1..num_harmonics + 1).step_by(2) {
+            WtOsc::add_cosine_wave(table, i as Float, 1.0 / ((i * i) as Float));
         }
-        WavetableOscillator::normalize(table);
+        WtOsc::normalize(table);
     }
 
-    pub fn insert_square(table: &mut [Float], start_freq: Float, sample_freq: Float) {
-        let num_partials = WavetableOscillator::calc_num_partials(start_freq * 2.0, sample_freq);
-        for i in (1..num_partials + 1).step_by(2) {
-            WavetableOscillator::add_sine_wave(table, i as Float, 1.0 / i as Float);
+    /** Insert a square wave into the given table.
+     *
+     * Adds odd sine harmonics with odd reciprocal amplitude.
+     */
+    fn insert_square(table: &mut [Float], start_freq: Float, sample_freq: Float) {
+        let num_harmonics = WtOsc::calc_num_harmonics(start_freq * 2.0, sample_freq);
+        for i in (1..num_harmonics + 1).step_by(2) {
+            WtOsc::add_sine_wave(table, i as Float, 1.0 / i as Float);
         }
-        WavetableOscillator::normalize(table);
+        WtOsc::normalize(table);
     }
 
-    pub fn create_tables(table: &mut [Float],
+    /** Create octave tables with given insert function.
+     *
+     * Divides the given table into NUM_TABLES subtables and uses the given
+     * insert function to insert waveforms into them. Each table serves the
+     * frequency range of one octave.
+     */
+    fn create_tables(table: &mut [Float],
                          start_freq: Float,
                          sample_freq: Float,
-                         func: fn(&mut [Float], Float, Float)) {
+                         insert_wave: fn(&mut [Float], Float, Float)) {
         let mut current_freq = start_freq;
         for i in 0..NUM_TABLES {
-            let from = i * NUM_SAMPLES_PER_TABLE;
-            let to = (i + 1) * NUM_SAMPLES_PER_TABLE;
-            func(&mut table[from..to], current_freq, sample_freq);
+            let from = i * NUM_VALUES_PER_TABLE;
+            let to = (i + 1) * NUM_VALUES_PER_TABLE;
+            insert_wave(&mut table[from..to], current_freq, sample_freq);
             current_freq *= 2.0; // Next octave
         }
     }
 
-    pub fn initialize_tables(&mut self) {
+    /** Create tables of common waveforms (sine, triangle, square, saw). */
+    fn initialize_tables(&mut self) {
         let two: Float = 2.0;
         let start_freq = (440.0 / 32.0) * (two.powf((-9.0) / 12.0));
         info!("Start frequency: {}", start_freq);
-        WavetableOscillator::create_tables(&mut self.table_sine, start_freq, self.sample_rate, WavetableOscillator::insert_sine);
-        WavetableOscillator::create_tables(&mut self.table_tri, start_freq, self.sample_rate, WavetableOscillator::insert_tri);
-        WavetableOscillator::create_tables(&mut self.table_square, start_freq, self.sample_rate, WavetableOscillator::insert_square);
-        WavetableOscillator::create_tables(&mut self.table_saw, start_freq, self.sample_rate, WavetableOscillator::insert_saw);
+        WtOsc::create_tables(&mut self.table_sine, start_freq, self.sample_rate, WtOsc::insert_sine);
+        WtOsc::create_tables(&mut self.table_tri, start_freq, self.sample_rate, WtOsc::insert_tri);
+        WtOsc::create_tables(&mut self.table_saw, start_freq, self.sample_rate, WtOsc::insert_saw);
+        WtOsc::create_tables(&mut self.table_square, start_freq, self.sample_rate, WtOsc::insert_saw_2);
     }
 
+    /** Interpolate between two sample values with the given ratio. */
+    fn interpolate(val_a: Float, val_b: Float, ratio: Float) -> Float {
+        val_a + ((val_b - val_a) * ratio)
+    }
+
+    /** Get a sample from the given table at the given position.
+     *
+     * Uses linear interpolation for positions that don't map directly to a
+     * table index.
+     */
     fn get_sample(table: &[Float], table_index: usize, position: Float) -> Float{
-        let position = position as usize + table_index * NUM_SAMPLES_PER_TABLE;
-        table[position]
+        let floor_pos = position as usize;
+        let frac = position - floor_pos as Float;
+        let position = floor_pos + table_index * NUM_VALUES_PER_TABLE;
+        if frac > 0.9 {
+            // Close to upper sample
+            table[position + 1]
+        } else if frac < 0.1 {
+            // Close to lower sample
+            table[position]
+        } else {
+            // Interpolate for differences > 10%
+            let value_left = table[position];
+            let value_right = table[position + 1];
+            WtOsc::interpolate(value_left, value_right, frac)
+        }
     }
 
     fn get_sample_noise() -> Float {
@@ -326,7 +393,7 @@ impl WavetableOscillator {
     }
 }
 
-impl SampleGenerator for WavetableOscillator {
+impl SampleGenerator for WtOsc {
     fn get_sample(&mut self, frequency: Float, sample_clock: i64, data: &SoundData, reset: bool) -> (Float, bool) {
         let data = data.get_osc_data(self.id);
         let dt = sample_clock - self.last_update;
@@ -341,7 +408,7 @@ impl SampleGenerator for WavetableOscillator {
             let state: &mut State = &mut self.state[i as usize];
             let freq_diff = (frequency / 100.0) * (data.voice_spread * i as Float) * (1 - (i & 0x01 * 2)) as Float;
             let frequency = frequency + freq_diff;
-            let freq_speed = frequency * ((NUM_SAMPLES_PER_TABLE - 1) as Float / self.sample_rate);
+            let freq_speed = frequency * (NUM_SAMPLES_PER_TABLE as Float / self.sample_rate);
             let diff = freq_speed * dt_f;
             let mut voice_result = 0.0;
             state.last_pos += diff;
@@ -351,22 +418,22 @@ impl SampleGenerator for WavetableOscillator {
                 complete = true; // Sync signal for other oscillators
             }
 
-            let table_index = WavetableOscillator::get_table_index(frequency);
+            let table_index = WtOsc::get_table_index(frequency);
 
             if data.sine_ratio > 0.0 {
-                voice_result += WavetableOscillator::get_sample(&self.table_sine, table_index, state.last_pos) * data.sine_ratio;
+                voice_result += WtOsc::get_sample(&self.table_sine, table_index, state.last_pos) * data.sine_ratio;
             }
             if data.tri_ratio > 0.0 {
-                voice_result += WavetableOscillator::get_sample(&self.table_tri, table_index, state.last_pos) * data.tri_ratio;
+                voice_result += WtOsc::get_sample(&self.table_tri, table_index, state.last_pos) * data.tri_ratio;
             }
             if data.saw_ratio > 0.0 {
-                voice_result += WavetableOscillator::get_sample(&self.table_saw, table_index, state.last_pos) * data.saw_ratio;
+                voice_result += WtOsc::get_sample(&self.table_saw, table_index, state.last_pos) * data.saw_ratio;
             }
             if data.square_ratio > 0.0 {
-                voice_result += WavetableOscillator::get_sample(&self.table_square, table_index, state.last_pos) * data.square_ratio;
+                voice_result += WtOsc::get_sample(&self.table_square, table_index, state.last_pos) * data.square_ratio;
             }
             if data.noise_ratio > 0.0 {
-                voice_result += WavetableOscillator::get_sample_noise() * data.noise_ratio;
+                voice_result += WtOsc::get_sample_noise() * data.noise_ratio;
             }
 
             //voice_result *= 1.0 - (i as Float * 0.1);
@@ -391,27 +458,47 @@ impl SampleGenerator for WavetableOscillator {
 
 #[cfg(test)]
 #[test]
-fn test_calc_num_partials() {
+fn test_calc_num_harmonics() {
     /* Base frequency: 2 Hz
      * Sample frequency 20 Hz
      * Nyquist: 10 Hz
-     * Num partials: 2, 4, 6, 8 = 3
+     * Num harmonics: [2,] 4, 6, 8 = 3
      */
-    assert_eq!(WavetableOscillator::calc_num_partials(2.0, 20.0), 3);
+    assert_eq!(WtOsc::calc_num_harmonics(2.0, 20.0), 3);
 }
 
 #[test]
 fn test_get_table_index() {
-    assert_eq!(WavetableOscillator::get_table_index(10.0), 0);
-    assert_eq!(WavetableOscillator::get_table_index(20.0), 1);
-    assert_eq!(WavetableOscillator::get_table_index(40.0), 2);
-    assert_eq!(WavetableOscillator::get_table_index(80.0), 3);
-    assert_eq!(WavetableOscillator::get_table_index(160.0), 4);
-    assert_eq!(WavetableOscillator::get_table_index(320.0), 5);
-    assert_eq!(WavetableOscillator::get_table_index(640.0), 6);
-    assert_eq!(WavetableOscillator::get_table_index(1280.0), 7);
-    assert_eq!(WavetableOscillator::get_table_index(2560.0), 8);
-    assert_eq!(WavetableOscillator::get_table_index(5120.0), 9);
-    assert_eq!(WavetableOscillator::get_table_index(10240.0), 10);
-    assert_eq!(WavetableOscillator::get_table_index(20480.0), 10);
+    assert_eq!(WtOsc::get_table_index(10.0), 0);
+    assert_eq!(WtOsc::get_table_index(20.0), 1);
+    assert_eq!(WtOsc::get_table_index(40.0), 2);
+    assert_eq!(WtOsc::get_table_index(80.0), 3);
+    assert_eq!(WtOsc::get_table_index(160.0), 4);
+    assert_eq!(WtOsc::get_table_index(320.0), 5);
+    assert_eq!(WtOsc::get_table_index(640.0), 6);
+    assert_eq!(WtOsc::get_table_index(1280.0), 7);
+    assert_eq!(WtOsc::get_table_index(2560.0), 8);
+    assert_eq!(WtOsc::get_table_index(5120.0), 9);
+    assert_eq!(WtOsc::get_table_index(10240.0), 10);
+    assert_eq!(WtOsc::get_table_index(20480.0), 10);
+}
+
+#[test]
+fn test_interpolate() {
+    assert_eq!(WtOsc::interpolate(2.0, 3.0, 0.0), 2.0); // Exactly left value
+    assert_eq!(WtOsc::interpolate(2.0, 3.0, 1.0), 3.0); // Exactly right value
+    assert_eq!(WtOsc::interpolate(2.0, 3.0, 0.5), 2.5); // Middle
+}
+
+#[test]
+fn test_get_sample() {
+    //fn get_sample(table: &[Float], table_index: usize, position: Float) -> Float{
+    let mut table = [0.0; NUM_VALUES_PER_TABLE];
+    table[0] = 2.0;
+    table[1] = 3.0;
+    assert_eq!(WtOsc::get_sample(&table, 0, 0.0), 2.0); // Exactly first value
+    assert_eq!(WtOsc::get_sample(&table, 0, 1.0), 3.0); // Exactly second value
+    assert_eq!(WtOsc::get_sample(&table, 0, 0.5), 2.5); // Middle
+    assert_eq!(WtOsc::get_sample(&table, 0, 0.09), 2.0); // Close to first
+    assert_eq!(WtOsc::get_sample(&table, 0, 0.99), 3.0); // Close to second
 }

@@ -6,7 +6,7 @@ use super::Modulator;
 use super::Oscillator;
 use super::{Parameter, ParameterValue, SynthParam};
 use super::SampleGenerator;
-use super::{MultiOscillator, WavetableOscillator};
+use super::{MultiOscillator, WtOsc};
 use super::SoundData;
 
 use std::sync::Arc;
@@ -21,7 +21,7 @@ pub const NUM_LFOS: usize = 2;
 pub struct Voice {
     // Components
     //osc: Box<dyn SampleGenerator + Send>,
-    osc: [WavetableOscillator; NUM_OSCILLATORS],
+    osc: [WtOsc; NUM_OSCILLATORS],
     env: [Envelope; NUM_ENVELOPES],
     pub filter: [Filter; NUM_FILTERS],
     lfo: [Lfo; NUM_LFOS],
@@ -38,11 +38,10 @@ pub struct Voice {
 
 impl Voice {
     pub fn new(sample_rate: u32) -> Self {
-        /*
         let osc = [
-            WavetableOscillator::new(sample_rate, 0),
-            WavetableOscillator::new(sample_rate, 1),
-            WavetableOscillator::new(sample_rate, 2),
+            WtOsc::new(sample_rate, 0),
+            WtOsc::new(sample_rate, 1),
+            WtOsc::new(sample_rate, 2),
         ];
         let env = [
             Envelope::new(sample_rate as Float),
@@ -56,7 +55,6 @@ impl Voice {
             Lfo::new(sample_rate),
             Lfo::new(sample_rate),
         ];
-        */
         let triggered = false;
         let trigger_seq = 0;
         let key = 0;
@@ -65,15 +63,10 @@ impl Voice {
         let osc_amp = 0.5;
         let last_update = 0i64;
         let voice = Voice{
-                osc: [WavetableOscillator::new(sample_rate, 0),
-                    WavetableOscillator::new(sample_rate, 1),
-                    WavetableOscillator::new(sample_rate, 2)],
-                env: [Envelope::new(sample_rate as Float),
-                      Envelope::new(sample_rate as Float)],
-                filter: [Filter::new(sample_rate),
-                         Filter::new(sample_rate)],
-                lfo: [Lfo::new(sample_rate),
-                      Lfo::new(sample_rate)],
+                osc,
+                env,
+                filter,
+                lfo,
                 triggered,
                 trigger_seq,
                 key,
