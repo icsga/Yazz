@@ -441,7 +441,7 @@ impl SampleGenerator for WtOsc {
         }
         self.last_update += dt;
         //result /= data.num_voices as Float; // TODO: Scale level to number of active voices
-        result *= data.level;
+        //result *= data.level; // Apply level in Voice, to use this for modulation
         if result > 1.0 {
             result = 1.0;
         }
