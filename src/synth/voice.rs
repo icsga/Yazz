@@ -6,7 +6,7 @@ use super::Modulator;
 use super::Oscillator;
 use super::{Parameter, ParameterValue, SynthParam};
 use super::SampleGenerator;
-use super::{MultiOscillator, WtOsc};
+use super::{MultiOscillator, MultiOscData, WtOsc};
 use super::SoundData;
 
 use std::sync::Arc;
@@ -77,6 +77,16 @@ impl Voice {
         voice
     }
 
+    fn get_frequency(data: &MultiOscData, input_freq: Float) -> Float {
+        let mut freq: Float = if data.key_follow == 0 {
+            440.0
+        } else {
+            input_freq
+        };
+        freq *= data.freq_offset;
+        freq
+    }
+
     pub fn get_sample(&mut self, sample_clock: i64, modulators: &[Modulator], sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) -> Float {
         if !self.is_running() {
             return 0.0;
@@ -99,6 +109,12 @@ impl Voice {
 
             // Get modulator source output
             let mod_val: Float = match m.source_func {
+                Parameter::Oscillator => {
+                    let id = m.source_func_id - 1;
+                    let freq = Voice::get_frequency(&sound_local.osc[id], self.input_freq);
+                    let (val, wave_complete) = self.osc[id].get_sample(freq, sample_clock, sound_local, reset);
+                    val
+                },
                 Parameter::Lfo => {
                     let (val, reset) = self.lfo[m.source_func_id - 1].get_sample(sample_clock, &sound_local.lfo[m.source_func_id - 1], false);
                     val
@@ -130,14 +146,17 @@ impl Voice {
 
         // Get mixed output from oscillators
         for (i, osc) in self.osc.iter_mut().enumerate() {
+            /*
             if sound_local.osc[i].key_follow == 0 {
                 freq = 440.0;
             } else {
                 freq = self.input_freq;
             }
             freq *= sound_local.osc[i].freq_offset;
+            */
+            freq = Voice::get_frequency(&sound_local.osc[i], self.input_freq);
             let (sample, wave_complete) = osc.get_sample(freq, sample_clock, sound_local, reset);
-            result += sample * (self.osc_amp + amp_mod);
+            result += sample * sound_local.osc[i].level * (self.osc_amp + amp_mod);
             if i == 0 && wave_complete && sound_local.osc[1].sync == 1 {
                 reset = true; // Sync next oscillator in list (osc 1)
             } else {

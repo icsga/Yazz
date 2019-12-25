@@ -73,7 +73,7 @@ pub enum UiMessage {
     MousePress{x: Index, y: Index},
     MouseHold{x: Index, y: Index},
     MouseRelease{x: Index, y: Index},
-    Param(SynthParam),
+    //Param(SynthParam),
     SampleBuffer(Vec<Float>, SynthParam),
     EngineSync(Duration, Duration),
 }

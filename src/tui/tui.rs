@@ -220,7 +220,7 @@ impl Tui {
                     UiMessage::MouseRelease{x, y} => {
                         tui.window.handle_event(&msg);
                     }
-                    UiMessage::Param(m) => tui.handle_synth_param(m),
+                    //UiMessage::Param(m) => tui.handle_synth_param(m),
                     UiMessage::SampleBuffer(m, p) => tui.handle_samplebuffer(m, p),
                     UiMessage::EngineSync(idle, busy) => tui.handle_engine_sync(idle, busy),
                 };
@@ -290,11 +290,13 @@ impl Tui {
     }
 
     /* Received a queried parameter value from the synth engine. */
+    /*
     fn handle_synth_param(&mut self, m: SynthParam) {
         let selection = &mut self.selector.param_selection;
         info!("handle_synth_param {} = {:?}", selection.item_list[selection.item_index].item, m);
         Tui::update_value(selection, m.value, &mut self.temp_string);
     }
+    */
 
     /* Received a buffer with samples from the synth engine. */
     fn handle_samplebuffer(&mut self, m: Vec<Float>, p: SynthParam) {
@@ -449,6 +451,7 @@ impl Tui {
     fn change_state(selector: &mut ParamSelector, new_state: TuiState) {
         if new_state != selector.state {
             if let TuiState::Function = new_state {
+                selector.func_selection.item_index = 0;
                 selector.param_selection.item_index = 0;
             }
             info!("change_state {} -> {}", selector.state, new_state);
