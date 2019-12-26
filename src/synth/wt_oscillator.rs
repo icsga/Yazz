@@ -148,6 +148,8 @@ pub struct WtOsc {
     sample_rate: Float,
     id: usize,
     last_update: i64, // Time of last sample generation
+    last_sample: Float,
+    last_complete: bool,
     state: [State; MAX_VOICES], // State for up to MAX_VOICES oscillators running in sync
     table_sine: Vec<Float>,
     table_tri: Vec<Float>,
@@ -171,6 +173,8 @@ impl WtOsc {
     pub fn new(sample_rate: u32, id: usize) -> WtOsc {
         let sample_rate = sample_rate as Float;
         let last_update = 0;
+        let last_sample = 0.0;
+        let last_complete = false;
         let last_pos = 0.0;
         let freq_shift = 0.0;
         let level_shift = 1.0;
@@ -180,14 +184,16 @@ impl WtOsc {
         let table_saw = vec![0.0; TABLE_SIZE];
         let table_square = vec![0.0; TABLE_SIZE];
         let mut osc = WtOsc{sample_rate,
-                                          id,
-                                          last_update,
-                                          state,
-                                          table_sine,
-                                          table_tri,
-                                          table_saw,
-                                          table_square
-                                          };
+                            id,
+                            last_update,
+                            last_sample,
+                            last_complete,
+                            state,
+                            table_sine,
+                            table_tri,
+                            table_saw,
+                            table_square
+                            };
         osc.initialize_tables();
         osc
     }
@@ -357,7 +363,7 @@ impl WtOsc {
      * Uses linear interpolation for positions that don't map directly to a
      * table index.
      */
-    fn get_sample(table: &[Float], table_index: usize, position: Float) -> Float{
+    fn get_sample(table: &[Float], table_index: usize, position: Float) -> Float {
         let floor_pos = position as usize;
         let frac = position - floor_pos as Float;
         let position = floor_pos + table_index * NUM_VALUES_PER_TABLE;
@@ -395,14 +401,21 @@ impl WtOsc {
 
 impl SampleGenerator for WtOsc {
     fn get_sample(&mut self, frequency: Float, sample_clock: i64, data: &SoundData, reset: bool) -> (Float, bool) {
+        if reset {
+            self.reset(sample_clock - 1);
+        }
+
+        // Check if we already calculated a matching value
+        // TODO: Check if we also need to test the frequency here
+        if sample_clock == self.last_update {
+            return (self.last_sample, self.last_complete);
+        }
+
         let data = data.get_osc_data(self.id);
         let dt = sample_clock - self.last_update;
         let dt_f = dt as Float;
         let mut result = 0.0;
         let mut complete = false;
-        if reset {
-            self.reset(sample_clock - 1);
-        }
 
         for i in 0..data.num_voices {
             let state: &mut State = &mut self.state[i as usize];
@@ -445,6 +458,8 @@ impl SampleGenerator for WtOsc {
         if result > 1.0 {
             result = 1.0;
         }
+        self.last_sample = result;
+        self.last_complete = complete;
         (result, complete)
     }
 
