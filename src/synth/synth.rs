@@ -54,6 +54,9 @@ pub struct Synth {
     trigger_seq: u64,
     last_clock: i64,
     sender: Sender<UiMessage>,
+
+    samplebuff_osc: WtOsc,
+    samplebuff_env: Envelope,
 }
 
 impl Synth {
@@ -91,6 +94,8 @@ impl Synth {
         let voices_playing = 0;
         let trigger_seq = 0;
         let last_clock = 0i64;
+        let samplebuff_osc = WtOsc::new(sample_rate, 0, Arc::clone(&wt_manager));
+        let samplebuff_env = Envelope::new(sample_rate as Float);
         Synth{
             sample_rate,
             sound,
@@ -106,7 +111,9 @@ impl Synth {
             voices_playing,
             trigger_seq,
             last_clock,
-            sender}
+            sender,
+            samplebuff_osc,
+            samplebuff_env}
     }
 
     /* Starts a thread for receiving UI and MIDI messages. */
@@ -283,15 +290,14 @@ impl Synth {
         let len = buffer.capacity();
         match param.function {
             Parameter::Oscillator => {
-                let mut osc = MultiOscillator::new(44100, param.function_id - 1);
-                osc.reset(0);
+                self.samplebuff_osc.reset(0);
+                self.samplebuff_osc.id = param.function_id - 1;
                 for i in 0..buffer.capacity() {
-                    let (sample, complete) = osc.get_sample(440.0, i as i64, &self.sound, false);
-                    buffer[i] = sample;
+                    let (sample, complete) = self.samplebuff_osc.get_sample(440.0, i as i64, &self.sound, false);
+                    buffer[i] = sample * self.sound.osc[param.function_id - 1].level;
                 }
             },
             Parameter::Envelope => {
-                // Calculate lenth of envelope
                 let env_data = &mut self.sound.env[param.function_id - 1];
                 let mut len_total = env_data.attack + env_data.decay + env_data.release;
                 len_total += len_total / 3.0; // Add 25% duration for sustain, value is in ms
@@ -301,16 +307,15 @@ impl Synth {
                 let samples_per_slot = (len_total / buffer.capacity() as Float) as usize; // Number of samples per slot in the buffer
                 let mut index: usize = 0;
                 let mut counter: usize = 0;
-                let mut env = Envelope::new(44100.0);
                 let len_total = len_total as usize;
                 let release_point = release_point as usize;
                 let mut sample = 0.0;
-                env.trigger(0, env_data);
+                self.samplebuff_env.trigger(0, env_data);
                 for i in 0..len_total {
                     if i == release_point {
-                        env.release(i as i64, env_data);
+                        self.samplebuff_env.release(i as i64, env_data);
                     }
-                    sample += env.get_sample(i as i64, env_data);
+                    sample += self.samplebuff_env.get_sample(i as i64, env_data);
                     counter += 1;
                     if counter == samples_per_slot {
                         sample /= samples_per_slot as Float;
