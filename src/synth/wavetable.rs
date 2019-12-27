@@ -22,7 +22,9 @@ impl Wavetable {
         let name = name.to_string();
         let num_octaves = 11;
         let num_values = num_samples + 1;
-        let table = vec!(vec!(0.0; num_values * num_tables); num_octaves);
+        let table = vec!(vec!(0.0; num_values * num_octaves); num_tables);
+        info!("New Wavetable: {} tables for {} octaves, {} samples",
+              num_tables, num_octaves, num_samples);
         Wavetable {
             name,
             num_tables,
@@ -121,6 +123,7 @@ impl Wavetable {
                          start_freq: Float,
                          sample_freq: Float,
                          insert_wave: fn(&mut [Float], Float, Float)) {
+        info!("Creating table {}", table_id);
         let num_octaves = self.num_octaves;
         let num_values = self.num_values;
         let table = self.get_wave(table_id);

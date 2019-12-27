@@ -1,6 +1,7 @@
 use super::Float;
 use super::SampleGenerator;
 use super::sound::SoundData;
+use super::{Wavetable, WtManager};
 
 use rand::prelude::*;
 use serde::{Serialize, Deserialize};
@@ -151,10 +152,8 @@ pub struct WtOsc {
     last_sample: Float,
     last_complete: bool,
     state: [State; MAX_VOICES], // State for up to MAX_VOICES oscillators running in sync
-    table_sine: Vec<Float>,
-    table_tri: Vec<Float>,
-    table_saw: Vec<Float>,
-    table_square: Vec<Float>,
+    wt_manager: Arc<WtManager>,
+    wave: Arc<Wavetable>,
 }
 
 /** Wavetable oscillator implementation.
@@ -170,7 +169,7 @@ impl WtOsc {
      * \param sample_rate The global sample rate of the synth
      * \param id The voice ID of the oscillator (0 - 2)
      */
-    pub fn new(sample_rate: u32, id: usize) -> WtOsc {
+    pub fn new(sample_rate: u32, id: usize, wt_manager: Arc<WtManager>) -> WtOsc {
         let sample_rate = sample_rate as Float;
         let last_update = 0;
         let last_sample = 0.0;
@@ -179,178 +178,16 @@ impl WtOsc {
         let freq_shift = 0.0;
         let level_shift = 1.0;
         let state = [State{last_pos, freq_shift, level_shift}; MAX_VOICES];
-        let table_sine = vec![0.0; TABLE_SIZE];
-        let table_tri = vec![0.0; TABLE_SIZE];
-        let table_saw = vec![0.0; TABLE_SIZE];
-        let table_square = vec![0.0; TABLE_SIZE];
-        let mut osc = WtOsc{sample_rate,
-                            id,
-                            last_update,
-                            last_sample,
-                            last_complete,
-                            state,
-                            table_sine,
-                            table_tri,
-                            table_saw,
-                            table_square
-                            };
-        osc.initialize_tables();
-        osc
-    }
-
-    /** Calculates the number of non-aliasing harmonics for one octave.
-     *
-     * Calculates all the harmonics for the octave starting at base_freq that
-     * do not exceed the Nyquist frequency.
-     */
-    fn calc_num_harmonics(base_freq: Float, sample_freq: Float) -> usize {
-        info!("Calculating harmonics for frequency {} Hz with sample frequency {} Hz", base_freq, sample_freq);
-        let nyquist_freq = sample_freq / 2.0;
-        let mut part_freq = base_freq * 2.0;
-        let mut prev_part = part_freq;
-        let mut num_harmonics = 0.0;
-        while part_freq < nyquist_freq {
-            num_harmonics += 1.0;
-            prev_part = part_freq;
-            part_freq = base_freq * (num_harmonics + 2.0);
-        }
-        info!("Got {} harmonics, highest at {} Hz ", num_harmonics as usize, prev_part);
-        num_harmonics as usize
-    }
-
-    /** Add a wave with given frequency to the wave in a table.
-     *
-     * Frequency is relative to the buffer length, so a value of 1 will put one
-     * wave period into the table. The values are added to the values already
-     * in the table. Giving a negative amplitude will subtract the values.
-     *
-     * The last sample in the table receives the same value as the first, to
-     * allow more efficient interpolation (eliminates the need for index
-     * wrapping).
-     *
-     * wave_func is a function receiving an input in the range [0:1] and
-     * returning a value in the same range.
-     */
-    fn add_wave(table: &mut [Float], freq: Float, amplitude: Float, wave_func: fn(Float) -> Float) {
-        let num_samples = table.len() - 1;
-        let mult = freq * 2.0 * std::f32::consts::PI;
-        let mut position: Float;
-        for i in 0..num_samples {
-            position = mult * (i as Float / num_samples as Float);
-            table[i] = table[i] + wave_func(position) * amplitude;
-        }
-        table[table.len() - 1] = table[0]; // Add extra sample for interpolation
-    }
-
-    /** Add a sine wave with given frequency and amplitude to the buffer. */
-    fn add_sine_wave(table: &mut [Float], freq: Float, amplitude: Float) {
-        WtOsc::add_wave(table, freq, amplitude, f32::sin);
-    }
-
-    /** Add a cosine wave with given frequency and amplitude to the buffer. */
-    fn add_cosine_wave(table: &mut [Float], freq: Float, amplitude: Float) {
-        WtOsc::add_wave(table, freq, amplitude, f32::cos);
-    }
-
-    /** Normalizes samples in a buffer to the range [-1.0,1.0] */
-    fn normalize(table: &mut [Float]) {
-        let mut max = 0.0;
-        let mut current: Float;
-        for i in 0..table.len() {
-            current = table[i].abs();
-            if current > max {
-                max = current;
-            }
-        }
-        for i in 0..table.len() {
-            table[i] = table[i] / max;
-        }
-    }
-
-    /** Insert a sine wave into the given table. */
-    fn insert_sine(table: &mut [Float], start_freq: Float, sample_freq: Float) {
-        WtOsc::add_sine_wave(table, 1.0, 1.0);
-    }
-
-    /** Insert a saw wave into the given table.
-     *
-     * Adds all odd harmonics, subtracts all even harmonics, with reciprocal
-     * amplitude.
-     */
-    fn insert_saw(table: &mut [Float], start_freq: Float, sample_freq: Float) {
-        let num_harmonics = WtOsc::calc_num_harmonics(start_freq * 2.0, sample_freq);
-        let mut sign: Float;
-        for i in 1..num_harmonics + 1 {
-            sign = if (i & 1) == 0 { 1.0 } else { -1.0 };
-            WtOsc::add_sine_wave(table, i as Float, 1.0 / i as Float * sign);
-        }
-        WtOsc::normalize(table);
-    }
-
-    /** Insert a saw wave into the given table.
-     *
-     * Adds all harmonics. Should be wrong, but sounds the same.
-     */
-    fn insert_saw_2(table: &mut [Float], start_freq: Float, sample_freq: Float) {
-        let num_harmonics = WtOsc::calc_num_harmonics(start_freq * 2.0, sample_freq);
-        for i in 1..num_harmonics + 1 {
-            WtOsc::add_sine_wave(table, i as Float, 1.0 / i as Float);
-        }
-        WtOsc::normalize(table);
-    }
-
-    /** Insert a triangular wave into the given table.
-     *
-     * Adds odd cosine harmonics with squared odd reciprocal amplitude.
-     */
-    fn insert_tri(table: &mut [Float], start_freq: Float, sample_freq: Float) {
-        let num_harmonics = WtOsc::calc_num_harmonics(start_freq * 2.0, sample_freq);
-        for i in (1..num_harmonics + 1).step_by(2) {
-            WtOsc::add_cosine_wave(table, i as Float, 1.0 / ((i * i) as Float));
-        }
-        WtOsc::normalize(table);
-    }
-
-    /** Insert a square wave into the given table.
-     *
-     * Adds odd sine harmonics with odd reciprocal amplitude.
-     */
-    fn insert_square(table: &mut [Float], start_freq: Float, sample_freq: Float) {
-        let num_harmonics = WtOsc::calc_num_harmonics(start_freq * 2.0, sample_freq);
-        for i in (1..num_harmonics + 1).step_by(2) {
-            WtOsc::add_sine_wave(table, i as Float, 1.0 / i as Float);
-        }
-        WtOsc::normalize(table);
-    }
-
-    /** Create octave tables with given insert function.
-     *
-     * Divides the given table into NUM_TABLES subtables and uses the given
-     * insert function to insert waveforms into them. Each table serves the
-     * frequency range of one octave.
-     */
-    fn create_tables(table: &mut [Float],
-                         start_freq: Float,
-                         sample_freq: Float,
-                         insert_wave: fn(&mut [Float], Float, Float)) {
-        let mut current_freq = start_freq;
-        for i in 0..NUM_TABLES {
-            let from = i * NUM_VALUES_PER_TABLE;
-            let to = (i + 1) * NUM_VALUES_PER_TABLE;
-            insert_wave(&mut table[from..to], current_freq, sample_freq);
-            current_freq *= 2.0; // Next octave
-        }
-    }
-
-    /** Create tables of common waveforms (sine, triangle, square, saw). */
-    fn initialize_tables(&mut self) {
-        let two: Float = 2.0;
-        let start_freq = (440.0 / 32.0) * (two.powf((-9.0) / 12.0));
-        info!("Start frequency: {}", start_freq);
-        WtOsc::create_tables(&mut self.table_sine, start_freq, self.sample_rate, WtOsc::insert_sine);
-        WtOsc::create_tables(&mut self.table_tri, start_freq, self.sample_rate, WtOsc::insert_tri);
-        WtOsc::create_tables(&mut self.table_saw, start_freq, self.sample_rate, WtOsc::insert_saw);
-        WtOsc::create_tables(&mut self.table_square, start_freq, self.sample_rate, WtOsc::insert_saw_2);
+        let wave = wt_manager.get_table("default").unwrap();
+        let wt_manager = Arc::clone(&wt_manager);
+        WtOsc{sample_rate,
+              id,
+              last_update,
+              last_sample,
+              last_complete,
+              state,
+              wt_manager,
+              wave}
     }
 
     /** Interpolate between two sample values with the given ratio. */
@@ -431,19 +268,20 @@ impl SampleGenerator for WtOsc {
                 complete = true; // Sync signal for other oscillators
             }
 
+            let table: &Vec<Float>;
             let table_index = WtOsc::get_table_index(frequency);
 
             if data.sine_ratio > 0.0 {
-                voice_result += WtOsc::get_sample(&self.table_sine, table_index, state.last_pos) * data.sine_ratio;
+                voice_result += WtOsc::get_sample(&self.wave.table[0], table_index, state.last_pos) * data.sine_ratio;
             }
             if data.tri_ratio > 0.0 {
-                voice_result += WtOsc::get_sample(&self.table_tri, table_index, state.last_pos) * data.tri_ratio;
+                voice_result += WtOsc::get_sample(&self.wave.table[1], table_index, state.last_pos) * data.tri_ratio;
             }
             if data.saw_ratio > 0.0 {
-                voice_result += WtOsc::get_sample(&self.table_saw, table_index, state.last_pos) * data.saw_ratio;
+                voice_result += WtOsc::get_sample(&self.wave.table[2], table_index, state.last_pos) * data.saw_ratio;
             }
             if data.square_ratio > 0.0 {
-                voice_result += WtOsc::get_sample(&self.table_square, table_index, state.last_pos) * data.square_ratio;
+                voice_result += WtOsc::get_sample(&self.wave.table[3], table_index, state.last_pos) * data.square_ratio;
             }
             if data.noise_ratio > 0.0 {
                 voice_result += WtOsc::get_sample_noise() * data.noise_ratio;
@@ -471,14 +309,14 @@ impl SampleGenerator for WtOsc {
     }
 }
 
+/*
 #[cfg(test)]
 #[test]
 fn test_calc_num_harmonics() {
-    /* Base frequency: 2 Hz
-     * Sample frequency 20 Hz
-     * Nyquist: 10 Hz
-     * Num harmonics: [2,] 4, 6, 8 = 3
-     */
+    // Base frequency: 2 Hz
+    // Sample frequency 20 Hz
+    // Nyquist: 10 Hz
+    // Num harmonics: [2,] 4, 6, 8 = 3
     assert_eq!(WtOsc::calc_num_harmonics(2.0, 20.0), 3);
 }
 
@@ -517,3 +355,4 @@ fn test_get_sample() {
     assert_eq!(WtOsc::get_sample(&table, 0, 0.09), 2.0); // Close to first
     assert_eq!(WtOsc::get_sample(&table, 0, 0.99), 3.0); // Close to second
 }
+*/
