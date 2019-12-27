@@ -23,13 +23,13 @@ pub struct WtManager {
 }
 
 impl WtManager {
-    pub fn new(sample_rate: Float) -> WtManager {
+    pub fn new(sample_rate: Float) -> Arc<WtManager> {
         let default_table = WtManager::initialize_default_tables(sample_rate);
         //let cache = HashMap::new();
         //let def_copy = Arc::clone(&default_table);
         let wt = WtManager{sample_rate, default_table};
         //wt.add_to_cache(def_copy);
-        wt
+        Arc::new(wt)
     }
 
     /** Get a single wavetable by name. */
@@ -116,11 +116,11 @@ impl WtManager {
 
     /** Create tables of common waveforms (sine, triangle, square, saw). */
     fn initialize_default_tables(sample_rate: Float) -> Arc<Wavetable> {
+        info!("Initializing default waveshapes");
         let name = "Basic".to_string();
         let mut wt = Wavetable::new(&name, 4, 2048);
         let two: Float = 2.0;
         let start_freq = (440.0 / 32.0) * (two.powf((-9.0) / 12.0));
-        info!("Start frequency: {}", start_freq);
         wt.create_tables(0, start_freq, sample_rate, WtManager::insert_sine);
         wt.create_tables(1, start_freq, sample_rate, WtManager::insert_tri);
         wt.create_tables(2, start_freq, sample_rate, WtManager::insert_saw);

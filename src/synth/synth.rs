@@ -41,7 +41,7 @@ pub struct Synth {
     sound_local: SoundData,  // Sound with voice-local modulators applied
     modulators: [Modulator; NUM_MODULATORS], // Probably don't need this
     keymap: [Float; NUM_KEYS],
-    wt_manager: WtManager,
+    wt_manager: Arc<WtManager>,
 
     // Signal chain
     voice: [Voice; NUM_VOICES],
@@ -70,18 +70,22 @@ impl Synth {
             Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
             Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
         ];
+        let wt_manager = WtManager::new(sample_rate as Float);
         let voice = [
-            Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
-            Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
-            Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
-            Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
+            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
+            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
+            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
+            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
+            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
+            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
+            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
+            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
         ];
         let delay = Delay::new(sample_rate);
         let glfo = [
             Lfo::new(sample_rate), Lfo::new(sample_rate)
         ];
         let mut keymap: [Float; NUM_KEYS] = [0.0; NUM_KEYS];
-        let wt_manager = WtManager::new(sample_rate as Float);
         Synth::calculate_keymap(&mut keymap, REF_FREQUENCY);
         let num_voices_triggered = 0;
         let voices_playing = 0;
@@ -96,12 +100,6 @@ impl Synth {
             keymap,
             wt_manager,
             voice,
-            /*
-            voice: [Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
-                    Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
-                    Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate),
-                    Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate), Voice::new(sample_rate)],
-            */
             delay,
             glfo,
             num_voices_triggered,

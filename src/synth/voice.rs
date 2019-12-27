@@ -6,7 +6,8 @@ use super::Modulator;
 use super::Oscillator;
 use super::{Parameter, ParameterValue, SynthParam};
 use super::SampleGenerator;
-use super::{MultiOscillator, MultiOscData, WtOsc};
+use super::{MultiOscillator, MultiOscData};
+use super::{WtOsc, WtManager};
 use super::SoundData;
 
 use std::sync::Arc;
@@ -25,6 +26,7 @@ pub struct Voice {
     env: [Envelope; NUM_ENVELOPES],
     pub filter: [Filter; NUM_FILTERS],
     lfo: [Lfo; NUM_LFOS],
+    wt_manager: Arc<WtManager>,
 
     // Current state
     triggered: bool,
@@ -37,11 +39,11 @@ pub struct Voice {
 }
 
 impl Voice {
-    pub fn new(sample_rate: u32) -> Self {
+    pub fn new(sample_rate: u32, wt_manager: Arc<WtManager>) -> Self {
         let osc = [
-            WtOsc::new(sample_rate, 0),
-            WtOsc::new(sample_rate, 1),
-            WtOsc::new(sample_rate, 2),
+            WtOsc::new(sample_rate, 0, Arc::clone(&wt_manager)),
+            WtOsc::new(sample_rate, 1, Arc::clone(&wt_manager)),
+            WtOsc::new(sample_rate, 2, Arc::clone(&wt_manager)),
         ];
         let env = [
             Envelope::new(sample_rate as Float),
@@ -67,6 +69,7 @@ impl Voice {
                 env,
                 filter,
                 lfo,
+                wt_manager,
                 triggered,
                 trigger_seq,
                 key,
