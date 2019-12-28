@@ -20,6 +20,7 @@ use midi_handler::{MidiHandler, MidiMessage};
 use modulation::{Modulator, ModData};
 use parameter::*;
 use ringbuffer::Ringbuffer;
+use select::{SelectorState, ParamSelector, next, previous, ItemSelection};
 use sound::SoundData;
 use storage::{SoundBank, SoundPatch};
 use synth::*;
