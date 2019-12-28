@@ -1,10 +1,8 @@
-use super::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
+use super::{Parameter, ParameterValue, ParamId, SynthParam, ValueRange, FUNCTIONS, OSC_PARAMS, MOD_SOURCES};
 use super::{Canvas, CanvasRef};
 use super::Float;
-use super::Label;
 use super::MidiMessage;
 use super::{SelectorState, ParamSelector, next, ItemSelection};
-use super::SoundData;
 use super::{SoundBank, SoundPatch};
 use super::{UiMessage, SynthMessage};
 use super::surface::Surface;
@@ -13,7 +11,6 @@ use super::{SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION};
 
 use crossbeam_channel::{Sender, Receiver};
 use log::{info, trace, warn};
-use serde::{Serialize, Deserialize};
 use termion::{clear, color, cursor};
 use termion::color::{Black, White, Red, LightWhite, Reset, Rgb};
 use termion::event::Key;
@@ -184,6 +181,7 @@ impl Tui {
             MidiMessage::ControlChg{channel, controller, value} => {
                 if controller == 0x01 { // ModWheel
                     ParamSelector::handle_control_change(&mut self.selector, value as i64);
+                    self.send_event();
                 }
             },
             MidiMessage::ProgramChg{channel, program} => self.select_sound(program as usize - 1),

@@ -1,6 +1,6 @@
 use super::Float;
-use super::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
-use super::SoundData;
+use super::{Parameter, ParameterValue, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS};
+use super::{SoundData, SoundPatch};
 
 use log::{info, trace, warn};
 use termion::event::Key;
@@ -79,6 +79,23 @@ pub struct ParamSelector {
 }
 
 impl ParamSelector {
+    pub fn new(function_list: &'static [MenuItem], param_list: &'static [MenuItem]) -> ParamSelector {
+        let state = SelectorState::Function;
+        let func_selection = ItemSelection{item_list: function_list, item_index: 0, value: ParameterValue::Int(1)};
+        let param_selection = ItemSelection{item_list: param_list, item_index: 0, value: ParameterValue::Int(1)};
+        let value = ParameterValue::Int(0);
+        let target_state = SelectorState::Value;
+        let temp_string = String::new();
+        let sub_selector = Option::None;
+        ParamSelector{state,
+                      func_selection,
+                      param_selection,
+                      value,
+                      target_state,
+                      temp_string,
+                      sub_selector}
+    }
+
     /* Received a keyboard event from the terminal.
      *
      * Return true if a new value has been read completely, false otherwise.
@@ -457,7 +474,7 @@ impl ParamSelector {
     }
 
     /* Evaluate the MIDI control change message (ModWheel) */
-    pub fn handle_control_change(s: &mut ParamSelector, val: i64) -> bool {
+    pub fn handle_control_change(s: &mut ParamSelector, val: i64) {
         match s.state {
             SelectorState::Function => ParamSelector::change_state(s, SelectorState::FunctionIndex),
             SelectorState::FunctionIndex => (),
@@ -483,7 +500,242 @@ impl ParamSelector {
             }
             _ => ()
         }
-        //s.send_event();
-        true
     }
+}
+
+
+// ----------------------------------------------
+//                  Unit tests
+// ----------------------------------------------
+
+struct TestContext {
+    ps: ParamSelector,
+    sound: SoundPatch,
+}
+
+enum TestInput {
+    Chars(String),
+    Key(Key)
+}
+
+use flexi_logger::{Logger, opt_format};
+
+impl TestContext {
+
+    fn new() -> TestContext {
+        let ps = ParamSelector::new(&FUNCTIONS, &OSC_PARAMS);
+        let sound = SoundPatch::new();
+        TestContext{ps, sound}
+    }
+
+    fn do_handle_input(&mut self, input: &TestInput) -> bool {
+        let mut result = false;
+        match input {
+            TestInput::Chars(chars) => {
+                for c in chars.chars() {
+                    let k = Key::Char(c);
+                    result = ParamSelector::handle_user_input(&mut self.ps, k, &mut self.sound.data)
+                }
+            }
+            TestInput::Key(k) => {
+                result = ParamSelector::handle_user_input(&mut self.ps, *k, &mut self.sound.data)
+            }
+        }
+        result
+    }
+
+    fn handle_input(&mut self, input: TestInput) -> bool {
+        self.do_handle_input(&input)
+    }
+
+    fn handle_inputs(&mut self, input: &[TestInput]) -> bool {
+        let mut result = false;
+        for i in input {
+            result = self.do_handle_input(i);
+        }
+        result
+    }
+
+    fn verify_function(&self, func: Parameter) -> bool {
+        let fs = &self.ps.func_selection;
+        let function = fs.item_list[fs.item_index].item;
+        if function != func {
+            println!("Expected function {}, found {}", func, function);
+            false
+        } else {
+            true
+        }
+    }
+
+    fn verify_function_id(&self, func_id: usize) -> bool {
+        let fs = &self.ps.func_selection;
+        let function_id = if let ParameterValue::Int(x) = &fs.value { *x as usize } else { panic!() };
+        if function_id != func_id {
+            println!("Expected function ID {}, found {}", func_id, function_id);
+            false
+        } else {
+            true
+        }
+    }
+
+    fn verify_parameter(&self, param: Parameter) -> bool {
+        let ps = &self.ps.param_selection;
+        let parameter = ps.item_list[ps.item_index].item;
+        if parameter != param {
+            println!("Expected parameter {}, found {}", param, parameter);
+            false
+        } else {
+            true
+        }
+    }
+
+    fn verify_value(&self, value: ParameterValue) -> bool {
+        let ps = &self.ps.param_selection;
+        match value {
+            ParameterValue::Int(expected) => {
+                let actual = if let ParameterValue::Int(j) = ps.value { j } else { panic!() };
+                if expected != actual {
+                    println!("Expected value {}, actual {}", expected, actual);
+                    false
+                } else {
+                    true
+                }
+            }
+            ParameterValue::Float(expected) => {
+                let actual = if let ParameterValue::Float(j) = ps.value { j } else { panic!() };
+                if expected != actual {
+                    println!("Expected value {}, actual {}", expected, actual);
+                    false
+                } else {
+                    true
+                }
+            },
+            ParameterValue::Choice(expected) => {
+                let actual = if let ParameterValue::Choice(j) = ps.value { j } else { panic!() };
+                if expected != actual {
+                    println!("Expected value {}, actual {}", expected, actual);
+                    false
+                } else {
+                    true
+                }
+            },
+            _ => panic!(),
+        }
+    }
+
+    fn verify_selection(&self,
+                        func: Parameter,
+                        func_id: usize,
+                        param: Parameter,
+                        value: ParameterValue) -> bool {
+        self.verify_function(func) &&
+        self.verify_function_id(func_id) &&
+        self.verify_parameter(param) &&
+        self.verify_value(value)
+    }
+}
+
+// -----------------------
+// Test function selection
+// -----------------------
+
+#[test]
+fn test_direct_shortcuts_select_parameter() {
+    let mut context = TestContext::new();
+
+    // Initial state: Osc 1 waveform Sine
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
+
+    // Change to envelope 2 Sustain selection
+    assert!(context.handle_input(TestInput::Chars("e".to_string())) == false);
+    assert!(context.verify_function(Parameter::Envelope));
+    assert!(context.handle_input(TestInput::Chars("2".to_string())) == false);
+    assert!(context.verify_function_id(2));
+    assert!(context.handle_input(TestInput::Chars("s".to_string())) == false);
+    assert!(context.verify_parameter(Parameter::Sustain));
+}
+
+#[test]
+fn test_invalid_shortcut_doesnt_change_function() {
+    let mut context = TestContext::new();
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
+    assert!(context.handle_input(TestInput::Chars("@".to_string())) == false);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
+}
+
+#[test]
+fn test_cursor_navigation() {
+    let mut context = TestContext::new();
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
+
+    // Forward
+    assert!(context.handle_input(TestInput::Key(Key::Up)) == false);
+    assert!(context.verify_function(Parameter::Envelope));
+    assert!(context.handle_input(TestInput::Key(Key::Right)) == false);
+    assert!(context.verify_function_id(1));
+    assert!(context.handle_input(TestInput::Key(Key::Up)) == false);
+    assert!(context.verify_function_id(2));
+    assert!(context.handle_input(TestInput::Key(Key::Right)) == false);
+    assert!(context.verify_parameter(Parameter::Attack));
+    assert!(context.handle_input(TestInput::Key(Key::Up)) == false);
+    assert!(context.verify_parameter(Parameter::Decay));
+    assert!(context.handle_input(TestInput::Key(Key::Right)) == false);
+    assert!(context.verify_value(ParameterValue::Float(50.0)));
+
+    // Backward
+    assert!(context.handle_input(TestInput::Key(Key::Left)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Up)) == false);
+    assert!(context.verify_parameter(Parameter::Sustain));
+    assert!(context.handle_input(TestInput::Key(Key::Left)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Down)) == false);
+    assert!(context.verify_function_id(1));
+    assert!(context.handle_input(TestInput::Key(Key::Left)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Up)) == false);
+    assert!(context.verify_function(Parameter::Lfo));
+}
+
+#[test]
+fn test_param_selection_reads_current_value() {
+    let mut context = TestContext::new();
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
+
+    // Change to level selection, reads current value from sound data
+    assert!(context.handle_input(TestInput::Chars("o1l".to_string())) == false);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+}
+
+#[test]
+fn test_cursor_up_increments_float_value() {
+    let mut context = TestContext::new();
+    let c: &[TestInput] = &[TestInput::Chars("o1l".to_string()), TestInput::Key(Key::Up)];
+    assert!(context.handle_inputs(c));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(93.0)));
+}
+
+#[test]
+fn test_cursor_up_increments_int_value() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("o1v".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
+    assert!(context.handle_input(TestInput::Key(Key::Up)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(2)));
+}
+
+#[test]
+fn test_cursor_down_decrements_float_value() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("o1l".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+    assert!(context.handle_input(TestInput::Key(Key::Down)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(91.0)));
+}
+
+#[test]
+fn test_cursor_down_decrements_int_value() {
+    let mut context = TestContext::new();
+    let c: &[TestInput] = &[TestInput::Chars("o1v".to_string()), TestInput::Key(Key::Up)];
+    assert!(context.handle_inputs(c));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(2)));
+    assert!(context.handle_input(TestInput::Key(Key::Down)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
 }
