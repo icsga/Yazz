@@ -45,35 +45,15 @@ pub struct Tui {
     bank: SoundBank,   // Bank with sound patches
     sound: SoundPatch, // Current sound patch as loaded from disk
     selected_sound: usize,
-
-    temp_string: String,
 }
 
 impl Tui {
     pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> Tui {
-        let sub_func_selection = ItemSelection{item_list: &MOD_SOURCES, item_index: 0, value: ParameterValue::Int(1)};
-        let sub_param_selection = ItemSelection{item_list: &OSC_PARAMS, item_index: 0, value: ParameterValue::Int(1)};
-        let temp_string = String::new();
-        let sub_selector = ParamSelector{state: SelectorState::Function,
-                                         func_selection: sub_func_selection,
-                                         param_selection: sub_param_selection,
-                                         value: ParameterValue::Int(0),
-                                         target_state: SelectorState::FunctionIndex,
-                                         temp_string: temp_string,
-                                         sub_selector: Option::None};
-        let func_selection = ItemSelection{item_list: &FUNCTIONS, item_index: 0, value: ParameterValue::Int(1)};
-        let param_selection = ItemSelection{item_list: &OSC_PARAMS, item_index: 0, value: ParameterValue::Int(1)};
-        let temp_string = String::new();
-        let selector = ParamSelector{state: SelectorState::Function,
-                                     func_selection: func_selection,
-                                     param_selection: param_selection,
-                                     value: ParameterValue::Int(0),
-                                     target_state: SelectorState::Value,
-                                     temp_string: temp_string,
-                                     sub_selector: Option::Some(Rc::new(RefCell::new(sub_selector)))};
+        let sub_selector = ParamSelector::new(&MOD_SOURCES);
+        let mut selector = ParamSelector::new(&FUNCTIONS);
+        selector.set_subselector(sub_selector);
         let selection_changed = true;
         let mut window = Surface::new();
-        let temp_string = String::new();
         let sync_counter = 0;
         let idle = Duration::new(0, 0);
         let busy = Duration::new(0, 0);
@@ -102,7 +82,6 @@ impl Tui {
                           bank,
                           sound,
                           selected_sound,
-                          temp_string,
                           };
         tui.select_sound(0);
         tui
@@ -135,7 +114,7 @@ impl Tui {
                                 tui.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
                             },
                             _ => {
-                                if ParamSelector::handle_user_input(&mut tui.selector, m, &mut tui.sound.data) {
+                                if tui.selector.handle_user_input(m, &mut tui.sound.data) {
                                     tui.send_event();
                                 }
                             }
