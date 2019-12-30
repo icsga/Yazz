@@ -1,6 +1,6 @@
 use super::Float;
-use super::FunctionId;
-use super::{Parameter, ParameterValue, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES};
+use super::{FunctionId, ParamId};
+use super::{Parameter, ParameterValue, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
 use super::{SoundData, SoundPatch};
 
 use log::{info, trace, warn};
@@ -58,28 +58,11 @@ impl ItemSelection {
     pub fn reset(&mut self) {
         self.item_index = 0;
         self.value = match self.item_list[0].val_range {
-            ValueRange::IntRange(min, _) => {
-                println!("Reset to int");
-                ParameterValue::Int(min)
-            },
-            ValueRange::FloatRange(min, _) => {
-                println!("Reset to float");
-                ParameterValue::Float(min)
-            },
-            ValueRange::ChoiceRange(_) => {
-                println!("Reset to choice");
-                ParameterValue::Choice(0)
-            },
-            ValueRange::FuncRange(func_list) => {
-                println!("Reset to FuncRange");
-                let value = FunctionId{function: func_list[0].item, function_id: 0};
-                ParameterValue::Function(value)
-            },
-            ValueRange::ParamRange(func_list) => {
-                println!("Reset to ParamRange");
-                let value = FunctionId{function: func_list[0].item, function_id: 0};
-                ParameterValue::Function(value)
-            },
+            ValueRange::IntRange(min, _) => ParameterValue::Int(min),
+            ValueRange::FloatRange(min, _) => ParameterValue::Float(min),
+            ValueRange::ChoiceRange(_) => ParameterValue::Choice(0),
+            ValueRange::FuncRange(func_list) => ParameterValue::Function(FunctionId{function: func_list[0].item, function_id: 0}),
+            ValueRange::ParamRange(func_list) => ParameterValue::Function(FunctionId{function: func_list[0].item, function_id: 0}),
             ValueRange::NoRange => panic!(),
         };
     }
@@ -191,6 +174,7 @@ impl ParamSelector {
 
                 // Select the parameter of the function to edit (Waveshape, Frequency, ...)
                 SelectorState::Param => {
+                    info!("SelectorState::Param, target_state={}", self.target_state);
                     match ParamSelector::select_item(&mut self.param_selection, c) {
                         RetCode::KeyConsumed   => state,           // Value has changed, but not complete yet
                         RetCode::ValueUpdated  => {                     // Pararmeter selection updated
@@ -257,6 +241,28 @@ impl ParamSelector {
                 SelectorState::Value => {
                     self.temp_string.clear();
                 },
+                _ => ()
+            }
+
+            // Entering next state, initialize needed data
+            match new_state {
+                SelectorState::Value => {
+                    // If we're using the sub-selector, we need to set the right
+                    // parameter list (e.g. mod source or mod target).
+                    let subsel = if let Some(subsel) = &self.sub_selector { subsel } else { panic!() };
+                    let ps = &self.param_selection;
+                    match ps.item_list[ps.item_index].val_range {
+                        ValueRange::FuncRange(list) => {
+                            subsel.borrow_mut().func_selection.item_list = &MOD_SOURCES;
+                            subsel.borrow_mut().target_state = SelectorState::FunctionIndex;
+                        },
+                        ValueRange::ParamRange(list) => {
+                            subsel.borrow_mut().func_selection.item_list = &MOD_TARGETS;
+                            subsel.borrow_mut().target_state = SelectorState::Param;
+                        },
+                        _ => (),
+                    }
+                }
                 _ => ()
             }
 
@@ -503,6 +509,7 @@ impl ParamSelector {
             None => panic!(),
         };
         if result == RetCode::ValueComplete {
+            info!("Subselector value complete");
             let selector = if let Some(selector) = &s.sub_selector {selector} else {panic!()};
             let selector = selector.borrow();
             match s.param_selection.value {
@@ -510,6 +517,7 @@ impl ParamSelector {
                     let s_f = &selector.func_selection;
                     v.function = s_f.item_list[s_f.item_index].item;
                     v.function_id = if let ParameterValue::Int(x) = s_f.value { x as usize } else { panic!() };
+                    info!("Copying function {:?}", v);
                 },
                 ParameterValue::Param(ref mut v) => {
                     let s_f = &selector.func_selection;
@@ -517,6 +525,7 @@ impl ParamSelector {
                     v.function_id = if let ParameterValue::Int(x) = s_f.value { x as usize } else { panic!() };
                     let s_p = &selector.param_selection;
                     v.parameter = s_p.item_list[s_p.item_index].item;
+                    info!("Copying parameter {:?}", v);
                 },
                 _ => panic!(),
             }
@@ -765,6 +774,27 @@ impl TestContext {
                     true
                 }
             },
+            ParameterValue::Function(expected) => {
+                println!("Expected value {:?}", expected);
+                let actual = if let ParameterValue::Function(j) = ps.value { j } else { panic!() };
+                if expected.function != actual.function
+                || expected.function_id != actual.function_id {
+                    println!("Expected value {:?}, actual {:?}", expected, actual);
+                    false
+                } else {
+                    true
+                }
+            }
+            ParameterValue::Param(expected) => {
+                let actual = if let ParameterValue::Param(j) = ps.value { j } else { panic!() };
+                if expected.function != actual.function
+                || expected.function_id != actual.function_id {
+                    println!("Expected value {:?}, actual {:?}", expected, actual);
+                    false
+                } else {
+                    true
+                }
+            }
             _ => panic!(),
         }
     }
@@ -962,4 +992,22 @@ fn test_escape_resets_to_valid_state() {
     let c: &[TestInput] = &[TestInput::Chars("o1f".to_string()), TestInput::Key(Key::Esc)];
     assert!(context.handle_inputs(c) == false);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Choice(0)));
+}
+
+#[test]
+fn test_modulator_source_selection() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("m\nsl1".to_string()));
+    let value = FunctionId{function: Parameter::Lfo, function_id: 1};
+    assert!(context.verify_selection(Parameter::Modulation, 1, Parameter::Source, ParameterValue::Function(value)));
+    assert_eq!(context.ps.state, SelectorState::Param);
+}
+
+#[test]
+fn test_modulator_target_selection() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("m\ntd1t".to_string()));
+    let value = ParamId{function: Parameter::Delay, function_id: 1, parameter: Parameter::Time};
+    assert!(context.verify_selection(Parameter::Modulation, 1, Parameter::Target, ParameterValue::Param(value)));
+    assert_eq!(context.ps.state, SelectorState::Param);
 }
