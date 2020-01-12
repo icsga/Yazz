@@ -263,13 +263,11 @@ impl ParamSelector {
                     match ps.item_list[ps.item_index].val_range {
                         ValueRange::FuncRange(list) => {
                             subref.func_selection.item_list = &MOD_SOURCES;
-                            subref.func_selection.item_index = 0;
                             subref.target_state = SelectorState::FunctionIndex;
                             subref.state = SelectorState::Function;
                         },
                         ValueRange::ParamRange(list) => {
                             subref.func_selection.item_list = &MOD_TARGETS;
-                            subref.func_selection.item_index = 0;
                             subref.target_state = SelectorState::Param;
                             subref.state = SelectorState::Function;
                         },
@@ -280,7 +278,6 @@ impl ParamSelector {
             }
 
             if let SelectorState::Function = new_state {
-                //self.func_selection.item_index = 0;
                 self.param_selection.item_index = 0;
             }
             info!("change_state {} -> {}", self.state, new_state);

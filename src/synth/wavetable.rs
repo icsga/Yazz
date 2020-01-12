@@ -6,7 +6,7 @@
 
 use super::Float;
 
-use log::{info, trace, warn};
+use log::{info, debug, trace, warn};
 
 pub struct Wavetable {
     pub name: String,
@@ -64,7 +64,7 @@ impl Wavetable {
      * do not exceed the Nyquist frequency.
      */
     pub fn calc_num_harmonics(base_freq: Float, sample_freq: Float) -> usize {
-        info!("Calculating harmonics for frequency {} Hz with sample frequency {} Hz", base_freq, sample_freq);
+        debug!("Calculating harmonics for frequency {} Hz with sample frequency {} Hz", base_freq, sample_freq);
         let nyquist_freq = sample_freq / 2.0;
         let mut part_freq = base_freq * 2.0;
         let mut prev_part = part_freq;
@@ -74,7 +74,7 @@ impl Wavetable {
             prev_part = part_freq;
             part_freq = base_freq * (num_harmonics + 2.0);
         }
-        info!("Got {} harmonics, highest at {} Hz ", num_harmonics as usize, prev_part);
+        debug!("Got {} harmonics, highest at {} Hz ", num_harmonics as usize, prev_part);
         num_harmonics as usize
     }
 
