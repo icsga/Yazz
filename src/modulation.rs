@@ -143,6 +143,7 @@ impl ModData {
     }
 
     fn get_mod_source(function: Parameter) -> &'static ModSource {
+        info!("Looking up mod src for {}", function);
         for (i, s) in MOD_SOURCE.iter().enumerate() {
             if s.function == function {
                 return &s;
@@ -152,6 +153,7 @@ impl ModData {
     }
 
     fn get_mod_dest(function: Parameter, parameter: Parameter) -> &'static ModDest {
+        info!("Looking up mod dest for {} - {}", function, parameter);
         for (i, d) in MOD_DEST.iter().enumerate() {
             if d.function == function && d.parameter == parameter {
                 return &d;

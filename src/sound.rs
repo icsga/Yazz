@@ -10,7 +10,7 @@ use super::{Parameter, ParameterValue, SynthParam};
 use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
+#[derive(Serialize, Deserialize, Copy, Clone, Debug)]
 pub struct SoundData {
     pub osc: [MultiOscData; 3],
     pub env: [EnvelopeData; 2],
@@ -19,6 +19,12 @@ pub struct SoundData {
     pub lfo: [LfoData; 2],
     pub glfo: [LfoData; 2],
     pub delay: DelayData,
+}
+
+impl Default for SoundData {
+    fn default() -> Self {
+        SoundData::new()
+    }
 }
 
 impl SoundData {

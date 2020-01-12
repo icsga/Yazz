@@ -8,19 +8,17 @@ use cpal::traits::{DeviceTrait, EventLoopTrait, HostTrait};
 use crossbeam_channel::Sender;
 
 use std::sync::{Arc, Mutex};
+use std::thread::JoinHandle;
 use std::time::{SystemTime, Duration};
 
 use log::{info, trace, warn};
 
 pub struct Engine {
     sample_rate: u32,
-    sample_clock: i64,
-    num_channels: usize,
-    to_ui_sender: Sender<UiMessage>,
 }
 
 impl Engine {
-    pub fn new(to_ui_sender: Sender<UiMessage>) -> Engine {
+    pub fn new() -> Engine {
         //Engine::enumerate();
         let host = cpal::default_host();
         println!("\r  Chose host {:?}", host.id());
@@ -28,60 +26,64 @@ impl Engine {
         println!("\r  Chose device {:?}", device.name());
         let format = device.default_output_format().unwrap();
         let sample_rate = format.sample_rate.0;
-        let sample_clock = 0i64;
-        let num_channels = 2;
 
-        Engine{sample_rate, sample_clock, num_channels, to_ui_sender}
+        Engine{sample_rate}
     }
 
     pub fn get_sample_rate(&self) -> u32 {
         self.sample_rate
     }
 
-    pub fn run(&mut self, synth: Arc<Mutex<Synth>>) -> Result<(), failure::Error> {
+    pub fn run(&mut self, synth: Arc<Mutex<Synth>>, to_ui_sender: Sender<UiMessage>) {
         let host = cpal::default_host();
         let device = host.default_output_device().expect("failed to find a default output device");
+        let format = device.default_output_format().unwrap();
+        let mut sample_clock = 0i64;
+        let num_channels = 2;
+
         let event_loop = host.event_loop();
         let mut format = device.default_output_format().unwrap();
-        if format.channels > self.num_channels as u16 {
-            format.channels = self.num_channels as u16;
+        if format.channels > num_channels as u16 {
+            format.channels = num_channels as u16;
         }
         let stream_id = event_loop.build_output_stream(&device, &format).unwrap();
         let my_synth = synth.clone();
         let mut time = SystemTime::now();
         event_loop.play_stream(stream_id.clone()).unwrap();
 
-        event_loop.run(move |id, result| {
-            let data = match result {
-                Ok(data) => data,
-                Err(err) => {
-                    eprintln!("an error occurred on stream {:?}: {}", id, err);
-                    return;
-                }
-            };
-            match data {
-                cpal::StreamData::Output { buffer: cpal::UnknownTypeOutputBuffer::F32(mut buffer) } => {
-                    let locked_synth = &mut synth.lock().unwrap();
-
-                    let idle = time.elapsed().expect("Went back in time");
-                    time = SystemTime::now();
-
-                    for sample in buffer.chunks_mut(self.num_channels) {
-                        self.sample_clock = self.sample_clock + 1;
-                        let value = locked_synth.get_sample(self.sample_clock);
-                        for out in sample.iter_mut() {
-                            *out = value;
-                        }
+        let handle = std::thread::spawn(move || {
+            event_loop.run(move |id, result| {
+                let data = match result {
+                    Ok(data) => data,
+                    Err(err) => {
+                        eprintln!("an error occurred on stream {:?}: {}", id, err);
+                        return;
                     }
+                };
+                match data {
+                    cpal::StreamData::Output { buffer: cpal::UnknownTypeOutputBuffer::F32(mut buffer) } => {
+                        let locked_synth = &mut synth.lock().unwrap();
 
-                    let busy = time.elapsed().expect("Went back in time");
-                    time = SystemTime::now();
-                    self.to_ui_sender.send(UiMessage::EngineSync(idle, busy)).unwrap();
+                        let idle = time.elapsed().expect("Went back in time");
+                        time = SystemTime::now();
 
-                    locked_synth.update(); // Update the state of the synth voices
-                },
-                _ => (),
-            }
+                        for sample in buffer.chunks_mut(num_channels) {
+                            sample_clock = sample_clock + 1;
+                            let value = locked_synth.get_sample(sample_clock);
+                            for out in sample.iter_mut() {
+                                *out = value;
+                            }
+                        }
+
+                        let busy = time.elapsed().expect("Went back in time");
+                        time = SystemTime::now();
+                        to_ui_sender.send(UiMessage::EngineSync(idle, busy)).unwrap();
+
+                        locked_synth.update(); // Update the state of the synth voices
+                    },
+                    _ => (),
+                }
+            });
         });
     }
 

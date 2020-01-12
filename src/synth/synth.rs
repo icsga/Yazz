@@ -119,7 +119,8 @@ impl Synth {
     /* Starts a thread for receiving UI and MIDI messages. */
     pub fn run(synth: Arc<Mutex<Synth>>, synth_receiver: Receiver<SynthMessage>) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
-            loop {
+            let mut keep_running = true;
+            while keep_running {
                 let msg = synth_receiver.recv().unwrap();
                 let mut locked_synth = synth.lock().unwrap();
                 match msg {
@@ -127,10 +128,19 @@ impl Synth {
                     SynthMessage::Midi(m)  => locked_synth.handle_midi_message(m),
                     SynthMessage::Sound(s) => locked_synth.handle_sound_update(&s),
                     SynthMessage::SampleBuffer(m, p) => locked_synth.handle_sample_buffer(m, p),
+                    SynthMessage::Exit     => {
+                        keep_running = false;
+                        locked_synth.exit();
+                    }
                 }
             }
         });
         handler
+    }
+
+    fn exit(&mut self) {
+        // Do exit stuff here
+        info!("Stopping synth engine");
     }
 
     fn get_modulation_values(glfo: &mut [Lfo], sample_clock: i64, sound: &SoundData, sound_global: &mut SoundData) {

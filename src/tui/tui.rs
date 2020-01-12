@@ -96,7 +96,8 @@ impl Tui {
                ui_receiver: Receiver<UiMessage>) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
             let mut tui = Tui::new(to_synth_sender, ui_receiver);
-            loop {
+            let mut keep_running = true;
+            while keep_running {
                 let msg = tui.ui_receiver.recv().unwrap();
                 match msg {
                     UiMessage::Midi(m)  => tui.handle_midi_event(&m),
@@ -130,6 +131,11 @@ impl Tui {
                     UiMessage::EngineSync(idle, busy) => {
                         tui.update_idle_time(idle, busy);
                         tui.handle_engine_sync();
+                    }
+                    UiMessage::Exit => {
+                        info!("Stopping TUI");
+                        keep_running = false;
+                        tui.sender.send(SynthMessage::Exit).unwrap();
                     }
                 };
             }
