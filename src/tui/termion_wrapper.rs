@@ -10,6 +10,7 @@ use super::SynthParam;
 use super::{UiMessage, SynthMessage};
 
 use crossbeam_channel::{Sender};
+use log::{info, trace, warn};
 
 use std::io::{Write, stdout, stdin};
 use std::thread::spawn;
@@ -37,7 +38,12 @@ impl TermionWrapper {
                     Event::Key(c) => {
                         match c {
                             // Exit.
-                            Key::Char('q') => { exit = true; break},
+                            Key::Ctrl('c') => {
+                                info!("Stopping terminal handler");
+                                exit = true;
+                                to_ui_sender.send(UiMessage::Exit).unwrap();
+                                break;
+                            },
                             _              => to_ui_sender.send(UiMessage::Key(c)).unwrap(),
                         };
                         termion.stdout.flush().unwrap();
@@ -53,7 +59,7 @@ impl TermionWrapper {
                 }
             }
             if exit {
-                println!("");
+                println!("{}", termion::cursor::Show);
                 return;
             }
         });

@@ -66,6 +66,7 @@ pub enum SynthMessage {
     Param(SynthParam),
     Sound(SoundData),
     SampleBuffer(Vec<Float>, SynthParam),
+    Exit
 }
 
 pub enum UiMessage {
@@ -76,6 +77,7 @@ pub enum UiMessage {
     MouseRelease{x: Index, y: Index},
     SampleBuffer(Vec<Float>, SynthParam),
     EngineSync(Duration, Duration),
+    Exit,
 }
 
 fn setup_logging() {
@@ -110,15 +112,6 @@ fn setup_ui(to_synth_sender: Sender<SynthMessage>, to_ui_sender: Sender<UiMessag
     (term_handle, tui_handle)
 }
 
-fn setup_audio(to_ui_sender: Sender<UiMessage>) -> (Engine, u32) {
-    println!("\rSetting up audio engine...");
-    let engine = Engine::new(to_ui_sender);
-    let sample_rate = engine.get_sample_rate();
-    println!("\r  sample_rate: {}", sample_rate);
-    println!("\r... finished");
-    (engine, sample_rate)
-}
-
 fn setup_synth(sample_rate: u32, s2u_sender: Sender<UiMessage>, synth_receiver: Receiver<SynthMessage>) -> (Arc<Mutex<Synth>>, std::thread::JoinHandle<()>) { 
     println!("\rSetting up synth engine...");
     let synth = Synth::new(sample_rate, s2u_sender);
@@ -126,6 +119,15 @@ fn setup_synth(sample_rate: u32, s2u_sender: Sender<UiMessage>, synth_receiver: 
     let synth_handle = Synth::run(synth.clone(), synth_receiver);
     println!("\r... finished");
     (synth, synth_handle)
+}
+
+fn setup_audio() -> (Engine, u32) {
+    println!("\rSetting up audio engine...");
+    let engine = Engine::new();
+    let sample_rate = engine.get_sample_rate();
+    println!("\r  sample_rate: {}", sample_rate);
+    println!("\r... finished");
+    (engine, sample_rate)
 }
 
 /*
@@ -167,16 +169,20 @@ fn main() {
     let (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver) = setup_messaging();
     let midi_connection = setup_midi(to_synth_sender.clone(), to_ui_sender.clone());
     let (term_handle, tui_handle) = setup_ui(to_synth_sender, to_ui_sender.clone(), ui_receiver);
-    let (mut engine, sample_rate) = setup_audio(to_ui_sender.clone());
-    let (synth, synth_handle) = setup_synth(sample_rate, to_ui_sender, synth_receiver);
+    let (mut engine, sample_rate) = setup_audio();
+    let (synth, synth_handle) = setup_synth(sample_rate, to_ui_sender.clone(), synth_receiver);
 
     // Run
     println!("\r... finished, starting processing");
-    engine.run(synth).unwrap();
+    engine.run(synth, to_ui_sender);
 
     // Cleanup
     term_handle.join().unwrap();
+    println!("Terminal handler finished");
     tui_handle.join().unwrap();
+    println!("TUI finished");
     synth_handle.join().unwrap();
+    println!("Synth engine finished");
+    drop(engine);
 }
 

@@ -249,16 +249,22 @@ impl ParamSelector {
                 SelectorState::Value => {
                     // If we're using the sub-selector, we need to set the right
                     // parameter list (e.g. mod source or mod target).
+                    info!("Initializing sub-selector");
                     let subsel = if let Some(subsel) = &self.sub_selector { subsel } else { panic!() };
+                    let mut subref = subsel.borrow_mut();
                     let ps = &self.param_selection;
                     match ps.item_list[ps.item_index].val_range {
                         ValueRange::FuncRange(list) => {
-                            subsel.borrow_mut().func_selection.item_list = &MOD_SOURCES;
-                            subsel.borrow_mut().target_state = SelectorState::FunctionIndex;
+                            subref.func_selection.item_list = &MOD_SOURCES;
+                            subref.func_selection.item_index = 0;
+                            subref.target_state = SelectorState::FunctionIndex;
+                            subref.state = SelectorState::Function;
                         },
                         ValueRange::ParamRange(list) => {
-                            subsel.borrow_mut().func_selection.item_list = &MOD_TARGETS;
-                            subsel.borrow_mut().target_state = SelectorState::Param;
+                            subref.func_selection.item_list = &MOD_TARGETS;
+                            subref.func_selection.item_index = 0;
+                            subref.target_state = SelectorState::Param;
+                            subref.state = SelectorState::Function;
                         },
                         _ => (),
                     }
@@ -328,8 +334,6 @@ impl ParamSelector {
 
         match c {
             // Common keys
-            Key::Left  => RetCode::Cancel,
-            Key::Right => RetCode::ValueComplete,
             Key::Esc   => RetCode::Reset,
 
             // All others
@@ -404,6 +408,8 @@ impl ParamSelector {
             }
             Key::Up        => { current += 1; RetCode::ValueUpdated },
             Key::Down      => if current > min { current -= 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
+            Key::Left      => RetCode::Cancel,
+            Key::Right     => RetCode::ValueComplete,
             Key::Backspace => RetCode::Cancel,
             _              => RetCode::ValueComplete,
         };
@@ -440,6 +446,8 @@ impl ParamSelector {
             }
             Key::Up        => { current += 1.0; RetCode::ValueUpdated },
             Key::Down      => { current -= 1.0; RetCode::ValueUpdated },
+            Key::Left      => RetCode::Cancel,
+            Key::Right     => RetCode::ValueComplete,
             Key::Backspace => {
                 let len = s.temp_string.len();
                 if len > 0 {
@@ -474,6 +482,8 @@ impl ParamSelector {
         let result = match c {
             Key::Up         => {current += 1; RetCode::ValueUpdated },
             Key::Down       => if current > 0 { current -= 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
+            Key::Left       => RetCode::Cancel,
+            Key::Right      => RetCode::ValueComplete,
             Key::Backspace  => RetCode::Cancel,
             Key::Char('\n') => RetCode::ValueComplete,
             _ => RetCode::KeyMissmatch,
@@ -512,6 +522,8 @@ impl ParamSelector {
             info!("Subselector value complete");
             let selector = if let Some(selector) = &s.sub_selector {selector} else {panic!()};
             let selector = selector.borrow();
+            info!("func_selection: {:?}", s.param_selection);
+            info!("param_selection: {:?}", s.param_selection);
             match s.param_selection.value {
                 ParameterValue::Function(ref mut v) => {
                     let s_f = &selector.func_selection;
@@ -529,11 +541,20 @@ impl ParamSelector {
                 },
                 _ => panic!(),
             }
-            info!("Selector value = {:?}", s.param_selection.value);
+            info!("Selector value after setting = {:?}", s.param_selection.value);
         }
         result
     }
     
+    fn get_list_index(list: &[MenuItem], param: Parameter) -> usize {
+        for (id, item) in list.iter().enumerate() {
+            if item.item == param {
+                return id;
+            }
+        }
+        panic!();
+    }
+
     /* Select the parameter chosen by input. */
     fn select_param(selector: &mut ParamSelector, sound: &SoundData) {
         info!("select_param {:?}", selector.param_selection.item_list[selector.param_selection.item_index].item);
@@ -549,22 +570,23 @@ impl ParamSelector {
         // Initialize it with the minimum.
         let value = sound.get_value(&param);
         info!("Sound has value {:?}", value);
-        selector.param_selection.value = match value {
-            ParameterValue::Int(_) => value,
-            ParameterValue::Float(_) => value,
-            ParameterValue::Choice(_) => value,
-            ParameterValue::Function(_) => {
-                let sub_sel = if let Some(ref selector) = selector.sub_selector {selector} else {panic!()};
-                sub_sel.borrow_mut().target_state = SelectorState::FunctionIndex;
-                value
-            },
-            ParameterValue::Param(_) => {
-                let sub_sel = if let Some(ref selector) = selector.sub_selector {selector} else {panic!()};
-                sub_sel.borrow_mut().target_state = SelectorState::Param;
-                value
-            },
+        match value {
+            ParameterValue::Function(id) => {
+                let fs = &mut selector.sub_selector.as_ref().unwrap().borrow_mut().func_selection;
+                fs.item_index = ParamSelector::get_list_index(fs.item_list, id.function);
+                fs.value = ParameterValue::Int(id.function_id as i64);
+            }
+            ParameterValue::Param(id) => {
+                let ss = &mut selector.sub_selector.as_ref().unwrap().borrow_mut();
+                ss.func_selection.item_index = ParamSelector::get_list_index(ss.func_selection.item_list, id.function);
+                ss.func_selection.value = ParameterValue::Int(id.function_id as i64);
+                ss.param_selection.item_index = ParamSelector::get_list_index(ss.param_selection.item_list, id.parameter);
+                ss.param_selection.value = ParameterValue::Int(0);
+            }
             ParameterValue::NoValue => panic!(),
-        };
+            _ => ()
+        }
+        selector.param_selection.value = value;
     }
 
     /* Store a new value in the selected parameter. */
@@ -604,8 +626,10 @@ impl ParamSelector {
                 }
                 selection.value = ParameterValue::Choice(val);
             }
-            ValueRange::FuncRange(selection_list) | ValueRange::ParamRange(selection_list) => {
-                // These never get called. SubSelector always operates on Int(x)
+            ValueRange::FuncRange(selection_list) => {
+                panic!();
+            }
+            ValueRange::ParamRange(selection_list) => {
                 panic!();
             }
             ValueRange::NoRange => {}
@@ -1006,8 +1030,26 @@ fn test_modulator_source_selection() {
 #[test]
 fn test_modulator_target_selection() {
     let mut context = TestContext::new();
-    context.handle_input(TestInput::Chars("m\ntd1t".to_string()));
+    let c: &[TestInput] = &[TestInput::Chars("m".to_string()),
+                            TestInput::Key(Key::Right),
+                            TestInput::Chars("td1t".to_string())];
+    context.handle_inputs(c);
     let value = ParamId{function: Parameter::Delay, function_id: 1, parameter: Parameter::Time};
     assert!(context.verify_selection(Parameter::Modulation, 1, Parameter::Target, ParameterValue::Param(value)));
     assert_eq!(context.ps.state, SelectorState::Param);
+}
+
+#[test]
+fn test_modulator_target_sel_with_cursor() {
+    let mut context = TestContext::new();
+    let c: &[TestInput] = &[TestInput::Chars("m".to_string()),
+                            TestInput::Key(Key::Right), // Mod 1
+                            TestInput::Key(Key::Up), // Target
+                            TestInput::Key(Key::Right), // Target
+                            TestInput::Key(Key::Right), // Oscillator
+                            TestInput::Key(Key::Right), // Oscillator 1
+                            ];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert_eq!(context.ps.sub_selector.as_ref().unwrap().borrow().state, SelectorState::Param);
 }
