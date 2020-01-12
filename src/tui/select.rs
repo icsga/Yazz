@@ -69,8 +69,8 @@ impl ItemSelection {
 }
 
 /* Return code from functions handling user input. */
-#[derive(PartialEq)]
-enum RetCode {
+#[derive(Debug, PartialEq)]
+pub enum RetCode {
     KeyConsumed,   // Key has been used, but value is not updated yet
     ValueUpdated,  // Key has been used and value has changed to a valid value
     ValueComplete, // Value has changed and will not be updated again
@@ -125,13 +125,16 @@ impl ParamSelector {
 
     /* Received a keyboard event from the terminal.
      *
-     * Return true if a new value has been read completely, false otherwise.
+     * Return 
+     * - KeyConsumed if value is not complete yet
+     * - ValueComplete if value is complete and can be sent to the synth engine
+     * - Cancel to cancel user input
      */
     pub fn handle_user_input(&mut self,
                              c: termion::event::Key,
-                             sound: &mut SoundData) -> bool {
+                             sound: &mut SoundData) -> RetCode {
         let mut key_consumed = false;
-        let mut value_change_finished = false;
+        let mut value_change_finished = RetCode::KeyConsumed;
 
         while !key_consumed {
             info!("handle_user_input {:?} in state {:?}", c, self.state);
@@ -143,7 +146,11 @@ impl ParamSelector {
                 SelectorState::Function => {
                     match ParamSelector::select_item(&mut self.func_selection, c) {
                         RetCode::KeyConsumed | RetCode::ValueUpdated  => state,       // Selection updated
-                        RetCode::KeyMissmatch | RetCode::Cancel       => state,       // Ignore key that doesn't match a selection
+                        RetCode::KeyMissmatch                         => state,       // Ignore key that doesn't match a selection
+                        RetCode::Cancel                               => {
+                            value_change_finished = RetCode::Cancel;
+                            state
+                        },
                         RetCode::ValueComplete                        => next(state), // Function selected
                         RetCode::Reset                                => self.reset(),
                     }
@@ -158,7 +165,7 @@ impl ParamSelector {
                             // For modulation source or target, we might be finished here with
                             // getting the value. Compare current state to expected target state.
                             if state == self.target_state {
-                                value_change_finished = true;
+                                value_change_finished = RetCode::ValueComplete;
                                 previous(state)
                             } else {
                                 self.param_selection.item_list = self.func_selection.item_list[self.func_selection.item_index].next;
@@ -185,7 +192,7 @@ impl ParamSelector {
                             // For modulation source or target, we might be finished here with
                             // getting the value. Compare current state to expected target state.
                             if state == self.target_state {
-                                value_change_finished = true;
+                                value_change_finished = RetCode::ValueComplete;
                                 previous(state)
                             } else {
                                 ParamSelector::select_param(self, sound);
@@ -203,11 +210,11 @@ impl ParamSelector {
                     match ParamSelector::get_value(self, c, sound) {
                         RetCode::KeyConsumed   => state,
                         RetCode::ValueUpdated  => { // Value has changed to a valid value, update synth
-                            value_change_finished = true;
+                            value_change_finished = RetCode::ValueComplete;
                             state
                         },
                         RetCode::ValueComplete => {
-                            value_change_finished = true;
+                            value_change_finished = RetCode::ValueComplete;
                             previous(state) // Value has changed and will not be updated again
                         },
                         RetCode::KeyMissmatch  => {
@@ -507,14 +514,7 @@ impl ParamSelector {
         let result = match &mut s.sub_selector {
             Some(sub) => {
                 info!("Calling sub-selector!");
-                let value_finished = ParamSelector::handle_user_input(&mut sub.borrow_mut(), c, sound);
-                info!("Sub-selector finished!");
-                if value_finished {
-                    info!("Value finished!");
-                    RetCode::ValueComplete
-                } else {
-                    RetCode::KeyConsumed
-                }
+                ParamSelector::handle_user_input(&mut sub.borrow_mut(), c, sound)
             },
             None => panic!(),
         };
@@ -555,7 +555,7 @@ impl ParamSelector {
         panic!();
     }
 
-    /* Select the parameter chosen by input. */
+    /* Select the parameter chosen by input, set value to current sound data. */
     fn select_param(selector: &mut ParamSelector, sound: &SoundData) {
         info!("select_param {:?}", selector.param_selection.item_list[selector.param_selection.item_index].item);
         //let param = item.item_list[item.item_index].item;
@@ -567,7 +567,6 @@ impl ParamSelector {
         let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
 
         // The value in the selected parameter needs to point to the right type.
-        // Initialize it with the minimum.
         let value = sound.get_value(&param);
         info!("Sound has value {:?}", value);
         match value {
@@ -707,8 +706,8 @@ impl TestContext {
         TestContext{ps, sound}
     }
 
-    fn do_handle_input(&mut self, input: &TestInput) -> bool {
-        let mut result = false;
+    fn do_handle_input(&mut self, input: &TestInput) -> RetCode {
+        let mut result = RetCode::KeyConsumed;
         match input {
             TestInput::Chars(chars) => {
                 for c in chars.chars() {
@@ -723,12 +722,12 @@ impl TestContext {
         result
     }
 
-    fn handle_input(&mut self, input: TestInput) -> bool {
+    fn handle_input(&mut self, input: TestInput) -> RetCode {
         self.do_handle_input(&input)
     }
 
-    fn handle_inputs(&mut self, input: &[TestInput]) -> bool {
-        let mut result = false;
+    fn handle_inputs(&mut self, input: &[TestInput]) -> RetCode {
+        let mut result = RetCode::KeyConsumed;
         for i in input {
             result = self.do_handle_input(i);
         }
@@ -848,13 +847,13 @@ fn test_direct_shortcuts_select_parameter() {
     assert_eq!(context.ps.state, SelectorState::Function);
 
     // Change to envelope 2 Sustain selection
-    assert!(context.handle_input(TestInput::Chars("e".to_string())) == false);
+    assert!(context.handle_input(TestInput::Chars("e".to_string())) == RetCode::KeyConsumed);
     assert!(context.verify_function(Parameter::Envelope));
     assert_eq!(context.ps.state, SelectorState::FunctionIndex);
-    assert!(context.handle_input(TestInput::Chars("2".to_string())) == false);
+    assert!(context.handle_input(TestInput::Chars("2".to_string())) == RetCode::KeyConsumed);
     assert!(context.verify_function_id(2));
     assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.handle_input(TestInput::Chars("s".to_string())) == false);
+    assert!(context.handle_input(TestInput::Chars("s".to_string())) == RetCode::KeyConsumed);
     assert!(context.verify_parameter(Parameter::Sustain));
     assert_eq!(context.ps.state, SelectorState::Value);
 }
@@ -863,7 +862,7 @@ fn test_direct_shortcuts_select_parameter() {
 fn test_invalid_shortcut_doesnt_change_function() {
     let mut context = TestContext::new();
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
-    assert!(context.handle_input(TestInput::Chars("@".to_string())) == false);
+    assert!(context.handle_input(TestInput::Chars("@".to_string())) == RetCode::KeyConsumed);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
     assert_eq!(context.ps.state, SelectorState::Function);
 }
@@ -875,34 +874,34 @@ fn test_cursor_navigation() {
     assert_eq!(context.ps.state, SelectorState::Function);
 
     // Forwards
-    assert!(context.handle_input(TestInput::Key(Key::Up)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Up)) == RetCode::KeyConsumed);
     assert!(context.verify_function(Parameter::Envelope));
-    assert!(context.handle_input(TestInput::Key(Key::Right)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Right)) == RetCode::KeyConsumed);
     assert_eq!(context.ps.state, SelectorState::FunctionIndex);
     assert!(context.verify_function_id(1));
-    assert!(context.handle_input(TestInput::Key(Key::Up)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Up)) == RetCode::KeyConsumed);
     assert!(context.verify_function_id(2));
-    assert!(context.handle_input(TestInput::Key(Key::Right)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Right)) == RetCode::KeyConsumed);
     assert_eq!(context.ps.state, SelectorState::Param);
     assert!(context.verify_parameter(Parameter::Attack));
-    assert!(context.handle_input(TestInput::Key(Key::Up)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Up)) == RetCode::KeyConsumed);
     assert!(context.verify_parameter(Parameter::Decay));
-    assert!(context.handle_input(TestInput::Key(Key::Right)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Right)) == RetCode::KeyConsumed);
     assert_eq!(context.ps.state, SelectorState::Value);
     assert!(context.verify_value(ParameterValue::Float(50.0)));
 
     // Backwards
-    assert!(context.handle_input(TestInput::Key(Key::Left)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Left)) == RetCode::KeyConsumed);
     assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.handle_input(TestInput::Key(Key::Up)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Up)) == RetCode::KeyConsumed);
     assert!(context.verify_parameter(Parameter::Sustain));
-    assert!(context.handle_input(TestInput::Key(Key::Left)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Left)) == RetCode::KeyConsumed);
     assert_eq!(context.ps.state, SelectorState::FunctionIndex);
-    assert!(context.handle_input(TestInput::Key(Key::Down)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Down)) == RetCode::KeyConsumed);
     assert!(context.verify_function_id(1));
-    assert!(context.handle_input(TestInput::Key(Key::Left)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Left)) == RetCode::KeyConsumed);
     assert_eq!(context.ps.state, SelectorState::Function);
-    assert!(context.handle_input(TestInput::Key(Key::Up)) == false);
+    assert!(context.handle_input(TestInput::Key(Key::Up)) == RetCode::KeyConsumed);
     assert!(context.verify_function(Parameter::Lfo));
 }
 
@@ -912,7 +911,7 @@ fn test_param_selection_reads_current_value() {
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
 
     // Change to level selection, reads current value from sound data
-    assert!(context.handle_input(TestInput::Chars("o1l".to_string())) == false);
+    assert!(context.handle_input(TestInput::Chars("o1l".to_string())) == RetCode::KeyConsumed);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
 }
 
@@ -920,7 +919,7 @@ fn test_param_selection_reads_current_value() {
 fn test_cursor_up_increments_float_value() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o1l".to_string()), TestInput::Key(Key::Up)];
-    assert!(context.handle_inputs(c));
+    assert_eq!(context.handle_inputs(c), RetCode::ValueComplete);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(93.0)));
 }
 
@@ -929,7 +928,7 @@ fn test_cursor_up_increments_int_value() {
     let mut context = TestContext::new();
     context.handle_input(TestInput::Chars("o1v".to_string()));
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
-    assert!(context.handle_input(TestInput::Key(Key::Up)));
+    assert_eq!(context.handle_input(TestInput::Key(Key::Up)), RetCode::ValueComplete);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(2)));
 }
 
@@ -938,7 +937,7 @@ fn test_cursor_down_decrements_float_value() {
     let mut context = TestContext::new();
     context.handle_input(TestInput::Chars("o1l".to_string()));
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
-    assert!(context.handle_input(TestInput::Key(Key::Down)));
+    assert_eq!(context.handle_input(TestInput::Key(Key::Down)), RetCode::ValueComplete);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(91.0)));
 }
 
@@ -946,9 +945,9 @@ fn test_cursor_down_decrements_float_value() {
 fn test_cursor_down_decrements_int_value() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o1v".to_string()), TestInput::Key(Key::Up)];
-    assert!(context.handle_inputs(c));
+    assert_eq!(context.handle_inputs(c), RetCode::ValueComplete);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(2)));
-    assert!(context.handle_input(TestInput::Key(Key::Down)));
+    assert_eq!(context.handle_input(TestInput::Key(Key::Down)), RetCode::ValueComplete);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
 }
 
@@ -984,7 +983,7 @@ fn test_clear_int_tempstring_between_values() {
     // 2. After cancelling input
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o1f1".to_string()), TestInput::Key(Key::Backspace)];
-    assert!(context.handle_inputs(c) == false);
+    assert!(context.handle_inputs(c) == RetCode::KeyConsumed);
     assert_eq!(context.ps.state, SelectorState::Param);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(1)));
     context.handle_input(TestInput::Chars("f23".to_string()));
@@ -996,25 +995,25 @@ fn test_escape_resets_to_valid_state() {
     // 1. Function state
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Key(Key::Up), TestInput::Key(Key::Esc)];
-    assert!(context.handle_inputs(c) == false);
+    assert!(context.handle_inputs(c) == RetCode::KeyConsumed);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Choice(0)));
 
     // 2. Function ID state
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o".to_string()), TestInput::Key(Key::Esc)];
-    assert!(context.handle_inputs(c) == false);
+    assert!(context.handle_inputs(c) == RetCode::KeyConsumed);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Choice(0)));
 
     // 3. Parameter state
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o1".to_string()), TestInput::Key(Key::Esc)];
-    assert!(context.handle_inputs(c) == false);
+    assert!(context.handle_inputs(c) == RetCode::KeyConsumed);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Choice(0)));
 
     // 4. Value state
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o1f".to_string()), TestInput::Key(Key::Esc)];
-    assert!(context.handle_inputs(c) == false);
+    assert!(context.handle_inputs(c) == RetCode::KeyConsumed);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Choice(0)));
 }
 
@@ -1052,4 +1051,18 @@ fn test_modulator_target_sel_with_cursor() {
     context.handle_inputs(c);
     assert_eq!(context.ps.state, SelectorState::Value);
     assert_eq!(context.ps.sub_selector.as_ref().unwrap().borrow().state, SelectorState::Param);
+}
+
+#[test]
+fn test_leave_subsel_with_cursor() {
+    let mut context = TestContext::new();
+    let c: &[TestInput] = &[TestInput::Chars("m".to_string()),
+                            TestInput::Key(Key::Right), // Mod 1
+                            TestInput::Key(Key::Right), // Source
+                            ];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert_eq!(context.ps.sub_selector.as_ref().unwrap().borrow().state, SelectorState::Function);
+    context.handle_input(TestInput::Key(Key::Left)); // Back to parameter
+    assert_eq!(context.ps.state, SelectorState::Param);
 }

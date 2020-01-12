@@ -27,7 +27,7 @@ use dial::Dial;
 use label::Label;
 use mouse::{MouseHandler, MouseMessage};
 use observer::{Observer, ObserverRef};
-use select::{SelectorState, ParamSelector, next, previous, ItemSelection};
+use select::{RetCode, SelectorState, ParamSelector, next, previous, ItemSelection};
 use slider::{Slider, SliderRef};
 use surface::Surface;
 pub use tui::Tui;
