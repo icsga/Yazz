@@ -8,6 +8,7 @@ use super::{UiMessage, SynthMessage};
 use super::surface::Surface;
 use super::Value;
 use super::{SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION};
+use super::RetCode;
 
 use crossbeam_channel::{Sender, Receiver};
 use log::{info, trace, warn};
@@ -115,7 +116,7 @@ impl Tui {
                                 tui.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
                             },
                             _ => {
-                                if tui.selector.handle_user_input(m, &mut tui.sound.data) {
+                                if tui.selector.handle_user_input(m, &mut tui.sound.data) == RetCode::ValueComplete {
                                     tui.send_event();
                                 }
                             }
@@ -343,17 +344,17 @@ impl Tui {
     fn display_value(s: &ParamSelector, selected: bool) {
         let param = &s.param_selection;
         if selected {
-            print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+            print!("{}{} ", color::Bg(LightWhite), color::Fg(Black));
         }
         match param.value {
-            ParameterValue::Int(x) => print!(" {}", x),
-            ParameterValue::Float(x) => print!(" {}", x),
+            ParameterValue::Int(x) => print!("{}", x),
+            ParameterValue::Float(x) => print!("{}", x),
             ParameterValue::Choice(x) => {
                 let item = &param.item_list[param.item_index];
                 let range = &item.val_range;
                 let selection = if let ValueRange::ChoiceRange(list) = range { list } else { panic!() };
                 let item = selection[x].item;
-                print!(" {}", item);
+                print!("{}", item);
             },
             ParameterValue::Function(x) => {
                 match &s.sub_selector {

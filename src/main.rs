@@ -178,11 +178,11 @@ fn main() {
 
     // Cleanup
     term_handle.join().unwrap();
-    println!("Terminal handler finished");
+    println!("\rTerminal handler finished");
+    midi_connection.close();
     tui_handle.join().unwrap();
     println!("TUI finished");
     synth_handle.join().unwrap();
     println!("Synth engine finished");
-    drop(engine);
 }
 
