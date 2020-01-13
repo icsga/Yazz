@@ -71,13 +71,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -376,13 +376,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -681,13 +681,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -986,13 +986,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -1291,13 +1291,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -1596,13 +1596,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -1901,13 +1901,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -2206,13 +2206,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -2511,13 +2511,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -2816,13 +2816,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -3121,13 +3121,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -3426,13 +3426,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -3731,13 +3731,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -4036,13 +4036,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -4341,13 +4341,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -4646,13 +4646,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -4951,13 +4951,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -5256,13 +5256,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -5561,13 +5561,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -5866,13 +5866,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -6171,13 +6171,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -6476,13 +6476,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -6781,13 +6781,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -7086,13 +7086,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -7391,13 +7391,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -7696,13 +7696,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -8001,13 +8001,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -8306,13 +8306,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -8611,13 +8611,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -8916,13 +8916,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -9221,13 +9221,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -9526,13 +9526,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -9831,13 +9831,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -10136,13 +10136,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -10441,13 +10441,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -10746,13 +10746,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -11051,13 +11051,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -11356,13 +11356,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -11661,13 +11661,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -11966,13 +11966,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -12271,13 +12271,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -12576,13 +12576,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -12881,13 +12881,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -13186,13 +13186,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -13491,13 +13491,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -13796,13 +13796,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -14101,13 +14101,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -14406,13 +14406,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -14711,13 +14711,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -15016,13 +15016,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -15321,13 +15321,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -15626,13 +15626,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -15931,13 +15931,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -16236,13 +16236,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -16541,13 +16541,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -16846,13 +16846,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -17151,13 +17151,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -17456,13 +17456,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -17761,13 +17761,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -18066,13 +18066,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -18371,13 +18371,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -18676,13 +18676,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -18981,13 +18981,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -19286,13 +19286,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -19591,13 +19591,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -19896,13 +19896,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -20201,13 +20201,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -20506,13 +20506,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -20811,13 +20811,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -21116,13 +21116,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -21421,13 +21421,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -21726,13 +21726,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -22031,13 +22031,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -22336,13 +22336,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -22641,13 +22641,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -22946,13 +22946,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -23251,13 +23251,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -23556,13 +23556,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -23861,13 +23861,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -24166,13 +24166,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -24471,13 +24471,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -24776,13 +24776,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -25081,13 +25081,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -25386,13 +25386,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -25691,13 +25691,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -25996,13 +25996,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -26301,13 +26301,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -26606,13 +26606,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -26911,13 +26911,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -27216,13 +27216,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -27521,13 +27521,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -27826,13 +27826,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -28131,13 +28131,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -28436,13 +28436,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -28741,13 +28741,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -29046,13 +29046,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -29351,13 +29351,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -29656,13 +29656,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -29961,13 +29961,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -30266,13 +30266,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -30571,13 +30571,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -30876,13 +30876,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -31181,13 +31181,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -31486,13 +31486,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -31791,13 +31791,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -32096,13 +32096,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -32401,13 +32401,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -32706,13 +32706,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -33011,13 +33011,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -33316,13 +33316,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -33621,13 +33621,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -33926,13 +33926,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -34231,13 +34231,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -34536,13 +34536,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -34841,13 +34841,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -35146,13 +35146,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -35451,13 +35451,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -35756,13 +35756,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -36061,13 +36061,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -36366,13 +36366,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -36671,13 +36671,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -36976,13 +36976,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -37281,13 +37281,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -37586,13 +37586,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -37891,13 +37891,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -38196,13 +38196,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -38501,13 +38501,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
@@ -38806,13 +38806,13 @@
       ],
       "filter": [
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
         },
         {
-          "filter_type": "Default",
+          "filter_type": 1,
           "cutoff": 1000.0,
           "resonance": 1.0,
           "gain": 1.0
