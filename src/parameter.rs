@@ -32,7 +32,9 @@ pub enum Parameter {
     // Filter
     Type,
     Cutoff,
+    Q,
     Resonance,
+    Gain,
 
     // Amp
     Volume,
@@ -197,9 +199,10 @@ pub static LFO_PARAMS: [MenuItem; 2] = [
 ];
 
 pub static FILTER_PARAMS: [MenuItem; 3] = [
-    MenuItem{item: Parameter::Type,      key: 't', val_range: ValueRange::IntRange(1, 3),             mod_func: ModFunction::NoMod,  next: &[]},
-    MenuItem{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::FloatRange(0.0, 22000.0),   mod_func: ModFunction::Target, next: &[]},
-    MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
+    //MenuItem{item: Parameter::Type,      key: 't', val_range: ValueRange::IntRange(1, 3),             mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::FloatRange(1.0, 5000.0),    mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::FloatRange(0.2, 2.0),       mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Gain,      key: 'g', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
 ];
 
 pub static ENV_PARAMS: [MenuItem; 5] = [

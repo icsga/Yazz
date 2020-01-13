@@ -18,20 +18,7 @@ pub struct FilterData {
     pub filter_type: FilterType,
     pub cutoff: Float,
     pub resonance: Float,
-
-    // Coefficients
-    // TODO: Not so nice to store these in the sound data, since they are
-    // computed automatically. Find a better way to do this.
-    pub a0: Float,
-    pub a1: Float,
-    pub a2: Float,
-    pub a3: Float,
-    pub a4: Float,
-    pub b0: Float,
-    pub b1: Float,
-    pub b2: Float,
-    pub b3: Float,
-    pub b4: Float,
+    pub gain: Float,
 } 
 
 impl FilterData {
@@ -41,31 +28,61 @@ impl FilterData {
 
 pub struct Filter {
     sample_rate: Float,
-    buff_in: [Float; 4],
-    buff_out: [Float; 4],
-    rb_in: Ringbuffer,
-    rb_out: Ringbuffer,
+    radians_per_sample: Float,
+
+    pub y1: Float,
+    pub y2: Float,
+    pub a0: Float,
+    pub b1: Float,
+    pub b2: Float,
 }
 
 impl Filter {
     pub fn new(sample_rate: u32) -> Filter {
-        let sample_rate = sample_rate as Float;
-        let buff_in = [0.0; 4];
-        let buff_out = [0.0; 4];
-        let rb_in = Ringbuffer::new();
-        let rb_out = Ringbuffer::new();
-        Filter{sample_rate, buff_in, buff_out, rb_in, rb_out}
+        Filter{sample_rate: sample_rate as Float,
+               radians_per_sample: (std::f32::consts::PI * 2.0) / sample_rate as Float,
+               y1: 0.0, y2: 0.0, a0: 0.0, b1: 0.0, b2: 0.0}
     }
 
+    fn normalize(value: Float) -> Float {
+        if value >= 0.0 {
+            if value > 1e-15 as Float && value < 1e15 as Float {
+                value
+            } else {
+                0.0
+            }
+        } else {
+            if value < -1e-15 as Float && value > -1e15 as Float {
+                value
+            } else {
+                0.0
+            }
+        }
+    }
+
+    // Adapted from SC3's ResonZ
     pub fn process(&mut self, sample: Float, sample_clock: i64, data: &FilterData) -> Float {
-        sample
+        let y0 = sample + self.b1 * self.y1 + self.b2 * self.y2;
+        let result = self.a0 * (y0 - self.y2);
+        self.y2 = Filter::normalize(self.y1);
+        self.y1 = Filter::normalize(y0);
+        return result;
     }
 
+    // Called if cutoff or resonance have changed
     pub fn update(&mut self, data: &mut FilterData) {
-        // TODO: Use conditional compilation to get the right constant for f32/ f64
-        let y = ((std::f32::consts::PI * data.cutoff) / self.sample_rate).tan();
-        data.b0 = y;
-        data.b1 = y;
-        data.a1 = y - 1.0;
+        let pfreq = data.cutoff * self.radians_per_sample;
+        let b = pfreq / data.resonance;
+        let r = 1.0 - b * 0.5;
+        let r2 = 2.0 * r;
+        let r22 = r * r;
+        let cost = (r2 * f32::cos(pfreq)) / (1.0 + r22);
+        let next_b1 = r2 * cost;
+        let next_b2 = -r22;
+        let next_a0 = (1.0 - r22) * 0.5;
+
+        self.a0 = next_a0;
+        self.b1 = next_b1;
+        self.b2 = next_b2;
     }
 }

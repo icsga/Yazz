@@ -112,6 +112,7 @@ impl SoundData {
                     //Parameter::Type =>    { self.filter[id].filter_type = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }; }
                     Parameter::Cutoff =>    { self.filter[id].cutoff = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Resonance => { self.filter[id].resonance = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Gain =>      { self.filter[id].gain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -185,6 +186,7 @@ impl SoundData {
                 match param.parameter {
                     Parameter::Cutoff => ParameterValue::Float(self.filter[id].cutoff),
                     Parameter::Resonance => ParameterValue::Float(self.filter[id].resonance),
+                    Parameter::Gain => ParameterValue::Float(self.filter[id].gain),
                     _ => {panic!();}
                 }
             }

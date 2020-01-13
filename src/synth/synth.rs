@@ -229,7 +229,9 @@ impl Synth {
         // Let all components check if they need to react to a changed
         // parameter. This allows us to keep the processing out of the
         // audio engine thread.
-        self.voice[0].filter[0].update(&mut self.sound.filter[0]);
+        for v in self.voice.iter_mut() {
+            v.filter[0].update(&mut self.sound.filter[0]);
+        }
         self.delay.update(&self.sound.delay);
     }
 
