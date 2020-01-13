@@ -35,6 +35,9 @@ pub enum Parameter {
     Q,
     Resonance,
     Gain,
+    // Filter types
+    RLPF,
+    ResonZ,
 
     // Amp
     Volume,
@@ -198,11 +201,16 @@ pub static LFO_PARAMS: [MenuItem; 2] = [
     //MenuItem{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 100.0),     mod_func: ModFunction::Target, next: &[]},
 ];
 
-pub static FILTER_PARAMS: [MenuItem; 3] = [
-    //MenuItem{item: Parameter::Type,      key: 't', val_range: ValueRange::IntRange(1, 3),             mod_func: ModFunction::NoMod,  next: &[]},
+pub static FILTER_PARAMS: [MenuItem; 4] = [
+    MenuItem{item: Parameter::Type,      key: 't', val_range: ValueRange::ChoiceRange(&FILTER_TYPE),   mod_func: ModFunction::NoMod,  next: &[]},
     MenuItem{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::FloatRange(1.0, 5000.0),    mod_func: ModFunction::Target, next: &[]},
-    MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::FloatRange(0.2, 2.0),       mod_func: ModFunction::Target, next: &[]},
+    MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::FloatRange(1.0, 100.0),       mod_func: ModFunction::Target, next: &[]},
     MenuItem{item: Parameter::Gain,      key: 'g', val_range: ValueRange::FloatRange(0.0, 1.0),       mod_func: ModFunction::Target, next: &[]},
+];
+
+pub static FILTER_TYPE: [MenuItem; 2] = [
+    MenuItem{item: Parameter::RLPF,      key: 'l', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
+    MenuItem{item: Parameter::ResonZ,    key: 'r', val_range: ValueRange::NoRange,                    mod_func: ModFunction::NoMod,  next: &[]},
 ];
 
 pub static ENV_PARAMS: [MenuItem; 5] = [
