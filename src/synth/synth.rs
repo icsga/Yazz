@@ -225,13 +225,9 @@ impl Synth {
         self.sound.set_parameter(&msg);
         self.sound_global = self.sound;
         self.sound_local = self.sound;
-        //info!("handle_ui_message - {:?}\n{:?}\n{:?}", sound, self.sound_global, self.sound_local);
-        // Let all components check if they need to react to a changed
-        // parameter. This allows us to keep the processing out of the
-        // audio engine thread.
-        for v in self.voice.iter_mut() {
-            v.filter[0].update(&mut self.sound.filter[0]);
-        }
+
+        // Let components check if they need to react to a changed
+        // parameter.
         self.delay.update(&self.sound.delay);
     }
 

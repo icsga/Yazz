@@ -90,20 +90,7 @@ impl Voice {
         freq
     }
 
-    pub fn get_sample(&mut self, sample_clock: i64, modulators: &[Modulator], sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) -> Float {
-        if !self.is_running() {
-            return 0.0;
-        }
-        let mut result = 0.0;
-        //let amp_mod = self.get_amp_mod(sample_clock);
-        let amp_mod = 0.0;
-        self.last_update = sample_clock;
-        let mut reset = false;
-        let mut freq: Float;
-
-
-        // Prepare modulation values
-        // =========================
+    fn get_mod_data(&mut self, sample_clock: i64, modulators: &[Modulator], sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) {
         for m in sound.modul.iter() {
 
             if !m.active {
@@ -115,7 +102,7 @@ impl Voice {
                 Parameter::Oscillator => {
                     let id = m.source_func_id - 1;
                     let freq = Voice::get_frequency(&sound_local.osc[id], self.input_freq);
-                    let (val, wave_complete) = self.osc[id].get_sample(freq, sample_clock, sound_local, reset);
+                    let (val, wave_complete) = self.osc[id].get_sample(freq, sample_clock, sound_local, false);
                     val
                 },
                 Parameter::Lfo => {
@@ -146,17 +133,24 @@ impl Voice {
             let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::Float(val)};
             sound_local.set_parameter(&param);
         }
+    }
+
+    pub fn get_sample(&mut self, sample_clock: i64, modulators: &[Modulator], sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) -> Float {
+        if !self.is_running() {
+            return 0.0;
+        }
+        let mut result = 0.0;
+        //let amp_mod = self.get_amp_mod(sample_clock);
+        let amp_mod = 0.0;
+        self.last_update = sample_clock;
+        let mut reset = false;
+        let mut freq: Float;
+
+        // Prepare modulation values
+        self.get_mod_data(sample_clock, modulators, sound, sound_global, sound_local);
 
         // Get mixed output from oscillators
         for (i, osc) in self.osc.iter_mut().enumerate() {
-            /*
-            if sound_local.osc[i].key_follow == 0 {
-                freq = 440.0;
-            } else {
-                freq = self.input_freq;
-            }
-            freq *= sound_local.osc[i].freq_offset;
-            */
             freq = Voice::get_frequency(&sound_local.osc[i], self.input_freq);
             let (sample, wave_complete) = osc.get_sample(freq, sample_clock, sound_local, reset);
             result += sample * sound_local.osc[i].level * (self.osc_amp + amp_mod);
@@ -174,7 +168,7 @@ impl Voice {
 
         // Feed it into the filter
         // TODO: Use both filters, use different filter routings
-        result = self.filter[0].process(result, sample_clock, &sound_local.filter[0]);
+        result = self.filter[0].process(result, sample_clock, &mut sound_local.filter[0]);
 
         // Apply the volume envelope
         result *= self.env[0].get_sample(sample_clock, &sound_local.env[0]);

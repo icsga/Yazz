@@ -21,6 +21,8 @@ pub struct Filter {
     sample_rate: Float,
     radians_per_sample: Float,
     resonance: Float, // Might have different value from sound data
+    last_cutoff: Float,
+    last_resonance: Float,
 
     y1: Float,
     y2: Float,
@@ -34,6 +36,8 @@ impl Filter {
         Filter{sample_rate: sample_rate as Float,
                radians_per_sample: (std::f32::consts::PI * 2.0) / sample_rate as Float,
                resonance: 1.0,
+               last_cutoff: 0.0,
+               last_resonance: 0.0,
                y1: 0.0, y2: 0.0, a0: 0.0, b1: 0.0, b2: 0.0}
     }
 
@@ -53,7 +57,11 @@ impl Filter {
         }
     }
 
-    pub fn process(&mut self, sample: Float, sample_clock: i64, data: &FilterData) -> Float {
+    pub fn process(&mut self, sample: Float, sample_clock: i64, data: &mut FilterData) -> Float {
+        if data.cutoff != self.last_cutoff || data.resonance != self.last_resonance {
+            self.update(data);
+        }
+
         match data.filter_type {
             0 => self.process_rlpf(sample, sample_clock, data),
             1 => self.process_reson_z(sample, sample_clock, data),
