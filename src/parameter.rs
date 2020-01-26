@@ -91,6 +91,10 @@ pub enum Parameter {
     // System parameters
     Idle,
     Busy,
+    PlayMode,
+    Poly,
+    Mono,
+    Legato
 }
 
 impl Default for Parameter {
@@ -435,11 +439,12 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 
-pub static PATCH_PARAMS: [MenuItem; 4] = [
+pub static PATCH_PARAMS: [MenuItem; 5] = [
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
     MenuItem{item: Parameter::Drive,     key: 'd', val_range: ValueRange::Float(0.0, 10.0, 1.0),  next: &[]},
     MenuItem{item: Parameter::Pitchbend ,key: 'p', val_range: ValueRange::Int(0, 12),             next: &[]},
     MenuItem{item: Parameter::VelSens,   key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
+    MenuItem{item: Parameter::PlayMode,   key: 'p', val_range: ValueRange::Choice(&PLAY_MODES),  next: &[]},
 ];
 
 pub static MOD_SOURCES: [MenuItem; 8] = [
@@ -466,5 +471,11 @@ pub static MOD_TARGETS: [MenuItem; 7] = [
 pub static MOD_TARGET_PARAMS: [MenuItem; 2] = [
     MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::Float(0.0, 1.0, 0.01), next: &[]},
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
+];
+
+pub static PLAY_MODES: [MenuItem; 3] = [
+    MenuItem{item: Parameter::Poly,      key: 'p', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Mono,      key: 'm', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Legato,    key: 'l', val_range: ValueRange::NoRange, next: &[]},
 ];
 

@@ -129,6 +129,7 @@ impl Voice {
                 current_val.set_from_float(val);
             }
 
+            // TODO: Too much copying
             let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: current_val};
             sound_local.set_parameter(&param);
         }

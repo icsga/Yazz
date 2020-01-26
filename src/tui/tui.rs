@@ -111,8 +111,9 @@ impl Tui {
     }
 
     fn load_wavetables(&mut self) {
-        // send default wavetable to synth (already in list)
-        self.sender.send(SynthMessage::Wavetable(WtInfo{id: 0, valid: true, name: "Basic".to_string(), filename: "".to_string()})).unwrap();
+        // send default wavetables to synth (already in list)
+        //self.sender.send(SynthMessage::Wavetable(WtInfo{id: 0, valid: true, name: "Basic".to_string(), filename: "".to_string()})).unwrap();
+        //self.sender.send(SynthMessage::Wavetable(WtInfo{id: 1, valid: true, name: "PWM Square".to_string(), filename: "".to_string()})).unwrap();
 
         // For all wavetable list entries:
         let list = self.selector.get_dynamic_list(Parameter::Wavetable);
@@ -286,7 +287,7 @@ impl Tui {
                 }
                 if !found {
                     info!("Adding new table {}.", table_name);
-                    let id = self.bank.wt_list.len() + 1; // Default wavetable is not in this list, so add 1
+                    let id = self.bank.wt_list.len() + 2; // Default wavetables are not in this list, so add 2
                     let new_entry = WtInfo{
                         id: id,
                         valid: true,

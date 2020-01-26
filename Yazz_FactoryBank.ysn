@@ -289,8 +289,9 @@
         "patch": {
           "level": 1.0,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -579,8 +580,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -869,8 +871,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -1159,8 +1162,9 @@
         "patch": {
           "level": 0.6456692,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -1175,10 +1179,10 @@
             "tune_halfsteps": 0,
             "tune_cents": 0.0,
             "freq_offset": 1.0,
-            "wave_index": 0.0,
+            "wave_index": 0.5,
             "sync": 0,
             "key_follow": 1,
-            "wavetable": 0
+            "wavetable": 1
           },
           {
             "level": 0.0,
@@ -1264,15 +1268,15 @@
         ],
         "modul": [
           {
-            "source_func": "Lfo",
+            "source_func": "Velocity",
             "source_func_id": 1,
             "target_func": "Oscillator",
             "target_func_id": 1,
             "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "amount": 1.0,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 0.78740156
           },
           {
             "source_func": "Lfo",
@@ -1449,8 +1453,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -1739,8 +1744,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -2029,8 +2035,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -2319,8 +2326,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -2609,8 +2617,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -2899,8 +2908,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -3189,8 +3199,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -3479,8 +3490,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -3769,8 +3781,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -4059,8 +4072,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -4349,8 +4363,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -4639,8 +4654,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -4929,8 +4945,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -5219,8 +5236,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -5509,8 +5527,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -5799,8 +5818,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -6089,8 +6109,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -6379,8 +6400,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -6669,8 +6691,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -6959,8 +6982,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -7249,8 +7273,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -7539,8 +7564,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -7829,8 +7855,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -8119,8 +8146,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -8409,8 +8437,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -8699,8 +8728,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -8989,8 +9019,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -9279,8 +9310,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -9569,8 +9601,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -9859,8 +9892,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -10149,8 +10183,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -10439,8 +10474,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -10729,8 +10765,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -11019,8 +11056,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -11309,8 +11347,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -11599,8 +11638,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -11889,8 +11929,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -12179,8 +12220,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -12469,8 +12511,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -12759,8 +12802,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -13049,8 +13093,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -13339,8 +13384,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -13629,8 +13675,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -13919,8 +13966,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -14209,8 +14257,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -14499,8 +14548,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -14789,8 +14839,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -15079,8 +15130,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -15369,8 +15421,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -15659,8 +15712,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -15949,8 +16003,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -16239,8 +16294,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -16529,8 +16585,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -16819,8 +16876,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -17109,8 +17167,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -17399,8 +17458,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -17689,8 +17749,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -17979,8 +18040,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -18269,8 +18331,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -18559,8 +18622,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -18849,8 +18913,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -19139,8 +19204,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -19429,8 +19495,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -19719,8 +19786,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -20009,8 +20077,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -20299,8 +20368,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -20589,8 +20659,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -20879,8 +20950,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -21169,8 +21241,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -21459,8 +21532,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -21749,8 +21823,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -22039,8 +22114,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -22329,8 +22405,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -22619,8 +22696,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -22909,8 +22987,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -23199,8 +23278,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -23489,8 +23569,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -23779,8 +23860,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -24069,8 +24151,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -24359,8 +24442,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -24649,8 +24733,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -24939,8 +25024,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -25229,8 +25315,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -25519,8 +25606,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -25809,8 +25897,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -26099,8 +26188,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -26389,8 +26479,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -26679,8 +26770,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -26969,8 +27061,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -27259,8 +27352,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -27549,8 +27643,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -27839,8 +27934,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -28129,8 +28225,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -28419,8 +28516,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -28709,8 +28807,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -28999,8 +29098,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -29289,8 +29389,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -29579,8 +29680,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -29869,8 +29971,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -30159,8 +30262,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -30449,8 +30553,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -30739,8 +30844,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -31029,8 +31135,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -31319,8 +31426,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -31609,8 +31717,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -31899,8 +32008,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -32189,8 +32299,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -32479,8 +32590,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -32769,8 +32881,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -33059,8 +33172,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -33349,8 +33463,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -33639,8 +33754,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -33929,8 +34045,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -34219,8 +34336,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -34509,8 +34627,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -34799,8 +34918,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -35089,8 +35209,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -35379,8 +35500,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -35669,8 +35791,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -35959,8 +36082,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -36249,8 +36373,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -36539,8 +36664,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -36829,8 +36955,9 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     },
@@ -37119,516 +37246,12 @@
         "patch": {
           "level": 0.9,
           "drive": 0.0,
-"pitchbend": 2.0,
-          "vel_sens": 1.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0,
+          "play_mode": "Poly"
         }
       }
     }
   ],
-  "wt_list": [
-    {
-      "id": 1,
-      "valid": true,
-      "name": "ESW Digital - Felicity",
-      "filename": "ESW Digital - Felicity.wav"
-    },
-    {
-      "id": 2,
-      "valid": true,
-      "name": "ESW Digital - Sweep 01",
-      "filename": "ESW Digital - Sweep 01.wav"
-    },
-    {
-      "id": 3,
-      "valid": true,
-      "name": "ESW Digital - SSW 02",
-      "filename": "ESW Digital - SSW 02.wav"
-    },
-    {
-      "id": 4,
-      "valid": true,
-      "name": "ESW Digital - SSW 03",
-      "filename": "ESW Digital - SSW 03.wav"
-    },
-    {
-      "id": 5,
-      "valid": true,
-      "name": "ESW Digital - Leo",
-      "filename": "ESW Digital - Leo.wav"
-    },
-    {
-      "id": 6,
-      "valid": true,
-      "name": "ESW Digital - Acid Saw",
-      "filename": "ESW Digital - Acid Saw.wav"
-    },
-    {
-      "id": 7,
-      "valid": true,
-      "name": "ESW Digital - Flanges Saw",
-      "filename": "ESW Digital - Flanges Saw.wav"
-    },
-    {
-      "id": 8,
-      "valid": true,
-      "name": "ESW Digital - Taurus",
-      "filename": "ESW Digital - Taurus.wav"
-    },
-    {
-      "id": 9,
-      "valid": true,
-      "name": "ESW Digital - SSW 01",
-      "filename": "ESW Digital - SSW 01.wav"
-    },
-    {
-      "id": 10,
-      "valid": true,
-      "name": "ESW Digital - Loli Pops",
-      "filename": "ESW Digital - Loli Pops.wav"
-    },
-    {
-      "id": 11,
-      "valid": true,
-      "name": "ESW Digital - Simple Formant",
-      "filename": "ESW Digital - Simple Formant.wav"
-    },
-    {
-      "id": 12,
-      "valid": true,
-      "name": "ESW Digital - I Dunno Know",
-      "filename": "ESW Digital - I Dunno Know.wav"
-    },
-    {
-      "id": 13,
-      "valid": true,
-      "name": "ESW Digital - Virgo",
-      "filename": "ESW Digital - Virgo.wav"
-    },
-    {
-      "id": 14,
-      "valid": true,
-      "name": "ESW Digital - SSW 04",
-      "filename": "ESW Digital - SSW 04.wav"
-    },
-    {
-      "id": 15,
-      "valid": true,
-      "name": "ESW Digital - Chill Sines",
-      "filename": "ESW Digital - Chill Sines.wav"
-    },
-    {
-      "id": 16,
-      "valid": true,
-      "name": "ESW Digital - Warm Tubes",
-      "filename": "ESW Digital - Warm Tubes.wav"
-    },
-    {
-      "id": 17,
-      "valid": true,
-      "name": "ESW Digital - Folded Saws",
-      "filename": "ESW Digital - Folded Saws.wav"
-    },
-    {
-      "id": 18,
-      "valid": true,
-      "name": "ESW Digital - Acid",
-      "filename": "ESW Digital - Acid.wav"
-    },
-    {
-      "id": 19,
-      "valid": true,
-      "name": "ESW Digital - Throaty",
-      "filename": "ESW Digital - Throaty.wav"
-    },
-    {
-      "id": 20,
-      "valid": true,
-      "name": "ESW Digital - Mirror",
-      "filename": "ESW Digital - Mirror.wav"
-    },
-    {
-      "id": 21,
-      "valid": true,
-      "name": "ESW Digital - Cypher",
-      "filename": "ESW Digital - Cypher.wav"
-    },
-    {
-      "id": 22,
-      "valid": true,
-      "name": "ESW Digital - Saw Formant",
-      "filename": "ESW Digital - Saw Formant.wav"
-    },
-    {
-      "id": 23,
-      "valid": true,
-      "name": "ESW Digital - Metalish",
-      "filename": "ESW Digital - Metalish.wav"
-    },
-    {
-      "id": 24,
-      "valid": true,
-      "name": "ESW Digital - I Dunno Know 2",
-      "filename": "ESW Digital - I Dunno Know 2.wav"
-    },
-    {
-      "id": 25,
-      "valid": true,
-      "name": "ESW Digital - Filter Sweep",
-      "filename": "ESW Digital - Filter Sweep.wav"
-    },
-    {
-      "id": 26,
-      "valid": true,
-      "name": "ESW Digital - Square Bendz",
-      "filename": "ESW Digital - Square Bendz.wav"
-    },
-    {
-      "id": 27,
-      "valid": true,
-      "name": "ESW Digital - Square Harmonics",
-      "filename": "ESW Digital - Square Harmonics.wav"
-    },
-    {
-      "id": 28,
-      "valid": true,
-      "name": "ESW Digital - Flavor X",
-      "filename": "ESW Digital - Flavor X.wav"
-    },
-    {
-      "id": 29,
-      "valid": true,
-      "name": "ESW Digital - Phase Spectra",
-      "filename": "ESW Digital - Phase Spectra.wav"
-    },
-    {
-      "id": 30,
-      "valid": true,
-      "name": "ESW Digital - Fuzz Screech",
-      "filename": "ESW Digital - Fuzz Screech.wav"
-    },
-    {
-      "id": 31,
-      "valid": true,
-      "name": "ESW Digital - Saw Square Sync",
-      "filename": "ESW Digital - Saw Square Sync.wav"
-    },
-    {
-      "id": 32,
-      "valid": true,
-      "name": "ESW Digital - Sqaure Saw Bits",
-      "filename": "ESW Digital - Sqaure Saw Bits.wav"
-    },
-    {
-      "id": 33,
-      "valid": true,
-      "name": "ESW Digital - Tadpoles",
-      "filename": "ESW Digital - Tadpoles.wav"
-    },
-    {
-      "id": 34,
-      "valid": true,
-      "name": "ESW Digital - Scrums",
-      "filename": "ESW Digital - Scrums.wav"
-    },
-    {
-      "id": 35,
-      "valid": true,
-      "name": "ESW Digital - Phase Spectra Wide",
-      "filename": "ESW Digital - Phase Spectra Wide.wav"
-    },
-    {
-      "id": 36,
-      "valid": true,
-      "name": "ESW Digital - Megatron",
-      "filename": "ESW Digital - Megatron.wav"
-    },
-    {
-      "id": 37,
-      "valid": true,
-      "name": "ESW Digital - Fuzz Saw",
-      "filename": "ESW Digital - Fuzz Saw.wav"
-    },
-    {
-      "id": 38,
-      "valid": true,
-      "name": "ESW Digitial - Danger",
-      "filename": "ESW Digitial - Danger.wav"
-    },
-    {
-      "id": 39,
-      "valid": true,
-      "name": "ESW Digital - Gruff Throat",
-      "filename": "ESW Digital - Gruff Throat.wav"
-    },
-    {
-      "id": 40,
-      "valid": true,
-      "name": "ESW Digital - Bit Bass",
-      "filename": "ESW Digital - Bit Bass.wav"
-    },
-    {
-      "id": 41,
-      "valid": true,
-      "name": "ESW Digital - Roboto",
-      "filename": "ESW Digital - Roboto.wav"
-    },
-    {
-      "id": 42,
-      "valid": true,
-      "name": "ESW Digital - Super Dirt",
-      "filename": "ESW Digital - Super Dirt.wav"
-    },
-    {
-      "id": 43,
-      "valid": true,
-      "name": "ESW Digital - Additive Tones",
-      "filename": "ESW Digital - Additive Tones.wav"
-    },
-    {
-      "id": 44,
-      "valid": true,
-      "name": "ESW Digital - Pulse Acid",
-      "filename": "ESW Digital - Pulse Acid.wav"
-    },
-    {
-      "id": 45,
-      "valid": true,
-      "name": "ESW Digital - Neurotic",
-      "filename": "ESW Digital - Neurotic.wav"
-    },
-    {
-      "id": 46,
-      "valid": true,
-      "name": "ESW Digital - Bass Angry 01",
-      "filename": "ESW Digital - Bass Angry 01.wav"
-    },
-    {
-      "id": 47,
-      "valid": true,
-      "name": "ESW Digital - Deep House",
-      "filename": "ESW Digital - Deep House.wav"
-    },
-    {
-      "id": 48,
-      "valid": true,
-      "name": "ESW Digital - Gemini",
-      "filename": "ESW Digital - Gemini.wav"
-    },
-    {
-      "id": 49,
-      "valid": true,
-      "name": "ESW Digital - Astro Scorpio",
-      "filename": "ESW Digital - Astro Scorpio.wav"
-    },
-    {
-      "id": 50,
-      "valid": true,
-      "name": "ESW Digital - Sync House",
-      "filename": "ESW Digital - Sync House.wav"
-    },
-    {
-      "id": 51,
-      "valid": true,
-      "name": "ESW Digital - Fluffy",
-      "filename": "ESW Digital - Fluffy.wav"
-    },
-    {
-      "id": 52,
-      "valid": true,
-      "name": "ESW Digital - Square Cutoff",
-      "filename": "ESW Digital - Square Cutoff.wav"
-    },
-    {
-      "id": 53,
-      "valid": true,
-      "name": "ESW Digital - Evo",
-      "filename": "ESW Digital - Evo.wav"
-    },
-    {
-      "id": 54,
-      "valid": true,
-      "name": "ESW Digital - Pyramid Scheme",
-      "filename": "ESW Digital - Pyramid Scheme.wav"
-    },
-    {
-      "id": 55,
-      "valid": true,
-      "name": "ESW Digital - Synth Brass",
-      "filename": "ESW Digital - Synth Brass.wav"
-    },
-    {
-      "id": 56,
-      "valid": true,
-      "name": "ESW Digital - Filter Sweep Pulse",
-      "filename": "ESW Digital - Filter Sweep Pulse.wav"
-    },
-    {
-      "id": 57,
-      "valid": true,
-      "name": "ESW Digital - Glass Formant",
-      "filename": "ESW Digital - Glass Formant.wav"
-    },
-    {
-      "id": 58,
-      "valid": true,
-      "name": "ESW Basics - Sylenth VA",
-      "filename": "ESW Basics - Sylenth VA.wav"
-    },
-    {
-      "id": 59,
-      "valid": true,
-      "name": "ESW Digital - Saw Harmonics",
-      "filename": "ESW Digital - Saw Harmonics.wav"
-    },
-    {
-      "id": 60,
-      "valid": true,
-      "name": "ESW Digital - Protozoa",
-      "filename": "ESW Digital - Protozoa.wav"
-    },
-    {
-      "id": 61,
-      "valid": true,
-      "name": "ESW Digital - Flanger Talk",
-      "filename": "ESW Digital - Flanger Talk.wav"
-    },
-    {
-      "id": 62,
-      "valid": true,
-      "name": "ESW Digital - Big Booty Saws",
-      "filename": "ESW Digital - Big Booty Saws.wav"
-    },
-    {
-      "id": 63,
-      "valid": true,
-      "name": "ESW Digital - Flavors",
-      "filename": "ESW Digital - Flavors.wav"
-    },
-    {
-      "id": 64,
-      "valid": true,
-      "name": "ESW Digital - Complex Saw 01",
-      "filename": "ESW Digital - Complex Saw 01.wav"
-    },
-    {
-      "id": 65,
-      "valid": true,
-      "name": "ESW Digital - Sync Ring",
-      "filename": "ESW Digital - Sync Ring.wav"
-    },
-    {
-      "id": 66,
-      "valid": true,
-      "name": "ESW Digital - Angry 02",
-      "filename": "ESW Digital - Angry 02.wav"
-    },
-    {
-      "id": 67,
-      "valid": true,
-      "name": "ESW Digital Bell 03",
-      "filename": "ESW Digital Bell 03.wav"
-    },
-    {
-      "id": 68,
-      "valid": true,
-      "name": "ESW Digital - Synth Bug",
-      "filename": "ESW Digital - Synth Bug.wav"
-    },
-    {
-      "id": 69,
-      "valid": true,
-      "name": "ESW Digital - Acid Saw 02",
-      "filename": "ESW Digital - Acid Saw 02.wav"
-    },
-    {
-      "id": 70,
-      "valid": true,
-      "name": "ESW Digital - Hot Folds",
-      "filename": "ESW Digital - Hot Folds.wav"
-    },
-    {
-      "id": 71,
-      "valid": true,
-      "name": "ESW Digital - Redish",
-      "filename": "ESW Digital - Redish.wav"
-    },
-    {
-      "id": 72,
-      "valid": true,
-      "name": "ESW Digital - Air Lazer",
-      "filename": "ESW Digital - Air Lazer.wav"
-    },
-    {
-      "id": 73,
-      "valid": true,
-      "name": "ESW Digital - Screamer Saw",
-      "filename": "ESW Digital - Screamer Saw.wav"
-    },
-    {
-      "id": 74,
-      "valid": true,
-      "name": "ESW Digital - Hex Code ",
-      "filename": "ESW Digital - Hex Code .wav"
-    },
-    {
-      "id": 75,
-      "valid": true,
-      "name": "ESW Digital - Circuit Bending",
-      "filename": "ESW Digital - Circuit Bending.wav"
-    },
-    {
-      "id": 76,
-      "valid": true,
-      "name": "ESW Digital - Expansion",
-      "filename": "ESW Digital - Expansion.wav"
-    },
-    {
-      "id": 77,
-      "valid": true,
-      "name": "ESW Digital - Formantish",
-      "filename": "ESW Digital - Formantish.wav"
-    },
-    {
-      "id": 78,
-      "valid": true,
-      "name": "ESW Digital - Phaser Saw",
-      "filename": "ESW Digital - Phaser Saw.wav"
-    },
-    {
-      "id": 79,
-      "valid": true,
-      "name": "ESW Digital - Aries",
-      "filename": "ESW Digital - Aries.wav"
-    },
-    {
-      "id": 80,
-      "valid": true,
-      "name": "ESW Digital - Libra",
-      "filename": "ESW Digital - Libra.wav"
-    },
-    {
-      "id": 81,
-      "valid": true,
-      "name": "ESW Digital - Frion",
-      "filename": "ESW Digital - Frion.wav"
-    },
-    {
-      "id": 82,
-      "valid": true,
-      "name": "ESW Digital - Sine Fingers",
-      "filename": "ESW Digital - Sine Fingers.wav"
-    },
-    {
-      "id": 83,
-      "valid": true,
-      "name": "ESW Digital - Chill 808",
-      "filename": "ESW Digital - Chill 808.wav"
-    },
-    {
-      "id": 84,
-      "valid": true,
-      "name": "ESW Digital - Magix",
-      "filename": "ESW Digital - Magix.wav"
-    }
-  ]
+  "wt_list": []
 }

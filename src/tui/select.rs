@@ -137,6 +137,7 @@ impl ParamSelector {
         value_param_selection.reset();
         let mut wavetable_list: Vec<(usize, String)> = vec!{};
         wavetable_list.push((0, "Basic".to_string()));
+        wavetable_list.push((1, "PWM Square".to_string()));
         ParamSelector{value_changed: false,
                       state: SelectorState::Function,
                       func_selection: func_selection,
@@ -414,6 +415,19 @@ impl ParamSelector {
                 SmResult::EventHandled
             }
             SmEvent::ExitState => {
+                // TODO: This is copied here from state_value_function_index.
+                //       Clean this mess up.
+                if self.value_changed {
+                    match self.param_selection.value {
+                        ParameterValue::Function(ref mut id) => {
+                            info!("Saving function value");
+                            id.function = self.value_func_selection.item_list[self.value_func_selection.item_index].item;
+                            id.function_id = if let ParameterValue::Int(x) = self.value_func_selection.value { x as usize } else { panic!() };
+                        },
+                        _ => panic!(),
+                    }
+                }
+                self.value_func_selection.temp_string.clear();
                 SmResult::EventHandled
             }
             SmEvent::Event(selector_event) => {
@@ -434,8 +448,23 @@ impl ParamSelector {
                                 let val_range = &self.value_func_selection.item_list[self.value_func_selection.item_index].val_range;
                                 if let ValueRange::Int(_, num_instances) = val_range {
                                     if *num_instances == 1 {
+                                        // Only single instance of this
+                                        // function available, so no need to go
+                                        // to state_value_function_index.
                                         self.value_func_selection.value = ParameterValue::Int(1);
-                                        SmResult::ChangeState(ParamSelector::state_value_parameter)
+                                        match self.param_selection.value {
+                                            ParameterValue::Function(_) => {
+                                                // Value is finished
+                                                self.value_changed = true;
+                                                SmResult::ChangeState(ParamSelector::state_parameter)
+                                            }
+                                            ParameterValue::Param(_) => {
+                                                // Parameter has to be selected
+                                                self.value_func_selection.value = ParameterValue::Int(1);
+                                                SmResult::ChangeState(ParamSelector::state_value_parameter)
+                                            }
+                                            _ => panic!(),
+                                        }
                                     } else {
                                         SmResult::ChangeState(ParamSelector::state_value_function_index)
                                     }
