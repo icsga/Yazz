@@ -3,8 +3,8 @@ use super::{SynthMessage, UiMessage};
 use super::{Envelope, EnvelopeData};
 use super::Lfo;
 use super::MidiMessage;
-use super::ModData;
 use super::{Parameter, ParameterValue, ParamId, SynthParam, MenuItem};
+use super::ModData;
 use super::SoundData;
 use super::voice::Voice;
 use super::SampleGenerator;
@@ -32,6 +32,17 @@ pub enum Synth2UIMessage {
     Log(String)
 }
 
+#[derive(Serialize, Deserialize, Copy, Clone, Debug)]
+pub enum PlayMode {
+    Poly,   // Polyphonic
+    Mono,   // Monophonic, retrigger on key-on-event
+    Legato  // Monphonic, no retrigger until key-off-event
+}
+
+impl Default for PlayMode {
+    fn default() -> Self { PlayMode::Poly }
+}
+
 // Data of the currently selected sound patch
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
 pub struct PatchData {
@@ -39,6 +50,7 @@ pub struct PatchData {
     pub drive: Float,
     pub pitchbend: Float, // Range of the pitchwheel
     pub vel_sens: Float,  // Velocity sensitivity
+    pub play_mode: PlayMode,
 }
 
 impl PatchData {
@@ -47,6 +59,7 @@ impl PatchData {
         self.drive = 0.0;
         self.pitchbend = 2.0;
         self.vel_sens = 1.0;
+        self.play_mode = PlayMode::Poly;
     }
 }
 
@@ -274,18 +287,23 @@ impl Synth {
                 if msg.parameter == Parameter::Wavetable {
                     // New wavetable has been selected, update all oscillators
                     let osc_id = msg.function_id - 1;
-                    let id = self.sound.osc[osc_id].wavetable;
-                    info!("Updating oscillator {} to wavetable {}", osc_id, id);
-                    let wt = self.wt_manager.get_table(id).unwrap();
-                    for v in self.voice.iter_mut() {
-                        v.set_wavetable(osc_id, wt.clone());
-                    }
-                    self.osc_wave[osc_id] = wt.clone();
+                    self.update_wavetable(osc_id);
                 }
             }
             Parameter::Delay => self.delay.update(&self.sound.delay),
             _ => ()
         }
+    }
+
+    /* The assigned wavetable of an oscillator has changed. */
+    fn update_wavetable(&mut self, osc_id: usize) {
+        let id = self.sound.osc[osc_id].wavetable;
+        info!("Updating oscillator {} to wavetable {}", osc_id, id);
+        let wt = self.wt_manager.get_table(id).unwrap();
+        for v in self.voice.iter_mut() {
+            v.set_wavetable(osc_id, wt.clone());
+        }
+        self.osc_wave[osc_id] = wt.clone();
     }
 
     fn handle_midi_message(&mut self, msg: MidiMessage) {
@@ -304,6 +322,9 @@ impl Synth {
         self.sound = *sound;
         self.sound_global = self.sound;
         self.sound_local = self.sound;
+        self.update_wavetable(0);
+        self.update_wavetable(1);
+        self.update_wavetable(2);
     }
 
     fn handle_wavetable_info(&mut self, wt_info: WtInfo) {
@@ -355,6 +376,14 @@ impl Synth {
 
     /* Decide which voice gets to play the next note. */
     fn select_voice(&mut self) -> usize {
+        match self.sound.patch.play_mode {
+            PlayMode::Poly => self.select_voice_poly(),
+            PlayMode::Mono => 0,   // Monophonic modes always use voice 0
+            PlayMode::Legato => 0,
+        }
+    }
+
+    fn select_voice_poly(&mut self) -> usize {
         let mut min_trigger_seq = std::u64::MAX;
         let mut min_id = 0;
         for (i, v) in self.voice.iter().enumerate() {

@@ -19,7 +19,7 @@ pub use filter::{Filter, FilterData};
 pub use lfo::{Lfo, LfoData};
 pub use onepole::OnePole;
 pub use sample_generator::SampleGenerator;
-pub use synth::{Synth, PatchData, SynthState, NUM_GLOBAL_LFOS, NUM_MODULATORS};
+pub use synth::{Synth, PatchData, SynthState, PlayMode, NUM_GLOBAL_LFOS, NUM_MODULATORS};
 pub use wavetable::{Wavetable, WavetableRef};
 pub use wt_manager::{WtManager, WtInfo};
 pub use wt_oscillator::{WtOsc, WtOscData};

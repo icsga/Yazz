@@ -13,7 +13,8 @@ use serde::{Serialize, Deserialize};
 
 use std::collections::HashMap;
 use std::sync::Arc;
-//use std::rc::Weak;
+
+const NUM_PWM_TABLES: usize = 64;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct WtInfo {
@@ -33,11 +34,13 @@ pub struct WtManager {
 impl WtManager {
     pub fn new(sample_rate: Float) -> WtManager {
         let default_table = WtManager::initialize_default_tables(sample_rate);
+        let square_pwm_table = WtManager::initialize_pwm_tables(sample_rate, default_table.clone());
         let cache = HashMap::new();
         let def_copy = default_table.clone();
         let reader = WtReader::new("data/");
         let mut wt = WtManager{sample_rate, default_table, cache, reader};
         wt.add_to_cache(0, def_copy);
+        wt.add_to_cache(1, square_pwm_table);
         wt
     }
 
@@ -129,6 +132,11 @@ impl WtManager {
         Wavetable::normalize(table);
     }
 
+    fn get_start_frequency(base_freq: Float) -> Float {
+        let two: Float = 2.0;
+        (base_freq / 32.0) * (two.powf((-9.0) / 12.0))
+    }
+
     /** Create tables of common waveforms (sine, triangle, square, saw). */
     fn initialize_default_tables(sample_rate: Float) -> WavetableRef {
         info!("Initializing default waveshapes");
@@ -140,6 +148,20 @@ impl WtManager {
         wt.create_tables(2, start_freq, sample_rate, WtManager::insert_saw);
         wt.create_tables(3, start_freq, sample_rate, WtManager::insert_square);
         info!("Finished");
+        Arc::new(wt)
+    }
+
+    fn initialize_pwm_tables(sample_rate: Float, default_table: WavetableRef) -> WavetableRef {
+        info!("Initializing PWM table");
+        let mut wt = Wavetable::new(NUM_PWM_TABLES, 11, 2048);
+        let start_freq = WtManager::get_start_frequency(440.0);
+        let saw_wave = &default_table.table[2];
+        let inverted = default_table.copy_inverted();
+        let inverted_saw = &inverted.table[2];
+        for i in 0..NUM_PWM_TABLES {
+            // Offset the offset by 1 to keep modulation inside of 100%
+            wt.combine_tables(i, &saw_wave, &saw_wave, (i + 1) as Float / (NUM_PWM_TABLES + 2) as Float);
+        }
         Arc::new(wt)
     }
 }

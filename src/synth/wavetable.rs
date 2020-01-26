@@ -54,8 +54,30 @@ impl Wavetable {
         })
     }
 
+    pub fn copy_inverted(&self) -> WavetableRef {
+        let table_copy = self.table.to_vec();
+        let mut out = Wavetable{
+            num_tables: self.num_tables,
+            num_octaves: self.num_octaves,
+            num_values: self.num_values,
+            num_samples: self.num_samples,
+            table: table_copy};
+        let mut value: Float;
+        for t in &mut out.table {
+            for j in 0..t.len() {
+                t[j] = t[j] * -1.0;
+            }
+        }
+        Arc::new(out)
+    }
+
     /** Return a table vector for the selected waveshape. */
-    pub fn get_wave(&mut self, wave_id: usize) -> &mut Vec<Float> {
+    pub fn get_wave(&self, wave_id: usize) -> &Vec<Float> {
+        &self.table[wave_id]
+    }
+
+    /** Return a mutable table vector for the selected waveshape. */
+    fn get_wave_mut(&mut self, wave_id: usize) -> &mut Vec<Float> {
         &mut self.table[wave_id]
     }
 
@@ -98,10 +120,11 @@ impl Wavetable {
      */
     fn add_wave(table: &mut [Float], freq: Float, amplitude: Float, wave_func: fn(Float) -> Float) {
         let num_samples = table.len() - 1;
+        let num_samples_f = num_samples as Float;
         let mult = freq * 2.0 * std::f32::consts::PI;
         let mut position: Float;
         for i in 0..num_samples {
-            position = mult * (i as Float / num_samples as Float);
+            position = mult * (i as Float / num_samples_f);
             table[i] = table[i] + wave_func(position) * amplitude;
         }
         table[table.len() - 1] = table[0]; // Add extra sample for interpolation
@@ -131,7 +154,7 @@ impl Wavetable {
         info!("Creating table {}", table_id);
         let num_octaves = self.num_octaves;
         let num_values = self.num_values;
-        let table = self.get_wave(table_id);
+        let table = self.get_wave_mut(table_id);
         let mut current_freq = start_freq;
         for i in 0..num_octaves {
             let from = i * num_values;
@@ -141,7 +164,46 @@ impl Wavetable {
         }
     }
 
-    /** Normalizes samples in a buffer to the range [-1.0,1.0] */
+    /** Combine two tables by subtracting one from the other.
+     *
+     * \param table_id ID of the target table to write to
+     * \param table_a Source table that is subtracted from
+     * \param table_b Source table that gets subtracted from table_a
+     * \param offset_b Offset into source table_b (0.0 - 1.0)
+     */
+    pub fn combine_tables(&mut self,
+                          table_id: usize,
+                          table_a: &[Float],
+                          table_b: &[Float],
+                          offset_b: Float) {
+        let num_octaves = self.num_octaves;
+        let num_values = self.num_values;
+        let num_samples = self.num_samples;
+        let table = self.get_wave_mut(table_id);
+        let offset_b = (num_samples as Float * offset_b) as usize;
+        info!("Combining source tables into table {}, offset {}", table_id, offset_b);
+        let mut index_b: usize;
+        for i in 0..num_octaves {
+            let from = i * num_values;
+            let to = (i + 1) * num_values;
+            for j in from..to {
+                index_b = j + offset_b;
+                if index_b >= to {
+                    index_b -= num_samples;
+                }
+                table[j] = table_a[j] - table_b[index_b];
+                //info!("{}, {}: {} - {} = {}", j, index_b, table_a[j], table_b[index_b], table[j]);
+            }
+            //Wavetable::polarize(&mut table[from..to]);
+            Wavetable::expand(&mut table[from..to]);
+        }
+    }
+
+    /** Normalizes samples in a table to the range [-1.0,1.0].
+     *
+     * Searches the maximum absolute value and uses it to calculate the
+     * required scale. Assumes that the values are centered around 0.0.
+     */
     pub fn normalize(table: &mut [Float]) {
         let mut max = 0.0;
         let mut current: Float;
@@ -170,6 +232,62 @@ impl Wavetable {
             table[i] = temp[i]; // Copy back
         }
         table[num_values] = table[0];
+    }
+
+    /** Return min and max values of given table. */
+    fn get_extremes(table: &[Float]) -> (Float, Float) {
+        let mut max = -1.0;
+        let mut min = 1.0;
+        let mut current: Float;
+        for i in 0..table.len() {
+            current = table[i];
+            if current > max {
+                max = current;
+            } else if current < min {
+                min = current;
+            }
+        }
+        (min, max)
+    }
+
+    /** Expand the samples in a table to the rage [-1.0, 1.0].
+     *
+     * Scales and shifts a wave to fit into the target range. Uses the minimum
+     * and the maximum of the values to calculate scale factor and offset.
+     */
+    pub fn expand(table: &mut [Float]) {
+        let (min, max) = Wavetable::get_extremes(table);
+        let scale = 2.0 / (max - min);
+        let offset = (max + min) / 2.0;
+        let mut new_val: Float;
+        for i in 0..table.len() {
+            new_val = (table[i] - offset) * scale;
+            table[i] = new_val;
+        }
+    }
+
+    pub fn polarize(table: &mut [Float]) {
+        let (min, max) = Wavetable::get_extremes(table);
+        let halfpoint = (max + min) / 2.0;
+        let shift_up = 1.0 - max;
+        let shift_down = -1.0 - min;
+        let mut val: Float;
+        for i in 0..table.len() {
+            val = table[i];
+            table[i] = if val > halfpoint {
+                val + shift_up
+            } else {
+                val + shift_down
+            };
+        }
+    }
+
+    pub fn show(&self) {
+        for t in &self.table {
+            for (i, s) in t.iter().enumerate() {
+                info!("{}: {}", i, s);
+            }
+        }
     }
 }
 
