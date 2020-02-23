@@ -116,7 +116,7 @@ impl Tui {
                                 tui.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
                             },
                             _ => {
-                                if tui.selector.handle_user_input(m, &mut tui.sound.data) == RetCode::ValueComplete {
+                                if tui.selector.handle_user_input(m, &mut tui.sound.data) {
                                     tui.send_event();
                                 }
                             }

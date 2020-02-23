@@ -3,7 +3,6 @@ use super::Filter;
 use super::Float;
 use super::Lfo;
 use super::Modulator;
-use super::Oscillator;
 use super::{Parameter, ParameterValue, SynthParam};
 use super::SampleGenerator;
 use super::{MultiOscillator, MultiOscData};
