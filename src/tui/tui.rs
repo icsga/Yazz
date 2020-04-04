@@ -98,6 +98,7 @@ impl Tui {
         let handler = spawn(move || {
             let mut tui = Tui::new(to_synth_sender, ui_receiver);
             let mut keep_running = true;
+            let sound_data = Rc::new(RefCell::new(tui.sound.data));
             while keep_running {
                 let msg = tui.ui_receiver.recv().unwrap();
                 match msg {
@@ -116,7 +117,8 @@ impl Tui {
                                 tui.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
                             },
                             _ => {
-                                if tui.selector.handle_user_input(m, &mut tui.sound.data) {
+                                //if tui.selector.handle_user_input(m, &mut tui.sound.data) {
+                                if tui.selector.handle_user_input(m, sound_data.clone()) {
                                     tui.send_event();
                                 }
                             }
@@ -296,6 +298,9 @@ impl Tui {
                         Tui::display_value(s, s.state == SelectorState::Value);
                         x_pos = 23;
                 }
+                SelectorState::ValueFunction => (),
+                SelectorState::ValueFunctionIndex => (),
+                SelectorState::ValueParam => (),
             }
             if display_state == s.state {
                 break;

@@ -1,18 +1,26 @@
 use std::fmt::Display;
 
+#[derive(Debug)]
 pub enum SmEvent<E> {
     EnterState,
     ExitState,
     Event(E),
 }
 
+//#[derive(Debug)]
 pub enum SmResult<C, E> {
     EventHandled,
     ChangeState(fn(&mut C, &SmEvent<E>) -> SmResult<C, E>),
     Error,
 }
 
-#[derive(Debug)]
+impl<C, E> std::fmt::Debug for SmResult<C, E> {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "SmResult")
+    }
+}
+
+//#[derive(Debug)]
 pub struct StateMachine<C, E> {
     current_state: fn(&mut C, &SmEvent<E>) -> SmResult<C, E>,
 }
@@ -39,6 +47,13 @@ impl<C, E> StateMachine<C, E> {
         }
     }
 }
+
+impl<C, E> std::fmt::Debug for StateMachine<C, E> {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "StateMachine")
+    }
+}
+
 
 // ----------------------------------------------
 //                  Unit tests
