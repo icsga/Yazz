@@ -105,28 +105,25 @@ pub struct ParamSelector {
 
     pub temp_string: String,
     pub sub_selector: Option<Rc<RefCell<ParamSelector>>>,
+
+    sound: Option<Rc<RefCell<SoundData>>>,
 }
 
 impl ParamSelector {
     pub fn new(function_list: &'static [MenuItem]) -> ParamSelector {
         let sm = StateMachine::new(ParamSelector::state_function);
-        let value_changed = false;
-        let state = SelectorState::Function;
         let func_selection = ItemSelection{item_list: function_list, item_index: 0, value: ParameterValue::Int(1)};
         let param_selection = ItemSelection{item_list: function_list[0].next, item_index: 0, value: ParameterValue::Int(1)};
-        let value = ParameterValue::Int(0);
-        let target_state = SelectorState::Value;
-        let temp_string = String::new();
-        let sub_selector = Option::None;
-        ParamSelector{sm,
-                      value_changed,
-                      state,
-                      func_selection,
-                      param_selection,
-                      value,
-                      target_state,
-                      temp_string,
-                      sub_selector}
+        ParamSelector{sm: sm,
+                      value_changed: false,
+                      state: SelectorState::Function,
+                      func_selection: func_selection,
+                      param_selection: param_selection,
+                      value: ParameterValue::Int(0),
+                      target_state: SelectorState::Value,
+                      temp_string: String::new(),
+                      sub_selector: Option::None,
+                      sound: Option::None}
     }
 
     pub fn set_subselector(&mut self, subsel: ParamSelector) {
@@ -147,22 +144,9 @@ impl ParamSelector {
      */
     pub fn handle_user_input(&mut self,
                              c: termion::event::Key,
-                             sound: &mut SoundData) -> bool {
+                             sound: Rc<RefCell<SoundData>>) -> bool {
         info!("handle_user_input {:?} in state {:?}", c, self.state);
-        /*
-        let state = self.state;
-        let (finished, new_state) = match state {
-            SelectorState::Function => self.state_function(c),
-            SelectorState::FunctionIndex => self.state_function_index(c, sound),
-            SelectorState::Param => self.state_parameter(c, sound),
-            SelectorState::Value => self.state_value(c, sound),
-            SelectorState::ValueFunction => self.state_value_function(c, sound),
-            SelectorState::ValueFunctionIndex => self.state_value_function_index(c, sound),
-            SelectorState::ValueParam => self.state_value_parameter(c, sound),
-        };
-        self.change_state(new_state);
-        finished
-        */
+        self.sound = Option::Some(Rc::clone(&sound));
         self.sm.handle_event(&mut self, &SmEvent::Event(c));
         true
     }
@@ -229,7 +213,7 @@ impl ParamSelector {
                     RetCode::ValueUpdated  => SmResult::EventHandled, // Selection not complete yet
                     RetCode::ValueComplete => {                  // Parameter has been selected
                         self.param_selection.item_list = self.func_selection.item_list[self.func_selection.item_index].next;
-                        ParamSelector::select_param(self);
+                        self.select_param();
                         SmResult::ChangeState(ParamSelector::state_parameter)
                     },
                     RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_function), // Abort function index selection
@@ -257,11 +241,11 @@ impl ParamSelector {
                     RetCode::KeyConsumed   => SmResult::EventHandled, // Value has changed, but not complete yet
                     RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore invalid key
                     RetCode::ValueUpdated  => {                     // Pararmeter selection updated
-                        ParamSelector::select_param(self);
+                        self.select_param();
                         SmResult::ChangeState(ParamSelector::state_value)
                     },
                     RetCode::ValueComplete => {                     // Prepare to read the value
-                        ParamSelector::select_param(self);
+                        self.select_param();
                         SmResult::ChangeState(ParamSelector::state_value)
                     },
                     RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_function_index), // Cancel parameter selection
@@ -360,7 +344,7 @@ impl ParamSelector {
                             SmResult::ChangeState(ParamSelector::state_value_function)
                         } else {
                             self.param_selection.item_list = self.func_selection.item_list[self.func_selection.item_index].next;
-                            ParamSelector::select_param(self);
+                            self.select_param();
                             SmResult::ChangeState(ParamSelector::state_value_parameter)
                         }
                     },
@@ -389,7 +373,7 @@ impl ParamSelector {
                     RetCode::KeyConsumed   => SmResult::EventHandled, // Value has changed, but not complete yet
                     RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore invalid key
                     RetCode::ValueUpdated  => {                       // Pararmeter selection updated
-                        ParamSelector::select_param(self);
+                        self.select_param();
                         SmResult::EventHandled
                     },
                     RetCode::ValueComplete => {                       // Prepare to read the value
@@ -399,7 +383,7 @@ impl ParamSelector {
                             self.value_changed = true;
                             SmResult::ChangeState(ParamSelector::state_value_function_index)
                         } else {
-                            ParamSelector::select_param(self);
+                            self.select_param();
                             SmResult::ChangeState(ParamSelector::state_parameter)
                         }
                     },
@@ -542,7 +526,7 @@ impl ParamSelector {
                     ValueRange::FuncRange(_) | ValueRange::ParamRange(_) => {
                         // TODO: This
                         //ParamSelector::get_value_subselector(s, c),
-                        RetCode::KeyHandled
+                        RetCode::KeyConsumed
                     },
                     _ => panic!(),
                 }
@@ -752,27 +736,28 @@ impl ParamSelector {
     }
 
     /* Select the parameter chosen by input, set value to current sound data. */
-    fn select_param(selector: &mut ParamSelector) {
-        info!("select_param {:?}", selector.param_selection.item_list[selector.param_selection.item_index].item);
+    fn select_param(&mut self) {
+        info!("select_param {:?}", self.param_selection.item_list[self.param_selection.item_index].item);
         //let param = item.item_list[item.item_index].item;
 
-        let function = &selector.func_selection.item_list[selector.func_selection.item_index];
-        let function_id = if let ParameterValue::Int(x) = &selector.func_selection.value { *x as usize } else { panic!() };
-        let parameter = &selector.param_selection.item_list[selector.param_selection.item_index];
-        let param_val = &selector.param_selection.value;
+        let function = &self.func_selection.item_list[self.func_selection.item_index];
+        let function_id = if let ParameterValue::Int(x) = &self.func_selection.value { *x as usize } else { panic!() };
+        let parameter = &self.param_selection.item_list[self.param_selection.item_index];
+        let param_val = &self.param_selection.value;
         let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
 
         // The value in the selected parameter needs to point to the right type.
-        let value = selector.sound.get_value(&param);
+        let sound = if let Some(sound) = &self.sound { sound } else { panic!() };
+        let value = sound.borrow_mut().get_value(&param);
         info!("Sound has value {:?}", value);
         match value {
             ParameterValue::Function(id) => {
-                let fs = &mut selector.sub_selector.as_ref().unwrap().borrow_mut().func_selection;
+                let fs = &mut self.sub_selector.as_ref().unwrap().borrow_mut().func_selection;
                 fs.item_index = ParamSelector::get_list_index(fs.item_list, id.function);
                 fs.value = ParameterValue::Int(id.function_id as i64);
             }
             ParameterValue::Param(id) => {
-                let ss = &mut selector.sub_selector.as_ref().unwrap().borrow_mut();
+                let ss = &mut self.sub_selector.as_ref().unwrap().borrow_mut();
                 ss.func_selection.item_index = ParamSelector::get_list_index(ss.func_selection.item_list, id.function);
                 ss.func_selection.value = ParameterValue::Int(id.function_id as i64);
                 ss.param_selection.item_index = ParamSelector::get_list_index(ss.param_selection.item_list, id.parameter);
@@ -781,7 +766,7 @@ impl ParamSelector {
             ParameterValue::NoValue => panic!(),
             _ => ()
         }
-        selector.param_selection.value = value;
+        self.param_selection.value = value;
     }
 
     /* Store a new value in the selected parameter. */
@@ -838,6 +823,9 @@ impl ParamSelector {
             SelectorState::FunctionIndex => (),
             SelectorState::Param => ParamSelector::change_state(s, SelectorState::Value),
             SelectorState::Value => (),
+            SelectorState::ValueFunction => (),
+            SelectorState::ValueFunctionIndex => (),
+            SelectorState::ValueParam => (),
         }
         let item = &mut s.param_selection;
         match item.item_list[item.item_index].val_range {
@@ -869,6 +857,7 @@ impl ParamSelector {
 struct TestContext {
     ps: ParamSelector,
     sound: SoundPatch,
+    sound_data: Rc<RefCell<SoundData>>,
 }
 
 enum TestInput {
@@ -899,31 +888,33 @@ impl TestContext {
         let mut ps = ParamSelector::new(&FUNCTIONS);
         ps.set_subselector(sub);
         let sound = SoundPatch::new();
-        TestContext{ps, sound}
+        let sound_data = Rc::new(RefCell::new(sound.data));
+        TestContext{ps, sound, sound_data}
     }
 
-    fn do_handle_input(&mut self, input: &TestInput) -> RetCode {
-        let mut result = RetCode::KeyConsumed;
+    fn do_handle_input(&mut self, input: &TestInput) -> bool {
+        let mut result = false;
+        //let sound_data = Rc::new(RefCell::new(self.sound.data));
         match input {
             TestInput::Chars(chars) => {
                 for c in chars.chars() {
                     let k = Key::Char(c);
-                    result = ParamSelector::handle_user_input(&mut self.ps, k, &mut self.sound.data)
+                    result = ParamSelector::handle_user_input(&mut self.ps, k, self.sound_data.clone())
                 }
             }
             TestInput::Key(k) => {
-                result = ParamSelector::handle_user_input(&mut self.ps, *k, &mut self.sound.data)
+                result = ParamSelector::handle_user_input(&mut self.ps, *k, self.sound_data.clone())
             }
         }
         result
     }
 
-    fn handle_input(&mut self, input: TestInput) -> RetCode {
+    fn handle_input(&mut self, input: TestInput) -> bool {
         self.do_handle_input(&input)
     }
 
-    fn handle_inputs(&mut self, input: &[TestInput]) -> RetCode {
-        let mut result = RetCode::KeyConsumed;
+    fn handle_inputs(&mut self, input: &[TestInput]) -> bool {
+        let mut result = false;
         for i in input {
             result = self.do_handle_input(i);
         }
