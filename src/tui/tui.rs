@@ -9,6 +9,7 @@ use super::surface::Surface;
 use super::Value;
 use super::{SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION};
 use super::RetCode;
+use super::{StateMachine, SmEvent, SmResult};
 
 use crossbeam_channel::{Sender, Receiver};
 use log::{info, trace, warn};
@@ -46,6 +47,8 @@ pub struct Tui {
     bank: SoundBank,   // Bank with sound patches
     sound: SoundPatch, // Current sound patch as loaded from disk
     selected_sound: usize,
+
+    sm: StateMachine<ParamSelector, termion::event::Key>,
 }
 
 impl Tui {
@@ -68,6 +71,7 @@ impl Tui {
         window.update_all(&sound.data);
         let (_, y) = window.get_size();
         window.add_child(canvas.clone(), 1, y);
+        let sm = StateMachine::new(ParamSelector::state_function);
 
         let mut tui = Tui{sender,
                           ui_receiver,
@@ -83,6 +87,7 @@ impl Tui {
                           bank,
                           sound,
                           selected_sound,
+                          sm,
                           };
         tui.select_sound(0);
         tui
@@ -118,7 +123,7 @@ impl Tui {
                             },
                             _ => {
                                 //if tui.selector.handle_user_input(m, &mut tui.sound.data) {
-                                if tui.selector.handle_user_input(m, sound_data.clone()) {
+                                if tui.selector.handle_user_input(&mut tui.sm, m, sound_data.clone()) {
                                     tui.send_event();
                                 }
                             }

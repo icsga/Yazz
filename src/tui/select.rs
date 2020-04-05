@@ -91,7 +91,6 @@ pub enum RetCode {
 
 #[derive(Debug)]
 pub struct ParamSelector {
-    sm: StateMachine<ParamSelector, termion::event::Key>,
     value_changed: bool,
     pub state: SelectorState,
     pub func_selection: ItemSelection,
@@ -111,11 +110,9 @@ pub struct ParamSelector {
 
 impl ParamSelector {
     pub fn new(function_list: &'static [MenuItem]) -> ParamSelector {
-        let sm = StateMachine::new(ParamSelector::state_function);
         let func_selection = ItemSelection{item_list: function_list, item_index: 0, value: ParameterValue::Int(1)};
         let param_selection = ItemSelection{item_list: function_list[0].next, item_index: 0, value: ParameterValue::Int(1)};
-        ParamSelector{sm: sm,
-                      value_changed: false,
+        ParamSelector{value_changed: false,
                       state: SelectorState::Function,
                       func_selection: func_selection,
                       param_selection: param_selection,
@@ -143,11 +140,12 @@ impl ParamSelector {
      * - false if value is not complete yet
      */
     pub fn handle_user_input(&mut self,
+                             sm: &mut StateMachine<ParamSelector, termion::event::Key>,
                              c: termion::event::Key,
                              sound: Rc<RefCell<SoundData>>) -> bool {
         info!("handle_user_input {:?} in state {:?}", c, self.state);
         self.sound = Option::Some(Rc::clone(&sound));
-        self.sm.handle_event(&mut self, &SmEvent::Event(c));
+        sm.handle_event(self, &SmEvent::Event(c));
         true
     }
 
@@ -168,7 +166,7 @@ impl ParamSelector {
     }
 
     // Select the function group to edit (Oscillator, Envelope, ...)
-    fn state_function(self: &mut ParamSelector,
+    pub fn state_function(self: &mut ParamSelector,
                       e: &SmEvent<termion::event::Key>)
     -> SmResult<ParamSelector, termion::event::Key> {
         match e {
@@ -858,6 +856,7 @@ struct TestContext {
     ps: ParamSelector,
     sound: SoundPatch,
     sound_data: Rc<RefCell<SoundData>>,
+    sm: StateMachine<ParamSelector, termion::event::Key>,
 }
 
 enum TestInput {
@@ -889,21 +888,21 @@ impl TestContext {
         ps.set_subselector(sub);
         let sound = SoundPatch::new();
         let sound_data = Rc::new(RefCell::new(sound.data));
-        TestContext{ps, sound, sound_data}
+        let sm = StateMachine::new(ParamSelector::state_function);
+        TestContext{ps, sound, sound_data, sm}
     }
 
     fn do_handle_input(&mut self, input: &TestInput) -> bool {
         let mut result = false;
-        //let sound_data = Rc::new(RefCell::new(self.sound.data));
         match input {
             TestInput::Chars(chars) => {
                 for c in chars.chars() {
                     let k = Key::Char(c);
-                    result = ParamSelector::handle_user_input(&mut self.ps, k, self.sound_data.clone())
+                    result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, k, self.sound_data.clone())
                 }
             }
             TestInput::Key(k) => {
-                result = ParamSelector::handle_user_input(&mut self.ps, *k, self.sound_data.clone())
+                result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, *k, self.sound_data.clone())
             }
         }
         result
