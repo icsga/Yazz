@@ -277,42 +277,42 @@ impl Tui {
         self.window.draw();
 
         print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
-        Tui::display_selector(&self.selector);
+        Tui::display_selector(&self.selector, self.selector.state);
         self.display_idle_time();
 
         io::stdout().flush().ok();
     }
 
-    fn display_selector(s: &ParamSelector) {
+    fn display_selector(s: &ParamSelector, selector_state: SelectorState) {
         let mut display_state = SelectorState::Function;
         let mut x_pos: u16 = 1;
         loop {
             match display_state {
                 SelectorState::Function => {
-                    Tui::display_function(s, s.state == SelectorState::Function);
+                    Tui::display_function(s, selector_state == SelectorState::Function);
                 }
                 SelectorState::FunctionIndex => {
-                    Tui::display_function_index(s, s.state == SelectorState::FunctionIndex);
+                    Tui::display_function_index(s, selector_state == SelectorState::FunctionIndex);
                     x_pos = 12;
                 }
                 SelectorState::Param => {
-                    Tui::display_param(s, s.state == SelectorState::Param);
+                    Tui::display_param(s, selector_state == SelectorState::Param);
                     x_pos = 14;
                 }
                 SelectorState::Value => {
-                        Tui::display_value(s, s.state == SelectorState::Value);
+                        Tui::display_value(s, selector_state == SelectorState::Value);
                         x_pos = 23;
                 }
                 SelectorState::ValueFunction => (),
                 SelectorState::ValueFunctionIndex => (),
                 SelectorState::ValueParam => (),
             }
-            if display_state == s.state {
+            if display_state == selector_state {
                 break;
             }
             display_state = next(display_state);
         }
-        Tui::display_options(s, x_pos);
+        Tui::display_options(s, x_pos, selector_state);
     }
 
     fn display_function(s: &ParamSelector, selected: bool) {
@@ -366,6 +366,15 @@ impl Tui {
                 let item = selection[x].item;
                 print!("{}", item);
             },
+            //
+            //
+            //
+            //
+            // TODO
+            //
+            //
+            //
+            /*
             ParameterValue::Function(x) => {
                 match &s.sub_selector {
                     Some(sub) => Tui::display_selector(&sub.borrow()),
@@ -378,6 +387,7 @@ impl Tui {
                     None => panic!(),
                 }
             },
+            */
             _ => ()
         }
         if selected {
@@ -385,10 +395,10 @@ impl Tui {
         }
     }
 
-    fn display_options(s: &ParamSelector, x_pos: u16) {
+    fn display_options(s: &ParamSelector, x_pos: u16, selector_state: SelectorState) {
         //print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         print!("{}{}", color::Bg(Black), color::Fg(LightWhite));
-        if s.state == SelectorState::Function {
+        if selector_state == SelectorState::Function {
             let mut y_item = 2;
             let list = s.func_selection.item_list;
             for item in list.iter() {
@@ -396,12 +406,12 @@ impl Tui {
                 y_item += 1;
             }
         }
-        if s.state == SelectorState::FunctionIndex {
+        if selector_state == SelectorState::FunctionIndex {
             let item = &s.func_selection.item_list[s.func_selection.item_index];
             let (min, max) = if let ValueRange::IntRange(min, max) = item.val_range { (min, max) } else { panic!() };
             print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max);
         }
-        if s.state == SelectorState::Param {
+        if selector_state == SelectorState::Param {
             let mut y_item = 2;
             let list = s.param_selection.item_list;
             for item in list.iter() {
@@ -409,7 +419,7 @@ impl Tui {
                 y_item += 1;
             }
         }
-        if s.state == SelectorState::Value {
+        if selector_state == SelectorState::Value {
             let range = &s.param_selection.item_list[s.param_selection.item_index].val_range;
             match range {
                 ValueRange::IntRange(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),

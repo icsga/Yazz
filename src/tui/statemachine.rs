@@ -22,7 +22,7 @@ impl<C, E> std::fmt::Debug for SmResult<C, E> {
 
 //#[derive(Debug)]
 pub struct StateMachine<C, E> {
-    current_state: fn(&mut C, &SmEvent<E>) -> SmResult<C, E>,
+    pub current_state: fn(&mut C, &SmEvent<E>) -> SmResult<C, E>,
 }
 
 impl<C, E> StateMachine<C, E> {
