@@ -53,9 +53,7 @@ pub struct Tui {
 
 impl Tui {
     pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> Tui {
-        let sub_selector = ParamSelector::new(&MOD_SOURCES);
-        let mut selector = ParamSelector::new(&FUNCTIONS);
-        selector.set_subselector(sub_selector);
+        let selector = ParamSelector::new(&FUNCTIONS, &MOD_SOURCES);
         let selection_changed = true;
         let mut window = Surface::new();
         let sync_counter = 0;
@@ -277,35 +275,45 @@ impl Tui {
         self.window.draw();
 
         print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
-        Tui::display_selector(&self.selector, self.selector.state);
+        Tui::display_selector(&self.selector);
         self.display_idle_time();
 
         io::stdout().flush().ok();
     }
 
-    fn display_selector(s: &ParamSelector, selector_state: SelectorState) {
+    fn display_selector(s: &ParamSelector) {
+        let selector_state = s.state;
         let mut display_state = SelectorState::Function;
         let mut x_pos: u16 = 1;
         loop {
             match display_state {
                 SelectorState::Function => {
-                    Tui::display_function(s, selector_state == SelectorState::Function);
+                    Tui::display_function(&s.func_selection, selector_state == SelectorState::Function);
                 }
                 SelectorState::FunctionIndex => {
-                    Tui::display_function_index(s, selector_state == SelectorState::FunctionIndex);
+                    Tui::display_function_index(&s.func_selection, selector_state == SelectorState::FunctionIndex);
                     x_pos = 12;
                 }
                 SelectorState::Param => {
-                    Tui::display_param(s, selector_state == SelectorState::Param);
+                    Tui::display_param(&s.param_selection, selector_state == SelectorState::Param);
                     x_pos = 14;
                 }
                 SelectorState::Value => {
-                        Tui::display_value(s, selector_state == SelectorState::Value);
-                        x_pos = 23;
+                    Tui::display_value(&s.param_selection, selector_state == SelectorState::Value);
+                    x_pos = 23;
                 }
-                SelectorState::ValueFunction => (),
-                SelectorState::ValueFunctionIndex => (),
-                SelectorState::ValueParam => (),
+                SelectorState::ValueFunction => {
+                    Tui::display_function(&s.value_func_selection, selector_state == SelectorState::ValueFunction);
+                    x_pos = 30;
+                }
+                SelectorState::ValueFunctionIndex => {
+                    Tui::display_function_index(&s.value_func_selection, selector_state == SelectorState::ValueFunctionIndex);
+                    x_pos = 38;
+                }
+                SelectorState::ValueParam => {
+                    Tui::display_param(&s.value_param_selection, selector_state == SelectorState::ValueParam);
+                    x_pos = 46;
+                }
             }
             if display_state == selector_state {
                 break;
@@ -315,8 +323,7 @@ impl Tui {
         Tui::display_options(s, x_pos, selector_state);
     }
 
-    fn display_function(s: &ParamSelector, selected: bool) {
-        let func = &s.func_selection;
+    fn display_function(func: &ItemSelection, selected: bool) {
         if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         } else {
@@ -328,8 +335,7 @@ impl Tui {
         }
     }
 
-    fn display_function_index(s: &ParamSelector, selected: bool) {
-        let func = &s.func_selection;
+    fn display_function_index(func: &ItemSelection, selected: bool) {
         if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
@@ -340,8 +346,7 @@ impl Tui {
         }
     }
 
-    fn display_param(s: &ParamSelector, selected: bool) {
-        let param = &s.param_selection;
+    fn display_param(param: &ItemSelection, selected: bool) {
         if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
@@ -351,8 +356,7 @@ impl Tui {
         }
     }
 
-    fn display_value(s: &ParamSelector, selected: bool) {
-        let param = &s.param_selection;
+    fn display_value(param: &ItemSelection, selected: bool) {
         if selected {
             print!("{}{} ", color::Bg(LightWhite), color::Fg(Black));
         }
@@ -366,28 +370,6 @@ impl Tui {
                 let item = selection[x].item;
                 print!("{}", item);
             },
-            //
-            //
-            //
-            //
-            // TODO
-            //
-            //
-            //
-            /*
-            ParameterValue::Function(x) => {
-                match &s.sub_selector {
-                    Some(sub) => Tui::display_selector(&sub.borrow()),
-                    None => panic!(),
-                }
-            },
-            ParameterValue::Param(x) => {
-                match &s.sub_selector {
-                    Some(sub) => Tui::display_selector(&sub.borrow()),
-                    None => panic!(),
-                }
-            },
-            */
             _ => ()
         }
         if selected {
