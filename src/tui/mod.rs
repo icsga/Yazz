@@ -28,7 +28,7 @@ use dial::Dial;
 use label::Label;
 use mouse::{MouseHandler, MouseMessage};
 use observer::{Observer, ObserverRef};
-use select::{RetCode, SelectorState, ParamSelector, next, ItemSelection};
+use select::{RetCode, SelectorEvent, SelectorState, ParamSelector, next, ItemSelection};
 use slider::{Slider, SliderRef};
 use statemachine::{StateMachine, SmEvent, SmResult};
 use surface::Surface;
