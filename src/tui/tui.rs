@@ -2,8 +2,8 @@ use super::{Parameter, ParameterValue, ParamId, SynthParam, ValueRange, FUNCTION
 use super::{Canvas, CanvasRef};
 use super::Float;
 use super::MidiMessage;
-use super::{SelectorState, ParamSelector, next, ItemSelection};
-use super::{SoundBank, SoundPatch};
+use super::{SelectorEvent, SelectorState, ParamSelector, next, ItemSelection};
+use super::{SoundBank, SoundData, SoundPatch};
 use super::{UiMessage, SynthMessage};
 use super::surface::Surface;
 use super::Value;
@@ -48,7 +48,8 @@ pub struct Tui {
     sound: SoundPatch, // Current sound patch as loaded from disk
     selected_sound: usize,
 
-    sm: StateMachine<ParamSelector, termion::event::Key>,
+    //sm: StateMachine<ParamSelector, termion::event::Key>,
+    sm: StateMachine<ParamSelector, SelectorEvent>,
 }
 
 impl Tui {
@@ -105,7 +106,7 @@ impl Tui {
             while keep_running {
                 let msg = tui.ui_receiver.recv().unwrap();
                 match msg {
-                    UiMessage::Midi(m)  => tui.handle_midi_event(&m),
+                    UiMessage::Midi(m)  => tui.handle_midi_event(&m, sound_data.clone()),
                     UiMessage::Key(m) => {
                         match m {
                             Key::F(1) => {
@@ -167,11 +168,11 @@ impl Tui {
     }
 
     /* MIDI message received */
-    fn handle_midi_event(&mut self, m: &MidiMessage) {
+    fn handle_midi_event(&mut self, m: &MidiMessage, sound_data: Rc<RefCell<SoundData>>) {
         match *m {
             MidiMessage::ControlChg{channel, controller, value} => {
                 if controller == 0x01 { // ModWheel
-                    ParamSelector::handle_control_change(&mut self.selector, value as i64);
+                    self.selector.handle_control_input(&mut self.sm, value as i64, sound_data);
                     self.send_event();
                 }
             },
