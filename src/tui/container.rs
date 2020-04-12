@@ -35,7 +35,6 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
                                         self.props.pos_y + pos_y + y_offset);
         let (child_width, child_height) = child.borrow().get_size();
         let x_size = pos_x + child_width + x_offset * 2;
-        //let y_size = pos_y + child_height + y_offset * 2;
         let y_size = pos_y + child_height + y_offset;
         let (width, height) = self.props.get_size();
         if x_size > width {
@@ -65,9 +64,9 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         let y_end = y_start + self.props.height;
 
         // Calculate position and width of container title, if any
-        let title_len = self.title.len() - 4; // Unicode chars have wrong len. TODO: Handle case where title is longer than width
-        let x_middle_left = (self.props.width / 2) - (title_len / 2) as Index;
-        let mut x_middle_right = (self.props.width / 2) + (title_len / 2) as Index;
+        let title_len = if self.title.len() > 4 { self.title.len() - 4 } else { 0 }; // Unicode chars have wrong len. TODO: Handle case where title is longer than width
+        let x_middle_left = x_start + (self.props.width / 2) - (title_len / 2) as Index;
+        let mut x_middle_right = x_start + (self.props.width / 2) + (title_len / 2) as Index;
         if (x_middle_left - x_start) + title_len as Index + (x_end - x_middle_right) > self.props.width {
             x_middle_right += 1;
         }
