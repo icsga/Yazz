@@ -707,14 +707,18 @@ impl ParamSelector {
         match value {
             ParameterValue::Function(id) => {
                 let fs = &mut self.value_func_selection;
+                fs.item_list = parameter.next;
                 fs.item_index = ParamSelector::get_list_index(fs.item_list, id.function);
                 fs.value = ParameterValue::Int(id.function_id as i64);
             }
             ParameterValue::Param(id) => {
-                self.value_func_selection.item_index = ParamSelector::get_list_index(self.value_func_selection.item_list, id.function);
-                self.value_func_selection.value = ParameterValue::Int(id.function_id as i64);
-                self.value_param_selection.item_index = ParamSelector::get_list_index(self.value_param_selection.item_list, id.parameter);
-                self.value_param_selection.value = ParameterValue::Int(0);
+                let fs = &mut self.value_func_selection;
+                fs.item_list = parameter.next;
+                fs.item_index = ParamSelector::get_list_index(fs.item_list, id.function);
+                fs.value = ParameterValue::Int(id.function_id as i64);
+                let ps = &mut self.value_param_selection;
+                ps.item_index = ParamSelector::get_list_index(ps.item_list, id.parameter);
+                ps.value = ParameterValue::Int(0);
             }
             ParameterValue::NoValue => panic!(),
             _ => ()
@@ -1125,8 +1129,6 @@ fn test_escape_resets_to_valid_state() {
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Choice(0)));
 }
 
-// TODO: Select next param from value state with param shortcut
-
 #[test]
 fn test_modulator_source_selection() {
     let mut context = TestContext::new();
@@ -1174,3 +1176,6 @@ fn test_leave_subsel_with_cursor() {
     context.handle_input(TestInput::Key(Key::Left)); // Back to parameter
     assert_eq!(context.ps.state, SelectorState::Param);
 }
+
+// TODO: Select next param from value state with param shortcut
+

@@ -286,6 +286,7 @@ impl Tui {
         let selector_state = s.state;
         let mut display_state = SelectorState::Function;
         let mut x_pos: u16 = 1;
+        let mut selection = &s.func_selection;
         loop {
             match display_state {
                 SelectorState::Function => {
@@ -297,6 +298,7 @@ impl Tui {
                 }
                 SelectorState::Param => {
                     Tui::display_param(&s.param_selection, selector_state == SelectorState::Param);
+                    selection = &s.param_selection;
                     x_pos = 14;
                 }
                 SelectorState::Value => {
@@ -305,6 +307,7 @@ impl Tui {
                 }
                 SelectorState::ValueFunction => {
                     Tui::display_function(&s.value_func_selection, selector_state == SelectorState::ValueFunction);
+                    selection = &s.value_func_selection;
                     x_pos = 30;
                 }
                 SelectorState::ValueFunctionIndex => {
@@ -313,6 +316,7 @@ impl Tui {
                 }
                 SelectorState::ValueParam => {
                     Tui::display_param(&s.value_param_selection, selector_state == SelectorState::ValueParam);
+                    selection = &s.value_param_selection;
                     x_pos = 46;
                 }
             }
@@ -321,7 +325,7 @@ impl Tui {
             }
             display_state = next(display_state);
         }
-        Tui::display_options(s, x_pos, selector_state);
+        Tui::display_options(selection, x_pos, selector_state);
     }
 
     fn display_function(func: &ItemSelection, selected: bool) {
@@ -378,32 +382,32 @@ impl Tui {
         }
     }
 
-    fn display_options(s: &ParamSelector, x_pos: u16, selector_state: SelectorState) {
+    fn display_options(s: &ItemSelection, x_pos: u16, selector_state: SelectorState) {
         //print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         print!("{}{}", color::Bg(Black), color::Fg(LightWhite));
-        if selector_state == SelectorState::Function {
+        if selector_state == SelectorState::Function || selector_state == SelectorState::ValueFunction {
             let mut y_item = 2;
-            let list = s.func_selection.item_list;
+            let list = s.item_list;
             for item in list.iter() {
                 print!("{} {} - {} ", cursor::Goto(x_pos, y_item), item.key, item.item);
                 y_item += 1;
             }
         }
-        if selector_state == SelectorState::FunctionIndex {
-            let item = &s.func_selection.item_list[s.func_selection.item_index];
+        if selector_state == SelectorState::FunctionIndex || selector_state == SelectorState::ValueFunctionIndex {
+            let item = &s.item_list[s.item_index];
             let (min, max) = if let ValueRange::IntRange(min, max) = item.val_range { (min, max) } else { panic!() };
             print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max);
         }
-        if selector_state == SelectorState::Param {
+        if selector_state == SelectorState::Param || selector_state == SelectorState::ValueParam {
             let mut y_item = 2;
-            let list = s.param_selection.item_list;
+            let list = s.item_list;
             for item in list.iter() {
                 print!("{} {} - {} ", cursor::Goto(x_pos, y_item), item.key, item.item);
                 y_item += 1;
             }
         }
         if selector_state == SelectorState::Value {
-            let range = &s.param_selection.item_list[s.param_selection.item_index].val_range;
+            let range = &s.item_list[s.item_index].val_range;
             match range {
                 ValueRange::IntRange(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
                 ValueRange::FloatRange(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
