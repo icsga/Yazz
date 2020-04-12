@@ -1,0 +1,6 @@
+#set xrange [0:88200]
+set term gif size 1200, 800
+set output "out.gif"
+
+set yrange [-1.1:1.1]
+plot "env_output.txt" using :1 with lines
