@@ -48,46 +48,37 @@ pub struct Tui {
     sound: SoundPatch, // Current sound patch as loaded from disk
     selected_sound: usize,
 
-    //sm: StateMachine<ParamSelector, termion::event::Key>,
+    // State machine for ParamSelector
     sm: StateMachine<ParamSelector, SelectorEvent>,
 }
 
 impl Tui {
     pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> Tui {
-        let selector = ParamSelector::new(&FUNCTIONS, &MOD_SOURCES);
-        let selection_changed = true;
         let mut window = Surface::new();
-        let sync_counter = 0;
-        let idle = Duration::new(0, 0);
-        let busy = Duration::new(0, 0);
-        let min_idle = Duration::new(10, 0);
-        let max_busy = Duration::new(0, 0);
         let canvas: CanvasRef<ParamId> = Canvas::new(50, 20);
-        let bank = SoundBank::new(SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION);
         let sound = SoundPatch::new();
-        let selected_sound = 0;
         window.set_position(1, 3);
         window.update_all(&sound.data);
         let (_, y) = window.get_size();
         window.add_child(canvas.clone(), 1, y);
-        let sm = StateMachine::new(ParamSelector::state_function);
 
-        let mut tui = Tui{sender,
-                          ui_receiver,
-                          selector,
-                          selection_changed,
-                          window,
-                          sync_counter,
-                          idle,
-                          busy,
-                          min_idle,
-                          max_busy,
-                          canvas,
-                          bank,
-                          sound,
-                          selected_sound,
-                          sm,
-                          };
+        let mut tui = Tui{
+            sender: sender,
+            ui_receiver: ui_receiver,
+            selector: ParamSelector::new(&FUNCTIONS, &MOD_SOURCES),
+            selection_changed: true,
+            window: window,
+            sync_counter: 0,
+            idle: Duration::new(0, 0),
+            busy: Duration::new(0, 0),
+            min_idle: Duration::new(10, 0),
+            max_busy: Duration::new(0, 0),
+            canvas: canvas,
+            bank: SoundBank::new(SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION),
+            sound: sound,
+            selected_sound: 0,
+            sm: StateMachine::new(ParamSelector::state_function),
+        };
         tui.select_sound(0);
         tui
     }
@@ -121,7 +112,6 @@ impl Tui {
                                 tui.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
                             },
                             _ => {
-                                //if tui.selector.handle_user_input(m, &mut tui.sound.data) {
                                 if tui.selector.handle_user_input(&mut tui.sm, m, sound_data.clone()) {
                                     tui.send_event();
                                 }
@@ -233,7 +223,6 @@ impl Tui {
         self.sound.data.set_parameter(&param);
 
         // Send new value to synth engine
-        //info!("send_event {:?}", param);
         self.sender.send(SynthMessage::Param(param)).unwrap();
 
         // Update UI
@@ -383,9 +372,9 @@ impl Tui {
     }
 
     fn display_options(s: &ItemSelection, x_pos: u16, selector_state: SelectorState) {
-        //print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         print!("{}{}", color::Bg(Black), color::Fg(LightWhite));
-        if selector_state == SelectorState::Function || selector_state == SelectorState::ValueFunction {
+        if selector_state == SelectorState::Function || selector_state == SelectorState::ValueFunction
+        || selector_state == SelectorState::Param || selector_state == SelectorState::ValueParam {
             let mut y_item = 2;
             let list = s.item_list;
             for item in list.iter() {
@@ -397,14 +386,6 @@ impl Tui {
             let item = &s.item_list[s.item_index];
             let (min, max) = if let ValueRange::IntRange(min, max) = item.val_range { (min, max) } else { panic!() };
             print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max);
-        }
-        if selector_state == SelectorState::Param || selector_state == SelectorState::ValueParam {
-            let mut y_item = 2;
-            let list = s.item_list;
-            for item in list.iter() {
-                print!("{} {} - {} ", cursor::Goto(x_pos, y_item), item.key, item.item);
-                y_item += 1;
-            }
         }
         if selector_state == SelectorState::Value {
             let range = &s.item_list[s.item_index].val_range;
@@ -434,5 +415,4 @@ impl Tui {
         self.idle = Duration::new(0, 0);
         self.busy = Duration::new(0, 0);
     }
-
 }

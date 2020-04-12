@@ -961,13 +961,13 @@ fn test_direct_shortcuts_select_parameter() {
     // Change to envelope 2 Sustain selection
     assert_eq!(context.handle_input(TestInput::Chars("e".to_string())), false);
     assert!(context.verify_function(Parameter::Envelope));
-    //assert_eq!(context.ps.state, SelectorState::FunctionIndex);
+    assert_eq!(context.ps.state, SelectorState::FunctionIndex);
     assert_eq!(context.handle_input(TestInput::Chars("2".to_string())), false);
     assert!(context.verify_function_id(2));
-    //assert_eq!(context.ps.state, SelectorState::Param);
+    assert_eq!(context.ps.state, SelectorState::Param);
     assert_eq!(context.handle_input(TestInput::Chars("s".to_string())), false);
     assert!(context.verify_parameter(Parameter::Sustain));
-    //assert_eq!(context.ps.state, SelectorState::Value);
+    assert_eq!(context.ps.state, SelectorState::Value);
 }
 
 #[test]
