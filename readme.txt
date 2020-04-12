@@ -16,13 +16,13 @@ Features are:
 - Delay
 
 This is still very much work in progress. The basic sound engine works, but
-some extended features are still missing.
+some features are still missing.
 
 Near future enhancements:
 - 2 resonant filters
 - Chorus
 - Multitap delay
-i- Additional key tuning tables for alternate tunings
+- Additional key tuning tables for alternate tunings
 - Additional oscillators (Wavetable, PM, FM)
 - MIDI controller assignment
 - Editing via MIDI note commands
