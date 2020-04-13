@@ -147,7 +147,10 @@ impl ParamSelector {
         self.value_changed
     }
 
-    /* Received a controller event. */
+    /* Received a controller event.
+     *
+     * This event is used as a direct value control for the UI menu line.
+     */
     pub fn handle_control_input(&mut self,
                                 sm: &mut StateMachine<ParamSelector, SelectorEvent>,
                                 value: i64,
@@ -789,7 +792,8 @@ struct TestContext {
 
 enum TestInput {
     Chars(String),
-    Key(Key)
+    Key(Key),
+    ControlChange(i64),
 }
 
 use flexi_logger::{Logger, opt_format};
@@ -829,6 +833,9 @@ impl TestContext {
             }
             TestInput::Key(k) => {
                 result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, *k, self.sound_data.clone())
+            }
+            TestInput::ControlChange(value) => {
+                ParamSelector::handle_control_input(&mut self.ps, &mut self.sm, *value, self.sound_data.clone())
             }
         }
         result
@@ -1175,6 +1182,20 @@ fn test_leave_subsel_with_cursor() {
     assert_eq!(context.ps.state, SelectorState::ValueFunction);
     context.handle_input(TestInput::Key(Key::Left)); // Back to parameter
     assert_eq!(context.ps.state, SelectorState::Param);
+}
+
+#[test]
+fn test_controller_updates_selected_value() {
+    let mut context = TestContext::new();
+    let c: &[TestInput] = &[TestInput::Chars("o1l".to_string())];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::Value);
+    context.handle_input(TestInput::ControlChange(0));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
+    context.handle_input(TestInput::ControlChange(127));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(100.0)));
 }
 
 // TODO: Select next param from value state with param shortcut
