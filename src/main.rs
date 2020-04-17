@@ -3,6 +3,7 @@
 #![allow(unused_variables)]
 #![allow(unreachable_code)]
 
+mod ctrl_map;
 mod midi_handler;
 mod modulation;
 mod parameter;
@@ -16,6 +17,7 @@ use synth::*;
 use tui::*;
 
 use canvas::{Canvas, CanvasRef};
+use ctrl_map::CtrlHashMap;
 use midi_handler::{MidiHandler, MidiMessage};
 use modulation::{Modulator, ModData};
 use parameter::*;
