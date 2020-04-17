@@ -90,7 +90,7 @@ pub struct FunctionId {
     pub function_id: usize,
 }
 
-#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub struct ParamId {
     pub function: Parameter,
     pub function_id: usize,
