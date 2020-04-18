@@ -5,7 +5,7 @@ use super::Float;
 use super::LfoData;
 use super::ModData;
 use super::MultiOscData;
-use super::{Parameter, ParameterValue, SynthParam};
+use super::{Parameter, ParameterValue, ParamId, SynthParam};
 
 use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};
@@ -164,7 +164,7 @@ impl SoundData {
         }
     }
 
-    pub fn get_value(&self, param: &SynthParam) -> ParameterValue {
+    pub fn get_value(&self, param: &ParamId) -> ParameterValue {
         let id = param.function_id - 1;
         match param.function {
             Parameter::Oscillator => {
@@ -239,6 +239,7 @@ impl SoundData {
         }
     }
 
+    /*
     pub fn insert_value(&self, msg: &mut SynthParam) {
         msg.value = self.get_value(msg);
     }
@@ -254,6 +255,7 @@ impl SoundData {
     fn insert_choice(msg: &mut SynthParam, value: usize) {
         if let ParameterValue::Choice(x) = &mut msg.value { *x = value; } else { panic!() };
     }
+    */
 
     pub fn write(&self, filename: &str) {
         let serialized = serde_json::to_string(&self).unwrap();

@@ -533,24 +533,8 @@ impl ParamSelector {
 
     /* Evaluate the MIDI control change message (ModWheel) */
     fn set_control_value(item: &mut ItemSelection, val: i64) {
-        match item.item_list[item.item_index].val_range {
-            ValueRange::IntRange(min, max) => {
-                let inc: Float = (max - min) as Float / 127.0;
-                let value = min + (val as Float * inc) as i64;
-                ParamSelector::update_value(item, ParameterValue::Int(value));
-            }
-            ValueRange::FloatRange(min, max) => {
-                let inc: Float = (max - min) / 127.0;
-                let value = min + val as Float * inc;
-                ParamSelector::update_value(item, ParameterValue::Float(value));
-            }
-            ValueRange::ChoiceRange(choice_list) => {
-                let inc: Float = choice_list.len() as Float / 127.0;
-                let value = (val as Float * inc) as i64;
-                ParamSelector::update_value(item, ParameterValue::Choice(value as usize));
-            }
-            _ => ()
-        }
+        let value = item.item_list[item.item_index].val_range.translate_value(val);
+        ParamSelector::update_value(item, value);
     }
 
     fn get_value_int(item: &mut ItemSelection,
@@ -700,8 +684,7 @@ impl ParamSelector {
         let function = &self.func_selection.item_list[self.func_selection.item_index];
         let function_id = if let ParameterValue::Int(x) = &self.func_selection.value { *x as usize } else { panic!() };
         let parameter = &self.param_selection.item_list[self.param_selection.item_index];
-        let param_val = &self.param_selection.value;
-        let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
+        let param = ParamId::new(function.item, function_id, parameter.item);
 
         // The value in the selected parameter needs to point to the right type.
         let sound = if let Some(sound) = &self.sound { sound } else { panic!() };

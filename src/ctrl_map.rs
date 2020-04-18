@@ -14,7 +14,8 @@ API:
     Out: Option(Synth parameter, controller value(abs or rel))
 */
 
-use super::{Parameter, ParamId, ParameterValue};
+use super::Float;
+use super::{Parameter, ParamId, ParameterValue, ValueRange};
 use super::{SoundData, SoundPatch};
 use super::SynthParam;
 
@@ -24,16 +25,17 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-#[derive(Serialize, Deserialize, Copy, Clone, Debug)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug)]
 enum MappingType {
     Absolute,
     Relative
 }
 
-#[derive(Serialize, Deserialize, Copy, Clone, Debug)]
+#[derive(Clone, Copy, Debug)]
 pub struct CtrlMapEntry {
     id: ParamId,
-    map_type: MappingType
+    map_type: MappingType,
+    val_range: ValueRange,
 }
 
 pub type CtrlHashMap = HashMap<u64, CtrlMapEntry>;
@@ -57,8 +59,9 @@ impl CtrlMap {
                       program: usize,
                       controller: u64,
                       map_type: MappingType,
-                      parameter: &ParamId) {
-        self.map[program].insert(controller, CtrlMapEntry{id: *parameter, map_type: map_type});
+                      parameter: &ParamId,
+                      val_range: ValueRange) {
+        self.map[program].insert(controller, CtrlMapEntry{id: *parameter, map_type: map_type, val_range: val_range});
     }
 
     /** Update a value according to the controller value.
@@ -74,16 +77,27 @@ impl CtrlMap {
     pub fn get_value(&self,
                     program: usize,
                     controller: u64,
-                    value: u64,
+                    value: i64,
                     sound: &SoundData,
                     result: &mut SynthParam) -> bool {
         // Get mapping
-        // For absolute: Translate value
-        // For relative: Increase/ decrease value
-        self.map[program].contains_key(&controller)
+        if !self.map[program].contains_key(&controller) {
+            return false;
+        }
+        let mapping = &self.map[program][&controller];
+        match mapping.map_type {
+            MappingType::Absolute => {
+                // For absolute: Translate value
+                let trans_val = mapping.val_range.translate_value(value);
+                result.value = trans_val;
+            }
+            MappingType::Relative => {
+                // For relative: Increase/ decrease value
+            }
+        };
+        true
     }
 }
-
 
 // ----------------------------------------------
 //                  Unit tests
@@ -108,14 +122,30 @@ impl TestContext {
     }
 
     pub fn add_controller(&mut self, ctrl_no: u64, ctrl_type: MappingType) {
-        self.map.add_mapping(1, ctrl_no, ctrl_type, &self.param_id);
+        println!("Adding controller {}, type {:?}", ctrl_no, ctrl_type);
+        self.map.add_mapping(1, ctrl_no, ctrl_type, &self.param_id, ValueRange::FloatRange(0.0, 100.0));
     }
 
-    pub fn handle_controller(&mut self, ctrl_no: u64, value: u64) -> bool {
-        self.map.get_value(1, ctrl_no, value, &self.sound_data.borrow(), &mut self.synth_param)
+    pub fn handle_controller(&mut self, ctrl_no: u64, value: i64) -> bool {
+        println!("Setting value {} for controller {}", value, ctrl_no);
+        if self.map.get_value(1, ctrl_no, value, &self.sound_data.borrow(), &mut self.synth_param) {
+            self.sound_data.borrow_mut().set_parameter(&self.synth_param);
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn has_value(&mut self, value: Float) -> bool {
+        let pval = self.sound_data.borrow().get_value(&self.param_id);
+        println!("Sound has value {:?}", pval);
+        if let ParameterValue::Float(x) = pval {
+            x == value
+        } else {
+            false
+        }
     }
 }
-
 
 #[test]
 fn test_controller_without_mapping_returns_no_value() {
@@ -128,4 +158,13 @@ fn test_absolute_controller_can_be_added() {
     let mut context = TestContext::new();
     context.add_controller(1, MappingType::Absolute);
     assert_eq!(context.handle_controller(1, 50), true);
+}
+
+#[test]
+fn test_value_can_be_changed() {
+    let mut context = TestContext::new();
+    assert_eq!(context.has_value(92.0), true);
+    context.add_controller(1, MappingType::Absolute);
+    assert_eq!(context.handle_controller(1, 0), true);
+    assert_eq!(context.has_value(0.0), true);
 }

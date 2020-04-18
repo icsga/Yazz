@@ -5,7 +5,7 @@ use super::Lfo;
 use super::MidiMessage;
 use super::{Modulator, ModData};
 use super::{MultiOscData, MultiOscillator};
-use super::{Parameter, ParameterValue, SynthParam};
+use super::{Parameter, ParameterValue, ParamId, SynthParam};
 use super::SoundData;
 use super::voice::Voice;
 use super::SampleGenerator;
@@ -160,8 +160,8 @@ impl Synth {
             } * m.scale;
 
             // Get current value of target parameter
-            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::NoValue};
-            let current_val = sound.get_value(&param).clone();
+            let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
+            let current_val = sound.get_value(&param);
             let mut val = match current_val {
                 ParameterValue::Int(x) => x as Float,
                 ParameterValue::Float(x) => x,
