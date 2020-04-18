@@ -140,7 +140,7 @@ impl SynthParam {
 }
 
 /** Enum for ranges of valid values */
-#[derive(Debug)]
+#[derive(Clone, Copy, Debug)]
 pub enum ValueRange {
     IntRange(i64, i64),               // Range (min, max) of integer values
     FloatRange(Float, Float),         // Range (min, max) of float values
@@ -148,6 +148,34 @@ pub enum ValueRange {
     FuncRange(&'static [MenuItem]),   // A list of (function-id) function entries
     ParamRange(&'static [MenuItem]),  // A list of (function-id-param) parameter entries
     NoRange
+}
+
+impl ValueRange {
+
+    /** Translates an integer value into a parameter value of the value range.
+     *
+     * This is currently only used for controller values in the range 0 - 127.
+     */
+    pub fn translate_value(&self, val: i64) -> ParameterValue {
+        match self {
+            ValueRange::IntRange(min, max) => {
+                let inc: Float = (max - min) as Float / 127.0;
+                let value = min + (val as Float * inc) as i64;
+                ParameterValue::Int(value)
+            }
+            ValueRange::FloatRange(min, max) => {
+                let inc: Float = (max - min) / 127.0;
+                let value = min + val as Float * inc;
+                ParameterValue::Float(value)
+            }
+            ValueRange::ChoiceRange(choice_list) => {
+                let inc: Float = choice_list.len() as Float / 127.0;
+                let value = (val as Float * inc) as i64;
+                ParameterValue::Choice(value as usize)
+            }
+            _ => ParameterValue::NoValue
+        }
+    }
 }
 
 impl Default for ValueRange {

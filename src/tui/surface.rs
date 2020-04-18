@@ -320,12 +320,11 @@ impl Surface {
 
     pub fn update_all(&mut self, sound: &SoundData) {
         for (key, item) in self.controller.observers.iter_mut() {
-            let param = SynthParam::new(key.function,
-                                        key.function_id,
-                                        key.parameter,
-                                        ParameterValue::NoValue);
+            let param = ParamId::new(key.function, key.function_id, key.parameter);
             let value = sound.get_value(&param);
-            if let ParameterValue::NoValue = value { continue; };
+            if let ParameterValue::NoValue = value {
+                continue;
+            }
             let value = Surface::param_to_widget_value(&value);
             item.borrow_mut().update(value);
         }
