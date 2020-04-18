@@ -122,12 +122,10 @@ impl TestContext {
     }
 
     pub fn add_controller(&mut self, ctrl_no: u64, ctrl_type: MappingType) {
-        println!("Adding controller {}, type {:?}", ctrl_no, ctrl_type);
         self.map.add_mapping(1, ctrl_no, ctrl_type, &self.param_id, ValueRange::FloatRange(0.0, 100.0));
     }
 
     pub fn handle_controller(&mut self, ctrl_no: u64, value: u64) -> bool {
-        println!("Setting value {} for controller {}", value, ctrl_no);
         let sound_data = &mut self.sound_data.borrow_mut();
         match self.map.get_value(1, ctrl_no, value, sound_data) {
             Ok(result) => {
@@ -140,7 +138,6 @@ impl TestContext {
 
     pub fn has_value(&mut self, value: Float) -> bool {
         let pval = self.sound_data.borrow().get_value(&self.param_id);
-        println!("Sound has value {:?}", pval);
         if let ParameterValue::Float(x) = pval {
             x == value
         } else {
