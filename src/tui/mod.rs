@@ -37,6 +37,7 @@ use value::{Value, get_int, get_float, get_str};
 use value_display::{ValueDisplay, ValueDisplayRef};
 pub use widget::{Index, Widget, WidgetProperties, WidgetRef};
 
+use super::CtrlMap;
 use super::Float;
 use super::MidiMessage;
 use super::SoundData;

@@ -98,8 +98,14 @@ pub struct ParamId {
 }
 
 impl ParamId {
-    pub fn new(function: Parameter, function_id: usize, parameter: Parameter) -> ParamId {
+    pub fn new(function: Parameter, function_id: usize, parameter: Parameter) -> Self {
         ParamId{function, function_id, parameter}
+    }
+
+    pub fn new_from(from: &SynthParam) -> Self {
+        ParamId{function: from.function, 
+                function_id: from.function_id,
+                parameter: from.parameter}
     }
 
     pub fn set(&mut self, func: Parameter, func_id: usize, param: Parameter) {
@@ -137,6 +143,13 @@ impl SynthParam {
     pub fn new(function: Parameter, function_id: usize, parameter: Parameter, value: ParameterValue) -> Self {
         SynthParam{function, function_id, parameter, value}
     }
+
+    pub fn new_from(from: &ParamId) -> Self {
+        SynthParam{function: from.function, 
+                   function_id: from.function_id,
+                   parameter: from.parameter,
+                   value: ParameterValue::NoValue}
+    }
 }
 
 /** Enum for ranges of valid values */
@@ -156,7 +169,7 @@ impl ValueRange {
      *
      * This is currently only used for controller values in the range 0 - 127.
      */
-    pub fn translate_value(&self, val: i64) -> ParameterValue {
+    pub fn translate_value(&self, val: u64) -> ParameterValue {
         match self {
             ValueRange::IntRange(min, max) => {
                 let inc: Float = (max - min) as Float / 127.0;

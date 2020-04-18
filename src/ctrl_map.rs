@@ -26,7 +26,7 @@ use std::collections::HashMap;
 use std::rc::Rc;
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug)]
-enum MappingType {
+pub enum MappingType {
     Absolute,
     Relative
 }
@@ -38,9 +38,9 @@ pub struct CtrlMapEntry {
     val_range: ValueRange,
 }
 
-pub type CtrlHashMap = HashMap<u64, CtrlMapEntry>;
+type CtrlHashMap = HashMap<u64, CtrlMapEntry>;
 
-struct CtrlMap {
+pub struct CtrlMap {
     map: Vec<CtrlHashMap>
 }
 
@@ -77,14 +77,14 @@ impl CtrlMap {
     pub fn get_value(&self,
                     program: usize,
                     controller: u64,
-                    value: i64,
-                    sound: &SoundData,
-                    result: &mut SynthParam) -> bool {
+                    value: u64,
+                    sound: &SoundData) -> Result<SynthParam, ()> {
         // Get mapping
         if !self.map[program].contains_key(&controller) {
-            return false;
+            return Err(());
         }
         let mapping = &self.map[program][&controller];
+        let mut result = SynthParam::new_from(&mapping.id);
         match mapping.map_type {
             MappingType::Absolute => {
                 // For absolute: Translate value
@@ -95,7 +95,7 @@ impl CtrlMap {
                 // For relative: Increase/ decrease value
             }
         };
-        true
+        Ok(result)
     }
 }
 
@@ -126,13 +126,15 @@ impl TestContext {
         self.map.add_mapping(1, ctrl_no, ctrl_type, &self.param_id, ValueRange::FloatRange(0.0, 100.0));
     }
 
-    pub fn handle_controller(&mut self, ctrl_no: u64, value: i64) -> bool {
+    pub fn handle_controller(&mut self, ctrl_no: u64, value: u64) -> bool {
         println!("Setting value {} for controller {}", value, ctrl_no);
-        if self.map.get_value(1, ctrl_no, value, &self.sound_data.borrow(), &mut self.synth_param) {
-            self.sound_data.borrow_mut().set_parameter(&self.synth_param);
-            true
-        } else {
-            false
+        let sound_data = &mut self.sound_data.borrow_mut();
+        match self.map.get_value(1, ctrl_no, value, sound_data) {
+            Ok(result) => {
+                sound_data.set_parameter(&result);
+                true
+            }
+            Err(()) => false
         }
     }
 
@@ -168,3 +170,5 @@ fn test_value_can_be_changed() {
     assert_eq!(context.handle_controller(1, 0), true);
     assert_eq!(context.has_value(0.0), true);
 }
+
+// TODO: Tests for relative values
