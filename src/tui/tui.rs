@@ -1,3 +1,4 @@
+use super::CtrlMap;
 use super::{Parameter, ParameterValue, ParamId, SynthParam, ValueRange, FUNCTIONS, OSC_PARAMS, MOD_SOURCES};
 use super::{Canvas, CanvasRef};
 use super::Float;
@@ -36,17 +37,17 @@ pub struct Tui {
 
     // Actual UI
     window: Surface,
-
+    canvas: CanvasRef<ParamId>,
     sync_counter: u32,
     idle: Duration, // Accumulated idle times of the engine
     busy: Duration, // Accumulated busy times of the engine
     min_idle: Duration,
     max_busy: Duration,
-    canvas: CanvasRef<ParamId>,
 
     bank: SoundBank,   // Bank with sound patches
     sound: SoundPatch, // Current sound patch as loaded from disk
     selected_sound: usize,
+    ctrl_map: CtrlMap, // Mapping of MIDI controller to parameter
 
     // State machine for ParamSelector
     sm: StateMachine<ParamSelector, SelectorEvent>,
@@ -68,15 +69,16 @@ impl Tui {
             selector: ParamSelector::new(&FUNCTIONS, &MOD_SOURCES),
             selection_changed: true,
             window: window,
+            canvas: canvas,
             sync_counter: 0,
             idle: Duration::new(0, 0),
             busy: Duration::new(0, 0),
             min_idle: Duration::new(10, 0),
             max_busy: Duration::new(0, 0),
-            canvas: canvas,
             bank: SoundBank::new(SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION),
             sound: sound,
             selected_sound: 0,
+            ctrl_map: CtrlMap::new(),
             sm: StateMachine::new(ParamSelector::state_function),
         };
         tui.select_sound(0);
@@ -162,12 +164,21 @@ impl Tui {
         match *m {
             MidiMessage::ControlChg{channel, controller, value} => {
                 if controller == 0x01 { // ModWheel
-                    self.selector.handle_control_input(&mut self.sm, value as i64, sound_data);
+                    self.selector.handle_control_input(&mut self.sm, value.into(), sound_data);
                     self.send_event();
+                } else {
+                    self.handle_ctrl_change(controller.into(), value.into());
                 }
             },
             MidiMessage::ProgramChg{channel, program} => self.select_sound(program as usize - 1),
             _ => ()
+        }
+    }
+
+    fn handle_ctrl_change(&mut self, controller: u64, value: u64) {
+        let result = self.ctrl_map.get_value(self.selected_sound, controller, value, &self.sound.data);
+        if let Ok(synth_param) = result {
+            self.sound.data.set_parameter(&synth_param);
         }
     }
 

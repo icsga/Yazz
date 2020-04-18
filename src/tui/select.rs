@@ -79,7 +79,7 @@ pub enum RetCode {
 
 pub enum SelectorEvent {
     Key(termion::event::Key),
-    ControlChange(i64),
+    ControlChange(u64),
 }
 
 #[derive(Debug)]
@@ -153,7 +153,7 @@ impl ParamSelector {
      */
     pub fn handle_control_input(&mut self,
                                 sm: &mut StateMachine<ParamSelector, SelectorEvent>,
-                                value: i64,
+                                value: u64,
                                 sound: Rc<RefCell<SoundData>>) {
         info!("handle_control_input {:?} in state {:?}", value, self.state);
         self.sound = Option::Some(Rc::clone(&sound));
@@ -532,7 +532,7 @@ impl ParamSelector {
     }
 
     /* Evaluate the MIDI control change message (ModWheel) */
-    fn set_control_value(item: &mut ItemSelection, val: i64) {
+    fn set_control_value(item: &mut ItemSelection, val: u64) {
         let value = item.item_list[item.item_index].val_range.translate_value(val);
         ParamSelector::update_value(item, value);
     }
@@ -818,7 +818,7 @@ impl TestContext {
                 result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, *k, self.sound_data.clone())
             }
             TestInput::ControlChange(value) => {
-                ParamSelector::handle_control_input(&mut self.ps, &mut self.sm, *value, self.sound_data.clone())
+                ParamSelector::handle_control_input(&mut self.ps, &mut self.sm, (*value).try_into().unwrap(), self.sound_data.clone())
             }
         }
         result
