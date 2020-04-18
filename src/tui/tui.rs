@@ -1,4 +1,4 @@
-use super::CtrlMap;
+use super::{CtrlMap, MappingType};
 use super::{Parameter, ParameterValue, ParamId, SynthParam, ValueRange, FUNCTIONS, OSC_PARAMS, MOD_SOURCES};
 use super::{Canvas, CanvasRef};
 use super::Float;
@@ -82,6 +82,14 @@ impl Tui {
             sm: StateMachine::new(ParamSelector::state_function),
         };
         tui.select_sound(0);
+        let param = ParamId::new(Parameter::Oscillator, 1, Parameter::Level);
+
+        // For testing: Hardcode volume controller
+        tui.ctrl_map.add_mapping(tui.selected_sound,
+                                 7 /* Channel volume */,
+                                 MappingType::Absolute,
+                                 &param,
+                                 ValueRange::FloatRange(0.0, 100.0));
         tui
     }
 
@@ -143,7 +151,6 @@ impl Tui {
     }
 
     fn select_sound(&mut self, mut sound_index: usize) {
-        info!("select_sound {}", sound_index);
         if sound_index > 127 {
             sound_index = 127;
         }
@@ -178,7 +185,7 @@ impl Tui {
     fn handle_ctrl_change(&mut self, controller: u64, value: u64) {
         let result = self.ctrl_map.get_value(self.selected_sound, controller, value, &self.sound.data);
         if let Ok(synth_param) = result {
-            self.sound.data.set_parameter(&synth_param);
+            self.send_parameter(&synth_param);
         }
     }
 
@@ -231,14 +238,18 @@ impl Tui {
         let parameter = &self.selector.param_selection.item_list[self.selector.param_selection.item_index];
         let param_val = &self.selector.param_selection.value;
         let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
+        self.send_parameter(&param);
+    }
+
+    fn send_parameter(&mut self, param: &SynthParam) {
         self.sound.data.set_parameter(&param);
 
         // Send new value to synth engine
-        self.sender.send(SynthMessage::Param(param)).unwrap();
+        self.sender.send(SynthMessage::Param(param.clone())).unwrap();
 
         // Update UI
-        let param_id = ParamId{function: function.item, function_id: function_id, parameter: parameter.item};
-        let value = match *param_val {
+        let param_id = ParamId::new_from(param);
+        let value = match param.value {
             ParameterValue::Float(v) => Value::Float(v.into()),
             ParameterValue::Int(v) => Value::Int(v),
             ParameterValue::Choice(v) => Value::Int(v.try_into().unwrap()),
