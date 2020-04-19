@@ -82,14 +82,6 @@ impl Tui {
             sm: StateMachine::new(ParamSelector::state_function),
         };
         tui.select_sound(0);
-        let param = ParamId::new(Parameter::Oscillator, 1, Parameter::Level);
-
-        // For testing: Hardcode volume controller
-        tui.ctrl_map.add_mapping(tui.selected_sound,
-                                 7 /* Channel volume */,
-                                 MappingType::Absolute,
-                                 &param,
-                                 ValueRange::FloatRange(0.0, 100.0));
         tui
     }
 
@@ -102,54 +94,66 @@ impl Tui {
                ui_receiver: Receiver<UiMessage>) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
             let mut tui = Tui::new(to_synth_sender, ui_receiver);
-            let mut keep_running = true;
             let sound_data = Rc::new(RefCell::new(tui.sound.data));
-            while keep_running {
+            loop {
                 let msg = tui.ui_receiver.recv().unwrap();
-                match msg {
-                    UiMessage::Midi(m)  => tui.handle_midi_event(&m, sound_data.clone()),
-                    UiMessage::Key(m) => {
-                        match m {
-                            Key::F(1) => {
-                                // Read bank from disk
-                                tui.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
-                                tui.select_sound(0);
-                            },
-                            Key::F(2) => {
-                                // Copy current sound to selected sound in bank
-                                tui.bank.set_sound(tui.selected_sound, &tui.sound);
-                                // Write bank to disk
-                                tui.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
-                            },
-                            _ => {
-                                if tui.selector.handle_user_input(&mut tui.sm, m, sound_data.clone()) {
-                                    tui.send_event();
-                                }
-                            }
-                        }
-                        tui.selection_changed = true; // Trigger full UI redraw
-                    },
-                    UiMessage::MousePress{x, y} |
-                    UiMessage::MouseHold{x, y} |
-                    UiMessage::MouseRelease{x, y} => {
-                        tui.window.handle_event(&msg);
-                    }
-                    UiMessage::SampleBuffer(m, p) => tui.handle_samplebuffer(m, p),
-                    UiMessage::EngineSync(idle, busy) => {
-                        tui.update_idle_time(idle, busy);
-                        tui.handle_engine_sync();
-                    }
-                    UiMessage::Exit => {
-                        info!("Stopping TUI");
-                        keep_running = false;
-                        tui.sender.send(SynthMessage::Exit).unwrap();
-                    }
-                };
+                if !tui.handle_ui_message(msg, sound_data.clone()) {
+                    break;
+                }
             }
         });
         handler
     }
 
+    fn handle_ui_message(&mut self, msg: UiMessage, sound_data: Rc<RefCell<SoundData>>) -> bool {
+        match msg {
+            UiMessage::Midi(m)  => self.handle_midi_event(&m, sound_data),
+            UiMessage::Key(m) => {
+                match m {
+                    Key::F(1) => {
+                        // Read bank from disk
+                        self.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
+                        self.select_sound(0);
+                    },
+                    Key::F(2) => {
+                        // Copy current sound to selected sound in bank
+                        self.bank.set_sound(self.selected_sound, &self.sound);
+                        // Write bank to disk
+                        self.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
+                    },
+                    _ => {
+                        if self.selector.handle_user_input(&mut self.sm, m, sound_data) {
+                            self.send_event();
+                        }
+                    }
+                }
+                self.selection_changed = true; // Trigger full UI redraw
+            },
+            UiMessage::MousePress{x, y} |
+            UiMessage::MouseHold{x, y} |
+            UiMessage::MouseRelease{x, y} => {
+                self.window.handle_event(&msg);
+            }
+            UiMessage::SampleBuffer(m, p) => self.handle_samplebuffer(m, p),
+            UiMessage::EngineSync(idle, busy) => {
+                self.update_idle_time(idle, busy);
+                self.handle_engine_sync();
+            }
+            UiMessage::Exit => {
+                info!("Stopping TUI");
+                self.sender.send(SynthMessage::Exit).unwrap();
+                return false;
+            }
+        };
+        true
+    }
+
+    /** Select a sound from the loaded sound bank.
+     *
+     * Creates a local copy of the selected sound, which can be modified.  It
+     * is copied back into the sound bank when saving the sound. Changing the
+     * sound again before saving discards any changes.
+     */
     fn select_sound(&mut self, mut sound_index: usize) {
         if sound_index > 127 {
             sound_index = 127;
@@ -177,16 +181,14 @@ impl Tui {
 
                     // Check if complete, if yes set CtrlMap
                     if self.selector.ml.complete {
+                        let val_range = self.selector.get_value_range();
+                        let param = self.selector.get_param_id();
                         let ml = &mut self.selector.ml;
-                        let function = &self.selector.func_selection.item_list[self.selector.func_selection.item_index];
-                        let function_id = if let ParameterValue::Int(x) = &self.selector.func_selection.value { *x as usize } else { panic!() };
-                        let parameter = &self.selector.param_selection.item_list[self.selector.param_selection.item_index];
-                        let param = ParamId::new(function.item, function_id, parameter.item);
                         self.ctrl_map.add_mapping(self.selected_sound,
                                                   ml.ctrl,
-                                                  MappingType::Absolute,
-                                                  &param,
-                                                  parameter.val_range);
+                                                  ml.mapping_type,
+                                                  param,
+                                                  val_range);
                     }
 
                 } else if controller == 0x01 { // ModWheel
@@ -258,11 +260,7 @@ impl Tui {
     /* Send an updated value to the synth engine. */
     fn send_event(&mut self) {
         // Update sound data
-        let function = &self.selector.func_selection.item_list[self.selector.func_selection.item_index];
-        let function_id = if let ParameterValue::Int(x) = &self.selector.func_selection.value { *x as usize } else { panic!() };
-        let parameter = &self.selector.param_selection.item_list[self.selector.param_selection.item_index];
-        let param_val = &self.selector.param_selection.value;
-        let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
+        let param = self.selector.get_synth_param();
         self.send_parameter(&param);
     }
 
@@ -289,13 +287,7 @@ impl Tui {
      */
     fn query_samplebuffer(&self) {
         let buffer = vec!(0.0; 100);
-        let f_s = &self.selector.func_selection;
-        let function = &f_s.item_list[f_s.item_index];
-        let function_id = if let ParameterValue::Int(x) = &f_s.value { *x as usize } else { panic!() };
-        let p_s = &self.selector.param_selection;
-        let parameter = &p_s.item_list[p_s.item_index];
-        let param_val = &p_s.value;
-        let param = SynthParam::new(function.item, function_id, parameter.item, *param_val);
+        let param = self.selector.get_synth_param();
         self.sender.send(SynthMessage::SampleBuffer(buffer, param)).unwrap();
     }
 
@@ -341,6 +333,11 @@ impl Tui {
                     Tui::display_value(&s.param_selection, selector_state == SelectorState::Value);
                     x_pos = 23;
                 }
+                SelectorState::MidiLearn => {
+                    if selector_state == SelectorState::MidiLearn {
+                        Tui::display_midi_learn();
+                    }
+                }
                 SelectorState::ValueFunction => {
                     Tui::display_function(&s.value_func_selection, selector_state == SelectorState::ValueFunction);
                     selection = &s.value_func_selection;
@@ -354,9 +351,6 @@ impl Tui {
                     Tui::display_param(&s.value_param_selection, selector_state == SelectorState::ValueParam);
                     selection = &s.value_param_selection;
                     x_pos = 46;
-                }
-                SelectorState::MidiLearn => {
-                    Tui::display_midi_learn();
                 }
             }
             if display_state == selector_state {
@@ -402,17 +396,17 @@ impl Tui {
 
     fn display_value(param: &ItemSelection, selected: bool) {
         if selected {
-            print!("{}{} ", color::Bg(LightWhite), color::Fg(Black));
+            print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
         match param.value {
-            ParameterValue::Int(x) => print!("{}", x),
-            ParameterValue::Float(x) => print!("{}", x),
+            ParameterValue::Int(x) => print!(" {}", x),
+            ParameterValue::Float(x) => print!(" {}", x),
             ParameterValue::Choice(x) => {
                 let item = &param.item_list[param.item_index];
                 let range = &item.val_range;
                 let selection = if let ValueRange::ChoiceRange(list) = range { list } else { panic!() };
                 let item = selection[x].item;
-                print!("{}", item);
+                print!(" {}", item);
             },
             _ => ()
         }
@@ -423,7 +417,7 @@ impl Tui {
 
     fn display_midi_learn() {
         print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
-        print!(" MIDI Learn: Send controller value");
+        print!("  MIDI Learn: Move controller");
         print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
     }
 
@@ -448,7 +442,7 @@ impl Tui {
             let range = &s.item_list[s.item_index].val_range;
             match range {
                 ValueRange::IntRange(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
-                ValueRange::FloatRange(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
+                ValueRange::FloatRange(min, max, _) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
                 ValueRange::ChoiceRange(list) => print!("{} 1 - {} ", cursor::Goto(x_pos, 2), list.len()),
                 ValueRange::FuncRange(list) => (),
                 ValueRange::ParamRange(list) => (),

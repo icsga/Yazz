@@ -39,11 +39,11 @@ pub fn next(current: SelectorState) -> SelectorState {
         Function => FunctionIndex,
         FunctionIndex => Param,
         Param => Value,
-        Value => ValueFunction,
+        Value => MidiLearn,
+        MidiLearn => ValueFunction,
         ValueFunction => ValueFunctionIndex,
         ValueFunctionIndex => ValueParam,
-        ValueParam => MidiLearn,
-        MidiLearn => Value,
+        ValueParam => ValueParam,
     }
 }
 
@@ -60,7 +60,7 @@ impl ItemSelection {
         self.item_index = 0;
         self.value = match self.item_list[0].val_range {
             ValueRange::IntRange(min, _) => ParameterValue::Int(min),
-            ValueRange::FloatRange(min, _) => ParameterValue::Float(min),
+            ValueRange::FloatRange(min, _, _) => ParameterValue::Float(min),
             ValueRange::ChoiceRange(_) => ParameterValue::Choice(0),
             ValueRange::FuncRange(func_list) => ParameterValue::Function(FunctionId{function: func_list[0].item, function_id: 0}),
             ValueRange::ParamRange(func_list) => ParameterValue::Function(FunctionId{function: func_list[0].item, function_id: 0}),
@@ -567,7 +567,7 @@ impl ParamSelector {
             _ => {
                 match item.item_list[item.item_index].val_range {
                     ValueRange::IntRange(min, max) => ParamSelector::get_value_int(item, min, max, c),
-                    ValueRange::FloatRange(min, max) => ParamSelector::get_value_float(item, min, max, c),
+                    ValueRange::FloatRange(min, max, _) => ParamSelector::get_value_float(item, min, max, c),
                     ValueRange::ChoiceRange(choice_list) => ParamSelector::get_value_choice(item, choice_list, c),
                     _ => panic!(),
                 }
@@ -721,29 +721,49 @@ impl ParamSelector {
         panic!();
     }
 
-    /* Select the parameter chosen by input, set value to current sound data. */
-    fn select_param(&mut self) {
-        info!("select_param {:?}", self.param_selection.item_list[self.param_selection.item_index].item);
+    fn get_param_id_internal(fs: &ItemSelection, ps: &ItemSelection) -> ParamId {
+        let function = &fs.item_list[fs.item_index];
+        let function_id = if let ParameterValue::Int(x) = &fs.value { *x as usize } else { panic!() };
+        let parameter = &ps.item_list[ps.item_index];
+        ParamId::new(function.item, function_id, parameter.item)
+    }
 
+    pub fn get_param_id(&self) -> ParamId {
+        ParamSelector::get_param_id_internal(&self.func_selection, &self.param_selection)
+    }
+
+    pub fn get_synth_param(&self) -> SynthParam {
         let function = &self.func_selection.item_list[self.func_selection.item_index];
         let function_id = if let ParameterValue::Int(x) = &self.func_selection.value { *x as usize } else { panic!() };
         let parameter = &self.param_selection.item_list[self.param_selection.item_index];
-        let param = ParamId::new(function.item, function_id, parameter.item);
+        let param_val = &self.param_selection.value;
+        SynthParam::new(function.item, function_id, parameter.item, *param_val)
+    }
+
+    pub fn get_value_range(&self) -> ValueRange {
+        self.param_selection.item_list[self.param_selection.item_index].val_range
+    }
+
+    /* Select the parameter chosen by input, set value to current sound data. */
+    fn select_param(&mut self) {
+        info!("select_param {:?}", self.param_selection.item_list[self.param_selection.item_index].item);
+        let param = self.get_param_id();
 
         // The value in the selected parameter needs to point to the right type.
         let sound = if let Some(sound) = &self.sound { sound } else { panic!() };
         let value = sound.borrow_mut().get_value(&param);
         info!("Sound has value {:?}", value);
+        let next_item_list = &self.param_selection.item_list[self.param_selection.item_index].next;
         match value {
             ParameterValue::Function(id) => {
                 let fs = &mut self.value_func_selection;
-                fs.item_list = parameter.next;
+                fs.item_list = next_item_list;
                 fs.item_index = ParamSelector::get_list_index(fs.item_list, id.function);
                 fs.value = ParameterValue::Int(id.function_id as i64);
             }
             ParameterValue::Param(id) => {
                 let fs = &mut self.value_func_selection;
-                fs.item_list = parameter.next;
+                fs.item_list = next_item_list;
                 fs.item_index = ParamSelector::get_list_index(fs.item_list, id.function);
                 fs.value = ParameterValue::Int(id.function_id as i64);
                 let ps = &mut self.value_param_selection;
@@ -771,7 +791,7 @@ impl ParamSelector {
                 }
                 selection.value = ParameterValue::Int(val.try_into().unwrap());
             }
-            ValueRange::FloatRange(min, max) => {
+            ValueRange::FloatRange(min, max, _) => {
                 let mut val = if let ParameterValue::Float(x) = val { x } else { panic!(); };
                 let has_period =  temp_string.contains(".");
                 if val > max {
@@ -804,7 +824,6 @@ impl ParamSelector {
         };
     }
 }
-
 
 // ----------------------------------------------
 //                  Unit tests
