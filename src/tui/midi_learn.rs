@@ -1,9 +1,11 @@
+use super::MappingType;
 use log::{info, trace, warn};
 
 #[derive(Debug)]
 pub struct MidiLearn {
     pub complete: bool,
     pub ctrl: u64,
+    pub mapping_type: MappingType,
 
     val1: u64,
     val2: u64,
@@ -15,6 +17,7 @@ impl MidiLearn {
         MidiLearn{
             complete: false,
             ctrl: 0,
+            mapping_type: MappingType::Absolute,
             val1: 0,
             val2: 0,
             num_events_received: 0
@@ -24,6 +27,7 @@ impl MidiLearn {
     pub fn reset(&mut self) {
         self.complete = false;
         self.ctrl = 0;
+        self.mapping_type = MappingType::Absolute;
         self.val1 = 0;
         self.val2 = 0;
         self.num_events_received = 0;
@@ -39,10 +43,16 @@ impl MidiLearn {
             }
             1 => {
                 if controller == self.ctrl {
-                    if value != self.val1 {
+                    let diff = (self.val1 as i64 - value as i64).abs();
+                    if diff >= 2 {
                         self.val2 = value;
                         self.num_events_received = 2;
                         self.complete = true;
+                        self.mapping_type = if diff.abs() >= 125 {
+                            MappingType::Relative
+                        } else {
+                            MappingType::Absolute
+                        };
                         info!("handle_controller: MIDI learn complete");
                     }
                 } else {
@@ -62,7 +72,7 @@ impl MidiLearn {
 // ----------------------------------------------
 
 #[test]
-fn test_full_value_can_be_set() {
+fn test_full_absolute_value_can_be_set() {
     let mut ml = MidiLearn::new();
     assert_eq!(ml.complete, false);
 
@@ -72,6 +82,21 @@ fn test_full_value_can_be_set() {
     ml.handle_controller(7, 1);
     assert_eq!(ml.complete, true);
     assert_eq!(ml.ctrl, 7);
+    assert_eq!(ml.mapping_type, MappingType::Absolute);
+}
+
+#[test]
+fn test_full_relative_value_can_be_set() {
+    let mut ml = MidiLearn::new();
+    assert_eq!(ml.complete, false);
+
+    ml.handle_controller(7, 127);
+    assert_eq!(ml.complete, false);
+
+    ml.handle_controller(7, 0);
+    assert_eq!(ml.complete, true);
+    assert_eq!(ml.ctrl, 7);
+    assert_eq!(ml.mapping_type, MappingType::Relative);
 }
 
 #[test]

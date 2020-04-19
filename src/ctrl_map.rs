@@ -1,18 +1,4 @@
-/*
-- Controller input is absolute or relative
-- Relative translates to +/ - keys
-- Map is from controller number to parameter ID
-- This is unrelated to selector
-- Must set sound parameter directly, similar to parameter UI
-- Must set both synth sound and tui sound (see tui::send_event())
-
-API:
-- Reset map
-- Add a mapping (controller number to synth parameter, abs or rel)
-- Translate a controller value into a parameter
-    In: Controller number, value
-    Out: Option(Synth parameter, controller value(abs or rel))
-*/
+/** Maps MIDI controllers to synth parameters. */
 
 use super::Float;
 use super::{Parameter, ParamId, ParameterValue, ValueRange};
@@ -26,7 +12,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-#[derive(Serialize, Deserialize, Clone, Copy, Debug)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq)]
 pub enum MappingType {
     Absolute,
     Relative
@@ -47,27 +33,43 @@ pub struct CtrlMap {
 
 impl CtrlMap {
     pub fn new() -> CtrlMap {
+        // Each of the 128 patches has it's own set of controller assignments
         CtrlMap{map: vec!(CtrlHashMap::new(); 128)}
     }
 
+    /** Reset the map, removing all controller assignments. */
     pub fn reset(&mut self) {
         for m in &mut self.map {
             m.clear();
         }
     }
 
+    /** Add a new mapping entry for a controller.
+     *
+     * \param program The number of the active sound patch
+     * \param controller The controller number to add
+     * \param map_type Type of value change (absolute or relative)
+     * \param parameter The parameter changed with this controller
+     * \param val_range The valid values for the parameter
+     */
     pub fn add_mapping(&mut self,
                       program: usize,
                       controller: u64,
                       map_type: MappingType,
-                      parameter: &ParamId,
+                      parameter: ParamId,
                       val_range: ValueRange) {
-        info!("add_mapping: Prg {}, ctrl {}, type {:?}, param {:?}, val range {:?}",
+        trace!("add_mapping: Prg {}, ctrl {}, type {:?}, param {:?}, val range {:?}",
             program, controller, map_type, parameter, val_range);
-        self.map[program].insert(controller, CtrlMapEntry{id: *parameter, map_type: map_type, val_range: val_range});
+        self.map[program].insert(controller,
+                                 CtrlMapEntry{id: parameter,
+                                              map_type: map_type,
+                                              val_range: val_range});
     }
 
     /** Update a value according to the controller value.
+     *
+     * Uses the parameter's val_range to translate the controller value into
+     * a valid parameter value.
      *
      * \param program The number of the active sound patch
      * \param controller The controller number to look up
@@ -96,6 +98,9 @@ impl CtrlMap {
             }
             MappingType::Relative => {
                 // For relative: Increase/ decrease value
+                let sound_value = sound.get_value(&mapping.id);
+                let delta = if value >= 126 { -1 } else { 1 };
+                result.value = mapping.val_range.add_value(sound_value, delta);
             }
         };
         Ok(result)
@@ -120,12 +125,19 @@ impl TestContext {
         let sound = SoundPatch::new();
         let sound_data = Rc::new(RefCell::new(sound.data));
         let param_id = ParamId::new(Parameter::Oscillator, 1, Parameter::Level);
-        let synth_param = SynthParam::new(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0));
+        let synth_param = SynthParam::new(Parameter::Oscillator,
+                                          1,
+                                          Parameter::Level,
+                                          ParameterValue::Float(0.0));
         TestContext{map, sound, sound_data, param_id, synth_param}
     }
 
     pub fn add_controller(&mut self, ctrl_no: u64, ctrl_type: MappingType) {
-        self.map.add_mapping(1, ctrl_no, ctrl_type, &self.param_id, ValueRange::FloatRange(0.0, 100.0));
+        self.map.add_mapping(1,
+                             ctrl_no,
+                             ctrl_type,
+                             self.param_id,
+                             ValueRange::FloatRange(0.0, 100.0, 1.0));
     }
 
     pub fn handle_controller(&mut self, ctrl_no: u64, value: u64) -> bool {
@@ -142,6 +154,7 @@ impl TestContext {
     pub fn has_value(&mut self, value: Float) -> bool {
         let pval = self.sound_data.borrow().get_value(&self.param_id);
         if let ParameterValue::Float(x) = pval {
+            println!("\nIs: {} Expected: {}", x, value);
             x == value
         } else {
             false
@@ -163,7 +176,7 @@ fn test_absolute_controller_can_be_added() {
 }
 
 #[test]
-fn test_value_can_be_changed() {
+fn test_value_can_be_changed_absolute() {
     let mut context = TestContext::new();
     assert_eq!(context.has_value(92.0), true);
     context.add_controller(1, MappingType::Absolute);
@@ -171,4 +184,25 @@ fn test_value_can_be_changed() {
     assert_eq!(context.has_value(0.0), true);
 }
 
-// TODO: Tests for relative values
+#[test]
+fn test_relative_controller_can_be_added() {
+    let mut context = TestContext::new();
+    context.add_controller(1, MappingType::Relative);
+    assert_eq!(context.handle_controller(1, 50), true);
+}
+
+#[test]
+fn test_value_can_be_changed_relative() {
+    let mut context = TestContext::new();
+    assert_eq!(context.has_value(92.0), true);
+    context.add_controller(1, MappingType::Relative);
+
+    // Increase value
+    assert_eq!(context.handle_controller(1, 0), true);
+    assert_eq!(context.has_value(93.0), true);
+
+    // Decrease value
+    assert_eq!(context.handle_controller(1, 127), true);
+    assert_eq!(context.has_value(92.0), true);
+}
+
