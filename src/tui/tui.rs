@@ -170,11 +170,36 @@ impl Tui {
     fn handle_midi_event(&mut self, m: &MidiMessage, sound_data: Rc<RefCell<SoundData>>) {
         match *m {
             MidiMessage::ControlChg{channel, controller, value} => {
-                if controller == 0x01 { // ModWheel
-                    self.selector.handle_control_input(&mut self.sm, value.into(), sound_data);
+                if self.selector.state == SelectorState::MidiLearn {
+
+                    // MIDI learn: Send all controller events to the selector
+                    self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), sound_data);
+
+                    // Check if complete, if yes set CtrlMap
+                    if self.selector.ml.complete {
+                        let ml = &mut self.selector.ml;
+                        let function = &self.selector.func_selection.item_list[self.selector.func_selection.item_index];
+                        let function_id = if let ParameterValue::Int(x) = &self.selector.func_selection.value { *x as usize } else { panic!() };
+                        let parameter = &self.selector.param_selection.item_list[self.selector.param_selection.item_index];
+                        let param = ParamId::new(function.item, function_id, parameter.item);
+                        self.ctrl_map.add_mapping(self.selected_sound,
+                                                  ml.ctrl,
+                                                  MappingType::Absolute,
+                                                  &param,
+                                                  parameter.val_range);
+                    }
+
+                } else if controller == 0x01 { // ModWheel
+
+                    // ModWheel is used as general data entry for selector
+                    self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), sound_data);
                     self.send_event();
+
                 } else {
+
+                    // All others might be mapped to control a parameter directly
                     self.handle_ctrl_change(controller.into(), value.into());
+
                 }
             },
             MidiMessage::ProgramChg{channel, program} => self.select_sound(program as usize - 1),
@@ -199,7 +224,7 @@ impl Tui {
             Parameter::Envelope => {
                 self.canvas.borrow_mut().plot(&m, 0.0, 1.0);
             }
-            _ => {}
+            _ => ()
         }
     }
 
@@ -330,6 +355,9 @@ impl Tui {
                     selection = &s.value_param_selection;
                     x_pos = 46;
                 }
+                SelectorState::MidiLearn => {
+                    Tui::display_midi_learn();
+                }
             }
             if display_state == selector_state {
                 break;
@@ -392,6 +420,13 @@ impl Tui {
             print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         }
     }
+
+    fn display_midi_learn() {
+        print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+        print!(" MIDI Learn: Send controller value");
+        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+    }
+
 
     fn display_options(s: &ItemSelection, x_pos: u16, selector_state: SelectorState) {
         print!("{}{}", color::Bg(Black), color::Fg(LightWhite));

@@ -19,6 +19,7 @@ use super::{Parameter, ParamId, ParameterValue, ValueRange};
 use super::{SoundData, SoundPatch};
 use super::SynthParam;
 
+use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};
 
 use std::cell::RefCell;
@@ -61,6 +62,8 @@ impl CtrlMap {
                       map_type: MappingType,
                       parameter: &ParamId,
                       val_range: ValueRange) {
+        info!("add_mapping: Prg {}, ctrl {}, type {:?}, param {:?}, val range {:?}",
+            program, controller, map_type, parameter, val_range);
         self.map[program].insert(controller, CtrlMapEntry{id: *parameter, map_type: map_type, val_range: val_range});
     }
 
