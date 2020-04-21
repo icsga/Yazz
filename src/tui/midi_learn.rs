@@ -34,7 +34,8 @@ impl MidiLearn {
     }
 
     pub fn handle_controller(&mut self, controller: u64, value: u64) -> bool {
-        info!("handle_controller: ctrl {} val {}, {} events received", controller, value, self.num_events_received);
+        info!("handle_controller: ctrl {} val {}, {} events received",
+            controller, value, self.num_events_received);
         match self.num_events_received {
             0 => {
                 self.ctrl = controller;

@@ -629,6 +629,8 @@ impl ParamSelector {
                             }
                         }
                     },
+                    '+' => { current += 1; RetCode::ValueUpdated },
+                    '-' => if current > min { current -= 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
                     '\n' => RetCode::ValueComplete,
                     _ => RetCode::KeyMissmatch,
                 }
@@ -662,10 +664,13 @@ impl ParamSelector {
                         current = if let Ok(x) = value { x } else { current };
                         RetCode::ValueUpdated
                     },
+                    '+' => { current += 1.0; RetCode::ValueUpdated },
+                    '-' => { current -= 1.0; RetCode::ValueUpdated },
                     '\n' => RetCode::ValueComplete,
                     _ => RetCode::KeyMissmatch,
                 }
             }
+            // TODO: Use ValueRange 'step' value for inc/ dec, some for +/ - above
             Key::Up        => { current += 1.0; RetCode::ValueUpdated },
             Key::Down      => { current -= 1.0; RetCode::ValueUpdated },
             Key::Left      => RetCode::Cancel,
@@ -697,7 +702,9 @@ impl ParamSelector {
                         c: termion::event::Key) -> RetCode {
         let mut current = if let ParameterValue::Choice(x) = item.value { x } else { panic!() };
         let result = match c {
+            Key::Char('+') |
             Key::Up         => {current += 1; RetCode::ValueUpdated },
+            Key::Char('-') |
             Key::Down       => if current > 0 { current -= 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
             Key::Left       => RetCode::Cancel,
             Key::Right      => RetCode::ValueComplete,

@@ -417,7 +417,7 @@ impl Tui {
 
     fn display_midi_learn() {
         print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
-        print!("  MIDI Learn: Move controller");
+        print!("  MIDI Learn: Send controller data");
         print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
     }
 
