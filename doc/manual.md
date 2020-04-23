@@ -1,21 +1,5 @@
 # Yazz - Yet Another Subtractive Synth
 
-<!-- vim-markdown-toc GFM -->
-
-* [Introduction](#introduction)
-* [Architecture](#architecture)
-* [Loading and saving sounds](#loading-and-saving-sounds)
-* [Editing parameters](#editing-parameters)
-    * [Function selection](#function-selection)
-    * [Function ID selection](#function-id-selection)
-    * [Parameter selection](#parameter-selection)
-    * [Value selection](#value-selection)
-    * [Keyboard shortcuts](#keyboard-shortcuts)
-* [Assigning MIDI controllers](#assigning-midi-controllers)
-* [Modulation](#modulation)
-
-<!-- vim-markdown-toc -->
-
 ## Introduction
 Thanks for trying out Yazz. This project is still under development, so not
 everything works as expected, or at all. I'm happy about any feedback.
@@ -37,7 +21,6 @@ Yazz has a fixed signal flow with the following components:
 * 2 global LFOs
 * Delay
 
-<a text="loading-and-saving-sounds"></a>
 ## Loading and saving sounds
 
 This functionality is still under construction.
