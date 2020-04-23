@@ -1,0 +1,26 @@
+A list of features to implement, roughly in order of importance:
+
+Synth engine:
+- Finish modulation sources/ targets
+- Finish filter
+- Envelope amount + delay
+- Implement additional oscillators:
+    - Sample
+    - FM
+    - PM
+- Poly/ Mono modes
+
+UI:
+- Loading of wavetable files
+- Improved loading/ saving/ copying of sounds
+- Dynamic parameter lists (needed when having multiple oscillators)
+- Macro controller to controll multiple parameters
+
+MIDI:
+- Pitchwheel
+- Velocity
+- Default controller mapping
+
+General:
+- Performance improvements
+- Test coverage
