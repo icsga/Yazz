@@ -81,8 +81,9 @@ pub enum RetCode {
 }
 
 pub enum SelectorEvent {
-    Key(termion::event::Key),
-    ControlChange(u64, u64),
+    Key(termion::event::Key), // A key has been pressed
+    ControlChange(u64, u64),  // The input controller has been updated
+    ValueChange(SynthParam),  // A sound parameter has changed outside of the selector (by MIDI controller)
 }
 
 #[derive(Debug)]
@@ -194,6 +195,7 @@ impl ParamSelector {
                         }
                     }
                     SelectorEvent::ControlChange(c, i) => SmResult::ChangeState(ParamSelector::state_function_index), // Function selected
+                    _ => SmResult::EventHandled,
                 }
             }
         }
@@ -233,6 +235,7 @@ impl ParamSelector {
                         ParamSelector::set_control_value(&mut self.func_selection, *value);
                         SmResult::EventHandled
                     }
+                    _ => SmResult::EventHandled,
                 }
             }
         }
@@ -277,6 +280,7 @@ impl ParamSelector {
                         }
                     }
                     SelectorEvent::ControlChange(c, i) => SmResult::ChangeState(ParamSelector::state_value),
+                    _ => SmResult::EventHandled,
                 }
             }
         }
@@ -331,6 +335,13 @@ impl ParamSelector {
                         ParamSelector::set_control_value(&mut self.param_selection, *value);
                         SmResult::EventHandled
                     }
+                    SelectorEvent::ValueChange(p) => {
+                        let selected_param = self.get_param_id();
+                        if p.equals(&selected_param) {
+                            ParamSelector::update_value(&mut self.param_selection, p.value);
+                        }
+                        SmResult::EventHandled
+                    }
                 }
             }
         }
@@ -365,6 +376,7 @@ impl ParamSelector {
                             SmResult::EventHandled
                         }
                     }
+                    _ => SmResult::EventHandled,
                 }
             }
         }
@@ -397,6 +409,7 @@ impl ParamSelector {
                         }
                     }
                     SelectorEvent::ControlChange(ctrl, value) => SmResult::ChangeState(ParamSelector::state_value_function_index),
+                    _ => SmResult::EventHandled,
                 }
             }
         }
@@ -457,6 +470,7 @@ impl ParamSelector {
                         ParamSelector::set_control_value(&mut self.value_func_selection, *value);
                         SmResult::EventHandled
                     }
+                    _ => SmResult::EventHandled,
                 }
             }
         }
@@ -507,6 +521,7 @@ impl ParamSelector {
                     SelectorEvent::ControlChange(ctrl, value) => {
                         SmResult::EventHandled
                     }
+                    _ => SmResult::EventHandled,
                 }
             }
         }
@@ -829,6 +844,11 @@ impl ParamSelector {
             }
             ValueRange::NoRange => {}
         };
+    }
+
+    /** A value has changed outside of the selector, update the local value. */
+    pub fn value_has_changed(&mut self, sm: &mut StateMachine<ParamSelector, SelectorEvent>, param: SynthParam) {
+        sm.handle_event(self, &SmEvent::Event(SelectorEvent::ValueChange(param)));
     }
 }
 

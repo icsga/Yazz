@@ -30,10 +30,11 @@ impl MidiHandler {
             if message.len() >= 2 {
                 let m = MidiHandler::get_midi_message(message);
                 info!("MidiMessage: {:?}", m);
-                m2s_sender.send(SynthMessage::Midi(m.clone())).unwrap();
                 let command = message[0] & 0xF0;
                 if command == 0xB0 || command == 0xC0 {
                     m2u_sender.send(UiMessage::Midi(m)).unwrap();
+                } else {
+                    m2s_sender.send(SynthMessage::Midi(m)).unwrap();
                 }
             } else {
                 info!("Got MIDI message with len {}", message.len());
