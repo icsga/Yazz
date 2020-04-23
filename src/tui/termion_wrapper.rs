@@ -44,7 +44,7 @@ impl TermionWrapper {
                                 to_ui_sender.send(UiMessage::Exit).unwrap();
                                 break;
                             },
-                            _              => to_ui_sender.send(UiMessage::Key(c)).unwrap(),
+                            _ => to_ui_sender.send(UiMessage::Key(c)).unwrap(),
                         };
                         termion.stdout.flush().unwrap();
                     }

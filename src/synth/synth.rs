@@ -237,10 +237,11 @@ impl Synth {
             MidiMessage::NoteOn{channel, key, velocity} => self.handle_note_on(key, velocity),
             MidiMessage::NoteOff{channel, key, velocity} => self.handle_note_off(key, velocity),
             MidiMessage::KeyAT{channel, key, pressure} => (),
-            MidiMessage::ControlChg{channel, controller, value} => (),
-            MidiMessage::ProgramChg{channel, program} => (),
             MidiMessage::ChannelAT{channel, pressure} => (),
             MidiMessage::PitchWheel{channel, pitch} => (),
+            // These shouldn't get here, they are UI events
+            MidiMessage::ControlChg{channel, controller, value} => (),
+            MidiMessage::ProgramChg{channel, program} => (),
         }
     }
 

@@ -156,6 +156,12 @@ impl SynthParam {
                    parameter: from.parameter,
                    value: ParameterValue::NoValue}
     }
+
+    pub fn equals(&self, other: &ParamId) -> bool {
+        self.function == other.function &&
+        self.function_id == other.function_id &&
+        self.parameter == other.parameter
+    }
 }
 
 /** Enum for ranges of valid values */

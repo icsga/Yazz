@@ -264,11 +264,17 @@ impl Tui {
         self.send_parameter(&param);
     }
 
+    /* Update all places this parameter is used. */
     fn send_parameter(&mut self, param: &SynthParam) {
+        // Update local copy of the sound
         self.sound.data.set_parameter(&param);
 
         // Send new value to synth engine
         self.sender.send(SynthMessage::Param(param.clone())).unwrap();
+
+        // If the changed value is currently selected in the command line,
+        // send it the updated value too.
+        self.selector.value_has_changed(&mut self.sm, param.clone());
 
         // Update UI
         let param_id = ParamId::new_from(param);
