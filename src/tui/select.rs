@@ -101,24 +101,28 @@ pub struct ParamSelector {
 
 impl ParamSelector {
     pub fn new(function_list: &'static [MenuItem], mod_list: &'static [MenuItem]) -> ParamSelector {
-        let func_selection = ItemSelection{
+        let mut func_selection = ItemSelection{
             item_list: function_list,
             item_index: 0,
             value: ParameterValue::Int(1),
             temp_string: String::new()};
-        let param_selection = ItemSelection{item_list: function_list[0].next,
+        func_selection.reset();
+        let mut param_selection = ItemSelection{item_list: function_list[0].next,
             item_index: 0,
             value: ParameterValue::Int(1),
             temp_string: String::new()};
-        let value_func_selection = ItemSelection{
+        param_selection.reset();
+        let mut value_func_selection = ItemSelection{
             item_list: mod_list,
             item_index: 0,
             value: ParameterValue::Int(1),
             temp_string: String::new()};
-        let value_param_selection = ItemSelection{item_list: mod_list[0].next,
+        value_func_selection.reset();
+        let mut value_param_selection = ItemSelection{item_list: mod_list[0].next,
             item_index: 0,
             value: ParameterValue::Int(1),
             temp_string: String::new()};
+        value_param_selection.reset();
         ParamSelector{value_changed: false,
                       state: SelectorState::Function,
                       func_selection: func_selection,
@@ -157,15 +161,19 @@ impl ParamSelector {
     /* Received a controller event.
      *
      * This event is used as a direct value control for the UI menu line.
+     *
+     * \todo This is the same as handle_user_input, consolidate
      */
     pub fn handle_control_input(&mut self,
                                 sm: &mut StateMachine<ParamSelector, SelectorEvent>,
                                 controller: u64,
                                 value: u64,
-                                sound: Rc<RefCell<SoundPatch>>) {
+                                sound: Rc<RefCell<SoundPatch>>) -> bool {
         info!("handle_control_input {:?} in state {:?}", value, self.state);
         self.sound = Option::Some(Rc::clone(&sound));
+        self.value_changed = false;
         sm.handle_event(self, &SmEvent::Event(SelectorEvent::ControlChange(controller, value)));
+        self.value_changed
     }
 
     // Select the function group to edit (Oscillator, Envelope, ...)
@@ -194,7 +202,7 @@ impl ParamSelector {
                             RetCode::Reset         => self.reset(),
                         }
                     }
-                    SelectorEvent::ControlChange(c, i) => SmResult::ChangeState(ParamSelector::state_function_index), // Function selected
+                    SelectorEvent::ControlChange(c, i) => SmResult::EventHandled,
                     _ => SmResult::EventHandled,
                 }
             }
@@ -231,10 +239,7 @@ impl ParamSelector {
                             RetCode::Reset         => self.reset(),
                         }
                     }
-                    SelectorEvent::ControlChange(ctrl, value) => {
-                        ParamSelector::set_control_value(&mut self.func_selection, *value);
-                        SmResult::EventHandled
-                    }
+                    SelectorEvent::ControlChange(ctrl, value) => SmResult::EventHandled,
                     _ => SmResult::EventHandled,
                 }
             }
@@ -333,6 +338,7 @@ impl ParamSelector {
                     }
                     SelectorEvent::ControlChange(ctrl, value) => {
                         ParamSelector::set_control_value(&mut self.param_selection, *value);
+                        self.value_changed = true;
                         SmResult::EventHandled
                     }
                     SelectorEvent::ValueChange(p) => {
@@ -906,7 +912,7 @@ impl TestContext {
                 result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, *k, self.sound.clone())
             }
             TestInput::ControlChange(controller, value) => {
-                ParamSelector::handle_control_input(&mut self.ps, &mut self.sm, *controller, *value, self.sound.clone())
+                result = ParamSelector::handle_control_input(&mut self.ps, &mut self.sm, *controller, *value, self.sound.clone())
             }
         }
         result
@@ -959,6 +965,7 @@ impl TestContext {
 
     fn verify_value(&self, value: ParameterValue) -> bool {
         let ps = &self.ps.param_selection;
+        info!("Checking value {:?}", ps.value);
         match value {
             ParameterValue::Int(expected) => {
                 let actual = if let ParameterValue::Int(j) = ps.value { j } else { panic!() };
@@ -1032,9 +1039,9 @@ impl TestContext {
 fn test_direct_shortcuts_select_parameter() {
     let mut context = TestContext::new();
 
-    // Initial state: Osc 1 waveform Sine
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
-    //assert_eq!(context.ps.state, SelectorState::Function);
+    // Initial state: Osc 1 something
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
+    assert_eq!(context.ps.state, SelectorState::Function);
 
     // Change to envelope 2 Sustain selection
     assert_eq!(context.handle_input(TestInput::Chars("e".to_string())), false);
@@ -1051,16 +1058,15 @@ fn test_direct_shortcuts_select_parameter() {
 #[test]
 fn test_invalid_shortcut_doesnt_change_function() {
     let mut context = TestContext::new();
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
     assert_eq!(context.handle_input(TestInput::Chars("@".to_string())), false);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
     assert_eq!(context.ps.state, SelectorState::Function);
 }
 
 #[test]
 fn test_cursor_navigation() {
     let mut context = TestContext::new();
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
     assert_eq!(context.ps.state, SelectorState::Function);
 
     // Forwards
@@ -1098,7 +1104,7 @@ fn test_cursor_navigation() {
 #[test]
 fn test_param_selection_reads_current_value() {
     let mut context = TestContext::new();
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Int(1)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
 
     // Change to level selection, reads current value from sound data
     assert_eq!(context.handle_input(TestInput::Chars("o1l".to_string())), false);
@@ -1186,25 +1192,25 @@ fn test_escape_resets_to_valid_state() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Key(Key::Up), TestInput::Key(Key::Esc)];
     assert_eq!(context.handle_inputs(c), false);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Choice(0)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
 
     // 2. Function ID state
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o".to_string()), TestInput::Key(Key::Esc)];
     assert_eq!(context.handle_inputs(c), false);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Choice(0)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
 
     // 3. Parameter state
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o1".to_string()), TestInput::Key(Key::Esc)];
     assert_eq!(context.handle_inputs(c), false);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Choice(0)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
 
     // 4. Value state
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o1f".to_string()), TestInput::Key(Key::Esc)];
     assert_eq!(context.handle_inputs(c), false);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Waveform, ParameterValue::Choice(0)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
 }
 
 #[test]
@@ -1267,6 +1273,25 @@ fn test_controller_updates_selected_value() {
     context.handle_input(TestInput::ControlChange(1, 127));
     assert_eq!(context.ps.state, SelectorState::Value);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(100.0)));
+}
+
+#[test]
+fn test_controller_is_ignored_in_other_states() {
+    let mut context = TestContext::new();
+
+    // Ignored in state_function
+    context.handle_input(TestInput::ControlChange(1, 127));
+    assert_eq!(context.ps.state, SelectorState::Function);
+
+    // Ignored in state_function_id
+    context.handle_input(TestInput::Chars("o".to_string()));
+    context.handle_input(TestInput::ControlChange(1, 127));
+    assert_eq!(context.ps.state, SelectorState::FunctionIndex);
+
+    // In state_param, it switches to state_value
+    context.handle_input(TestInput::Chars("1".to_string()));
+    context.handle_input(TestInput::ControlChange(1, 127));
+    assert_eq!(context.ps.state, SelectorState::Value);
 }
 
 // TODO: Select next param from value state with param shortcut

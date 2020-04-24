@@ -52,6 +52,7 @@ pub struct Synth {
     voices_playing: u32, // Bitmap with currently playing voices
     trigger_seq: u64,
     last_clock: i64,
+    aftertouch: Float, // MIDI channel aftertouch
     sender: Sender<UiMessage>,
 
     samplebuff_osc: WtOsc,
@@ -93,6 +94,7 @@ impl Synth {
         let voices_playing = 0;
         let trigger_seq = 0;
         let last_clock = 0i64;
+        let aftertouch = 0.0;
         let samplebuff_osc = WtOsc::new(sample_rate, 0, Arc::clone(&wt_manager));
         let samplebuff_env = Envelope::new(sample_rate as Float);
         Synth{
@@ -110,6 +112,7 @@ impl Synth {
             voices_playing,
             trigger_seq,
             last_clock,
+            aftertouch,
             sender,
             samplebuff_osc,
             samplebuff_env}
@@ -142,39 +145,49 @@ impl Synth {
         info!("Stopping synth engine");
     }
 
-    fn get_modulation_values(glfo: &mut [Lfo], sample_clock: i64, sound: &SoundData, sound_global: &mut SoundData) {
-        for m in sound.modul.iter() {
-            if !m.active {
+    /* Get global modulation values.
+     *
+     * Calculates the values for global modulation sources and applies them to
+     * the global sound data.
+     */
+    fn get_modulation_values(&mut self, sample_clock: i64) {
+        for m in self.sound.modul.iter() {
+            if !m.active || !m.is_global {
                 continue;
             }
 
             // Get modulator source output
             let mod_val: Float = match m.source_func {
                 Parameter::GlobalLfo => {
-                    let (val, reset) = glfo[m.source_func_id - 1].get_sample(sample_clock, &sound_global.glfo[m.source_func_id - 1], false);
+                    let (val, reset) = self.glfo[m.source_func_id - 1].get_sample(sample_clock, &self.sound_global.glfo[m.source_func_id - 1], false);
                     info!("Global LFO {}", val);
                     val
                 },
+                Parameter::Aftertouch => self.aftertouch,
                 _ => 0.0, // TODO: This also sets non-global vars, optimize that
             } * m.scale;
 
             // Get current value of target parameter
             let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
-            let current_val = sound.get_value(&param);
+            let current_val = self.sound.get_value(&param);
             let mut val = match current_val {
                 ParameterValue::Int(x) => x as Float,
                 ParameterValue::Float(x) => x,
                 _ => panic!()
             };
 
+            /*
             // Update value if mod source is global
             if m.is_global {
                 val += mod_val;
             }
+            */
+            // Update value
+            val += mod_val;
 
             // Write value to global sound data
             let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::Float(val)};
-            sound_global.set_parameter(&param);
+            self.sound_global.set_parameter(&param);
         }
     }
 
@@ -182,7 +195,7 @@ impl Synth {
     pub fn get_sample(&mut self, sample_clock: i64) -> Float {
         let mut value: Float = 0.0;
 
-        Synth::get_modulation_values(&mut self.glfo, sample_clock, &self.sound, &mut self.sound_global);
+        self.get_modulation_values(sample_clock);
 
         // Get sample of all active voices
         if self.voices_playing > 0 {
@@ -236,7 +249,7 @@ impl Synth {
             MidiMessage::NoteOn{channel, key, velocity} => self.handle_note_on(key, velocity),
             MidiMessage::NoteOff{channel, key, velocity} => self.handle_note_off(key, velocity),
             MidiMessage::KeyAT{channel, key, pressure} => (),
-            MidiMessage::ChannelAT{channel, pressure} => (),
+            MidiMessage::ChannelAT{channel, pressure} => self.handle_channel_aftertouch(pressure),
             MidiMessage::PitchWheel{channel, pitch} => (),
             // These shouldn't get here, they are UI events
             MidiMessage::ControlChg{channel, controller, value} => (),
@@ -272,6 +285,10 @@ impl Synth {
                 break;
             }
         }
+    }
+
+    fn handle_channel_aftertouch(&mut self, pressure: u8) {
+        self.aftertouch = pressure as Float;
     }
 
     /* Decide which voice gets to play the next note. */

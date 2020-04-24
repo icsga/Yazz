@@ -195,9 +195,9 @@ impl Tui {
                 } else if controller == 0x01 { // ModWheel
 
                     // ModWheel is used as general data entry for selector
-                    self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), self.sound.clone());
-                    self.send_event();
-
+                    if self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), self.sound.clone()) {
+                        self.send_event();
+                    }
                 } else {
 
                     // All others might be mapped to control a parameter directly

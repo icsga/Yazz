@@ -28,13 +28,14 @@ pub struct ModSource {
 }
 
 /** Static list of available modulation data sources. */
-static MOD_SOURCE: [ModSource; 5] = [
+static MOD_SOURCE: [ModSource; 6] = [
     ModSource{function: Parameter::Envelope, index_range: (1, NUM_ENVELOPES), val_range: ModValRange::FloatRange(0.0, 1.0), is_global: false},
     ModSource{function: Parameter::Lfo, index_range: (1, NUM_LFOS), val_range: ModValRange::FloatRange(-1.0, 1.0), is_global: false},
     ModSource{function: Parameter::Oscillator, index_range: (1, NUM_OSCILLATORS), val_range: ModValRange::FloatRange(-1.0, 1.0), is_global: false},
+    ModSource{function: Parameter::KeyAttack, index_range: (1, 1), val_range: ModValRange::IntRange(0, 127), is_global: false},
 
-    ModSource{function: Parameter::KeyAttack, index_range: (1, 1), val_range: ModValRange::IntRange(0, 127), is_global: true},
     ModSource{function: Parameter::GlobalLfo, index_range: (1, NUM_GLOBAL_LFOS), val_range: ModValRange::FloatRange(-1.0, 1.0), is_global: true},
+    ModSource{function: Parameter::Aftertouch, index_range: (1, 1), val_range: ModValRange::IntRange(0, 127), is_global: true},
 ];
 
 /** Defines a target for modulation data with it's allowed value range. */
