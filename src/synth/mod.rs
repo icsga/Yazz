@@ -11,6 +11,7 @@ pub mod voice;
 pub mod wavetable;
 pub mod wt_manager;
 pub mod wt_oscillator;
+pub mod wt_reader;
 
 pub use delay::{Delay, DelayData};
 pub use engine::Engine;
@@ -24,6 +25,7 @@ pub use synth::{Synth, NUM_GLOBAL_LFOS};
 pub use wavetable::Wavetable;
 pub use wt_manager::WtManager;
 pub use wt_oscillator::{WtOsc, WtOscData};
+pub use wt_reader::WtReader;
 
 use super::Float;
 use super::MidiMessage;

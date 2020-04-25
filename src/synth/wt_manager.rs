@@ -56,7 +56,6 @@ impl WtManager {
     // ------------------
     // Default waveshapes
     // ------------------
-    // TODO: Move to separate file, maybe wt_manager
 
     /** Insert a sine wave into the given table. */
     fn insert_sine(table: &mut [Float], start_freq: Float, sample_freq: Float) {
@@ -118,7 +117,7 @@ impl WtManager {
     fn initialize_default_tables(sample_rate: Float) -> Arc<Wavetable> {
         info!("Initializing default waveshapes");
         let name = "Basic".to_string();
-        let mut wt = Wavetable::new(&name, 4, 2048);
+        let mut wt = Wavetable::new(&name, 4, 11, 2048);
         let two: Float = 2.0;
         let start_freq = (440.0 / 32.0) * (two.powf((-9.0) / 12.0));
         wt.create_tables(0, start_freq, sample_rate, WtManager::insert_sine);

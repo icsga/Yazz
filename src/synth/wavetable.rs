@@ -18,11 +18,25 @@ pub struct Wavetable {
 }
 
 impl Wavetable {
-    pub fn new(name: &str, num_tables: usize, num_samples: usize) -> Wavetable {
+    pub fn new(name: &str, num_tables: usize, num_octaves: usize, num_samples: usize) -> Wavetable {
         let name = name.to_string();
-        let num_octaves = 11;
         let num_values = num_samples + 1;
         let table = vec!(vec!(0.0; num_values * num_octaves); num_tables);
+        info!("New Wavetable: {} tables for {} octaves, {} samples",
+              num_tables, num_octaves, num_samples);
+        Wavetable {
+            name,
+            num_tables,
+            num_octaves,
+            num_values,
+            num_samples,
+            table
+        }
+    }
+
+    pub fn new_from_vector(name: &str, num_tables: usize, num_octaves: usize, num_samples: usize, table: Vec<Vec<Float>>) -> Wavetable {
+        let name = name.to_string();
+        let num_values = num_samples + 1;
         info!("New Wavetable: {} tables for {} octaves, {} samples",
               num_tables, num_octaves, num_samples);
         Wavetable {

@@ -73,6 +73,7 @@ pub enum Parameter {
     // MIDI parameters
     KeyValue,
     KeyAttack,
+    KeyAftertouch,
     Aftertouch,
 
     // System parameters
