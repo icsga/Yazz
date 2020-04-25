@@ -211,7 +211,7 @@ impl Surface {
         target.add_child(osc_freq, x_offset, 4 + y_offset);
 
         key.set(Parameter::Oscillator, func_id, Parameter::WaveIndex);
-        let osc_wave_id = self.new_mod_dial_float("Wave", 0.0, 3.0, 0.0, false, &key);
+        let osc_wave_id = self.new_mod_dial_float("Wave", 0.0, 1.0, 0.0, false, &key);
         target.add_child(osc_wave_id, x_offset, 7 + y_offset);
 
         key.set(Parameter::Oscillator, func_id, Parameter::Voices);

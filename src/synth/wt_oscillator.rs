@@ -195,9 +195,10 @@ impl SampleGenerator for WtOsc {
                 complete = true; // Sync signal for other oscillators
             }
 
-            let lower_wave = data.wave_index as usize;
+            let translated_index = (self.wave.table.len() - 1) as Float * data.wave_index;
+            let lower_wave = translated_index as usize;
             let lower_wave_float = lower_wave as Float;
-            let lower_fract: Float = 1.0 - (data.wave_index - lower_wave_float);
+            let lower_fract: Float = 1.0 - (translated_index - lower_wave_float);
             let upper_fract: Float = if lower_fract != 1.0 { 1.0 - lower_fract } else { 0.0 };
 
             let table: &Vec<Float>;
