@@ -129,7 +129,7 @@ impl WtManager {
         info!("Finished");
         Arc::new(wt)
         */
-        let result = WtReader::read_file("data/ESW Analog - 80's PWM.wav");
+        let result = WtReader::read_file("data/ESW Digital - Formantish.wav");
         if let Ok(wt) = result { wt } else { panic!(); }
     }
 }
