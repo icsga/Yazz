@@ -46,11 +46,10 @@ pub struct ModDest {
     pub val_max: Float,
 }
 
-static MOD_DEST: [ModDest; 6] = [
+static MOD_DEST: [ModDest; 5] = [
     ModDest{function: Parameter::Oscillator, parameter: Parameter::Level,      val_min: 0.0,   val_max: 100.0},
     ModDest{function: Parameter::Oscillator, parameter: Parameter::Finetune,   val_min: 0.0,   val_max: 1200.0},
-    ModDest{function: Parameter::Oscillator, parameter: Parameter::Blend,      val_min: 0.0,   val_max: 5.0},
-    ModDest{function: Parameter::Oscillator, parameter: Parameter::Phase,      val_min: 0.0,   val_max: 1.0},
+    ModDest{function: Parameter::Oscillator, parameter: Parameter::WaveIndex,  val_min: 0.0,   val_max: 5.0},
     ModDest{function: Parameter::Oscillator, parameter: Parameter::Voices,     val_min: 1.0,   val_max: 7.0},
     ModDest{function: Parameter::Delay,      parameter: Parameter::Time,       val_min: 0.0,   val_max: 1.0},
 ];

@@ -14,17 +14,12 @@ const MAX_VOICES: usize = 7;
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
 pub struct WtOscData {
     pub level: Float,
-    pub phase: Float,
-    pub sine_ratio: Float,
-    pub tri_ratio: Float,
-    pub saw_ratio: Float,
-    pub square_ratio: Float,
-    pub noise_ratio: Float,
     pub num_voices: i64,
     pub voice_spread: Float,
     pub tune_halfsteps: i64,
     pub tune_cents: Float,
     pub freq_offset: Float, // Value derived from tune_halfsteps and tune_cents
+    pub wave_index: Float, // Index into the wave tables
     pub sync: i64,
     pub key_follow: i64,
 }
@@ -32,46 +27,11 @@ pub struct WtOscData {
 impl WtOscData {
     pub fn init(&mut self) {
         self.level = 0.92;
-        self.phase = 0.5;
-        self.select_wave(0);
         self.set_voice_num(1);
         self.set_halfsteps(0);
+        self.wave_index = 0.0;
         self.sync = 0;
         self.key_follow = 1;
-    }
-
-    /** Select a single waveform. */
-    pub fn select_wave(&mut self, value: usize) {
-        match value {
-            0 => self.set_ratios(1.0, 0.0, 0.0, 0.0, 0.0),
-            1 => self.set_ratios(0.0, 1.0, 0.0, 0.0, 0.0),
-            2 => self.set_ratios(0.0, 0.0, 1.0, 0.0, 0.0),
-            3 => self.set_ratios(0.0, 0.0, 0.0, 1.0, 0.0),
-            4 => self.set_ratios(0.0, 0.0, 0.0, 0.0, 1.0),
-            _ => {}
-        }
-    }
-
-    /** Select a free mix of all waveforms. */
-    pub fn set_ratios(&mut self, sine_ratio: Float, tri_ratio: Float, saw_ratio: Float, square_ratio: Float, noise_ratio: Float) {
-        self.sine_ratio = sine_ratio;
-        self.tri_ratio = tri_ratio;
-        self.saw_ratio = saw_ratio;
-        self.square_ratio = square_ratio;
-        self.noise_ratio = noise_ratio;
-    }
-
-    /** Select a mix of up to two waveforms. */
-    pub fn set_ratio(&mut self, ratio: Float) {
-        if ratio <= 1.0 {
-            self.set_ratios(1.0 - ratio, ratio, 0.0, 0.0, 0.0);
-        } else if ratio <= 2.0 {
-            self.set_ratios(0.0, 1.0 - (ratio - 1.0), ratio - 1.0, 0.0, 0.0);
-        } else if ratio <= 3.0 {
-            self.set_ratios(0.0, 0.0, 1.0 - (ratio - 2.0), ratio - 2.0, 0.0);
-        } else if ratio <= 4.0 {
-            self.set_ratios(0.0, 0.0, 0.0, 1.0 - (ratio - 3.0), ratio - 3.0);
-        }
     }
 
     /** Number of detuned voices per oscillator. */
@@ -101,42 +61,10 @@ impl WtOscData {
         let inc: Float = 1.059463;
         self.freq_offset = inc.powf(self.tune_halfsteps as Float + self.tune_cents);
     }
-
-    pub fn get_waveform(&self) -> i64 {
-        if self.sine_ratio > 0.0 {
-            0
-        } else if self.tri_ratio > 0.0 {
-            1
-        } else if self.saw_ratio > 0.0 {
-            2
-        } else if self.square_ratio > 0.0 {
-            3
-        } else if self.noise_ratio > 0.0 {
-            4
-        } else {
-            0
-        }
-    }
-
-    pub fn get_ratio(&self) -> Float {
-        if self.sine_ratio > 0.0 {
-            self.tri_ratio
-        } else if self.tri_ratio > 0.0 {
-            self.saw_ratio + 1.0
-        } else if self.saw_ratio > 0.0 {
-            self.square_ratio + 2.0
-        } else if self.square_ratio > 0.0 {
-            self.noise_ratio + 3.0
-        } else {
-            0.0
-        }
-    }
 }
 
-const NUM_TABLES: usize = 11;
 const NUM_SAMPLES_PER_TABLE: usize = 2048;
 const NUM_VALUES_PER_TABLE: usize = (NUM_SAMPLES_PER_TABLE + 1); // Add one sample for easier interpolation on last sample
-const TABLE_SIZE: usize = NUM_VALUES_PER_TABLE * NUM_TABLES;
 
 #[derive(Copy, Clone)]
 struct State {
@@ -221,17 +149,18 @@ impl WtOsc {
         (rand::random::<Float>() * 2.0) - 1.0
     }
 
-    fn get_table_index(freq: Float) -> usize {
+    /* Look up the octave table matching the current frequency. */
+    fn get_table_index(num_octaves: usize, freq: Float) -> usize {
         let two: Float = 2.0;
         let mut compare_freq = (440.0 / 32.0) * (two.powf((-9.0) / 12.0));
         let i: usize = 0;
-        for i in 0..NUM_TABLES {
+        for i in 0..num_octaves {
             if freq < compare_freq * 2.0 {
                 return i;
             }
             compare_freq *= 2.0;
         }
-        NUM_TABLES - 1
+        0
     }
 }
 
@@ -259,7 +188,6 @@ impl SampleGenerator for WtOsc {
             let frequency = frequency + freq_diff;
             let freq_speed = frequency * (NUM_SAMPLES_PER_TABLE as Float / self.sample_rate);
             let diff = freq_speed * dt_f;
-            let mut voice_result = 0.0;
             state.last_pos += diff;
             if state.last_pos > (NUM_SAMPLES_PER_TABLE as Float) {
                 // Completed one wave cycle
@@ -267,26 +195,22 @@ impl SampleGenerator for WtOsc {
                 complete = true; // Sync signal for other oscillators
             }
 
+            let lower_wave = data.wave_index as usize;
+            let lower_wave_float = lower_wave as Float;
+            let mut lower_fract: Float = 1.0 - (data.wave_index - lower_wave_float);
+            let mut upper_fract: Float = 0.0;
+            if lower_fract != 1.0 {
+                // Between two waves, prepare interpolation
+                upper_fract = 1.0 - lower_fract;
+            }
+
             let table: &Vec<Float>;
-            let table_index = WtOsc::get_table_index(frequency);
+            let table_index = WtOsc::get_table_index(self.wave.num_octaves, frequency);
 
-            if data.sine_ratio > 0.0 {
-                voice_result += WtOsc::get_sample(&self.wave.table[0], table_index, state.last_pos) * data.sine_ratio;
+            let mut voice_result = WtOsc::get_sample(&self.wave.table[lower_wave], table_index, state.last_pos) * lower_fract;
+            if upper_fract > 0.0 {
+                voice_result += WtOsc::get_sample(&self.wave.table[lower_wave + 1], table_index, state.last_pos) * upper_fract;
             }
-            if data.tri_ratio > 0.0 {
-                voice_result += WtOsc::get_sample(&self.wave.table[1], table_index, state.last_pos) * data.tri_ratio;
-            }
-            if data.saw_ratio > 0.0 {
-                voice_result += WtOsc::get_sample(&self.wave.table[2], table_index, state.last_pos) * data.saw_ratio;
-            }
-            if data.square_ratio > 0.0 {
-                voice_result += WtOsc::get_sample(&self.wave.table[3], table_index, state.last_pos) * data.square_ratio;
-            }
-            if data.noise_ratio > 0.0 {
-                voice_result += WtOsc::get_sample_noise() * data.noise_ratio;
-            }
-
-            //voice_result *= 1.0 - (i as Float * 0.1);
             result += voice_result;
         }
         self.last_update += dt;

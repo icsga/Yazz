@@ -19,9 +19,8 @@ pub enum Parameter {
 
     // Oscillator, Lfo
     Waveform,
-    Phase,
-    Blend,
     Level,
+    WaveIndex,
     Frequency,
     Finetune,
     Sync,
@@ -278,13 +277,11 @@ pub static FUNCTIONS: [MenuItem; 7] = [
     MenuItem{item: Parameter::Modulation, key: 'm', val_range: ValueRange::IntRange(1, 16), next: &MOD_PARAMS},
 ];
 
-pub static OSC_PARAMS: [MenuItem; 10] = [
-    MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::ChoiceRange(&OSC_WAVEFORM),   next: &[]},
+pub static OSC_PARAMS: [MenuItem; 8] = [
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::FloatRange(0.0, 100.0, 1.0),  next: &[]},
+    MenuItem{item: Parameter::WaveIndex, key: 'w', val_range: ValueRange::FloatRange(0.0, 3.0, 0.1),    next: &[]},
     MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::IntRange(-24, 24),            next: &[]},
     MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::FloatRange(0.0, 1200.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Blend,     key: 'b', val_range: ValueRange::FloatRange(0.0, 5.0, 0.1),    next: &[]},
-    MenuItem{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 1.0, 0.01),   next: &[]},
     MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::IntRange(0, 1),               next: &[]},
     MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::IntRange(0, 1),               next: &[]},
     MenuItem{item: Parameter::Voices,    key: 'v', val_range: ValueRange::IntRange(1, 7),               next: &[]},

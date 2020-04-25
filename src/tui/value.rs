@@ -6,13 +6,13 @@ pub enum Value {
 }
 
 pub fn get_int(value: &Value) -> i64 {
-    if let Value::Int(x) = value { *x } else { panic!() }
+    if let Value::Int(x) = value { *x } else { panic!("Got value {:?}", value) }
 }
 
 pub fn get_float(value: &Value) -> f64 {
-    if let Value::Float(x) = value { *x } else { panic!() }
+    if let Value::Float(x) = value { *x } else { panic!("Got value {:?}", value) }
 }
 
 pub fn get_str(value: &Value) -> &String {
-    if let Value::Str(x) = value { &x } else { panic!() }
+    if let Value::Str(x) = value { &x } else { panic!("Got value {:?}", value) }
 }

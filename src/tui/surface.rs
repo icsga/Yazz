@@ -204,11 +204,7 @@ impl Surface {
         let title = Label::new(title, len as Index);
         target.add_child(title, 10 + x_offset, y_offset);
 
-        let mut key = ParamId::new(Parameter::Oscillator, func_id, Parameter::Waveform);
-        let osc_wave = self.new_mod_dial_int("Waveform", 0, 4, 0, false, &key);
-        target.add_child(osc_wave, x_offset, 1 + y_offset);
-
-        key.set(Parameter::Oscillator, func_id, Parameter::Level);
+        let mut key = ParamId::new(Parameter::Oscillator, func_id, Parameter::Level);
         let osc_level = self.new_mod_dial_float("Level", 0.0, 100.0, 0.0, false, &key);
         target.add_child(osc_level, x_offset, 4 + y_offset);
 
@@ -216,13 +212,9 @@ impl Surface {
         let osc_freq = self.new_mod_dial_int("Pitch", -24, 24, 0, false, &key);
         target.add_child(osc_freq, x_offset, 7 + y_offset);
 
-        key.set(Parameter::Oscillator, func_id, Parameter::Blend);
-        let osc_blend = self.new_mod_dial_float("Blend", 0.0, 5.0, 0.0, false, &key);
-        target.add_child(osc_blend, x_offset, 10 + y_offset);
-
-        key.set(Parameter::Oscillator, func_id, Parameter::Phase);
-        let osc_phase = self.new_mod_dial_float("Phase", 0.0, 1.0, 0.0, false, &key);
-        target.add_child(osc_phase, 14 + x_offset, 1 + y_offset);
+        key.set(Parameter::Oscillator, func_id, Parameter::WaveIndex);
+        let osc_wave_id = self.new_mod_dial_float("Wave", 0.0, 3.0, 0.0, false, &key);
+        target.add_child(osc_wave_id, x_offset, 10 + y_offset);
 
         key.set(Parameter::Oscillator, func_id, Parameter::Voices);
         let osc_voices = self.new_mod_dial_int("Voices", 1, 7, 1, false, &key);
@@ -282,8 +274,8 @@ impl Surface {
         let title = Label::new(title, len as Index);
         target.add_child(title, x_offset, y_offset);
 
-        let mut key = ParamId::new(Parameter::Oscillator, func_id, Parameter::Waveform);
-        let osc_wave = self.new_mod_dial_int("Waveform", 0, 4, 0, false, &key);
+        let mut key = ParamId::new(Parameter::Oscillator, func_id, Parameter::WaveIndex);
+        let osc_wave = self.new_mod_dial_float("WaveIndex", 0.0, 3.0, 0.0, false, &key);
         target.add_child(osc_wave, x_offset, 1 + y_offset);
 
         key.set(Parameter::Oscillator, func_id, Parameter::Frequency);

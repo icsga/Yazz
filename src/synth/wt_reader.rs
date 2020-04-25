@@ -8,6 +8,8 @@ use std::io::{Read, BufReader};
 use std::mem;
 use std::sync::Arc;
 
+use log::{info, trace, warn};
+
 #[repr(C, packed)]
 #[derive(Debug, Copy, Clone)]
 struct ChunkHeader {
@@ -25,11 +27,18 @@ impl WtReader {
     }
 
     pub fn read_wavetable<R: Read>(mut source: R, samples_per_table: usize) -> Result<Arc<Wavetable>, ()> {
+        // Read RIFF header
+        let result = WtReader::read_header(&mut source);
+        match result {
+            Ok(header) => { WtReader::skip_chunk(&mut source, 4); }
+            Err(()) => return Err(()),
+        }
+        // Read chunks
         loop {
             let result = WtReader::read_header(&mut source);
             match result {
                 Ok(header) => {
-                    unsafe { println!("Chunk ID: {:?}\nSize; {}", header.chunk_id, header.size) };
+                    unsafe { info!("Chunk ID: {:?}\nSize; {}", header.chunk_id, header.size) };
                     if header.chunk_id[0] == 'd' as u8
                     && header.chunk_id[1] == 'a' as u8
                     && header.chunk_id[2] == 't' as u8
@@ -56,7 +65,7 @@ impl WtReader {
             let header_slize = std::slice::from_raw_parts_mut(&mut header as *mut _ as *mut u8, header_size);
             source.read_exact(header_slize).unwrap();
         }
-        println!("\nRead structure: {:#?}", header);
+        info!("\nRead structure: {:#?}", header);
         Ok(header)
     }
 
@@ -78,10 +87,10 @@ impl WtReader {
         let num_samples = num_bytes as usize / sample_size;
         let num_tables = num_samples / samples_per_table;
         if num_samples < samples_per_table || num_samples % samples_per_table != 0 {
-            println!("Unexpected number of samples: {}", num_samples);
+            info!("Unexpected number of samples: {}", num_samples);
             return Err(());
         }
-        println!("{} samples total, {} tables with {} values each", num_samples, num_tables, samples_per_table);
+        info!("{} samples total, {} tables with {} values each", num_samples, num_tables, samples_per_table);
         for i in 0..num_tables {
             samples.push(vec!(0.0; samples_per_table + 1));
         }
@@ -91,7 +100,6 @@ impl WtReader {
                 unsafe {
                     let sample = std::slice::from_raw_parts_mut(&mut buf as *mut _ as *mut u8, sample_size);
                     source.read_exact(sample).unwrap();
-                    //println!("{}.{}: {}", i, j, buf);
                     table.push(buf as Float);
                 }
             }
@@ -118,8 +126,8 @@ impl TestContext {
         let reader = BufReader::new(ptr);
         let result = WtReader::read_wavetable(reader, 512);
         match result {
-            Ok(x) => { println!("Got OK"); true},
-            Err(()) => { println!("Got Error"); false}
+            Ok(x) => true,
+            Err(()) => false
         }
     }
 }

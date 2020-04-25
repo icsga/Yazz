@@ -4,7 +4,7 @@ use super::FilterData;
 use super::Float;
 use super::LfoData;
 use super::ModData;
-use super::MultiOscData;
+use super::WtOscData;
 use super::{Parameter, ParameterValue, ParamId, SynthParam};
 
 use log::{info, trace, warn};
@@ -12,7 +12,7 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug)]
 pub struct SoundData {
-    pub osc: [MultiOscData; 3],
+    pub osc: [WtOscData; 3],
     pub env: [EnvelopeData; 2],
     pub filter: [FilterData; 2],
     pub modul: [ModData; 16],
@@ -30,9 +30,9 @@ impl Default for SoundData {
 impl SoundData {
     pub fn new() -> SoundData {
         let osc = [
-            MultiOscData{..Default::default()},
-            MultiOscData{..Default::default()},
-            MultiOscData{..Default::default()},
+            WtOscData{..Default::default()},
+            WtOscData{..Default::default()},
+            WtOscData{..Default::default()},
         ];
         let env = [
             EnvelopeData{..Default::default()},
@@ -81,7 +81,7 @@ impl SoundData {
         self.delay.init();
     }
 
-    pub fn get_osc_data<'a>(&'a self, id: usize) -> &'a MultiOscData {
+    pub fn get_osc_data<'a>(&'a self, id: usize) -> &'a WtOscData {
         &self.osc[id]
     }
 
@@ -94,12 +94,10 @@ impl SoundData {
         match msg.function {
             Parameter::Oscillator => {
                 match msg.parameter {
-                    Parameter::Waveform =>  { self.osc[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
                     Parameter::Level =>     { self.osc[id].level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
+                    Parameter::WaveIndex => { self.osc[id].wave_index = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Frequency => { self.osc[id].set_halfsteps(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
                     Parameter::Finetune =>  { self.osc[id].set_cents(if let ParameterValue::Float(x) = msg.value { x / 100.0 } else { panic!() }); }
-                    Parameter::Blend =>     { self.osc[id].set_ratio(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Phase =>     { self.osc[id].phase = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Sync =>      { self.osc[id].sync = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
                     Parameter::KeyFollow => { self.osc[id].key_follow = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
                     Parameter::Voices =>    { self.osc[id].set_voice_num(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
@@ -169,17 +167,15 @@ impl SoundData {
         match param.function {
             Parameter::Oscillator => {
                 match param.parameter {
-                    Parameter::Waveform => ParameterValue::Choice(self.osc[id].get_waveform() as usize),
                     Parameter::Level => ParameterValue::Float(self.osc[id].level * 100.0),
+                    Parameter::WaveIndex => ParameterValue::Float(self.osc[id].wave_index),
                     Parameter::Frequency => ParameterValue::Int(self.osc[id].tune_halfsteps),
                     Parameter::Finetune => ParameterValue::Float(self.osc[id].tune_cents * 100.0),
-                    Parameter::Blend => ParameterValue::Float(self.osc[id].get_ratio()),
-                    Parameter::Phase => ParameterValue::Float(self.osc[id].phase),
                     Parameter::Sync => ParameterValue::Int(self.osc[id].sync),
                     Parameter::KeyFollow => ParameterValue::Int(self.osc[id].key_follow),
                     Parameter::Voices => ParameterValue::Int(self.osc[id].num_voices),
                     Parameter::Spread => ParameterValue::Float(self.osc[id].voice_spread),
-                    _ => {panic!();}
+                    _ => {panic!("Got ParamId {:?}", param);}
                 }
             }
             Parameter::Filter => {
