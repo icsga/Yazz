@@ -6,6 +6,7 @@
 
 use super::Float;
 use super::Wavetable;
+use super::WtReader;
 
 use log::{info, trace, warn};
 
@@ -124,7 +125,12 @@ impl WtManager {
         wt.create_tables(1, start_freq, sample_rate, WtManager::insert_tri);
         wt.create_tables(2, start_freq, sample_rate, WtManager::insert_saw);
         wt.create_tables(3, start_freq, sample_rate, WtManager::insert_square);
+        info!("Finished");
         Arc::new(wt)
+        /*
+        let result = WtReader::read_file("data/ESW Analog - 80's PWM.wav");
+        if let Ok(wt) = result { wt } else { panic!(); }
+        */
     }
 }
 

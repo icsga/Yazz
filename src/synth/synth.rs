@@ -4,7 +4,6 @@ use super::{Envelope, EnvelopeData};
 use super::Lfo;
 use super::MidiMessage;
 use super::{Modulator, ModData};
-use super::{MultiOscData, MultiOscillator};
 use super::{Parameter, ParameterValue, ParamId, SynthParam};
 use super::SoundData;
 use super::voice::Voice;

@@ -5,8 +5,7 @@ use super::Lfo;
 use super::Modulator;
 use super::{Parameter, ParameterValue, ParamId, SynthParam};
 use super::SampleGenerator;
-use super::{MultiOscillator, MultiOscData};
-use super::{WtOsc, WtManager};
+use super::{WtOsc, WtOscData, WtManager};
 use super::SoundData;
 
 use std::sync::Arc;
@@ -76,7 +75,7 @@ impl Voice {
         voice
     }
 
-    fn get_frequency(data: &MultiOscData, input_freq: Float) -> Float {
+    fn get_frequency(data: &WtOscData, input_freq: Float) -> Float {
         let mut freq: Float = if data.key_follow == 0 {
             440.0
         } else {
