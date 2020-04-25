@@ -179,7 +179,6 @@ impl WtOsc {
         let level_shift = 1.0;
         let state = [State{last_pos, freq_shift, level_shift}; MAX_VOICES];
         let wave = wt_manager.get_table("default").unwrap();
-        let wt_manager = Arc::clone(&wt_manager);
         WtOsc{sample_rate,
               id,
               last_update,

@@ -20,12 +20,10 @@ pub const NUM_LFOS: usize = 2;
 
 pub struct Voice {
     // Components
-    //osc: Box<dyn SampleGenerator + Send>,
     osc: [WtOsc; NUM_OSCILLATORS],
     env: [Envelope; NUM_ENVELOPES],
     pub filter: [Filter; NUM_FILTERS],
     lfo: [Lfo; NUM_LFOS],
-    wt_manager: Arc<WtManager>,
 
     // Current state
     triggered: bool,
@@ -68,7 +66,6 @@ impl Voice {
                 env,
                 filter,
                 lfo,
-                wt_manager,
                 triggered,
                 trigger_seq,
                 key,
