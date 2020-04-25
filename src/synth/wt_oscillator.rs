@@ -197,12 +197,8 @@ impl SampleGenerator for WtOsc {
 
             let lower_wave = data.wave_index as usize;
             let lower_wave_float = lower_wave as Float;
-            let mut lower_fract: Float = 1.0 - (data.wave_index - lower_wave_float);
-            let mut upper_fract: Float = 0.0;
-            if lower_fract != 1.0 {
-                // Between two waves, prepare interpolation
-                upper_fract = 1.0 - lower_fract;
-            }
+            let lower_fract: Float = 1.0 - (data.wave_index - lower_wave_float);
+            let upper_fract: Float = if lower_fract != 1.0 { 1.0 - lower_fract } else { 0.0 };
 
             let table: &Vec<Float>;
             let table_index = WtOsc::get_table_index(self.wave.num_octaves, frequency);
@@ -214,8 +210,6 @@ impl SampleGenerator for WtOsc {
             result += voice_result;
         }
         self.last_update += dt;
-        //result /= data.num_voices as Float; // TODO: Scale level to number of active voices
-        //result *= data.level; // Apply level in Voice, to use this for modulation
         if result > 1.0 {
             result = 1.0;
         }

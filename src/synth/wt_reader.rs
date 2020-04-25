@@ -94,16 +94,17 @@ impl WtReader {
         for i in 0..num_tables {
             samples.push(vec!(0.0; samples_per_table + 1));
         }
-        for i in 0..num_tables {
-            let table = &mut samples[i];
-            for j in 0..samples_per_table {
-                unsafe {
-                    let sample = std::slice::from_raw_parts_mut(&mut buf as *mut _ as *mut u8, sample_size);
+        unsafe {
+            let sample = std::slice::from_raw_parts_mut(&mut buf as *mut _ as *mut u8, sample_size);
+            for i in 0..num_tables {
+                let table = &mut samples[i];
+                for j in 0..samples_per_table {
                     source.read_exact(sample).unwrap();
-                    table.push(buf as Float);
+                    table[j] = buf as Float;
                 }
+                table[samples_per_table] = table[0]; // Duplicate first entry as last entry for easy interpolation
+                Wavetable::normalize(table);
             }
-            table.push(table[0]); // Duplicate first entry as last entry for easy interpolation
         }
         Ok(samples)
     }

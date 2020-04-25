@@ -116,6 +116,7 @@ impl WtManager {
 
     /** Create tables of common waveforms (sine, triangle, square, saw). */
     fn initialize_default_tables(sample_rate: Float) -> Arc<Wavetable> {
+        /*
         info!("Initializing default waveshapes");
         let name = "Basic".to_string();
         let mut wt = Wavetable::new(&name, 4, 11, 2048);
@@ -127,10 +128,9 @@ impl WtManager {
         wt.create_tables(3, start_freq, sample_rate, WtManager::insert_square);
         info!("Finished");
         Arc::new(wt)
-        /*
+        */
         let result = WtReader::read_file("data/ESW Analog - 80's PWM.wav");
         if let Ok(wt) = result { wt } else { panic!(); }
-        */
     }
 }
 
