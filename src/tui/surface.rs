@@ -224,7 +224,7 @@ impl Surface {
 
         key.set(Parameter::Oscillator, func_id, Parameter::KeyFollow);
         let osc_sync = self.new_option("KeyFollow", 0, &key);
-        target.add_child(osc_sync, 14 + x_offset, 7 + y_offset);
+        target.add_child(osc_sync, 14 + x_offset, 8 + y_offset);
 
         if func_id == 2 {
             key.set(Parameter::Oscillator, func_id, Parameter::Sync);
