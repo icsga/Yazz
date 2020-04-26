@@ -19,7 +19,7 @@ use tui::*;
 use canvas::{Canvas, CanvasRef};
 use ctrl_map::{CtrlMap, MappingType};
 use midi_handler::{MidiHandler, MidiMessage};
-use modulation::{Modulator, ModData};
+use modulation::ModData;
 use parameter::*;
 use ringbuffer::Ringbuffer;
 use select::{SelectorState, ParamSelector, next, ItemSelection};

@@ -3,7 +3,7 @@ use super::{SynthMessage, UiMessage};
 use super::{Envelope, EnvelopeData};
 use super::Lfo;
 use super::MidiMessage;
-use super::{Modulator, ModData};
+use super::ModData;
 use super::{Parameter, ParameterValue, ParamId, SynthParam};
 use super::SoundData;
 use super::voice::Voice;
@@ -38,7 +38,6 @@ pub struct Synth {
     sound: SoundData,        // Sound patch as loaded from disk
     sound_global: SoundData, // Sound with global modulators applied
     sound_local: SoundData,  // Sound with voice-local modulators applied
-    modulators: [Modulator; NUM_MODULATORS], // Probably don't need this
     keymap: [Float; NUM_KEYS],
     wt_manager: Arc<WtManager>,
 
@@ -67,12 +66,6 @@ impl Synth {
         sound.init();
         sound_global.init();
         sound_local.init();
-        let modulators = [
-            Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
-            Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
-            Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
-            Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()}, Modulator{..Default::default()},
-        ];
         let wt_manager = WtManager::new(sample_rate as Float);
         let voice = [
             Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
@@ -102,7 +95,6 @@ impl Synth {
             sound,
             sound_global,
             sound_local,
-            modulators,
             keymap,
             wt_manager,
             voice,
@@ -201,7 +193,7 @@ impl Synth {
         if self.voices_playing > 0 {
             for i in 0..32 {
                 if self.voices_playing & (1 << i) > 0 {
-                    value += self.voice[i].get_sample(sample_clock, &self.modulators, &self.sound, &self.sound_global, &mut self.sound_local);
+                    value += self.voice[i].get_sample(sample_clock, &self.sound, &self.sound_global, &mut self.sound_local);
                 }
             }
         }
