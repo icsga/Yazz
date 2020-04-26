@@ -56,7 +56,7 @@ pub struct Tui {
 impl Tui {
     pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> Tui {
         let mut window = Surface::new();
-        let canvas: CanvasRef<ParamId> = Canvas::new(50, 20);
+        let canvas: CanvasRef<ParamId> = Canvas::new(50, 21);
         let sound = SoundPatch::new();
         window.set_position(1, 3);
         window.update_all(&sound.data);
@@ -150,7 +150,7 @@ impl Tui {
 
     /** Select a sound from the loaded sound bank.
      *
-     * Creates a local copy of the selected sound, which can be modified.  It
+     * Creates a local copy of the selected sound, which can be modified. It
      * is copied back into the sound bank when saving the sound. Changing the
      * sound again before saving discards any changes.
      */
