@@ -3,6 +3,7 @@ use super::Float;
 use std::fmt::{self, Debug, Display};
 
 use serde::{Serialize, Deserialize};
+use log::{info, trace, warn};
 
 #[derive(PartialEq, Clone, Copy, Debug, Eq, Hash, Serialize, Deserialize)]
 pub enum Parameter {
@@ -128,6 +129,26 @@ pub enum ParameterValue {
     NoValue
 }
 
+impl ParameterValue {
+    pub fn as_float(&self) -> Float {
+        match self {
+            ParameterValue::Int(x) => *x as Float,
+            ParameterValue::Float(x) => *x,
+            ParameterValue::Choice(x) => *x as Float,
+            _ => panic!("Cannot convert parameter value to float")
+        }
+    }
+
+    pub fn set_from_float(&mut self, value: Float) {
+        match self {
+            ParameterValue::Int(x) => {*self = ParameterValue::Int(value as i64)},
+            ParameterValue::Float(x) => {*self = ParameterValue::Float(value)},
+            ParameterValue::Choice(x) => {*self = ParameterValue::Choice(value as usize)},
+            _ => panic!("Cannot convert parameter value to float")
+        }
+    }
+}
+
 impl fmt::Display for Parameter {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Debug::fmt(self, f)
@@ -244,6 +265,28 @@ impl ValueRange {
             _ => ParameterValue::NoValue
         }
     }
+
+    pub fn get_min_max(&self) -> (Float, Float) {
+        match self {
+            ValueRange::IntRange(min, max) => (*min as Float, *max as Float),
+            ValueRange::FloatRange(min, max, _) => (*min, *max),
+            ValueRange::ChoiceRange(itemlist) => (0.0, itemlist.len() as Float),
+            _ => panic!("Unexpected value range, cannot get min and max"),
+        }
+    }
+
+    /** Adds two floats, keeps result within value range. */
+    pub fn safe_add(&self, a: Float, b: Float) -> Float {
+        let result = a + b;
+        let (min, max) = self.get_min_max();
+        if result < min {
+            min
+        } else if result > max {
+            max
+        } else {
+            result
+        }
+    }
 }
 
 impl Default for ValueRange {
@@ -264,6 +307,24 @@ pub struct MenuItem {
     pub key: char,
     pub val_range: ValueRange,
     pub next: &'static [MenuItem]
+}
+
+impl MenuItem {
+    pub fn get_val_range(function: Parameter, parameter: Parameter) -> &'static ValueRange {
+        let func_item = MenuItem::get_menu_item(function, &FUNCTIONS);
+        let param_item = MenuItem::get_menu_item(parameter, &func_item.next);
+        &param_item.val_range
+    }
+
+    fn get_menu_item(item: Parameter, item_list: &'static [MenuItem]) -> &'static MenuItem {
+        info!("Looking up MenuItem for item {}", item);
+        for (i, s) in item_list.iter().enumerate() {
+            if s.item == item {
+                return &s;
+            }
+        }
+        panic!();
+    }
 }
 
 /* Top-level menu */

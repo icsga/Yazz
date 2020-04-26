@@ -2,8 +2,7 @@ use super::Envelope;
 use super::Filter;
 use super::Float;
 use super::Lfo;
-use super::Modulator;
-use super::{Parameter, ParameterValue, ParamId, SynthParam};
+use super::{Parameter, ParameterValue, ParamId, SynthParam, MenuItem};
 use super::SampleGenerator;
 use super::{WtOsc, WtOscData, WtManager};
 use super::SoundData;
@@ -85,7 +84,7 @@ impl Voice {
         freq
     }
 
-    fn get_mod_data(&mut self, sample_clock: i64, modulators: &[Modulator], sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) {
+    fn get_mod_data(&mut self, sample_clock: i64, sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) {
         for m in sound.modul.iter() {
 
             if !m.active {
@@ -112,25 +111,23 @@ impl Voice {
 
             // Get current value of target parameter
             let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
-            let current_val = sound_global.get_value(&param);
-            let mut val = match current_val {
-                ParameterValue::Int(x) => x as Float,
-                ParameterValue::Float(x) => x,
-                _ => panic!()
-            };
+            let mut current_val = sound_global.get_value(&param); // TODO: This overwrites previous local mod changes
+            let mut val = current_val.as_float();
 
             // Update value if mod source is local
             if !m.is_global {
-                val += mod_val;
+                let dest_range = MenuItem::get_val_range(param.function, param.parameter);
+                val = dest_range.safe_add(val, mod_val);
             }
 
             // Update parameter in voice sound data
-            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::Float(val)};
+            current_val.set_from_float(val);
+            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: current_val};
             sound_local.set_parameter(&param);
         }
     }
 
-    pub fn get_sample(&mut self, sample_clock: i64, modulators: &[Modulator], sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) -> Float {
+    pub fn get_sample(&mut self, sample_clock: i64, sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) -> Float {
         if !self.is_running() {
             return 0.0;
         }
@@ -142,7 +139,7 @@ impl Voice {
         let mut freq: Float;
 
         // Prepare modulation values
-        self.get_mod_data(sample_clock, modulators, sound, sound_global, sound_local);
+        self.get_mod_data(sample_clock, sound, sound_global, sound_local);
 
         // Get mixed output from oscillators
         for (i, osc) in self.osc.iter_mut().enumerate() {

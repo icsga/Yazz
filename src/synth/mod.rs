@@ -27,7 +27,7 @@ pub use wt_reader::WtReader;
 
 use super::Float;
 use super::MidiMessage;
-use super::{Modulator, ModData};
+use super::ModData;
 use super::{Parameter, ParameterValue, SynthParam, ParamId, FunctionId, MenuItem};
 use super::Ringbuffer;
 use super::sound;
