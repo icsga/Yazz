@@ -14,7 +14,7 @@ struct SoundBankInfo {
     synth_engine_version: String,
 }
 
-#[derive(Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct SoundPatch {
     pub name: String,
     pub data: SoundData

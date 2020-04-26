@@ -45,7 +45,7 @@ pub struct Tui {
     max_busy: Duration,
 
     bank: SoundBank,   // Bank with sound patches
-    sound: SoundPatch, // Current sound patch as loaded from disk
+    sound: Rc<RefCell<SoundPatch>>, // Current sound patch as loaded from disk
     selected_sound: usize,
     ctrl_map: CtrlMap, // Mapping of MIDI controller to parameter
 
@@ -57,9 +57,9 @@ impl Tui {
     pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> Tui {
         let mut window = Surface::new();
         let canvas: CanvasRef<ParamId> = Canvas::new(50, 21);
-        let sound = SoundPatch::new();
+        let sound = Rc::new(RefCell::new(SoundPatch::new()));
         window.set_position(1, 3);
-        window.update_all(&sound.data);
+        window.update_all(&sound.borrow().data);
         let (_, y) = window.get_size();
         window.add_child(canvas.clone(), 1, y);
 
@@ -81,6 +81,7 @@ impl Tui {
             ctrl_map: CtrlMap::new(),
             sm: StateMachine::new(ParamSelector::state_function),
         };
+        tui.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
         tui.select_sound(0);
         tui
     }
@@ -94,10 +95,9 @@ impl Tui {
                ui_receiver: Receiver<UiMessage>) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
             let mut tui = Tui::new(to_synth_sender, ui_receiver);
-            let sound_data = Rc::new(RefCell::new(tui.sound.data));
             loop {
                 let msg = tui.ui_receiver.recv().unwrap();
-                if !tui.handle_ui_message(msg, sound_data.clone()) {
+                if !tui.handle_ui_message(msg) {
                     break;
                 }
             }
@@ -105,9 +105,9 @@ impl Tui {
         handler
     }
 
-    fn handle_ui_message(&mut self, msg: UiMessage, sound_data: Rc<RefCell<SoundData>>) -> bool {
+    fn handle_ui_message(&mut self, msg: UiMessage) -> bool {
         match msg {
-            UiMessage::Midi(m)  => self.handle_midi_event(&m, sound_data),
+            UiMessage::Midi(m)  => self.handle_midi_event(&m),
             UiMessage::Key(m) => {
                 match m {
                     Key::F(1) => {
@@ -117,12 +117,12 @@ impl Tui {
                     },
                     Key::F(2) => {
                         // Copy current sound to selected sound in bank
-                        self.bank.set_sound(self.selected_sound, &self.sound);
+                        self.bank.set_sound(self.selected_sound, &self.sound.borrow());
                         // Write bank to disk
                         self.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
                     },
                     _ => {
-                        if self.selector.handle_user_input(&mut self.sm, m, sound_data) {
+                        if self.selector.handle_user_input(&mut self.sm, m, self.sound.clone()) {
                             self.send_event();
                         }
                     }
@@ -160,24 +160,25 @@ impl Tui {
         }
         self.selected_sound = sound_index;
         let sound_ref: &SoundPatch = self.bank.get_sound(self.selected_sound);
-        self.sound.name = sound_ref.name.clone();
-        self.sound.data = sound_ref.data;
+        let sound = &mut self.sound.borrow_mut();
+        sound.name = sound_ref.name.clone();
+        sound.data = sound_ref.data;
         // Send new sound to synth engine
-        let sound_copy = self.sound.data;
+        let sound_copy = sound.data;
         self.sender.send(SynthMessage::Sound(sound_copy)).unwrap();
         // Update display
-        self.window.set_sound_info(self.selected_sound, &self.sound.name);
-        self.window.update_all(&self.sound.data);
+        self.window.set_sound_info(self.selected_sound, &sound.name);
+        self.window.update_all(&sound.data);
     }
 
     /* MIDI message received */
-    fn handle_midi_event(&mut self, m: &MidiMessage, sound_data: Rc<RefCell<SoundData>>) {
+    fn handle_midi_event(&mut self, m: &MidiMessage) {
         match *m {
             MidiMessage::ControlChg{channel, controller, value} => {
                 if self.selector.state == SelectorState::MidiLearn {
 
                     // MIDI learn: Send all controller events to the selector
-                    self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), sound_data);
+                    self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), self.sound.clone());
 
                     // Check if complete, if yes set CtrlMap
                     if self.selector.ml.complete {
@@ -194,7 +195,7 @@ impl Tui {
                 } else if controller == 0x01 { // ModWheel
 
                     // ModWheel is used as general data entry for selector
-                    self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), sound_data);
+                    self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), self.sound.clone());
                     self.send_event();
 
                 } else {
@@ -210,7 +211,7 @@ impl Tui {
     }
 
     fn handle_ctrl_change(&mut self, controller: u64, value: u64) {
-        let result = self.ctrl_map.get_value(self.selected_sound, controller, value, &self.sound.data);
+        let result = self.ctrl_map.get_value(self.selected_sound, controller, value, &self.sound.borrow().data);
         if let Ok(synth_param) = result {
             self.send_parameter(&synth_param);
         }
@@ -267,7 +268,7 @@ impl Tui {
     /* Update all places this parameter is used. */
     fn send_parameter(&mut self, param: &SynthParam) {
         // Update local copy of the sound
-        self.sound.data.set_parameter(&param);
+        self.sound.borrow_mut().data.set_parameter(&param);
 
         // Send new value to synth engine
         self.sender.send(SynthMessage::Param(param.clone())).unwrap();

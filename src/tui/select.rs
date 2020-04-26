@@ -96,7 +96,7 @@ pub struct ParamSelector {
     pub value_param_selection: ItemSelection,
     pub value: ParameterValue,
     pub ml: MidiLearn,
-    sound: Option<Rc<RefCell<SoundData>>>,
+    sound: Option<Rc<RefCell<SoundPatch>>>,
 }
 
 impl ParamSelector {
@@ -146,7 +146,7 @@ impl ParamSelector {
     pub fn handle_user_input(&mut self,
                              sm: &mut StateMachine<ParamSelector, SelectorEvent>,
                              c: termion::event::Key,
-                             sound: Rc<RefCell<SoundData>>) -> bool {
+                             sound: Rc<RefCell<SoundPatch>>) -> bool {
         info!("handle_user_input {:?} in state {:?}", c, self.state);
         self.sound = Option::Some(Rc::clone(&sound));
         self.value_changed = false;
@@ -162,7 +162,7 @@ impl ParamSelector {
                                 sm: &mut StateMachine<ParamSelector, SelectorEvent>,
                                 controller: u64,
                                 value: u64,
-                                sound: Rc<RefCell<SoundData>>) {
+                                sound: Rc<RefCell<SoundPatch>>) {
         info!("handle_control_input {:?} in state {:?}", value, self.state);
         self.sound = Option::Some(Rc::clone(&sound));
         sm.handle_event(self, &SmEvent::Event(SelectorEvent::ControlChange(controller, value)));
@@ -773,7 +773,7 @@ impl ParamSelector {
 
         // The value in the selected parameter needs to point to the right type.
         let sound = if let Some(sound) = &self.sound { sound } else { panic!() };
-        let value = sound.borrow_mut().get_value(&param);
+        let value = sound.borrow_mut().data.get_value(&param);
         info!("Sound has value {:?}", value);
         let next_item_list = &self.param_selection.item_list[self.param_selection.item_index].next;
         match value {
@@ -858,8 +858,7 @@ impl ParamSelector {
 
 struct TestContext {
     ps: ParamSelector,
-    sound: SoundPatch,
-    sound_data: Rc<RefCell<SoundData>>,
+    sound: Rc<RefCell<SoundPatch>>,
     sm: StateMachine<ParamSelector, SelectorEvent>,
 }
 
@@ -889,10 +888,9 @@ impl TestContext {
         }
 
         let ps = ParamSelector::new(&FUNCTIONS, &MOD_TARGETS);
-        let sound = SoundPatch::new();
-        let sound_data = Rc::new(RefCell::new(sound.data));
+        let sound = Rc::new(RefCell::new(SoundPatch::new()));
         let sm = StateMachine::new(ParamSelector::state_function);
-        TestContext{ps, sound, sound_data, sm}
+        TestContext{ps, sound, sm}
     }
 
     fn do_handle_input(&mut self, input: &TestInput) -> bool {
@@ -901,14 +899,14 @@ impl TestContext {
             TestInput::Chars(chars) => {
                 for c in chars.chars() {
                     let k = Key::Char(c);
-                    result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, k, self.sound_data.clone())
+                    result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, k, self.sound.clone())
                 }
             }
             TestInput::Key(k) => {
-                result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, *k, self.sound_data.clone())
+                result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, *k, self.sound.clone())
             }
             TestInput::ControlChange(controller, value) => {
-                ParamSelector::handle_control_input(&mut self.ps, &mut self.sm, *controller, *value, self.sound_data.clone())
+                ParamSelector::handle_control_input(&mut self.ps, &mut self.sm, *controller, *value, self.sound.clone())
             }
         }
         result
