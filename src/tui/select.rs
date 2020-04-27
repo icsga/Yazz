@@ -309,32 +309,7 @@ impl ParamSelector {
             SmEvent::Event(selector_event) => {
                 match selector_event {
                     SelectorEvent::Key(c) => {
-                        if *c == Key::Char('l') {
-                            return SmResult::ChangeState(ParamSelector::state_midi_learn);
-                        }
-                        match ParamSelector::get_value(&mut self.param_selection, *c) {
-                            RetCode::KeyConsumed   => SmResult::EventHandled,
-                            RetCode::KeyMissmatch  => {
-                                // Key can't be used for value, so it probably is the short cut for a
-                                // different parameter. Switch to parameter state and try again.
-                                //
-                                // TODO: Push key back on stack
-                                //
-                                SmResult::ChangeState(ParamSelector::state_parameter)
-                            },
-                            RetCode::ValueUpdated  => {
-                                // Value has changed to a valid value, update synth
-                                self.value_changed = true;
-                                SmResult::EventHandled
-                            },
-                            RetCode::ValueComplete => {
-                                // Value has changed and will not be updated again
-                                self.value_changed = true;
-                                SmResult::ChangeState(ParamSelector::state_parameter)
-                            }
-                            RetCode::Cancel => SmResult::ChangeState(ParamSelector::state_parameter), // Stop updating the value, back to parameter selection
-                            RetCode::Reset => self.reset(),
-                        }
+                        self.handle_key_in_state_value(c)
                     }
                     SelectorEvent::ControlChange(ctrl, value) => {
                         ParamSelector::set_control_value(&mut self.param_selection, *value);
@@ -351,6 +326,55 @@ impl ParamSelector {
                 }
             }
         }
+    }
+
+    fn handle_key_in_state_value(&mut self, c: &termion::event::Key) -> SmResult<ParamSelector, SelectorEvent> {
+        // Check for shortcut keys
+        match *c {
+            Key::Char('l') => return SmResult::ChangeState(ParamSelector::state_midi_learn),
+            Key::PageUp => {
+                self.increase_function_id();
+                return SmResult::EventHandled;
+            }
+            Key::PageDown => {
+                self.decrease_function_id();
+                return SmResult::EventHandled;
+            }
+            _ => () // Pass on to code below
+        }
+        match ParamSelector::get_value(&mut self.param_selection, *c) {
+            RetCode::KeyConsumed   => SmResult::EventHandled,
+            RetCode::KeyMissmatch  => {
+                // Key can't be used for value, so it probably is the short cut for a
+                // different parameter. Switch to parameter state and try again.
+                //
+                // TODO: Push key back on stack
+                //
+                SmResult::ChangeState(ParamSelector::state_parameter)
+            },
+            RetCode::ValueUpdated  => {
+                // Value has changed to a valid value, update synth
+                self.value_changed = true;
+                SmResult::EventHandled
+            },
+            RetCode::ValueComplete => {
+                // Value has changed and will not be updated again
+                self.value_changed = true;
+                SmResult::ChangeState(ParamSelector::state_parameter)
+            }
+            RetCode::Cancel => SmResult::ChangeState(ParamSelector::state_parameter), // Stop updating the value, back to parameter selection
+            RetCode::Reset => self.reset(),
+        }
+    }
+
+    fn increase_function_id(&mut self) {
+        ParamSelector::get_value(&mut self.func_selection, Key::Up);
+        self.select_param();
+    }
+
+    fn decrease_function_id(&mut self) {
+        ParamSelector::get_value(&mut self.func_selection, Key::Down);
+        self.select_param();
     }
 
     fn state_midi_learn(self: &mut ParamSelector,
@@ -405,13 +429,21 @@ impl ParamSelector {
             SmEvent::Event(selector_event) => {
                 match selector_event {
                     SelectorEvent::Key(c) => {
-                        match ParamSelector::select_item(&mut self.value_func_selection, *c) {
-                            RetCode::KeyConsumed   => SmResult::EventHandled, // Selection updated
-                            RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore key that doesn't match a selection
-                            RetCode::ValueUpdated  => SmResult::EventHandled, // Selection updated
-                            RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_parameter), // Stop updating the value, back to parameter selection
-                            RetCode::ValueComplete => SmResult::ChangeState(ParamSelector::state_value_function_index), // Function selected
-                            RetCode::Reset         => self.reset(),
+                        if *c == Key::PageUp {
+                            self.increase_function_id();
+                            return SmResult::EventHandled;
+                        } else if *c == Key::PageDown {
+                                self.decrease_function_id();
+                                return SmResult::EventHandled;
+                        } else {
+                            match ParamSelector::select_item(&mut self.value_func_selection, *c) {
+                                RetCode::KeyConsumed   => SmResult::EventHandled, // Selection updated
+                                RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore key that doesn't match a selection
+                                RetCode::ValueUpdated  => SmResult::EventHandled, // Selection updated
+                                RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_parameter), // Stop updating the value, back to parameter selection
+                                RetCode::ValueComplete => SmResult::ChangeState(ParamSelector::state_value_function_index), // Function selected
+                                RetCode::Reset         => self.reset(),
+                            }
                         }
                     }
                     SelectorEvent::ControlChange(ctrl, value) => SmResult::ChangeState(ParamSelector::state_value_function_index),
@@ -448,28 +480,36 @@ impl ParamSelector {
             SmEvent::Event(selector_event) => {
                 match selector_event {
                     SelectorEvent::Key(c) => {
-                        match ParamSelector::get_value(&mut self.value_func_selection, *c) {
-                            RetCode::KeyConsumed   => SmResult::EventHandled, // Key has been used, but value hasn't changed
-                            RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore unmatched keys
-                            RetCode::ValueUpdated  => SmResult::EventHandled, // Selection not complete yet
-                            RetCode::ValueComplete => {                       // Parameter has been selected
-                                // For modulation source or target, we might be finished here with
-                                // getting the value. Compare current state to expected target state.
-                                match self.param_selection.value {
-                                    ParameterValue::Function(id) => {
-                                        // Value is finished
-                                        self.value_changed = true;
-                                        SmResult::ChangeState(ParamSelector::state_parameter)
-                                    },
-                                    ParameterValue::Param(id) => {
-                                        self.value_param_selection.item_list = self.value_func_selection.item_list[self.value_func_selection.item_index].next;
-                                        SmResult::ChangeState(ParamSelector::state_value_parameter)
-                                    },
-                                    _ => SmResult::EventHandled,
-                                }
-                            },
-                            RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_value_parameter), // Abort function index selection
-                            RetCode::Reset         => self.reset(),
+                        if *c == Key::PageUp {
+                            self.increase_function_id();
+                            return SmResult::EventHandled;
+                        } else if *c == Key::PageDown {
+                                self.decrease_function_id();
+                                return SmResult::EventHandled;
+                        } else {
+                            match ParamSelector::get_value(&mut self.value_func_selection, *c) {
+                                RetCode::KeyConsumed   => SmResult::EventHandled, // Key has been used, but value hasn't changed
+                                RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore unmatched keys
+                                RetCode::ValueUpdated  => SmResult::EventHandled, // Selection not complete yet
+                                RetCode::ValueComplete => {                       // Parameter has been selected
+                                    // For modulation source or target, we might be finished here with
+                                    // getting the value. Compare current state to expected target state.
+                                    match self.param_selection.value {
+                                        ParameterValue::Function(id) => {
+                                            // Value is finished
+                                            self.value_changed = true;
+                                            SmResult::ChangeState(ParamSelector::state_parameter)
+                                        },
+                                        ParameterValue::Param(id) => {
+                                            self.value_param_selection.item_list = self.value_func_selection.item_list[self.value_func_selection.item_index].next;
+                                            SmResult::ChangeState(ParamSelector::state_value_parameter)
+                                        },
+                                        _ => SmResult::EventHandled,
+                                    }
+                                },
+                                RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_value_parameter), // Abort function index selection
+                                RetCode::Reset         => self.reset(),
+                            }
                         }
                     }
                     SelectorEvent::ControlChange(ctrl, value) => {
@@ -510,18 +550,26 @@ impl ParamSelector {
             SmEvent::Event(selector_event) => {
                 match selector_event {
                     SelectorEvent::Key(c) => {
-                        match ParamSelector::select_item(&mut self.value_param_selection, *c) {
-                            RetCode::KeyConsumed   => SmResult::EventHandled, // Value has changed, but not complete yet
-                            RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore invalid key
-                            RetCode::ValueUpdated  => {                       // Pararmeter selection updated
-                                SmResult::EventHandled
-                            },
-                            RetCode::ValueComplete => {                       // Prepare to read the value
-                                self.value_changed = true;
-                                SmResult::ChangeState(ParamSelector::state_parameter)
-                            },
-                            RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_value_function_index), // Abort function index selection
-                            RetCode::Reset         => self.reset(),
+                        if *c == Key::PageUp {
+                            self.increase_function_id();
+                            return SmResult::EventHandled;
+                        } else if *c == Key::PageDown {
+                                self.decrease_function_id();
+                                return SmResult::EventHandled;
+                        } else {
+                            match ParamSelector::select_item(&mut self.value_param_selection, *c) {
+                                RetCode::KeyConsumed   => SmResult::EventHandled, // Value has changed, but not complete yet
+                                RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore invalid key
+                                RetCode::ValueUpdated  => {                       // Pararmeter selection updated
+                                    SmResult::EventHandled
+                                },
+                                RetCode::ValueComplete => {                       // Prepare to read the value
+                                    self.value_changed = true;
+                                    SmResult::ChangeState(ParamSelector::state_parameter)
+                                },
+                                RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_value_function_index), // Abort function index selection
+                                RetCode::Reset         => self.reset(),
+                            }
                         }
                     }
                     SelectorEvent::ControlChange(ctrl, value) => {
@@ -776,6 +824,7 @@ impl ParamSelector {
     fn select_param(&mut self) {
         info!("select_param {:?}", self.param_selection.item_list[self.param_selection.item_index].item);
         let param = self.get_param_id();
+        info!("select_param {:?}", param);
 
         // The value in the selected parameter needs to point to the right type.
         let sound = if let Some(sound) = &self.sound { sound } else { panic!() };
@@ -1292,6 +1341,22 @@ fn test_controller_is_ignored_in_other_states() {
     context.handle_input(TestInput::Chars("1".to_string()));
     context.handle_input(TestInput::ControlChange(1, 127));
     assert_eq!(context.ps.state, SelectorState::Value);
+}
+
+#[test]
+fn test_page_up_changes_function_id() {
+    let mut context = TestContext::new();
+
+    // Select Oscillator 1 Finetune
+    let c: &[TestInput] = &[TestInput::Chars("o1t".to_string())];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Finetune, ParameterValue::Float(0.0)));
+
+    // Enter PageUp
+    context.handle_input(TestInput::Key(Key::PageUp));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Oscillator, 2, Parameter::Finetune, ParameterValue::Float(0.0)));
 }
 
 // TODO: Select next param from value state with param shortcut
