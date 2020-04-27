@@ -72,7 +72,7 @@ pub enum Parameter {
 
     // MIDI parameters
     KeyValue,
-    KeyAttack,
+    Velocity,
     KeyAftertouch,
     Aftertouch,
 
@@ -317,7 +317,6 @@ impl MenuItem {
     }
 
     fn get_menu_item(item: Parameter, item_list: &'static [MenuItem]) -> &'static MenuItem {
-        info!("Looking up MenuItem for item {}", item);
         for (i, s) in item_list.iter().enumerate() {
             if s.item == item {
                 return &s;
@@ -406,19 +405,27 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::IntRange(0, 1),             next: &[]},
 ];
 
-pub static MOD_SOURCES: [MenuItem; 4] = [
+pub static MOD_SOURCES: [MenuItem; 6] = [
     MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3), next: &OSC_PARAMS},
     MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
     MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Velocity,   key: 'v', val_range: ValueRange::IntRange(1, 1), next: &LFO_PARAMS},
     MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Aftertouch, key: 'a', val_range: ValueRange::IntRange(1, 1), next: &LFO_PARAMS},
 ];
 
-pub static MOD_TARGETS: [MenuItem; 6] = [
+pub static MOD_TARGETS: [MenuItem; 7] = [
     MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3), next: &OSC_PARAMS},
     MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
     MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2), next: &LFO_PARAMS},
     MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2), next: &LFO_PARAMS},
     MenuItem{item: Parameter::Filter,     key: 'f', val_range: ValueRange::IntRange(1, 2), next: &FILTER_PARAMS},
     MenuItem{item: Parameter::Delay,      key: 'd', val_range: ValueRange::IntRange(1, 1), next: &DELAY_PARAMS},
+    MenuItem{item: Parameter::Modulation, key: 'm', val_range: ValueRange::IntRange(1, 16), next: &MOD_TARGET_PARAMS},
+];
+
+pub static MOD_TARGET_PARAMS: [MenuItem; 2] = [
+    MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::FloatRange(0.0, 1.0, 0.01), next: &[]},
+    MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::IntRange(0, 1),             next: &[]},
 ];
 

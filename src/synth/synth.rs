@@ -51,7 +51,8 @@ pub struct Synth {
     voices_playing: u32, // Bitmap with currently playing voices
     trigger_seq: u64,
     last_clock: i64,
-    aftertouch: Float, // MIDI channel aftertouch
+    pitch_wheel: Float,
+    aftertouch: Float,
     sender: Sender<UiMessage>,
 
     samplebuff_osc: WtOsc,
@@ -87,6 +88,7 @@ impl Synth {
         let voices_playing = 0;
         let trigger_seq = 0;
         let last_clock = 0i64;
+        let pitch_wheel = 0.0;
         let aftertouch = 0.0;
         let samplebuff_osc = WtOsc::new(sample_rate, 0, Arc::clone(&wt_manager));
         let samplebuff_env = Envelope::new(sample_rate as Float);
@@ -104,6 +106,7 @@ impl Synth {
             voices_playing,
             trigger_seq,
             last_clock,
+            pitch_wheel,
             aftertouch,
             sender,
             samplebuff_osc,
@@ -234,9 +237,8 @@ impl Synth {
             MidiMessage::KeyAT{channel, key, pressure} => (),
             MidiMessage::ChannelAT{channel, pressure} => self.handle_channel_aftertouch(pressure),
             MidiMessage::PitchWheel{channel, pitch} => (),
-            // These shouldn't get here, they are UI events
-            MidiMessage::ControlChg{channel, controller, value} => (),
-            MidiMessage::ProgramChg{channel, program} => (),
+            MidiMessage::ControlChg{channel, controller, value} => (), // This shouldn't get here, it's a UI event
+            MidiMessage::ProgramChg{channel, program} => (), // This shouldn't get here, it's a UI event
         }
     }
 
