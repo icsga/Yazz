@@ -31,13 +31,13 @@ pub struct ModSource {
 
 /** Static list of available modulation data sources. */
 static MOD_SOURCE: [ModSource; 6] = [
-    ModSource{function: Parameter::GlobalLfo, index_range: (1, NUM_GLOBAL_LFOS), val_range: ValueRange::FloatRange(-1.0, 1.0, 0.1), is_global: true},
-    ModSource{function: Parameter::Aftertouch, index_range: (1, 1), val_range: ValueRange::IntRange(0, 127), is_global: true},
+    ModSource{function: Parameter::GlobalLfo,  index_range: (1, NUM_GLOBAL_LFOS), val_range: ValueRange::FloatRange(-1.0, 1.0, 0.1), is_global: true},
+    ModSource{function: Parameter::Aftertouch, index_range: (1, 1),               val_range: ValueRange::IntRange(0, 127),           is_global: true},
 
-    ModSource{function: Parameter::Envelope, index_range: (1, NUM_ENVELOPES), val_range: ValueRange::FloatRange(0.0, 1.0, 0.1), is_global: false},
-    ModSource{function: Parameter::Lfo, index_range: (1, NUM_LFOS), val_range: ValueRange::FloatRange(-1.0, 1.0, 0.1), is_global: false},
+    ModSource{function: Parameter::Envelope,   index_range: (1, NUM_ENVELOPES),   val_range: ValueRange::FloatRange(0.0, 1.0, 0.1),  is_global: false},
+    ModSource{function: Parameter::Lfo,        index_range: (1, NUM_LFOS),        val_range: ValueRange::FloatRange(-1.0, 1.0, 0.1), is_global: false},
     ModSource{function: Parameter::Oscillator, index_range: (1, NUM_OSCILLATORS), val_range: ValueRange::FloatRange(-1.0, 1.0, 0.1), is_global: false},
-    ModSource{function: Parameter::KeyAttack, index_range: (1, 1), val_range: ValueRange::IntRange(0, 127), is_global: false},
+    ModSource{function: Parameter::KeyAttack,  index_range: (1, 1),               val_range: ValueRange::IntRange(0, 127),           is_global: false},
 ];
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
