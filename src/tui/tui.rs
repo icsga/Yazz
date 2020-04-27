@@ -101,6 +101,9 @@ impl Tui {
         };
         tui.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
         tui.select_sound(0);
+        match tui.ctrl_map.load("Yazz_ControllerMapping.ysn") {
+            _ => ()
+        }
         tui
     }
 
@@ -158,6 +161,7 @@ impl Tui {
                 self.bank.set_sound(self.selected_sound, &self.sound.borrow());
                 // Write bank to disk
                 self.bank.save_bank("Yazz_FactoryBank.ysn").unwrap();
+                self.ctrl_map.save("Yazz_ControllerMapping.ysn").unwrap();
                 true
             },
             Key::Char(c) => {
