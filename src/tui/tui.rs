@@ -26,6 +26,11 @@ use std::time::{Duration, SystemTime};
 use std::cell::RefCell;
 use std::rc::Rc;
 
+enum Mode {
+    Play,
+    Edit
+}
+
 pub struct Tui {
     // Function selection
     sender: Sender<SynthMessage>,
@@ -51,6 +56,7 @@ pub struct Tui {
 
     // State machine for ParamSelector
     sm: StateMachine<ParamSelector, SelectorEvent>,
+    mode: Mode,
 }
 
 impl Tui {
@@ -80,6 +86,7 @@ impl Tui {
             selected_sound: 0,
             ctrl_map: CtrlMap::new(),
             sm: StateMachine::new(ParamSelector::state_function),
+            mode: Mode::Edit,
         };
         tui.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
         tui.select_sound(0);
@@ -108,32 +115,10 @@ impl Tui {
     fn handle_ui_message(&mut self, msg: UiMessage) -> bool {
         match msg {
             UiMessage::Midi(m)  => self.handle_midi_event(&m),
-            UiMessage::Key(m) => {
-                match m {
-                    Key::F(1) => {
-                        // Read bank from disk
-                        self.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
-                        self.select_sound(0);
-                    },
-                    Key::F(2) => {
-                        // Copy current sound to selected sound in bank
-                        self.bank.set_sound(self.selected_sound, &self.sound.borrow());
-                        // Write bank to disk
-                        self.bank.save_bank("Yazz_FactoryBank.ysn").unwrap()
-                    },
-                    _ => {
-                        if self.selector.handle_user_input(&mut self.sm, m, self.sound.clone()) {
-                            self.send_event();
-                        }
-                    }
-                }
-                self.selection_changed = true; // Trigger full UI redraw
-            },
-            UiMessage::MousePress{x, y} |
-            UiMessage::MouseHold{x, y} |
-            UiMessage::MouseRelease{x, y} => {
-                self.window.handle_event(&msg);
-            }
+            UiMessage::Key(m) => self.handle_key_input(m),
+            UiMessage::MousePress{x, y}
+            | UiMessage::MouseHold{x, y}
+            | UiMessage::MouseRelease{x, y} => self.window.handle_event(&msg),
             UiMessage::SampleBuffer(m, p) => self.handle_samplebuffer(m, p),
             UiMessage::EngineSync(idle, busy) => {
                 self.update_idle_time(idle, busy);
@@ -146,6 +131,49 @@ impl Tui {
             }
         };
         true
+    }
+
+    fn handle_key_input(&mut self, key: Key) {
+        // Top-level keys
+        if !match key {
+            Key::F(1) => {
+                // Read bank from disk
+                self.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
+                self.select_sound(0);
+                true
+            },
+            Key::F(2) => {
+                // Copy current sound to selected sound in bank
+                self.bank.set_sound(self.selected_sound, &self.sound.borrow());
+                // Write bank to disk
+                self.bank.save_bank("Yazz_FactoryBank.ysn").unwrap();
+                true
+            },
+            Key::Char(c) => {
+                match c {
+                    '\t' => {
+                        self.toggle_mode();
+                        true
+                    }
+                    _ => false // Key not handled yet
+                }
+            },
+            _ => false
+        } {
+            if let Mode::Edit = self.mode {
+                if self.selector.handle_user_input(&mut self.sm, key, self.sound.clone()) {
+                    self.send_event();
+                }
+            }
+        }
+        self.selection_changed = true; // Trigger full UI redraw
+    }
+
+    fn toggle_mode(&mut self) {
+        match self.mode {
+            Mode::Play => self.mode = Mode::Edit,
+            Mode::Edit => self.mode = Mode::Play,
+        }
     }
 
     /** Select a sound from the loaded sound bank.
@@ -191,13 +219,16 @@ impl Tui {
                                                   param,
                                                   val_range);
                     }
+                    return;
+                }
+                let edit_mode = if let Mode::Edit = self.mode { true } else { false };
+                if controller == 0x01 && edit_mode { // ModWheel
 
-                } else if controller == 0x01 { // ModWheel
-
-                    // ModWheel is used as general data entry for selector
+                    // ModWheel is used as general data entry for selector in Edit mode.
                     if self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), self.sound.clone()) {
                         self.send_event();
                     }
+
                 } else {
 
                     // All others might be mapped to control a parameter directly

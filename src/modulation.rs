@@ -37,7 +37,7 @@ static MOD_SOURCE: [ModSource; 6] = [
     ModSource{function: Parameter::Envelope,   index_range: (1, NUM_ENVELOPES),   val_range: ValueRange::FloatRange(0.0, 1.0, 0.1),  is_global: false},
     ModSource{function: Parameter::Lfo,        index_range: (1, NUM_LFOS),        val_range: ValueRange::FloatRange(-1.0, 1.0, 0.1), is_global: false},
     ModSource{function: Parameter::Oscillator, index_range: (1, NUM_OSCILLATORS), val_range: ValueRange::FloatRange(-1.0, 1.0, 0.1), is_global: false},
-    ModSource{function: Parameter::KeyAttack,  index_range: (1, 1),               val_range: ValueRange::IntRange(0, 127),           is_global: false},
+    ModSource{function: Parameter::Velocity,   index_range: (1, 1),               val_range: ValueRange::IntRange(0, 127),           is_global: false},
 ];
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
@@ -51,7 +51,6 @@ pub struct ModData {
     pub active: bool,
     pub is_global: bool,
     pub scale: Float,
-    pub offset: Float,
 }
 
 impl ModData {
@@ -65,8 +64,7 @@ impl ModData {
         let active = false;
         let is_global = false;
         let scale = 0.0;
-        let offset = 0.0;
-        ModData{source_func, source_func_id, target_func, target_func_id, target_param, amount, active, is_global, scale, offset}
+        ModData{source_func, source_func_id, target_func, target_func_id, target_param, amount, active, is_global, scale}
     }
 
     pub fn set_source(&mut self, func: &FunctionId) {
@@ -96,14 +94,12 @@ impl ModData {
         let dest_range = MenuItem::get_val_range(self.target_func, self.target_param);
         let (dest_min, dest_max) = dest_range.get_min_max();
 
-        // Calculate scale factor and offset
+        // Calculate scale factor
         // Scale is the factor applied to the mod source value to cover the
         // total target value range. Mod amount limits it to a smaller range.
         self.scale = ((dest_max - dest_min) / (source_max - source_min)) * self.amount;
-        info!("source_min={}, source_max={}, dest_min={}, dest_max={}, scale={}",
-            source_min, source_max, dest_min, dest_max, self.scale);
         self.is_global = source.is_global;
-        info!("Updated modulator {:?}", self);
+        //info!("Updated modulator {:?}", self);
     }
 
     pub fn get_source(&self) -> FunctionId {
@@ -115,7 +111,6 @@ impl ModData {
     }
 
     fn get_mod_source(function: Parameter) -> &'static ModSource {
-        info!("Looking up mod src for {}", function);
         for (i, s) in MOD_SOURCE.iter().enumerate() {
             if s.function == function {
                 return &s;
