@@ -33,8 +33,8 @@ pub struct CtrlMap {
 
 impl CtrlMap {
     pub fn new() -> CtrlMap {
-        // Each of the 128 patches has it's own set of controller assignments
-        CtrlMap{map: vec!(CtrlHashMap::new(); 128)}
+        // 36 sets of controller mappings (0-9, a-z)
+        CtrlMap{map: vec!(CtrlHashMap::new(); 36)}
     }
 
     /** Reset the map, removing all controller assignments. */
@@ -46,21 +46,21 @@ impl CtrlMap {
 
     /** Add a new mapping entry for a controller.
      *
-     * \param program The number of the active sound patch
+     * \param set The selected controller map set
      * \param controller The controller number to add
      * \param map_type Type of value change (absolute or relative)
      * \param parameter The parameter changed with this controller
      * \param val_range The valid values for the parameter
      */
     pub fn add_mapping(&mut self,
-                      program: usize,
+                      set: usize,
                       controller: u64,
                       map_type: MappingType,
                       parameter: ParamId,
                       val_range: ValueRange) {
-        trace!("add_mapping: Prg {}, ctrl {}, type {:?}, param {:?}, val range {:?}",
-            program, controller, map_type, parameter, val_range);
-        self.map[program].insert(controller,
+        trace!("add_mapping: Set {}, ctrl {}, type {:?}, param {:?}, val range {:?}",
+            set, controller, map_type, parameter, val_range);
+        self.map[set].insert(controller,
                                  CtrlMapEntry{id: parameter,
                                               map_type: map_type,
                                               val_range: val_range});
@@ -71,7 +71,7 @@ impl CtrlMap {
      * Uses the parameter's val_range to translate the controller value into
      * a valid parameter value.
      *
-     * \param program The number of the active sound patch
+     * \param set The selected controller map set
      * \param controller The controller number to look up
      * \param value New value of the controller
      * \param sound Currently active sound
@@ -80,15 +80,15 @@ impl CtrlMap {
      * \return true if result was updated, false otherwise
      */
     pub fn get_value(&self,
-                    program: usize,
+                    set: usize,
                     controller: u64,
                     value: u64,
                     sound: &SoundData) -> Result<SynthParam, ()> {
         // Get mapping
-        if !self.map[program].contains_key(&controller) {
+        if !self.map[set].contains_key(&controller) {
             return Err(());
         }
-        let mapping = &self.map[program][&controller];
+        let mapping = &self.map[set][&controller];
         let mut result = SynthParam::new_from(&mapping.id);
         match mapping.map_type {
             MappingType::Absolute => {

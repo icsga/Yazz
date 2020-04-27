@@ -1410,5 +1410,7 @@ fn test_page_up_changes_function_id() {
     assert!(context.verify_selection(Parameter::Oscillator, 2, Parameter::Finetune, ParameterValue::Float(0.0)));
 }
 
-// TODO: Select next param from value state with param shortcut
+// TODO:
+// - Select next param from value state with param shortcut
+// - Delete controller assignment in MIDI learn mode
 
