@@ -84,44 +84,47 @@ impl Voice {
         freq
     }
 
-    fn get_mod_data(&mut self, sample_clock: i64, sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) {
+    fn get_mod_values(&mut self, sample_clock: i64, sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) {
         for m in sound.modul.iter() {
 
             if !m.active {
                 continue;
             }
 
-            // Get modulator source output
-            let mod_val: Float = match m.source_func {
-                Parameter::Oscillator => {
-                    let id = m.source_func_id - 1;
-                    let freq = Voice::get_frequency(&sound_local.osc[id], self.input_freq);
-                    let (val, wave_complete) = self.osc[id].get_sample(freq, sample_clock, sound_local, false);
-                    val
-                },
-                Parameter::Lfo => {
-                    let (val, reset) = self.lfo[m.source_func_id - 1].get_sample(sample_clock, &sound_local.lfo[m.source_func_id - 1], false);
-                    val
-                },
-                Parameter::Envelope => {
-                    self.env[m.source_func_id - 1].get_sample(sample_clock, &sound_local.env[m.source_func_id - 1])
-                }
-                _ => 0.0, // TODO: This also sets non-global vars, optimize that
-            } * m.scale;
-
             // Get current value of target parameter
             let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
             let mut current_val = sound_global.get_value(&param); // TODO: This overwrites previous local mod changes
-            let mut val = current_val.as_float();
 
-            // Update value if mod source is local
             if !m.is_global {
+
+                // Get modulator source output
+                let mod_val: Float = match m.source_func {
+                    Parameter::Oscillator => {
+                        let id = m.source_func_id - 1;
+                        let freq = Voice::get_frequency(&sound_local.osc[id], self.input_freq);
+                        let (val, wave_complete) = self.osc[id].get_sample(freq, sample_clock, sound_local, false);
+                        val
+                    },
+                    Parameter::Lfo => {
+                        let (val, reset) = self.lfo[m.source_func_id - 1].get_sample(sample_clock, &sound_local.lfo[m.source_func_id - 1], false);
+                        val
+                    },
+                    Parameter::Envelope => {
+                        self.env[m.source_func_id - 1].get_sample(sample_clock, &sound_local.env[m.source_func_id - 1])
+                    }
+                    _ => 0.0, // TODO: This also sets non-global vars, optimize that
+                } * m.scale;
+
+                let mut val = current_val.as_float();
+
+                // Update value
                 let dest_range = MenuItem::get_val_range(param.function, param.parameter);
                 val = dest_range.safe_add(val, mod_val);
+
+                // Update parameter in voice sound data
+                current_val.set_from_float(val);
             }
 
-            // Update parameter in voice sound data
-            current_val.set_from_float(val);
             let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: current_val};
             sound_local.set_parameter(&param);
         }
@@ -139,7 +142,7 @@ impl Voice {
         let mut freq: Float;
 
         // Prepare modulation values
-        self.get_mod_data(sample_clock, sound, sound_global, sound_local);
+        self.get_mod_values(sample_clock, sound, sound_global, sound_local);
 
         // Get mixed output from oscillators
         for (i, osc) in self.osc.iter_mut().enumerate() {

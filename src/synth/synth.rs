@@ -142,7 +142,7 @@ impl Synth {
      * Calculates the values for global modulation sources and applies them to
      * the global sound data.
      */
-    fn get_modulation_values(&mut self, sample_clock: i64) {
+    fn get_mod_values(&mut self, sample_clock: i64) {
         for m in self.sound.modul.iter() {
             if !m.active || !m.is_global {
                 continue;
@@ -152,7 +152,6 @@ impl Synth {
             let mod_val: Float = match m.source_func {
                 Parameter::GlobalLfo => {
                     let (val, reset) = self.glfo[m.source_func_id - 1].get_sample(sample_clock, &self.sound_global.glfo[m.source_func_id - 1], false);
-                    info!("Global LFO {}", val);
                     val
                 },
                 Parameter::Aftertouch => self.aftertouch,
@@ -164,11 +163,9 @@ impl Synth {
             let mut current_val = self.sound.get_value(&param); // TODO: This overwrites previous global mod changes
             let mut val = current_val.as_float();
 
-            // Update value if mod source is global
-            if m.is_global {
-                let dest_range = MenuItem::get_val_range(param.function, param.parameter);
-                val = dest_range.safe_add(val, mod_val);
-            }
+            // Update value
+            let dest_range = MenuItem::get_val_range(param.function, param.parameter);
+            val = dest_range.safe_add(val, mod_val);
 
             // Update parameter in global sound data
             current_val.set_from_float(val);
@@ -181,7 +178,7 @@ impl Synth {
     pub fn get_sample(&mut self, sample_clock: i64) -> Float {
         let mut value: Float = 0.0;
 
-        self.get_modulation_values(sample_clock);
+        self.get_mod_values(sample_clock);
 
         // Get sample of all active voices
         if self.voices_playing > 0 {
