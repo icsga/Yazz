@@ -4,7 +4,7 @@ use super::{Envelope, EnvelopeData};
 use super::Lfo;
 use super::MidiMessage;
 use super::ModData;
-use super::{Parameter, ParameterValue, ParamId, SynthParam};
+use super::{Parameter, ParameterValue, ParamId, SynthParam, MenuItem};
 use super::SoundData;
 use super::voice::Voice;
 use super::SampleGenerator;
@@ -161,24 +161,18 @@ impl Synth {
 
             // Get current value of target parameter
             let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
-            let current_val = self.sound.get_value(&param);
-            let mut val = match current_val {
-                ParameterValue::Int(x) => x as Float,
-                ParameterValue::Float(x) => x,
-                _ => panic!()
-            };
+            let mut current_val = self.sound.get_value(&param); // TODO: This overwrites previous global mod changes
+            let mut val = current_val.as_float();
 
-            /*
             // Update value if mod source is global
             if m.is_global {
-                val += mod_val;
+                let dest_range = MenuItem::get_val_range(param.function, param.parameter);
+                val = dest_range.safe_add(val, mod_val);
             }
-            */
-            // Update value
-            val += mod_val;
 
-            // Write value to global sound data
-            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: ParameterValue::Float(val)};
+            // Update parameter in global sound data
+            current_val.set_from_float(val);
+            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: current_val};
             self.sound_global.set_parameter(&param);
         }
     }

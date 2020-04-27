@@ -20,13 +20,14 @@ pub struct MidiHandler {
 }
 
 impl MidiHandler {
-    pub fn run(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>) -> MidiInputConnection<()> {
+    pub fn run(m2s_sender: Sender<SynthMessage>,
+            m2u_sender: Sender<UiMessage>,
+            midi_port: usize) -> MidiInputConnection<()> {
         let input = String::new();
         let mut midi_in = MidiInput::new("midir reading input").unwrap();
         midi_in.ignore(Ignore::None);
-        let in_port = 2;
-        let in_port_name = midi_in.port_name(in_port).unwrap();
-        let conn_in = midi_in.connect(in_port, "midir-read-input", move |stamp, message, _| {
+        let in_port_name = midi_in.port_name(midi_port).unwrap();
+        let conn_in = midi_in.connect(midi_port, "midir-read-input", move |stamp, message, _| {
             if message.len() >= 2 {
                 let m = MidiHandler::get_midi_message(message);
                 info!("MidiMessage: {:?}", m);

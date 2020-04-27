@@ -57,9 +57,11 @@ use rand::Rng;
 use log::{info, trace, warn};
 use flexi_logger::{Logger, opt_format};
 
+extern crate clap;
+use clap::{Arg, App};
 
-pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.2";
-pub const SOUND_DATA_VERSION: &'static str = "0.0.1";
+pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.3";
+pub const SOUND_DATA_VERSION: &'static str = "0.0.2";
 
 type Float = f32;
 
@@ -98,9 +100,9 @@ fn setup_messaging() -> (Sender<UiMessage>, Receiver<UiMessage>, Sender<SynthMes
     (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver)
 }
 
-fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>) -> MidiInputConnection<()> {
+fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>, midi_port: usize) -> MidiInputConnection<()> {
     println!("Setting up MIDI... ");
-    let conn_in = MidiHandler::run(m2s_sender, m2u_sender);
+    let conn_in = MidiHandler::run(m2s_sender, m2u_sender, midi_port);
     println!("... finished.");
     conn_in
 }
@@ -165,11 +167,25 @@ fn save_wave() -> std::io::Result<()> {
 
 fn main() {
     setup_logging();
+
+    // Command line arguments
+    let matches = App::new("Yazz")
+                        .version(SYNTH_ENGINE_VERSION)
+                        .about("Yet Another Subtractive Synth")
+                        .arg(Arg::with_name("midiport")
+                            .short("m")
+                            .long("midiport")
+                            .help("Selects the MIDI port to receive MIDI events on")
+                            .takes_value(true))
+                        .get_matches();
+    let midi_port = matches.value_of("midiport").unwrap_or("1");
+    let midi_port: usize = midi_port.parse().unwrap_or(1);
+
     //save_wave().unwrap();
 
     // Do setup
     let (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver) = setup_messaging();
-    let midi_connection = setup_midi(to_synth_sender.clone(), to_ui_sender.clone());
+    let midi_connection = setup_midi(to_synth_sender.clone(), to_ui_sender.clone(), midi_port);
     let (term_handle, tui_handle) = setup_ui(to_synth_sender, to_ui_sender.clone(), ui_receiver);
     let (mut engine, sample_rate) = setup_audio();
     let (synth, synth_handle) = setup_synth(sample_rate, to_ui_sender.clone(), synth_receiver);

@@ -7,6 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+clap = "2"
 cpal = "*"
 failure = "0.1.5"
 lazy_static = "1.3"
