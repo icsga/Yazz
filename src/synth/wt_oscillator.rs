@@ -64,7 +64,7 @@ impl WtOscData {
 }
 
 const NUM_SAMPLES_PER_TABLE: usize = 2048;
-const NUM_VALUES_PER_TABLE: usize = (NUM_SAMPLES_PER_TABLE + 1); // Add one sample for easier interpolation on last sample
+const NUM_VALUES_PER_TABLE: usize = NUM_SAMPLES_PER_TABLE + 1; // Add one sample for easier interpolation on last sample
 
 #[derive(Copy, Clone)]
 struct State {
