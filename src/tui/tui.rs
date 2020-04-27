@@ -31,6 +31,13 @@ enum Mode {
     Edit
 }
 
+enum TuiState {
+    Play,
+    CtrlSetSelect
+}
+
+type TuiEvent = termion::event::Key;
+
 pub struct Tui {
     // Function selection
     sender: Sender<SynthMessage>,
@@ -53,10 +60,12 @@ pub struct Tui {
     sound: Rc<RefCell<SoundPatch>>, // Current sound patch as loaded from disk
     selected_sound: usize,
     ctrl_map: CtrlMap, // Mapping of MIDI controller to parameter
+    active_ctrl_set: usize,
 
     // State machine for ParamSelector
-    sm: StateMachine<ParamSelector, SelectorEvent>,
+    selector_sm: StateMachine<ParamSelector, SelectorEvent>,
     mode: Mode,
+    state: TuiState,
 }
 
 impl Tui {
@@ -85,8 +94,10 @@ impl Tui {
             sound: sound,
             selected_sound: 0,
             ctrl_map: CtrlMap::new(),
-            sm: StateMachine::new(ParamSelector::state_function),
+            active_ctrl_set: 0,
+            selector_sm: StateMachine::new(ParamSelector::state_function),
             mode: Mode::Edit,
+            state: TuiState::Play,
         };
         tui.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
         tui.select_sound(0);
@@ -134,7 +145,7 @@ impl Tui {
     }
 
     fn handle_key_input(&mut self, key: Key) {
-        // Top-level keys
+        // Top-level keys that work in both modes
         if !match key {
             Key::F(1) => {
                 // Read bank from disk
@@ -160,10 +171,13 @@ impl Tui {
             },
             _ => false
         } {
+            // Mode-specific key handling
             if let Mode::Edit = self.mode {
-                if self.selector.handle_user_input(&mut self.sm, key, self.sound.clone()) {
+                if self.selector.handle_user_input(&mut self.selector_sm, key, self.sound.clone()) {
                     self.send_event();
                 }
+            } else {
+                self.handle_play_mode_input(key);
             }
         }
         self.selection_changed = true; // Trigger full UI redraw
@@ -173,6 +187,42 @@ impl Tui {
         match self.mode {
             Mode::Play => self.mode = Mode::Edit,
             Mode::Edit => self.mode = Mode::Play,
+        }
+    }
+
+    fn handle_play_mode_input(&mut self, key: Key) {
+        self.state = match self.state {
+            TuiState::Play => self.state_play(key),
+            TuiState::CtrlSetSelect => self.state_ctrl_set_select(key),
+        }
+    }
+
+    fn state_play(&mut self, key: Key) -> TuiState {
+        match key {
+            Key::Char(c) => {
+                match c {
+                    'c' => TuiState::CtrlSetSelect,
+                    _ => TuiState::Play,
+                }
+            }
+            _ => TuiState::Play,
+        }
+    }
+
+    fn state_ctrl_set_select(&mut self, key: Key) -> TuiState {
+        match key {
+            Key::Char(c) => {
+                if c >= '0' && c <= '9' {
+                    self.active_ctrl_set = c as usize - '0' as usize;
+                } else if c >= 'a' && c <= 'z' {
+                    self.active_ctrl_set = c as usize - 'a' as usize + 10;
+                } else {
+                    // Stay in this state until valid key received
+                    return TuiState::CtrlSetSelect;
+                }
+                TuiState::Play
+            }
+            _ => TuiState::CtrlSetSelect
         }
     }
 
@@ -206,14 +256,14 @@ impl Tui {
                 if self.selector.state == SelectorState::MidiLearn {
 
                     // MIDI learn: Send all controller events to the selector
-                    self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), self.sound.clone());
+                    self.selector.handle_control_input(&mut self.selector_sm, controller.into(), value.into(), self.sound.clone());
 
                     // Check if complete, if yes set CtrlMap
                     if self.selector.ml.complete {
                         let val_range = self.selector.get_value_range();
                         let param = self.selector.get_param_id();
                         let ml = &mut self.selector.ml;
-                        self.ctrl_map.add_mapping(self.selected_sound,
+                        self.ctrl_map.add_mapping(self.active_ctrl_set,
                                                   ml.ctrl,
                                                   ml.mapping_type,
                                                   param,
@@ -225,7 +275,7 @@ impl Tui {
                 if controller == 0x01 && edit_mode { // ModWheel
 
                     // ModWheel is used as general data entry for selector in Edit mode.
-                    if self.selector.handle_control_input(&mut self.sm, controller.into(), value.into(), self.sound.clone()) {
+                    if self.selector.handle_control_input(&mut self.selector_sm, controller.into(), value.into(), self.sound.clone()) {
                         self.send_event();
                     }
 
@@ -242,7 +292,7 @@ impl Tui {
     }
 
     fn handle_ctrl_change(&mut self, controller: u64, value: u64) {
-        let result = self.ctrl_map.get_value(self.selected_sound, controller, value, &self.sound.borrow().data);
+        let result = self.ctrl_map.get_value(self.active_ctrl_set, controller, value, &self.sound.borrow().data);
         if let Ok(synth_param) = result {
             self.send_parameter(&synth_param);
         }
@@ -306,7 +356,7 @@ impl Tui {
 
         // If the changed value is currently selected in the command line,
         // send it the updated value too.
-        self.selector.value_has_changed(&mut self.sm, param.clone());
+        self.selector.value_has_changed(&mut self.selector_sm, param.clone());
 
         // Update UI
         let param_id = ParamId::new_from(param);
