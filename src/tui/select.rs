@@ -826,8 +826,9 @@ impl ParamSelector {
         SynthParam::new(function.item, function_id, parameter.item, *param_val)
     }
 
-    pub fn get_value_range(&self) -> ValueRange {
-        self.param_selection.item_list[self.param_selection.item_index].val_range
+    /* Get value range for currently selected parameter. */
+    pub fn get_value_range(&self) -> &'static ValueRange {
+        &self.param_selection.item_list[self.param_selection.item_index].val_range
     }
 
     /* Select the parameter chosen by input, set value to current sound data. */

@@ -1,0 +1,56 @@
+[
+  {},
+  {
+    "7": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 1,
+        "parameter": "Level"
+      },
+      "map_type": "Absolute"
+    }
+  },
+  {
+    "7": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 1,
+        "parameter": "Frequency"
+      },
+      "map_type": "Absolute"
+    }
+  },
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {},
+  {}
+]

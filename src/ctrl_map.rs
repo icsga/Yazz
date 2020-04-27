@@ -1,7 +1,7 @@
 /** Maps MIDI controllers to synth parameters. */
 
 use super::Float;
-use super::{Parameter, ParamId, ParameterValue, ValueRange};
+use super::{Parameter, ParamId, ParameterValue, ValueRange, MenuItem};
 use super::{SoundData, SoundPatch};
 use super::SynthParam;
 
@@ -11,6 +11,10 @@ use serde::{Serialize, Deserialize};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
+use std::fs;
+use std::fs::File;
+use std::io::BufReader;
+use std::io::prelude::*;
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq)]
 pub enum MappingType {
@@ -22,10 +26,21 @@ pub enum MappingType {
 pub struct CtrlMapEntry {
     id: ParamId,
     map_type: MappingType,
-    val_range: ValueRange,
+    val_range: &'static ValueRange,
+}
+
+/* ValueRange contains a reference, so it can't be stored easily. Instead we
+ * store only ParamId and MappingType and rely on the TUI to look up the
+ * value range when loading the data.
+ */
+#[derive(Serialize, Deserialize, Clone, Copy, Debug)]
+pub struct CtrlMapStorageEntry {
+    id: ParamId,
+    map_type: MappingType,
 }
 
 type CtrlHashMap = HashMap<u64, CtrlMapEntry>;
+type CtrlHashMapStorage = HashMap<u64, CtrlMapStorageEntry>;
 
 pub struct CtrlMap {
     map: Vec<CtrlHashMap>
@@ -57,7 +72,7 @@ impl CtrlMap {
                       controller: u64,
                       map_type: MappingType,
                       parameter: ParamId,
-                      val_range: ValueRange) {
+                      val_range: &'static ValueRange) {
         trace!("add_mapping: Set {}, ctrl {}, type {:?}, param {:?}, val range {:?}",
             set, controller, map_type, parameter, val_range);
         self.map[set].insert(controller,
@@ -105,6 +120,41 @@ impl CtrlMap {
         };
         Ok(result)
     }
+
+    pub fn load(&mut self, filename: &str) -> std::io::Result<()> {
+        info!("Reading controller mapping from {}", filename);
+        let file = File::open(filename)?;
+        let mut reader = BufReader::new(file);
+        self.reset();
+        let mut serialized = String::new();
+        reader.read_to_string(&mut serialized)?;
+        let storage_map: Vec<CtrlHashMapStorage> = serde_json::from_str(&serialized).unwrap();
+
+        for i in 0..storage_map.len() {
+            for (key, value) in &storage_map[i] {
+                let val_range = MenuItem::get_val_range(value.id.function, value.id.parameter);
+                self.map[i].insert(*key, CtrlMapEntry{id: value.id, map_type: value.map_type, val_range: val_range});
+            }
+        }
+        Ok(())
+    }
+
+    pub fn save(&self, filename: &str) -> std::io::Result<()> {
+        info!("Writing controller mapping to {}", filename);
+
+        // Transfer data into serializable format
+        let mut storage_map = vec!(CtrlHashMapStorage::new(); 36);
+        for i in 0..self.map.len() {
+            for (key, value) in &self.map[i] {
+                storage_map[i].insert(*key, CtrlMapStorageEntry{id: value.id, map_type: value.map_type});
+            }
+        }
+
+        let mut file = File::create(filename)?;
+        let serialized = serde_json::to_string_pretty(&storage_map).unwrap();
+        file.write_all(serialized.as_bytes())?;
+        Ok(())
+    }
 }
 
 // ----------------------------------------------
@@ -133,11 +183,12 @@ impl TestContext {
     }
 
     pub fn add_controller(&mut self, ctrl_no: u64, ctrl_type: MappingType) {
+        let val_range = MenuItem::get_val_range(self.param_id.function, self.param_id.parameter);
         self.map.add_mapping(1,
                              ctrl_no,
                              ctrl_type,
                              self.param_id,
-                             ValueRange::FloatRange(0.0, 100.0, 1.0));
+                             val_range);
     }
 
     pub fn handle_controller(&mut self, ctrl_no: u64, value: u64) -> bool {
