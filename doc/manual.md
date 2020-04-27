@@ -92,9 +92,13 @@ selection, pressing Escape will return to the function selection.
 
 ### Keyboard shortcuts
 
-TODO: There will be additional keyboard shortcuts for a faster workflow, e.g.
-for updating the function ID from the value input position, and for setting
-markers to jump between parameters.
+While setting the value in the command line, there are a number of additional
+keyboard shortcuts for easier navigation:
+
+* **PageUp/ PageDown** will change the function ID of the current parameter.
+  That way it is easy to adjust the same parameter for all 3 oscillators, or to
+  search for the modulation slot that is assigned to a particular target.
+* More to come
 
 ## Assigning MIDI controllers
 
