@@ -12,7 +12,7 @@ use std::sync::Arc;
 use log::{info, trace, warn};
 
 pub const NUM_OSCILLATORS: usize = 3;
-pub const NUM_ENVELOPES: usize = 2;
+pub const NUM_ENVELOPES: usize = 3;
 pub const NUM_FILTERS: usize = 2;
 pub const NUM_LFOS: usize = 2;
 
@@ -41,6 +41,7 @@ impl Voice {
             WtOsc::new(sample_rate, 2, Arc::clone(&default_wavetable)),
         ];
         let env = [
+            Envelope::new(sample_rate as Float),
             Envelope::new(sample_rate as Float),
             Envelope::new(sample_rate as Float),
         ];

@@ -60,8 +60,8 @@ use flexi_logger::{Logger, opt_format};
 extern crate clap;
 use clap::{Arg, App};
 
-pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.3";
-pub const SOUND_DATA_VERSION: &'static str = "0.0.2";
+pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.4";
+pub const SOUND_DATA_VERSION: &'static str = "0.0.3";
 
 type Float = f32;
 

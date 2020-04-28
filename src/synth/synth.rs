@@ -22,7 +22,7 @@ use log::{info, trace, warn};
 
 const NUM_VOICES: usize = 32;
 const NUM_KEYS: usize = 128;
-const NUM_MODULATORS: usize = 16;
+pub const NUM_MODULATORS: usize = 16;
 pub const NUM_GLOBAL_LFOS: usize = 2;
 const REF_FREQUENCY: Float = 440.0;
 

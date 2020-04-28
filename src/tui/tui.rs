@@ -503,7 +503,7 @@ impl Tui {
             ParameterValue::Choice(x) => {
                 let item = &param.item_list[param.item_index];
                 let range = &item.val_range;
-                let selection = if let ValueRange::ChoiceRange(list) = range { list } else { panic!() };
+                let selection = if let ValueRange::Choice(list) = range { list } else { panic!() };
                 let item = selection[x].item;
                 print!(" {}", item);
             },
@@ -534,17 +534,18 @@ impl Tui {
         }
         if selector_state == SelectorState::FunctionIndex || selector_state == SelectorState::ValueFunctionIndex {
             let item = &s.item_list[s.item_index];
-            let (min, max) = if let ValueRange::IntRange(min, max) = item.val_range { (min, max) } else { panic!() };
+            let (min, max) = if let ValueRange::Int(min, max) = item.val_range { (min, max) } else { panic!() };
             print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max);
         }
         if selector_state == SelectorState::Value {
             let range = &s.item_list[s.item_index].val_range;
             match range {
-                ValueRange::IntRange(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
-                ValueRange::FloatRange(min, max, _) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
-                ValueRange::ChoiceRange(list) => print!("{} 1 - {} ", cursor::Goto(x_pos, 2), list.len()),
-                ValueRange::FuncRange(list) => (),
-                ValueRange::ParamRange(list) => (),
+                ValueRange::Int(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
+                ValueRange::Float(min, max, _) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
+                ValueRange::Choice(list) => print!("{} 1 - {} ", cursor::Goto(x_pos, 2), list.len()),
+                ValueRange::Dynamic(id) => (),
+                ValueRange::Func(list) => (),
+                ValueRange::Param(list) => (),
                 ValueRange::NoRange => ()
             }
         }

@@ -5,6 +5,8 @@ use super::Float;
 use super::LfoData;
 use super::ModData;
 use super::WtOscData;
+use super::synth::*;
+use super::voice::*;
 use super::{Parameter, ParameterValue, ParamId, SynthParam};
 
 use log::{info, trace, warn};
@@ -12,12 +14,12 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug)]
 pub struct SoundData {
-    pub osc: [WtOscData; 3],
-    pub env: [EnvelopeData; 2],
-    pub filter: [FilterData; 2],
-    pub modul: [ModData; 16],
-    pub lfo: [LfoData; 2],
-    pub glfo: [LfoData; 2],
+    pub osc: [WtOscData; NUM_OSCILLATORS],
+    pub env: [EnvelopeData; NUM_ENVELOPES],
+    pub filter: [FilterData; NUM_FILTERS],
+    pub lfo: [LfoData; NUM_LFOS],
+    pub glfo: [LfoData; NUM_GLOBAL_LFOS],
+    pub modul: [ModData; NUM_MODULATORS],
     pub delay: DelayData,
 }
 
@@ -37,6 +39,7 @@ impl SoundData {
         let env = [
             EnvelopeData{..Default::default()},
             EnvelopeData{..Default::default()},
+            EnvelopeData{..Default::default()},
         ];
         let filter = [
             FilterData{..Default::default()},
@@ -50,14 +53,14 @@ impl SoundData {
             LfoData{..Default::default()},
             LfoData{..Default::default()},
         ];
-        let delay = DelayData{..Default::default()};
         let modul = [
             ModData::new(), ModData::new(), ModData::new(), ModData::new(),
             ModData::new(), ModData::new(), ModData::new(), ModData::new(),
             ModData::new(), ModData::new(), ModData::new(), ModData::new(),
             ModData::new(), ModData::new(), ModData::new(), ModData::new(),
         ];
-        SoundData{osc, env, filter, lfo, glfo, delay, modul}
+        let delay = DelayData{..Default::default()};
+        SoundData{osc, env, filter, lfo, glfo, modul, delay}
     }
 
     pub fn init(&mut self) {
@@ -95,6 +98,7 @@ impl SoundData {
             Parameter::Oscillator => {
                 match msg.parameter {
                     Parameter::Level =>     { self.osc[id].level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
+                    Parameter::Wavetable => { self.osc[id].wavetable = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }; }
                     Parameter::WaveIndex => { self.osc[id].wave_index = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Frequency => { self.osc[id].set_halfsteps(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
                     Parameter::Finetune =>  { self.osc[id].set_cents(if let ParameterValue::Float(x) = msg.value { x / 100.0 } else { panic!() }); }
@@ -168,6 +172,7 @@ impl SoundData {
             Parameter::Oscillator => {
                 match param.parameter {
                     Parameter::Level => ParameterValue::Float(self.osc[id].level * 100.0),
+                    Parameter::Wavetable => ParameterValue::Choice(self.osc[id].wavetable),
                     Parameter::WaveIndex => ParameterValue::Float(self.osc[id].wave_index),
                     Parameter::Frequency => ParameterValue::Int(self.osc[id].tune_halfsteps),
                     Parameter::Finetune => ParameterValue::Float(self.osc[id].tune_cents * 100.0),
