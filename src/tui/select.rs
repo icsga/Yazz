@@ -761,14 +761,19 @@ impl ParamSelector {
                 let len = item.temp_string.len();
                 if len > 0 {
                     item.temp_string.pop();
-                    if len >= 1 {
+                    if item.temp_string.len() >= 1 {
                         let value = item.temp_string.parse();
                         current = if let Ok(x) = value { x } else { current };
                     } else {
+                        item.temp_string.push('0');
                         current = 0.0;
                     }
+                } else {
+                    item.temp_string.push('0');
+                    current = 0.0;
                 }
-                RetCode::KeyConsumed
+                info!("BS for float value, remaining: {}, current = {}", item.temp_string, current);
+                RetCode::ValueUpdated
             },
             _ => RetCode::KeyMissmatch,
         };
@@ -1445,6 +1450,25 @@ fn test_page_up_changes_function_id() {
     context.handle_input(TestInput::Key(Key::PageDown));
     assert_eq!(context.ps.state, SelectorState::Value);
     assert!(context.verify_selection(Parameter::Oscillator, 2, Parameter::Finetune, ParameterValue::Float(0.0)));
+}
+
+#[test]
+fn test_float_string_input() {
+    let mut context = TestContext::new();
+    let c: &[TestInput] = &[TestInput::Chars("o3l".to_string()),
+                            TestInput::Chars("13.5\n".to_string())];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_selection(Parameter::Oscillator, 3, Parameter::Level, ParameterValue::Float(13.5)));
+
+    let c: &[TestInput] = &[TestInput::Chars("l".to_string()),
+                            TestInput::Chars("26.47".to_string()),
+                            TestInput::Key(Key::Backspace),
+                            TestInput::Chars("\n".to_string()),
+    ];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_selection(Parameter::Oscillator, 3, Parameter::Level, ParameterValue::Float(26.4)));
 }
 
 // TODO:
