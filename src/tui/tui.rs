@@ -402,8 +402,11 @@ impl Tui {
 
         self.window.draw();
 
-        print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
-        Tui::display_selector(&self.selector);
+        if let Mode::Edit = self.mode {
+            print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
+            Tui::display_selector(&self.selector);
+        }
+
         self.display_idle_time();
 
         io::stdout().flush().ok();
@@ -487,7 +490,7 @@ impl Tui {
         if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
-        print!(" {}", param.item_list[param.item_index].item);
+        print!(" {}: ", param.item_list[param.item_index].item);
         if selected {
             print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         }

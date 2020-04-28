@@ -224,6 +224,7 @@ impl ParamSelector {
                 SmResult::EventHandled
             }
             SmEvent::ExitState => {
+                self.func_selection.temp_string.clear();
                 SmResult::EventHandled
             }
             SmEvent::Event(selector_event) => {
@@ -481,6 +482,7 @@ impl ParamSelector {
                         _ => panic!(),
                     }
                 }
+                self.value_func_selection.temp_string.clear();
                 SmResult::EventHandled
             }
             SmEvent::Event(selector_event) => {
@@ -993,6 +995,10 @@ impl TestContext {
         TestContext{ps, sound, sm}
     }
 
+    /* Return 
+     * - true if a value has changed and can be sent to the synth engine
+     * - false if no value has
+     */
     fn do_handle_input(&mut self, input: &TestInput) -> bool {
         let mut result = false;
         match input {
@@ -1012,10 +1018,18 @@ impl TestContext {
         result
     }
 
+    /* Return 
+     * - true if a value has changed and can be sent to the synth engine
+     * - false if no value has
+     */
     fn handle_input(&mut self, input: TestInput) -> bool {
         self.do_handle_input(&input)
     }
 
+    /* Return 
+     * - true if a value has changed and can be sent to the synth engine
+     * - false if no value has
+     */
     fn handle_inputs(&mut self, input: &[TestInput]) -> bool {
         let mut result = false;
         for i in input {
@@ -1203,6 +1217,25 @@ fn test_param_selection_reads_current_value() {
     // Change to level selection, reads current value from sound data
     assert_eq!(context.handle_input(TestInput::Chars("o1l".to_string())), false);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+}
+
+#[test]
+fn test_function_id_can_be_entered_directly() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("o2v".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 2, Parameter::Voices, ParameterValue::Int(1)));
+
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m2a".to_string())];
+    assert_eq!(context.handle_inputs(c), false);
+    assert!(context.verify_selection(Parameter::Modulation, 2, Parameter::Amount, ParameterValue::Float(0.0)));
+
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m12a".to_string())];
+    assert_eq!(context.handle_inputs(c), false);
+    assert!(context.verify_selection(Parameter::Modulation, 12, Parameter::Amount, ParameterValue::Float(0.0)));
+
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m2a".to_string())];
+    assert_eq!(context.handle_inputs(c), false);
+    assert!(context.verify_selection(Parameter::Modulation, 2, Parameter::Amount, ParameterValue::Float(0.0)));
 }
 
 #[test]
