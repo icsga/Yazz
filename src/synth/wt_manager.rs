@@ -24,13 +24,13 @@ pub struct WtManager {
 }
 
 impl WtManager {
-    pub fn new(sample_rate: Float) -> Arc<WtManager> {
+    pub fn new(sample_rate: Float) -> WtManager {
         let default_table = WtManager::initialize_default_tables(sample_rate);
         //let cache = HashMap::new();
         //let def_copy = Arc::clone(&default_table);
         let wt = WtManager{sample_rate, default_table};
         //wt.add_to_cache(def_copy);
-        Arc::new(wt)
+        wt
     }
 
     /** Get a single wavetable by name. */
@@ -116,7 +116,6 @@ impl WtManager {
 
     /** Create tables of common waveforms (sine, triangle, square, saw). */
     fn initialize_default_tables(sample_rate: Float) -> Arc<Wavetable> {
-        /*
         info!("Initializing default waveshapes");
         let name = "Basic".to_string();
         let mut wt = Wavetable::new(&name, 4, 11, 2048);
@@ -128,9 +127,10 @@ impl WtManager {
         wt.create_tables(3, start_freq, sample_rate, WtManager::insert_square);
         info!("Finished");
         Arc::new(wt)
-        */
+        /*
         let result = WtReader::read_file("data/ESW Digital - Formantish.wav");
         if let Ok(wt) = result { wt } else { panic!(); }
+        */
     }
 }
 

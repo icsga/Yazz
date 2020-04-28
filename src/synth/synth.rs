@@ -39,7 +39,7 @@ pub struct Synth {
     sound_global: SoundData, // Sound with global modulators applied
     sound_local: SoundData,  // Sound with voice-local modulators applied
     keymap: [Float; NUM_KEYS],
-    wt_manager: Arc<WtManager>,
+    wt_manager: WtManager,
 
     // Signal chain
     voice: [Voice; NUM_VOICES],
@@ -69,15 +69,16 @@ impl Synth {
         sound_global.init();
         sound_local.init();
         let wt_manager = WtManager::new(sample_rate as Float);
+        let default_table = wt_manager.get_table("default").unwrap();
         let voice = [
-            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
-            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
-            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
-            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
-            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
-            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
-            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
-            Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)), Voice::new(sample_rate, Arc::clone(&wt_manager)),
+            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
+            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
+            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
+            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
+            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
+            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
+            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
+            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
         ];
         let delay = Delay::new(sample_rate);
         let glfo = [
@@ -92,7 +93,7 @@ impl Synth {
         let pitch_wheel = 0.0;
         let mod_wheel = 0.0;
         let aftertouch = 0.0;
-        let samplebuff_osc = WtOsc::new(sample_rate, 0, Arc::clone(&wt_manager));
+        let samplebuff_osc = WtOsc::new(sample_rate, 0, Arc::clone(&default_table));
         let samplebuff_env = Envelope::new(sample_rate as Float);
         Synth{
             sample_rate,
