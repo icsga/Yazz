@@ -60,8 +60,8 @@ impl MidiHandler {
             0xC0 => MidiMessage::ProgramChg{channel: channel, program: param},
             0xD0 => MidiMessage::ChannelAT{channel: channel, pressure: param},
             0xE0 => {
-                let mut pitch: i16 = (param as i16) << 7;
-                pitch |= value as i16;
+                let mut pitch: i16 = param as i16;
+                pitch |= (value as i16) << 7;
                 pitch -= 0x2000;
                 MidiMessage::PitchWheel{channel, pitch}
             },

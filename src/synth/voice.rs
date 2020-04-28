@@ -27,7 +27,7 @@ pub struct Voice {
     triggered: bool,
     pub trigger_seq: u64,
     pub key: u8,          // Key that was pressed to trigger this voice
-    velocity: u8,         // Velocity of NoteOn event
+    velocity: Float,      // Velocity of NoteOn event
     input_freq: Float,    // Frequency to play as received from Synth
     osc_amp: Float,
     last_update: i64,
@@ -55,7 +55,7 @@ impl Voice {
         let triggered = false;
         let trigger_seq = 0;
         let key = 0;
-        let velocity = 0;
+        let velocity = 0.0;
         let input_freq = 440.0;
         let osc_amp = 0.5;
         let last_update = 0i64;
@@ -111,6 +111,9 @@ impl Voice {
                     },
                     Parameter::Envelope => {
                         self.env[m.source_func_id - 1].get_sample(sample_clock, &sound_local.env[m.source_func_id - 1])
+                    }
+                    Parameter::Velocity => {
+                        self.velocity
                     }
                     _ => 0.0, // TODO: This also sets non-global vars, optimize that
                 } * m.scale;
@@ -184,7 +187,7 @@ impl Voice {
     }
 
     pub fn set_velocity(&mut self, velocity: u8) {
-        self.velocity = velocity;
+        self.velocity = velocity as Float;
     }
 
     pub fn trigger(&mut self, trigger_seq: u64, trigger_time: i64, sound: &SoundData) {
@@ -201,6 +204,7 @@ impl Voice {
         }
     }
 
+    // TODO: Release velocity
     pub fn release(&mut self, velocity: u8, sound: &SoundData) {
         self.triggered = false;
         for i in 0..NUM_ENVELOPES {

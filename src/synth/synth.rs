@@ -52,6 +52,7 @@ pub struct Synth {
     trigger_seq: u64,
     last_clock: i64,
     pitch_wheel: Float,
+    mod_wheel: Float,
     aftertouch: Float,
     sender: Sender<UiMessage>,
 
@@ -89,6 +90,7 @@ impl Synth {
         let trigger_seq = 0;
         let last_clock = 0i64;
         let pitch_wheel = 0.0;
+        let mod_wheel = 0.0;
         let aftertouch = 0.0;
         let samplebuff_osc = WtOsc::new(sample_rate, 0, Arc::clone(&wt_manager));
         let samplebuff_env = Envelope::new(sample_rate as Float);
@@ -107,6 +109,7 @@ impl Synth {
             trigger_seq,
             last_clock,
             pitch_wheel,
+            mod_wheel,
             aftertouch,
             sender,
             samplebuff_osc,
@@ -158,8 +161,11 @@ impl Synth {
                     val
                 },
                 Parameter::Aftertouch => self.aftertouch,
+                Parameter::PitchWheel => self.pitch_wheel,
+                Parameter::ModWheel => self.mod_wheel,
                 _ => 0.0, // TODO: This also sets non-global vars, optimize that
             } * m.scale;
+
 
             // Get current value of target parameter
             let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
@@ -236,8 +242,8 @@ impl Synth {
             MidiMessage::NoteOff{channel, key, velocity} => self.handle_note_off(key, velocity),
             MidiMessage::KeyAT{channel, key, pressure} => (),
             MidiMessage::ChannelAT{channel, pressure} => self.handle_channel_aftertouch(pressure),
-            MidiMessage::PitchWheel{channel, pitch} => (),
-            MidiMessage::ControlChg{channel, controller, value} => (), // This shouldn't get here, it's a UI event
+            MidiMessage::PitchWheel{channel, pitch} => self.handle_pitch_wheel(pitch),
+            MidiMessage::ControlChg{channel, controller, value} => self.handle_controller(controller, value),
             MidiMessage::ProgramChg{channel, program} => (), // This shouldn't get here, it's a UI event
         }
     }
@@ -274,6 +280,19 @@ impl Synth {
 
     fn handle_channel_aftertouch(&mut self, pressure: u8) {
         self.aftertouch = pressure as Float;
+    }
+
+    fn handle_pitch_wheel(&mut self, value: i16) {
+        self.pitch_wheel = value as Float;
+    }
+
+    fn handle_controller(&mut self, ctrl: u8, value: u8) {
+        if ctrl == 0x01 {
+            // The ModWheel gets a special handling in that it can both be
+            // used as a general purpose controller (handled in Tui) and as a
+            // dedicated global modulation source (handled here).
+            self.mod_wheel = value as Float;
+        }
     }
 
     /* Decide which voice gets to play the next note. */
