@@ -98,6 +98,7 @@ pub struct ParamSelector {
     pub value: ParameterValue,
     pub ml: MidiLearn,
     sound: Option<Rc<RefCell<SoundPatch>>>,
+    pending_key: Option<Key>,
 }
 
 impl ParamSelector {
@@ -133,6 +134,7 @@ impl ParamSelector {
                       value: ParameterValue::Int(0),
                       ml: MidiLearn::new(),
                       sound: Option::None,
+                      pending_key: Option::None,
         }
     }
 
@@ -156,6 +158,14 @@ impl ParamSelector {
         self.sound = Option::Some(Rc::clone(&sound));
         self.value_changed = false;
         sm.handle_event(self, &SmEvent::Event(SelectorEvent::Key(c)));
+
+        // If we received a key that wasn't used but caused a state change, we
+        // need to pass it in again as a new event for it to be handled.
+        if let Option::Some(key) = self.pending_key {
+            self.pending_key = Option::None;
+            sm.handle_event(self, &SmEvent::Event(SelectorEvent::Key(key)));
+        }
+
         self.value_changed
     }
 
@@ -354,7 +364,7 @@ impl ParamSelector {
     fn handle_key_in_state_value(&mut self, c: &termion::event::Key) -> SmResult<ParamSelector, SelectorEvent> {
         // Check for shortcut keys
         match *c {
-            Key::Char('l') => return SmResult::ChangeState(ParamSelector::state_midi_learn),
+            Key::Ctrl('l') => return SmResult::ChangeState(ParamSelector::state_midi_learn),
             Key::PageUp => {
                 self.increase_function_id();
                 return SmResult::EventHandled;
@@ -370,9 +380,7 @@ impl ParamSelector {
             RetCode::KeyMissmatch  => {
                 // Key can't be used for value, so it probably is the short cut for a
                 // different parameter. Switch to parameter state and try again.
-                //
-                // TODO: Push key back on stack
-                //
+                self.pending_key = Option::Some(*c);
                 SmResult::ChangeState(ParamSelector::state_parameter)
             },
             RetCode::ValueUpdated  => {
@@ -1502,6 +1510,21 @@ fn test_state_function_id_is_skipped_for_len_1() {
     let mut context = TestContext::new();
     context.handle_input(TestInput::Chars("d".to_string())); // Only single delay, skip function ID input
     assert_eq!(context.ps.state, SelectorState::Param);
+}
+
+#[test]
+fn test_alpha_key_in_state_value_selects_parameter() {
+    let mut context = TestContext::new();
+
+    context.handle_input(TestInput::Chars("o1l3v".to_string()));
+
+    // Verify that we left level input and are now in voices
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
+
+    // Go back to level and verify the correct value was set
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("o1l".to_string())];
+    context.handle_inputs(c);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(3.0)));
 }
 
 // TODO:
