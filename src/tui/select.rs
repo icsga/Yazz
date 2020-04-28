@@ -201,7 +201,18 @@ impl ParamSelector {
                             RetCode::ValueComplete => {
                                 // Function selected
                                 self.param_selection.item_list = self.func_selection.item_list[self.func_selection.item_index].next;
-                                SmResult::ChangeState(ParamSelector::state_function_index)
+                                // Check if there are more then one instances of the selected function
+                                let val_range = &self.func_selection.item_list[self.func_selection.item_index].val_range;
+                                if let ValueRange::Int(_, num_instances) = val_range {
+                                    if *num_instances == 1 {
+                                        self.func_selection.value = ParameterValue::Int(1);
+                                        SmResult::ChangeState(ParamSelector::state_parameter)
+                                    } else {
+                                        SmResult::ChangeState(ParamSelector::state_function_index)
+                                    }
+                                } else {
+                                    panic!();
+                                }
                             },
                             RetCode::Reset         => self.reset(),
                         }
@@ -221,6 +232,8 @@ impl ParamSelector {
             SmEvent::EnterState => {
                 info!("state_function_index Enter");
                 self.state = SelectorState::FunctionIndex;
+
+
                 SmResult::EventHandled
             }
             SmEvent::ExitState => {
@@ -449,7 +462,20 @@ impl ParamSelector {
                                 RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore key that doesn't match a selection
                                 RetCode::ValueUpdated  => SmResult::EventHandled, // Selection updated
                                 RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_parameter), // Stop updating the value, back to parameter selection
-                                RetCode::ValueComplete => SmResult::ChangeState(ParamSelector::state_value_function_index), // Function selected
+                                RetCode::ValueComplete => { // Function selected
+                                    // Check if there are more then one instances of the selected function
+                                    let val_range = &self.value_func_selection.item_list[self.value_func_selection.item_index].val_range;
+                                    if let ValueRange::Int(_, num_instances) = val_range {
+                                        if *num_instances == 1 {
+                                            self.value_func_selection.value = ParameterValue::Int(1);
+                                            SmResult::ChangeState(ParamSelector::state_value_parameter)
+                                        } else {
+                                            SmResult::ChangeState(ParamSelector::state_value_function_index)
+                                        }
+                                    } else {
+                                        panic!();
+                                    }
+                                }
                                 RetCode::Reset         => self.reset(),
                             }
                         }
@@ -1469,6 +1495,13 @@ fn test_float_string_input() {
     context.handle_inputs(c);
     assert_eq!(context.ps.state, SelectorState::Param);
     assert!(context.verify_selection(Parameter::Oscillator, 3, Parameter::Level, ParameterValue::Float(26.4)));
+}
+
+#[test]
+fn test_state_function_id_is_skipped_for_len_1() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("d".to_string())); // Only single delay, skip function ID input
+    assert_eq!(context.ps.state, SelectorState::Param);
 }
 
 // TODO:
