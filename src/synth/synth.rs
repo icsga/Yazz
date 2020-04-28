@@ -149,6 +149,19 @@ impl Synth {
      * the global sound data.
      */
     fn get_mod_values(&mut self, sample_clock: i64) {
+        // Copy values that might be modulated from stored sound to global sound
+        // TODO: Check if a simple memcopy of the whole sound is faster
+        for m in self.sound.modul.iter() {
+            if !m.active {
+                continue;
+            }
+            let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
+            let current_val = self.sound.get_value(&param);
+            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: current_val};
+            self.sound_global.set_parameter(&param);
+        }
+
+        // Then apply global modulators
         for m in self.sound.modul.iter() {
             if !m.active || !m.is_global {
                 continue;
@@ -163,13 +176,13 @@ impl Synth {
                 Parameter::Aftertouch => self.aftertouch,
                 Parameter::PitchWheel => self.pitch_wheel,
                 Parameter::ModWheel => self.mod_wheel,
-                _ => 0.0, // TODO: This also sets non-global vars, optimize that
+                _ => 0.0,
             } * m.scale;
 
 
             // Get current value of target parameter
             let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
-            let mut current_val = self.sound.get_value(&param); // TODO: This overwrites previous global mod changes
+            let mut current_val = self.sound_global.get_value(&param);
             let mut val = current_val.as_float();
 
             // Update value
