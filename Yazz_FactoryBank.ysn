@@ -70,17 +70,6 @@
       ],
       "modul": [
         {
-          "source_func": "Lfo",
-          "source_func_id": 1,
-          "target_func": "Oscillator",
-          "target_func_id": 1,
-          "target_param": "Voices",
-          "amount": 0.015748031,
-          "active": true,
-          "is_global": false,
-          "scale": 9.448819
-        },
-        {
           "source_func": "Envelope",
           "source_func_id": 2,
           "target_func": "Oscillator",
@@ -90,6 +79,17 @@
           "active": true,
           "is_global": false,
           "scale": 170.07874
+        },
+        {
+          "source_func": "Lfo",
+          "source_func_id": 1,
+          "target_func": "Oscillator",
+          "target_func_id": 1,
+          "target_param": "Finetune",
+          "amount": 0.015748031,
+          "active": true,
+          "is_global": false,
+          "scale": 9.448819
         },
         {
           "source_func": "Lfo",
