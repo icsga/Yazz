@@ -76,6 +76,8 @@ impl WtManager {
             Wavetable::add_sine_wave(table, i as Float, 1.0 / i as Float * sign);
         }
         Wavetable::normalize(table);
+        // Shift by 180 degrees to keep it symmetrical to Sine wave
+        Wavetable::shift(table, table.len() & 0xFFFFFFFC, table.len() / 2);
     }
 
     /** Insert a saw wave into the given table.
@@ -100,6 +102,8 @@ impl WtManager {
             Wavetable::add_cosine_wave(table, i as Float, 1.0 / ((i * i) as Float));
         }
         Wavetable::normalize(table);
+        // Shift by 90 degrees to keep it symmetrical to Sine wave
+        Wavetable::shift(table, table.len() & 0xFFFFFFFC, table.len() / 4);
     }
 
     /** Insert a square wave into the given table.

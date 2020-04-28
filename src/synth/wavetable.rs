@@ -164,5 +164,21 @@ impl Wavetable {
             table[i] = table[i] / max;
         }
     }
+
+    pub fn shift(table: &mut [Float], num_values: usize, offset: usize) {
+        let mut temp = vec!(0.0; num_values);
+        let mut offset = offset;
+        for i in 0..num_values {
+            temp[offset] = table[i];
+            offset += 1;
+            if offset == num_values {
+                offset = 0;
+            }
+        }
+        for i in 0..num_values {
+            table[i] = temp[i]; // Copy back
+        }
+        table[num_values] = table[0];
+    }
 }
 
