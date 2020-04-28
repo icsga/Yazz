@@ -5,7 +5,7 @@ use std::fmt::{self, Debug, Display};
 use serde::{Serialize, Deserialize};
 use log::{info, trace, warn};
 
-#[derive(PartialEq, Clone, Copy, Debug, Eq, Hash, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
 pub enum Parameter {
     // Function
     Oscillator,
@@ -21,6 +21,7 @@ pub enum Parameter {
     // Oscillator, Lfo
     Waveform,
     Level,
+    Wavetable,
     WaveIndex,
     Frequency,
     Finetune,
@@ -93,7 +94,7 @@ pub struct FunctionId {
     pub function_id: usize,
 }
 
-#[derive(Serialize, Deserialize, Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq, Serialize, Deserialize)]
 pub struct ParamId {
     pub function: Parameter,
     pub function_id: usize,
@@ -157,7 +158,7 @@ impl fmt::Display for Parameter {
     }
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Clone, Copy, Debug)]
 pub struct SynthParam {
     pub function: Parameter,
     pub function_id: usize,
@@ -190,13 +191,21 @@ impl SynthParam {
 /** Enum for ranges of valid values */
 #[derive(Clone, Copy, Debug)]
 pub enum ValueRange {
-    IntRange(i64, i64),               // Range (min, max) of integer values
-    FloatRange(Float, Float, Float),  // Range (min, max, step) of float values
-    ChoiceRange(&'static [MenuItem]), // A list of items to choose from
-    FuncRange(&'static [MenuItem]),   // A list of (function-id) function entries
-    ParamRange(&'static [MenuItem]),  // A list of (function-id-param) parameter entries
+    Int(i64, i64),               // Range (min, max) of integer values
+    Float(Float, Float, Float),  // Range (min, max, step) of float values
+    Choice(&'static [MenuItem]), // A list of items to choose from
+    Func(&'static [MenuItem]),   // A list of (function-id) function entries
+    Param(&'static [MenuItem]),  // A list of (function-id-param) parameter entries
+    Dynamic(DynRangeId),         // List is dynamically generated according to the ID
     NoRange
 }
+
+// List of items that are dynamically generated
+#[derive(Clone, Copy, Debug)]
+pub enum DynRangeId {
+    WTName // Wavetable name
+}
+
 
 impl ValueRange {
 
@@ -206,17 +215,17 @@ impl ValueRange {
      */
     pub fn translate_value(&self, val: u64) -> ParameterValue {
         match self {
-            ValueRange::IntRange(min, max) => {
+            ValueRange::Int(min, max) => {
                 let inc: Float = (max - min) as Float / 127.0;
                 let value = min + (val as Float * inc) as i64;
                 ParameterValue::Int(value)
             }
-            ValueRange::FloatRange(min, max, _) => {
+            ValueRange::Float(min, max, _) => {
                 let inc: Float = (max - min) / 127.0;
                 let value = min + val as Float * inc;
                 ParameterValue::Float(value)
             }
-            ValueRange::ChoiceRange(choice_list) => {
+            ValueRange::Choice(choice_list) => {
                 let inc: Float = choice_list.len() as Float / 127.0;
                 let value = (val as Float * inc) as i64;
                 ParameterValue::Choice(value as usize)
@@ -228,7 +237,7 @@ impl ValueRange {
     /** Adds or subtracts two integers if the result is within the given range. */
     pub fn add_value(&self, val: ParameterValue, addsub: i64) -> ParameterValue {
         match self {
-            ValueRange::IntRange(min, max) => {
+            ValueRange::Int(min, max) => {
                 let mut value = if let ParameterValue::Int(x) = val {
                     x
                 } else {
@@ -240,7 +249,7 @@ impl ValueRange {
                 }
                 ParameterValue::Int(value)
             }
-            ValueRange::FloatRange(min, max, step) => {
+            ValueRange::Float(min, max, step) => {
                 let mut value = if let ParameterValue::Float(x) = val {
                     x
                 } else {
@@ -252,7 +261,7 @@ impl ValueRange {
                 }
                 ParameterValue::Float(value)
             }
-            ValueRange::ChoiceRange(choice_list) => {
+            ValueRange::Choice(choice_list) => {
                 let mut value = if let ParameterValue::Choice(x) = val {
                     x
                 } else {
@@ -270,9 +279,9 @@ impl ValueRange {
 
     pub fn get_min_max(&self) -> (Float, Float) {
         match self {
-            ValueRange::IntRange(min, max) => (*min as Float, *max as Float),
-            ValueRange::FloatRange(min, max, _) => (*min, *max),
-            ValueRange::ChoiceRange(itemlist) => (0.0, itemlist.len() as Float),
+            ValueRange::Int(min, max) => (*min as Float, *max as Float),
+            ValueRange::Float(min, max, _) => (*min, *max),
+            ValueRange::Choice(itemlist) => (0.0, itemlist.len() as Float),
             _ => panic!("Unexpected value range, cannot get min and max"),
         }
     }
@@ -330,37 +339,37 @@ impl MenuItem {
 
 /* Top-level menu */
 pub static FUNCTIONS: [MenuItem; 7] = [
-    MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3),  next: &OSC_PARAMS},
-    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2),  next: &ENV_PARAMS},
-    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2),  next: &LFO_PARAMS},
-    MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2),  next: &LFO_PARAMS},
-    MenuItem{item: Parameter::Filter,     key: 'f', val_range: ValueRange::IntRange(1, 2),  next: &FILTER_PARAMS},
-    MenuItem{item: Parameter::Delay,      key: 'd', val_range: ValueRange::IntRange(1, 1),  next: &DELAY_PARAMS},
-    MenuItem{item: Parameter::Modulation, key: 'm', val_range: ValueRange::IntRange(1, 16), next: &MOD_PARAMS},
+    MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::Int(1, 3),  next: &OSC_PARAMS},
+    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::Int(1, 2),  next: &ENV_PARAMS},
+    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::Int(1, 2),  next: &LFO_PARAMS},
+    MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::Int(1, 2),  next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Filter,     key: 'f', val_range: ValueRange::Int(1, 2),  next: &FILTER_PARAMS},
+    MenuItem{item: Parameter::Delay,      key: 'd', val_range: ValueRange::Int(1, 1),  next: &DELAY_PARAMS},
+    MenuItem{item: Parameter::Modulation, key: 'm', val_range: ValueRange::Int(1, 16), next: &MOD_PARAMS},
 ];
 
-pub static OSC_PARAMS: [MenuItem; 8] = [
-    MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::FloatRange(0.0, 100.0, 1.0),      next: &[]},
-    MenuItem{item: Parameter::WaveIndex, key: 'w', val_range: ValueRange::FloatRange(0.0, 1.0, 0.01),       next: &[]},
-    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::IntRange(-24, 24),                next: &[]},
-    MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::FloatRange(-1200.0, 1200.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::IntRange(0, 1),                   next: &[]},
-    MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::IntRange(0, 1),                   next: &[]},
-    MenuItem{item: Parameter::Voices,    key: 'v', val_range: ValueRange::IntRange(1, 7),                   next: &[]},
-    MenuItem{item: Parameter::Spread,    key: 'e', val_range: ValueRange::FloatRange(0.0, 2.0, 0.1),        next: &[]},
+pub static OSC_PARAMS: [MenuItem; 9] = [
+    MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0),      next: &[]},
+    MenuItem{item: Parameter::Wavetable, key: 'w', val_range: ValueRange::Dynamic(DynRangeId::WTName), next: &[]},
+    MenuItem{item: Parameter::WaveIndex, key: 'i', val_range: ValueRange::Float(0.0, 1.0, 0.01),       next: &[]},
+    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Int(-24, 24),                next: &[]},
+    MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::Float(-1200.0, 1200.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::Int(0, 1),                   next: &[]},
+    MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::Int(0, 1),                   next: &[]},
+    MenuItem{item: Parameter::Voices,    key: 'v', val_range: ValueRange::Int(1, 7),                   next: &[]},
+    MenuItem{item: Parameter::Spread,    key: 'e', val_range: ValueRange::Float(0.0, 2.0, 0.1),        next: &[]},
 ];
 
 pub static LFO_PARAMS: [MenuItem; 2] = [
-    MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::ChoiceRange(&LFO_WAVEFORM),    next: &[]},
-    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::FloatRange(0.0, 22000.0, 1.0), next: &[]},
-    //MenuItem{item: Parameter::Phase,     key: 'p', val_range: ValueRange::FloatRange(0.0, 100.0),        next: &[]},
+    MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::Choice(&LFO_WAVEFORM),    next: &[]},
+    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Float(0.0, 22000.0, 1.0), next: &[]},
 ];
 
 pub static FILTER_PARAMS: [MenuItem; 4] = [
-    MenuItem{item: Parameter::Type,      key: 't', val_range: ValueRange::ChoiceRange(&FILTER_TYPE),    next: &[]},
-    MenuItem{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::FloatRange(1.0, 5000.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::FloatRange(1.0, 100.0, 1.0),  next: &[]},
-    MenuItem{item: Parameter::Gain,      key: 'g', val_range: ValueRange::FloatRange(0.0, 1.0, 0.01),   next: &[]},
+    MenuItem{item: Parameter::Type,      key: 't', val_range: ValueRange::Choice(&FILTER_TYPE),    next: &[]},
+    MenuItem{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::Float(1.0, 5000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::Float(1.0, 100.0, 1.0),  next: &[]},
+    MenuItem{item: Parameter::Gain,      key: 'g', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
 ];
 
 pub static FILTER_TYPE: [MenuItem; 2] = [
@@ -369,11 +378,11 @@ pub static FILTER_TYPE: [MenuItem; 2] = [
 ];
 
 pub static ENV_PARAMS: [MenuItem; 5] = [
-    MenuItem{item: Parameter::Attack,  key: 'a', val_range: ValueRange::FloatRange(0.0, 4000.0, 1.0), next: &[]}, // Value = Duration in ms
-    MenuItem{item: Parameter::Decay,   key: 'd', val_range: ValueRange::FloatRange(0.0, 4000.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Sustain, key: 's', val_range: ValueRange::FloatRange(0.0, 1.0, 0.001),  next: &[]},
-    MenuItem{item: Parameter::Release, key: 'r', val_range: ValueRange::FloatRange(0.0, 8000.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Factor,  key: 'f', val_range: ValueRange::IntRange(1, 5),               next: &[]},
+    MenuItem{item: Parameter::Attack,  key: 'a', val_range: ValueRange::Float(0.0, 4000.0, 1.0), next: &[]}, // Value = Duration in ms
+    MenuItem{item: Parameter::Decay,   key: 'd', val_range: ValueRange::Float(0.0, 4000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Sustain, key: 's', val_range: ValueRange::Float(0.0, 1.0, 0.001),  next: &[]},
+    MenuItem{item: Parameter::Release, key: 'r', val_range: ValueRange::Float(0.0, 8000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Factor,  key: 'f', val_range: ValueRange::Int(1, 5),               next: &[]},
 ];
 
 pub static OSC_WAVEFORM: [MenuItem; 5] = [
@@ -394,42 +403,42 @@ pub static LFO_WAVEFORM: [MenuItem; 6] = [
 ];
 
 pub static DELAY_PARAMS: [MenuItem; 4] = [
-    MenuItem{item: Parameter::Time,      key: 't', val_range: ValueRange::FloatRange(0.01, 1.0, 0.01),    next: &[]},
-    MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::FloatRange(0.0, 1.0, 0.01),     next: &[]},
-    MenuItem{item: Parameter::Feedback,  key: 'f', val_range: ValueRange::FloatRange(0.0, 1.0, 0.01),     next: &[]},
-    MenuItem{item: Parameter::Tone,      key: 'o', val_range: ValueRange::FloatRange(100.0, 5000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Time,      key: 't', val_range: ValueRange::Float(0.01, 1.0, 0.01),    next: &[]},
+    MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
+    MenuItem{item: Parameter::Feedback,  key: 'f', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
+    MenuItem{item: Parameter::Tone,      key: 'o', val_range: ValueRange::Float(100.0, 5000.0, 1.0), next: &[]},
 ];
 
 pub static MOD_PARAMS: [MenuItem; 4] = [
-    MenuItem{item: Parameter::Source,    key: 's', val_range: ValueRange::FuncRange(&MOD_SOURCES),    next: &MOD_SOURCES},
-    MenuItem{item: Parameter::Target,    key: 't', val_range: ValueRange::ParamRange(&MOD_TARGETS),   next: &MOD_TARGETS},
-    MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::FloatRange(0.0, 1.0, 0.01), next: &[]},
-    MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::IntRange(0, 1),             next: &[]},
+    MenuItem{item: Parameter::Source,    key: 's', val_range: ValueRange::Func(&MOD_SOURCES),    next: &MOD_SOURCES},
+    MenuItem{item: Parameter::Target,    key: 't', val_range: ValueRange::Param(&MOD_TARGETS),   next: &MOD_TARGETS},
+    MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::Float(0.0, 1.0, 0.01), next: &[]},
+    MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 
 pub static MOD_SOURCES: [MenuItem; 8] = [
-    MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3), next: &OSC_PARAMS},
-    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
-    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::Velocity,   key: 'v', val_range: ValueRange::IntRange(1, 1), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::Aftertouch, key: 'a', val_range: ValueRange::IntRange(1, 1), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::PitchWheel, key: 'p', val_range: ValueRange::IntRange(1, 1), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::ModWheel,   key: 'm', val_range: ValueRange::IntRange(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::Int(1, 3), next: &OSC_PARAMS},
+    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::Int(1, 2), next: &ENV_PARAMS},
+    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Velocity,   key: 'v', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Aftertouch, key: 'a', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::PitchWheel, key: 'p', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::ModWheel,   key: 'm', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
 ];
 
 pub static MOD_TARGETS: [MenuItem; 7] = [
-    MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3), next: &OSC_PARAMS},
-    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
-    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::Filter,     key: 'f', val_range: ValueRange::IntRange(1, 2), next: &FILTER_PARAMS},
-    MenuItem{item: Parameter::Delay,      key: 'd', val_range: ValueRange::IntRange(1, 1), next: &DELAY_PARAMS},
-    MenuItem{item: Parameter::Modulation, key: 'm', val_range: ValueRange::IntRange(1, 16), next: &MOD_TARGET_PARAMS},
+    MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::Int(1, 3), next: &OSC_PARAMS},
+    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::Int(1, 2), next: &ENV_PARAMS},
+    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Filter,     key: 'f', val_range: ValueRange::Int(1, 2), next: &FILTER_PARAMS},
+    MenuItem{item: Parameter::Delay,      key: 'd', val_range: ValueRange::Int(1, 1), next: &DELAY_PARAMS},
+    MenuItem{item: Parameter::Modulation, key: 'm', val_range: ValueRange::Int(1, 16), next: &MOD_TARGET_PARAMS},
 ];
 
 pub static MOD_TARGET_PARAMS: [MenuItem; 2] = [
-    MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::FloatRange(0.0, 1.0, 0.01), next: &[]},
-    MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::IntRange(0, 1),             next: &[]},
+    MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::Float(0.0, 1.0, 0.01), next: &[]},
+    MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 

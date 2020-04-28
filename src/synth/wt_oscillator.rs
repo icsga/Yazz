@@ -11,7 +11,7 @@ use log::{info, trace, warn};
 
 const MAX_VOICES: usize = 7;
 
-#[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, Default)]
 pub struct WtOscData {
     pub level: Float,
     pub num_voices: i64,
@@ -22,6 +22,7 @@ pub struct WtOscData {
     pub wave_index: Float, // Index into the wave tables
     pub sync: i64,
     pub key_follow: i64,
+    pub wavetable: usize,
 }
 
 impl WtOscData {

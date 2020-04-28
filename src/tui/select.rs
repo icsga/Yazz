@@ -59,11 +59,12 @@ impl ItemSelection {
     pub fn reset(&mut self) {
         self.item_index = 0;
         self.value = match self.item_list[0].val_range {
-            ValueRange::IntRange(min, _) => ParameterValue::Int(min),
-            ValueRange::FloatRange(min, _, _) => ParameterValue::Float(min),
-            ValueRange::ChoiceRange(_) => ParameterValue::Choice(0),
-            ValueRange::FuncRange(func_list) => ParameterValue::Function(FunctionId{function: func_list[0].item, function_id: 0}),
-            ValueRange::ParamRange(func_list) => ParameterValue::Function(FunctionId{function: func_list[0].item, function_id: 0}),
+            ValueRange::Int(min, _) => ParameterValue::Int(min),
+            ValueRange::Float(min, _, _) => ParameterValue::Float(min),
+            ValueRange::Choice(_) => ParameterValue::Choice(0),
+            ValueRange::Dynamic(_) => ParameterValue::Choice(0),
+            ValueRange::Func(func_list) => ParameterValue::Function(FunctionId{function: func_list[0].item, function_id: 0}),
+            ValueRange::Param(func_list) => ParameterValue::Function(FunctionId{function: func_list[0].item, function_id: 0}),
             ValueRange::NoRange => panic!(),
         };
     }
@@ -645,9 +646,9 @@ impl ParamSelector {
             // All others
             _ => {
                 match item.item_list[item.item_index].val_range {
-                    ValueRange::IntRange(min, max) => ParamSelector::get_value_int(item, min, max, c),
-                    ValueRange::FloatRange(min, max, _) => ParamSelector::get_value_float(item, min, max, c),
-                    ValueRange::ChoiceRange(choice_list) => ParamSelector::get_value_choice(item, choice_list, c),
+                    ValueRange::Int(min, max) => ParamSelector::get_value_int(item, min, max, c),
+                    ValueRange::Float(min, max, _) => ParamSelector::get_value_float(item, min, max, c),
+                    ValueRange::Choice(choice_list) => ParamSelector::get_value_choice(item, choice_list, c),
                     _ => panic!(),
                 }
             }
@@ -822,8 +823,7 @@ impl ParamSelector {
         let function = &self.func_selection.item_list[self.func_selection.item_index];
         let function_id = if let ParameterValue::Int(x) = &self.func_selection.value { *x as usize } else { panic!() };
         let parameter = &self.param_selection.item_list[self.param_selection.item_index];
-        let param_val = &self.param_selection.value;
-        SynthParam::new(function.item, function_id, parameter.item, *param_val)
+        SynthParam::new(function.item, function_id, parameter.item, self.param_selection.value)
     }
 
     /* Get value range for currently selected parameter. */
@@ -900,43 +900,46 @@ impl ParamSelector {
         info!("update_value item: {:?}, value: {:?}", selection.item_list[selection.item_index].item, val);
         let temp_string = &mut selection.temp_string;
         match selection.item_list[selection.item_index].val_range {
-            ValueRange::IntRange(min, max) => {
-                let mut val = if let ParameterValue::Int(x) = val { x } else { panic!(); };
-                if val > max {
-                    val = max;
+            ValueRange::Int(min, max) => {
+                let mut value = if let ParameterValue::Int(x) = val { x } else { panic!(); };
+                if value > max {
+                    value = max;
                 }
-                if val < min {
-                    val = min;
+                if value < min {
+                    value = min;
                 }
-                selection.value = ParameterValue::Int(val.try_into().unwrap());
+                selection.value = ParameterValue::Int(value);
             }
-            ValueRange::FloatRange(min, max, _) => {
-                let mut val = if let ParameterValue::Float(x) = val { x } else { panic!(); };
+            ValueRange::Float(min, max, _) => {
+                let mut value = if let ParameterValue::Float(x) = val { x } else { panic!(); };
                 let has_period =  temp_string.contains(".");
-                if val > max {
-                    val = max;
+                if value > max {
+                    value = max;
                 }
-                if val < min {
-                    val = min;
+                if value < min {
+                    value = min;
                 }
                 temp_string.clear();
-                temp_string.push_str(val.to_string().as_str());
+                temp_string.push_str(value.to_string().as_str());
                 if !temp_string.contains(".") && has_period {
                     temp_string.push('.');
                 }
-                selection.value = ParameterValue::Float(val);
+                selection.value = ParameterValue::Float(value);
             }
-            ValueRange::ChoiceRange(selection_list) => {
-                let mut val = if let ParameterValue::Choice(x) = val { x as usize } else { panic!("{:?}", val); };
-                if val >= selection_list.len() {
-                    val = selection_list.len() - 1;
+            ValueRange::Choice(selection_list) => {
+                let mut value = if let ParameterValue::Choice(x) = val { x as usize } else { panic!("{:?}", val); };
+                if value >= selection_list.len() {
+                    value = selection_list.len() - 1;
                 }
-                selection.value = ParameterValue::Choice(val);
+                selection.value = ParameterValue::Choice(value);
             }
-            ValueRange::FuncRange(selection_list) => {
+            ValueRange::Dynamic(id) => {
+                selection.value = val;
+            }
+            ValueRange::Func(selection_list) => {
                 //panic!();
             }
-            ValueRange::ParamRange(selection_list) => {
+            ValueRange::Param(selection_list) => {
                 //panic!();
             }
             ValueRange::NoRange => {}

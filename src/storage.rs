@@ -63,7 +63,11 @@ impl SoundBank {
         info!("Read sound file version {}", self.info.sound_data_version);
         let mut serialized = String::new();
         reader.read_to_string(&mut serialized)?;
-        self.sounds = serde_json::from_str(&serialized).unwrap();
+        //self.sounds = serde_json::from_str(&serialized).unwrap();
+        let result = serde_json::from_str(&serialized);
+        if let Ok(data) = result {
+            self.sounds = data;
+        }
         Ok(())
     }
 
