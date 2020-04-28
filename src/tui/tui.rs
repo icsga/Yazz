@@ -276,16 +276,23 @@ impl Tui {
                     return;
                 }
                 let edit_mode = if let Mode::Edit = self.mode { true } else { false };
-                if controller == 0x01 && edit_mode { // ModWheel
 
-                    // ModWheel is used as general data entry for selector in Edit mode.
-                    if self.selector.handle_control_input(&mut self.selector_sm, controller.into(), value.into(), self.sound.clone()) {
-                        self.send_event();
+                // Special handling of ModWheel
+                if controller == 0x01 {
+                    if edit_mode {
+                        // ModWheel is used as general data entry for Selector in Edit mode.
+                        if self.selector.handle_control_input(&mut self.selector_sm, controller.into(), value.into(), self.sound.clone()) {
+                            self.send_event();
+                        }
+                    } else {
+                        // In play mode, modwheel is both a global mod source and a
+                        // controller. Send message to synth engine about mod
+                        // source update.
+                        self.sender.send(SynthMessage::Midi(*m)).unwrap();
                     }
 
-                } else {
-
-                    // All others might be mapped to control a parameter directly
+                    // All controllers (including ModWheel) might be
+                    // mapped to control a parameter directly
                     self.handle_ctrl_change(controller.into(), value.into());
 
                 }

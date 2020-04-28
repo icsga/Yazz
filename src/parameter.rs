@@ -75,6 +75,8 @@ pub enum Parameter {
     Velocity,
     KeyAftertouch,
     Aftertouch,
+    PitchWheel,
+    ModWheel,
 
     // System parameters
     Idle,
@@ -405,13 +407,15 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::IntRange(0, 1),             next: &[]},
 ];
 
-pub static MOD_SOURCES: [MenuItem; 6] = [
+pub static MOD_SOURCES: [MenuItem; 8] = [
     MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::IntRange(1, 3), next: &OSC_PARAMS},
     MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::IntRange(1, 2), next: &ENV_PARAMS},
     MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::IntRange(1, 2), next: &LFO_PARAMS},
     MenuItem{item: Parameter::Velocity,   key: 'v', val_range: ValueRange::IntRange(1, 1), next: &LFO_PARAMS},
     MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::IntRange(1, 2), next: &LFO_PARAMS},
     MenuItem{item: Parameter::Aftertouch, key: 'a', val_range: ValueRange::IntRange(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::PitchWheel, key: 'p', val_range: ValueRange::IntRange(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::ModWheel,   key: 'm', val_range: ValueRange::IntRange(1, 1), next: &LFO_PARAMS},
 ];
 
 pub static MOD_TARGETS: [MenuItem; 7] = [

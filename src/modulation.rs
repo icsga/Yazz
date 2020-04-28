@@ -30,9 +30,11 @@ pub struct ModSource {
 }
 
 /** Static list of available modulation data sources. */
-static MOD_SOURCE: [ModSource; 6] = [
+static MOD_SOURCE: [ModSource; 8] = [
     ModSource{function: Parameter::GlobalLfo,  index_range: (1, NUM_GLOBAL_LFOS), val_range: ValueRange::FloatRange(-1.0, 1.0, 0.1), is_global: true},
-    ModSource{function: Parameter::Aftertouch, index_range: (1, 1),               val_range: ValueRange::IntRange(0, 127),           is_global: true},
+    ModSource{function: Parameter::Aftertouch, index_range: (1, 1),               val_range: ValueRange::FloatRange(0.0, 127.0, 0.0),is_global: true},
+    ModSource{function: Parameter::PitchWheel, index_range: (1, 1),               val_range: ValueRange::FloatRange(-8192.0, 8191.0, 0.0),is_global: true},
+    ModSource{function: Parameter::ModWheel,   index_range: (1, 1),               val_range: ValueRange::FloatRange(0.0, 127.0, 0.0),is_global: true},
 
     ModSource{function: Parameter::Envelope,   index_range: (1, NUM_ENVELOPES),   val_range: ValueRange::FloatRange(0.0, 1.0, 0.1),  is_global: false},
     ModSource{function: Parameter::Lfo,        index_range: (1, NUM_LFOS),        val_range: ValueRange::FloatRange(-1.0, 1.0, 0.1), is_global: false},
@@ -99,7 +101,7 @@ impl ModData {
         // total target value range. Mod amount limits it to a smaller range.
         self.scale = ((dest_max - dest_min) / (source_max - source_min)) * self.amount;
         self.is_global = source.is_global;
-        //info!("Updated modulator {:?}", self);
+        info!("Updated modulator {:?}", self);
     }
 
     pub fn get_source(&self) -> FunctionId {
