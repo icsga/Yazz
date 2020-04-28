@@ -4,7 +4,7 @@ use super::Float;
 use super::Lfo;
 use super::{Parameter, ParameterValue, ParamId, SynthParam, MenuItem};
 use super::SampleGenerator;
-use super::{WtOsc, WtOscData, WtManager};
+use super::{WtOsc, WtOscData, Wavetable};
 use super::SoundData;
 
 use std::sync::Arc;
@@ -34,11 +34,11 @@ pub struct Voice {
 }
 
 impl Voice {
-    pub fn new(sample_rate: u32, wt_manager: Arc<WtManager>) -> Self {
+    pub fn new(sample_rate: u32, default_wavetable: Arc<Wavetable>) -> Self {
         let osc = [
-            WtOsc::new(sample_rate, 0, Arc::clone(&wt_manager)),
-            WtOsc::new(sample_rate, 1, Arc::clone(&wt_manager)),
-            WtOsc::new(sample_rate, 2, Arc::clone(&wt_manager)),
+            WtOsc::new(sample_rate, 0, Arc::clone(&default_wavetable)),
+            WtOsc::new(sample_rate, 1, Arc::clone(&default_wavetable)),
+            WtOsc::new(sample_rate, 2, Arc::clone(&default_wavetable)),
         ];
         let env = [
             Envelope::new(sample_rate as Float),

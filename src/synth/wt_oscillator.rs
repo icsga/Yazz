@@ -80,7 +80,6 @@ pub struct WtOsc {
     last_sample: Float,
     last_complete: bool,
     state: [State; MAX_VOICES], // State for up to MAX_VOICES oscillators running in sync
-    wt_manager: Arc<WtManager>,
     wave: Arc<Wavetable>,
 }
 
@@ -97,7 +96,7 @@ impl WtOsc {
      * \param sample_rate The global sample rate of the synth
      * \param id The voice ID of the oscillator (0 - 2)
      */
-    pub fn new(sample_rate: u32, id: usize, wt_manager: Arc<WtManager>) -> WtOsc {
+    pub fn new(sample_rate: u32, id: usize, wave: Arc<Wavetable>) -> WtOsc {
         let sample_rate = sample_rate as Float;
         let last_update = 0;
         let last_sample = 0.0;
@@ -106,14 +105,12 @@ impl WtOsc {
         let freq_shift = 0.0;
         let level_shift = 1.0;
         let state = [State{last_pos, freq_shift, level_shift}; MAX_VOICES];
-        let wave = wt_manager.get_table("default").unwrap();
         WtOsc{sample_rate,
               id,
               last_update,
               last_sample,
               last_complete,
               state,
-              wt_manager,
               wave}
     }
 
