@@ -85,6 +85,19 @@ impl Voice {
     }
 
     fn get_mod_values(&mut self, sample_clock: i64, sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) {
+        // Copy values that might be modulated from global sound to local sound
+        // TODO: Check if a simple memcopy of the whole sound is faster
+        for m in sound.modul.iter() {
+            if !m.active {
+                continue;
+            }
+            let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
+            let current_val = sound_global.get_value(&param);
+            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: current_val};
+            sound_local.set_parameter(&param);
+        }
+
+        // Then update the local sound with mod values
         for m in sound.modul.iter() {
 
             if !m.active {
@@ -93,7 +106,7 @@ impl Voice {
 
             // Get current value of target parameter
             let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
-            let mut current_val = sound_global.get_value(&param); // TODO: This overwrites previous local mod changes
+            let mut current_val = sound_local.get_value(&param);
 
             if !m.is_global {
 
@@ -115,7 +128,7 @@ impl Voice {
                     Parameter::Velocity => {
                         self.velocity
                     }
-                    _ => 0.0, // TODO: This also sets non-global vars, optimize that
+                    _ => 0.0,
                 } * m.scale;
 
                 let mut val = current_val.as_float();
