@@ -161,7 +161,6 @@ impl Tui {
                 self.bank.set_sound(self.selected_sound, &self.sound.borrow());
                 // Write bank to disk
                 self.bank.save_bank("Yazz_FactoryBank.ysn").unwrap();
-                self.ctrl_map.save("Yazz_ControllerMapping.ysn").unwrap();
                 true
             },
             Key::Char(c) => {
@@ -272,6 +271,7 @@ impl Tui {
                                                   ml.mapping_type,
                                                   param,
                                                   val_range);
+                        self.ctrl_map.save("Yazz_ControllerMapping.ysn").unwrap();
                     }
                     return;
                 }
