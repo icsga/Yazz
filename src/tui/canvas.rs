@@ -141,7 +141,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Canvas<Key> {
         print!("{}{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_dark), color::Fg(self.props.colors.fg_light2));
         for y in 0..self.props.height {
             for x in 0..self.props.width {
-                print!("{}{}", cursor::Goto(x + pos_x, pos_y + (self.props.height - y)), self.byte[(y * self.props.width + x) as usize]);
+                print!("{}{}", cursor::Goto(x + pos_x, pos_y + ((self.props.height - 1) - y)), self.byte[(y * self.props.width + x) as usize]);
             }
         }
     }
