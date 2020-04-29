@@ -1,5 +1,6 @@
 use termion::color::Rgb;
 
+#[derive(Debug)]
 pub struct Scheme {
     pub fg_light: Rgb,
     pub fg_light2: Rgb,

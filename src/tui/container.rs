@@ -1,12 +1,14 @@
-use std::cell::RefCell;
-use std::hash::Hash;
-use std::rc::Rc;
+use super::Index;
+use super::{Label}; // Needed for tests. TODO: There's got to be a better way
+use super::Scheme;
+use super::{Widget, WidgetProperties, WidgetRef};
 
 use termion::{color, cursor};
 
-use super::Index;
-use super::Scheme;
-use super::{Widget, WidgetProperties, WidgetRef};
+use std::cell::RefCell;
+use std::hash::Hash;
+use std::rc::Rc;
+use std::fmt;
 
 pub type ContainerRef<Key> = Rc<RefCell<Container<Key>>>;
 
@@ -15,6 +17,19 @@ pub struct Container<Key: Copy + Eq + Hash> {
     props: WidgetProperties<Key>,
     draw_border: bool,
     children: Vec<WidgetRef<Key>>,
+}
+
+impl<T: Copy + Eq + Hash> fmt::Debug for Container<T> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Container")
+         .field("title", &self.title)
+         .field("props.x", &self.props.pos_x)
+         .field("props.y", &self.props.pos_y)
+         .field("props.width", &self.props.width)
+         .field("props.height", &self.props.height)
+         .field("draw_border", &self.draw_border)
+         .finish()
+    }
 }
 
 impl<Key: Copy + Eq + Hash> Container<Key> {
@@ -28,14 +43,13 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
 
     pub fn add_child<C: Widget<Key> + 'static>(&mut self, child: Rc<RefCell<C>>, pos_x: Index, pos_y: Index) {
         // Check if we need to leave space for drawing the border
-        let x_offset = if self.draw_border { 1 } else { 0 };
-        let y_offset = if self.draw_border { 1 } else { 0 };
+        let (x_offset, y_offset) = if self.draw_border { (1, 1) } else { (0, 0) };
         // Update child with current absolute position
         child.borrow_mut().set_position(self.props.pos_x + pos_x + x_offset,
                                         self.props.pos_y + pos_y + y_offset);
         let (child_width, child_height) = child.borrow().get_size();
         let x_size = pos_x + child_width + x_offset * 2;
-        let y_size = pos_y + child_height + y_offset;
+        let y_size = pos_y + child_height + y_offset * 2;
         let (width, height) = self.props.get_size();
         if x_size > width {
             self.props.set_width(x_size);
@@ -47,6 +61,13 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
     }
 
     pub fn enable_border(&mut self, enable: bool) {
+        if enable && !self.draw_border {
+            self.props.set_width(self.props.get_width() + 2);
+            self.props.set_height(self.props.get_height() + 2);
+        } else if !enable && self.draw_border {
+            self.props.set_width(self.props.get_width() - 2);
+            self.props.set_height(self.props.get_height() - 2);
+        }
         self.draw_border = enable;
     }
 
@@ -61,7 +82,7 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         let x_start = self.props.pos_x;
         let x_end = x_start + self.props.width;
         let y_start = self.props.pos_y;
-        let y_end = y_start + self.props.height;
+        let y_end = y_start + self.props.height - 1;
 
         // Calculate position and width of container title, if any
         let title_len = if self.title.len() > 4 { self.title.len() - 4 } else { 0 }; // Unicode chars have wrong len. TODO: Handle case where title is longer than width
@@ -163,4 +184,39 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Container<Key> {
             }
         }
     }
+}
+
+// ----------
+// Unit tests
+// ----------
+
+fn validate_properties<T: Copy + Eq + Hash>(c: &Container<T>, pos_x: u16, pos_y: u16, width: u16, height: u16) -> bool {
+    if c.props.pos_x == pos_x
+    && c.props.pos_y == pos_y
+    && c.props.width == width
+    && c.props.height == height {
+        true
+    } else {
+        println!("\n{:?}", c);
+        false
+    }
+}
+
+#[test]
+fn size_changes_when_child_added_no_border() {
+    let mut c: Container<i32> = Container::new();
+    assert!(validate_properties(&c, 0, 0, 0, 0));
+    c.add_child(Label::new("12345".to_string(), 5), 0, 0);
+    assert!(validate_properties(&c, 0, 0, 5, 1));
+}
+
+#[test]
+fn size_changes_when_child_added_border() {
+    let mut c: Container<i32> = Container::new();
+    c.enable_border(true);
+    assert!(validate_properties(&c, 0, 0, 2, 2));
+    c.add_child(Label::new("12345".to_string(), 5), 0, 0);
+    assert!(validate_properties(&c, 0, 0, 7, 3));
+    c.add_child(Label::new("12345".to_string(), 5), 0, 1);
+    assert!(validate_properties(&c, 0, 0, 7, 4));
 }
