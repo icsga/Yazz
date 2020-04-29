@@ -166,6 +166,10 @@ impl ParamSelector {
             sm.handle_event(self, &SmEvent::Event(SelectorEvent::Key(key)));
         }
 
+        if self.value_changed {
+            info!("Value changed");
+        }
+
         self.value_changed
     }
 
@@ -373,6 +377,19 @@ impl ParamSelector {
                 self.decrease_function_id();
                 return SmResult::EventHandled;
             }
+            Key::Char(c) => {
+                match c {
+                    ']' => {
+                        self.increase_param_id();
+                        return SmResult::EventHandled;
+                    }
+                    '[' => {
+                        self.decrease_param_id();
+                        return SmResult::EventHandled;
+                    }
+                    _ => ()
+                }
+            }
             _ => () // Pass on to code below
         }
         match ParamSelector::get_value(&mut self.param_selection, *c) {
@@ -405,6 +422,16 @@ impl ParamSelector {
 
     fn decrease_function_id(&mut self) {
         ParamSelector::get_value(&mut self.func_selection, Key::Down);
+        self.query_current_value();
+    }
+
+    fn increase_param_id(&mut self) {
+        ParamSelector::select_item(&mut self.param_selection, Key::Up);
+        self.query_current_value();
+    }
+
+    fn decrease_param_id(&mut self) {
+        ParamSelector::select_item(&mut self.param_selection, Key::Down);
         self.query_current_value();
     }
 
@@ -1003,6 +1030,7 @@ struct TestContext {
     sm: StateMachine<ParamSelector, SelectorEvent>,
 }
 
+#[derive(Debug)]
 enum TestInput {
     Chars(String),
     Key(Key),
@@ -1044,20 +1072,32 @@ impl TestContext {
             TestInput::Chars(chars) => {
                 for c in chars.chars() {
                     let k = Key::Char(c);
-                    result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, k, self.sound.clone())
+                    result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, k, self.sound.clone());
+                    self.update_sound_if(result);
                 }
             }
             TestInput::Key(k) => {
-                result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, *k, self.sound.clone())
+                result = ParamSelector::handle_user_input(&mut self.ps, &mut self.sm, *k, self.sound.clone());
+                self.update_sound_if(result);
             }
             TestInput::ControlChange(controller, value) => {
-                result = ParamSelector::handle_control_input(&mut self.ps, &mut self.sm, *controller, *value, self.sound.clone())
+                result = ParamSelector::handle_control_input(&mut self.ps, &mut self.sm, *controller, *value, self.sound.clone());
+                self.update_sound_if(result);
             }
         }
         result
     }
 
-    /* Return 
+    fn update_sound_if(&mut self, value_changed: bool) {
+        if value_changed {
+            let param = self.ps.get_synth_param();
+            self.sound.borrow_mut().data.set_parameter(&param);
+        }
+    }
+
+    /* Process a single string of input characters.
+     *
+     * Return 
      * - true if a value has changed and can be sent to the synth engine
      * - false if no value has
      */
@@ -1065,7 +1105,12 @@ impl TestContext {
         self.do_handle_input(&input)
     }
 
-    /* Return 
+    /* Process an array of strings of input characters.
+     *
+     * Used for entering a mix of ASCII and control characters, which have
+     * different representations in the Key enum.
+     *
+     * Return 
      * - true if a value has changed and can be sent to the synth engine
      * - false if no value has
      */
@@ -1077,6 +1122,10 @@ impl TestContext {
         result
     }
 
+    /* Compare the selected function to the expected one.
+     *
+     * \return true if the functions match, false otherwise
+     */
     fn verify_function(&self, func: Parameter) -> bool {
         let fs = &self.ps.func_selection;
         let function = fs.item_list[fs.item_index].item;
@@ -1088,6 +1137,10 @@ impl TestContext {
         }
     }
 
+    /* Compare the selected function ID to the expected one.
+     *
+     * \return true if the function IDs match, false otherwise
+     */
     fn verify_function_id(&self, func_id: usize) -> bool {
         let fs = &self.ps.func_selection;
         let function_id = if let ParameterValue::Int(x) = &fs.value { *x as usize } else { panic!() };
@@ -1099,6 +1152,10 @@ impl TestContext {
         }
     }
 
+    /* Compare the selected parameter to the expected one.
+     *
+     * \return true if the parameters match, false otherwise
+     */
     fn verify_parameter(&self, param: Parameter) -> bool {
         let ps = &self.ps.param_selection;
         let parameter = ps.item_list[ps.item_index].item;
@@ -1110,6 +1167,10 @@ impl TestContext {
         }
     }
 
+    /* Compare the current value to the expected one.
+     *
+     * \return true if the values match, false otherwise
+     */
     fn verify_value(&self, value: ParameterValue) -> bool {
         let ps = &self.ps.param_selection;
         info!("Checking value {:?}", ps.value);
@@ -1166,6 +1227,10 @@ impl TestContext {
         }
     }
 
+    /* Compare the current selection to the expected one.
+     *
+     * \return true if all values match, false otherwise
+     */
     fn verify_selection(&self,
                         func: Parameter,
                         func_id: usize,
@@ -1182,6 +1247,17 @@ impl TestContext {
 // Test function selection
 // -----------------------
 
+const DEFAULT_LEVEL: Float = 92.0;
+const DEFAULT_ATTACK: Float = 30.0;
+const DEFAULT_DECAY: Float = 50.0;
+const DEFAULT_SUSTAIN: Float = 0.7;
+const DEFAULT_RELEASE: Float = 100.0;
+const DEFAULT_FACTOR: i64 = 3;
+
+// ----------------
+// Basic navigation
+// ----------------
+
 #[test]
 fn test_direct_shortcuts_select_parameter() {
     let mut context = TestContext::new();
@@ -1194,9 +1270,12 @@ fn test_direct_shortcuts_select_parameter() {
     assert_eq!(context.handle_input(TestInput::Chars("e".to_string())), false);
     assert!(context.verify_function(Parameter::Envelope));
     assert_eq!(context.ps.state, SelectorState::FunctionIndex);
+    assert!(context.verify_function_id(1));
+
     assert_eq!(context.handle_input(TestInput::Chars("2".to_string())), false);
     assert!(context.verify_function_id(2));
     assert_eq!(context.ps.state, SelectorState::Param);
+
     assert_eq!(context.handle_input(TestInput::Chars("s".to_string())), false);
     assert!(context.verify_parameter(Parameter::Sustain));
     assert_eq!(context.ps.state, SelectorState::Value);
@@ -1209,6 +1288,108 @@ fn test_invalid_shortcut_doesnt_change_function() {
     assert_eq!(context.handle_input(TestInput::Chars("@".to_string())), false);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
     assert_eq!(context.ps.state, SelectorState::Function);
+}
+
+#[test]
+fn test_function_id_can_be_entered_directly() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("o2v".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 2, Parameter::Voices, ParameterValue::Int(1)));
+
+    // Modulators have an ID range > 10, but < 20. Entering a '2' should
+    // directly switch to the parameter selection, since adding another digit
+    // would produce an invalid ID.
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m2a".to_string())];
+    assert_eq!(context.handle_inputs(c), false);
+    assert!(context.verify_selection(Parameter::Modulation, 2, Parameter::Amount, ParameterValue::Float(0.0)));
+
+    // Entering a '1' should wait for a possible second digit.
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m12a".to_string())];
+    assert_eq!(context.handle_inputs(c), false);
+    assert!(context.verify_selection(Parameter::Modulation, 12, Parameter::Amount, ParameterValue::Float(0.0)));
+}
+
+#[test]
+fn test_tempstring_for_function_id_is_cleared() {
+    let mut context = TestContext::new();
+
+    // Enter a double-digit value to fill the tempstring.
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m12a".to_string())];
+    assert_eq!(context.handle_inputs(c), false);
+    assert!(context.verify_selection(Parameter::Modulation, 12, Parameter::Amount, ParameterValue::Float(0.0)));
+
+    // On next selection, the tempstring should be cleared, so a single digit
+    // value will work.
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m2a".to_string())];
+    assert_eq!(context.handle_inputs(c), false);
+    assert!(context.verify_selection(Parameter::Modulation, 2, Parameter::Amount, ParameterValue::Float(0.0)));
+}
+
+#[test]
+fn test_state_function_id_is_skipped_for_len_1() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("d".to_string())); // Only single delay, skip function ID input
+    assert_eq!(context.ps.state, SelectorState::Param);
+}
+
+#[test]
+fn test_multi_digit_index() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("m".to_string()));
+    assert!(context.verify_function(Parameter::Modulation));
+    assert!(context.verify_function_id(1));
+    context.handle_input(TestInput::Chars("12".to_string()));
+    assert!(context.verify_function_id(12));
+    assert_eq!(context.ps.state, SelectorState::Param);
+}
+
+#[test]
+fn test_param_selection_reads_current_value() {
+    let mut context = TestContext::new();
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
+
+    // Change to level selection, reads current value from sound data
+    assert_eq!(context.handle_input(TestInput::Chars("o1l".to_string())), false);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(DEFAULT_LEVEL)));
+}
+
+#[test]
+fn test_alpha_key_in_state_value_selects_parameter() {
+    let mut context = TestContext::new();
+
+    context.handle_input(TestInput::Chars("o1l3v".to_string()));
+
+    // Verify that we left level input and are now in voices
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
+
+    // Go back to level and verify the correct value was set
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("o1l".to_string())];
+    context.handle_inputs(c);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(3.0)));
+}
+
+#[test]
+fn test_right_bracket_selects_nextparameter_in_state_value() {
+    let mut context = TestContext::new();
+
+    // Move to oscillator 1 level
+    context.handle_input(TestInput::Chars("e3a".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Attack, ParameterValue::Float(DEFAULT_ATTACK)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Decay, ParameterValue::Float(DEFAULT_DECAY)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Sustain, ParameterValue::Float(DEFAULT_SUSTAIN)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Release, ParameterValue::Float(DEFAULT_RELEASE)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
 }
 
 #[test]
@@ -1231,125 +1412,24 @@ fn test_cursor_navigation() {
     assert!(context.verify_parameter(Parameter::Decay));
     assert_eq!(context.handle_input(TestInput::Key(Key::Right)), false);
     assert_eq!(context.ps.state, SelectorState::Value);
-    assert!(context.verify_value(ParameterValue::Float(50.0)));
+    assert!(context.verify_value(ParameterValue::Float(DEFAULT_DECAY)));
 
     // Backwards
     assert_eq!(context.handle_input(TestInput::Key(Key::Left)), false);
     assert_eq!(context.ps.state, SelectorState::Param);
-    assert_eq!(context.handle_input(TestInput::Key(Key::Up)), false);
-    assert!(context.verify_parameter(Parameter::Sustain));
+    assert!(context.verify_parameter(Parameter::Decay));
+    assert_eq!(context.handle_input(TestInput::Key(Key::Down)), false);
+    assert!(context.verify_parameter(Parameter::Attack));
     assert_eq!(context.handle_input(TestInput::Key(Key::Left)), false);
     assert_eq!(context.ps.state, SelectorState::FunctionIndex);
+    assert!(context.verify_function_id(2));
     assert_eq!(context.handle_input(TestInput::Key(Key::Down)), false);
     assert!(context.verify_function_id(1));
     assert_eq!(context.handle_input(TestInput::Key(Key::Left)), false);
     assert_eq!(context.ps.state, SelectorState::Function);
-    assert_eq!(context.handle_input(TestInput::Key(Key::Up)), false);
-    assert!(context.verify_function(Parameter::Lfo));
-}
-
-#[test]
-fn test_param_selection_reads_current_value() {
-    let mut context = TestContext::new();
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
-
-    // Change to level selection, reads current value from sound data
-    assert_eq!(context.handle_input(TestInput::Chars("o1l".to_string())), false);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
-}
-
-#[test]
-fn test_function_id_can_be_entered_directly() {
-    let mut context = TestContext::new();
-    context.handle_input(TestInput::Chars("o2v".to_string()));
-    assert!(context.verify_selection(Parameter::Oscillator, 2, Parameter::Voices, ParameterValue::Int(1)));
-
-    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m2a".to_string())];
-    assert_eq!(context.handle_inputs(c), false);
-    assert!(context.verify_selection(Parameter::Modulation, 2, Parameter::Amount, ParameterValue::Float(0.0)));
-
-    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m12a".to_string())];
-    assert_eq!(context.handle_inputs(c), false);
-    assert!(context.verify_selection(Parameter::Modulation, 12, Parameter::Amount, ParameterValue::Float(0.0)));
-
-    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m2a".to_string())];
-    assert_eq!(context.handle_inputs(c), false);
-    assert!(context.verify_selection(Parameter::Modulation, 2, Parameter::Amount, ParameterValue::Float(0.0)));
-}
-
-#[test]
-fn test_cursor_up_increments_float_value() {
-    let mut context = TestContext::new();
-    let c: &[TestInput] = &[TestInput::Chars("o1l".to_string()), TestInput::Key(Key::Up)];
-    assert_eq!(context.handle_inputs(c), true);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(93.0)));
-}
-
-#[test]
-fn test_cursor_up_increments_int_value() {
-    let mut context = TestContext::new();
-    context.handle_input(TestInput::Chars("o1v".to_string()));
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
-    assert_eq!(context.handle_input(TestInput::Key(Key::Up)), true);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(2)));
-}
-
-#[test]
-fn test_cursor_down_decrements_float_value() {
-    let mut context = TestContext::new();
-    context.handle_input(TestInput::Chars("o1l".to_string()));
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
-    assert_eq!(context.handle_input(TestInput::Key(Key::Down)), true);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(91.0)));
-}
-
-#[test]
-fn test_cursor_down_decrements_int_value() {
-    let mut context = TestContext::new();
-    let c: &[TestInput] = &[TestInput::Chars("o1v".to_string()), TestInput::Key(Key::Up)];
-    assert_eq!(context.handle_inputs(c), true);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(2)));
-    assert_eq!(context.handle_input(TestInput::Key(Key::Down)), true);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
-}
-
-#[test]
-fn test_multi_digit_index() {
-    let mut context = TestContext::new();
-    context.handle_input(TestInput::Chars("m".to_string()));
-    assert!(context.verify_function(Parameter::Modulation));
-    assert!(context.verify_function_id(1));
-    context.handle_input(TestInput::Chars("12".to_string()));
-    assert!(context.verify_function_id(12));
-    assert_eq!(context.ps.state, SelectorState::Param);
-}
-
-#[test]
-fn test_multi_digit_float_value() {
-    let mut context = TestContext::new();
-    context.handle_input(TestInput::Chars("o1l12.3456\n".to_string()));
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(12.3456)));
-}
-
-#[test]
-fn test_clear_int_tempstring_between_values() {
-
-    // 1. After completing a value
-    let mut context = TestContext::new();
-    context.handle_input(TestInput::Chars("o1f23".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(23)));
-    context.handle_input(TestInput::Chars("f21".to_string()));
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(21)));
-
-    // 2. After cancelling input
-    let mut context = TestContext::new();
-    let c: &[TestInput] = &[TestInput::Chars("o1f1".to_string()), TestInput::Key(Key::Backspace)];
-    assert!(!context.handle_inputs(c));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(1)));
-    context.handle_input(TestInput::Chars("f23".to_string()));
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(23)));
+    assert!(context.verify_function(Parameter::Envelope));
+    assert_eq!(context.handle_input(TestInput::Key(Key::Down)), false);
+    assert!(context.verify_function(Parameter::Oscillator));
 }
 
 #[test]
@@ -1379,6 +1459,114 @@ fn test_escape_resets_to_valid_state() {
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
 }
 
+// -------------------
+// Entering int values
+// -------------------
+
+#[test]
+fn test_cursor_up_increments_int_value() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("o1v".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
+    assert_eq!(context.handle_input(TestInput::Key(Key::Up)), true);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(2)));
+}
+
+#[test]
+fn test_cursor_down_decrements_int_value() {
+    let mut context = TestContext::new();
+    let c: &[TestInput] = &[TestInput::Chars("o1v".to_string()), TestInput::Key(Key::Up)];
+    assert_eq!(context.handle_inputs(c), true);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(2)));
+    assert_eq!(context.handle_input(TestInput::Key(Key::Down)), true);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
+}
+
+#[test]
+fn test_clear_int_tempstring_between_values() {
+
+    // 1. After completing a value
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("o1f23".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(23)));
+    context.handle_input(TestInput::Chars("f21".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(21)));
+
+    // 2. After cancelling input
+    let mut context = TestContext::new();
+    let c: &[TestInput] = &[TestInput::Chars("o1f1".to_string()), TestInput::Key(Key::Backspace)];
+    assert!(!context.handle_inputs(c));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(1)));
+    context.handle_input(TestInput::Chars("f23".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(23)));
+}
+
+// ---------------------
+// Entering float values
+// ---------------------
+
+#[test]
+fn test_cursor_up_increments_float_value() {
+    let mut context = TestContext::new();
+    let c: &[TestInput] = &[TestInput::Chars("o1l".to_string()), TestInput::Key(Key::Up)];
+    assert_eq!(context.handle_inputs(c), true);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(DEFAULT_LEVEL + 1.0)));
+}
+
+#[test]
+fn test_cursor_up_stops_at_max_for_floats() {
+    let mut context = TestContext::new();
+    // Set level to max
+    assert_eq!(context.handle_input(TestInput::Chars("o1l100".to_string())), true);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(100.0)));
+
+    // Enter value state again, try to increase level
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("o1l".to_string()), TestInput::Key(Key::Up)];
+    assert_eq!(context.handle_inputs(c), true);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(100.0)));
+}
+
+#[test]
+fn test_cursor_down_decrements_float_value() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("o1l".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(DEFAULT_LEVEL)));
+    assert_eq!(context.handle_input(TestInput::Key(Key::Down)), true);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(DEFAULT_LEVEL - 1.0)));
+}
+
+#[test]
+fn test_multi_digit_float_value() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("o1l12.3456\n".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(12.3456)));
+}
+
+#[test]
+fn test_float_string_input() {
+    let mut context = TestContext::new();
+    let c: &[TestInput] = &[TestInput::Chars("o3l".to_string()),
+                            TestInput::Chars("13.5\n".to_string())];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_selection(Parameter::Oscillator, 3, Parameter::Level, ParameterValue::Float(13.5)));
+
+    let c: &[TestInput] = &[TestInput::Chars("l".to_string()),
+                            TestInput::Chars("26.47".to_string()),
+                            TestInput::Key(Key::Backspace),
+                            TestInput::Chars("\n".to_string()),
+    ];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_selection(Parameter::Oscillator, 3, Parameter::Level, ParameterValue::Float(26.4)));
+}
+
+// --------------------
+// Parameters as values
+// --------------------
+
 #[test]
 fn test_modulator_source_selection() {
     let mut context = TestContext::new();
@@ -1393,9 +1581,9 @@ fn test_modulator_target_selection() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("m".to_string()),
                             TestInput::Key(Key::Right),
-                            TestInput::Chars("td1t".to_string())];
+                            TestInput::Chars("te2a".to_string())];
     context.handle_inputs(c);
-    let value = ParamId{function: Parameter::Delay, function_id: 1, parameter: Parameter::Time};
+    let value = ParamId{function: Parameter::Envelope, function_id: 2, parameter: Parameter::Attack};
     assert!(context.verify_selection(Parameter::Modulation, 1, Parameter::Target, ParameterValue::Param(value)));
     assert_eq!(context.ps.state, SelectorState::Param);
 }
@@ -1426,6 +1614,10 @@ fn test_leave_subsel_with_cursor() {
     context.handle_input(TestInput::Key(Key::Left)); // Back to parameter
     assert_eq!(context.ps.state, SelectorState::Param);
 }
+
+// ----------------
+// Controller input
+// ----------------
 
 #[test]
 fn test_controller_updates_selected_value() {
@@ -1460,6 +1652,10 @@ fn test_controller_is_ignored_in_other_states() {
     assert_eq!(context.ps.state, SelectorState::Value);
 }
 
+// -------------
+// Shortcut keys
+// -------------
+
 #[test]
 fn test_page_up_changes_function_id() {
     let mut context = TestContext::new();
@@ -1484,47 +1680,6 @@ fn test_page_up_changes_function_id() {
     context.handle_input(TestInput::Key(Key::PageDown));
     assert_eq!(context.ps.state, SelectorState::Value);
     assert!(context.verify_selection(Parameter::Oscillator, 2, Parameter::Finetune, ParameterValue::Float(0.0)));
-}
-
-#[test]
-fn test_float_string_input() {
-    let mut context = TestContext::new();
-    let c: &[TestInput] = &[TestInput::Chars("o3l".to_string()),
-                            TestInput::Chars("13.5\n".to_string())];
-    context.handle_inputs(c);
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_selection(Parameter::Oscillator, 3, Parameter::Level, ParameterValue::Float(13.5)));
-
-    let c: &[TestInput] = &[TestInput::Chars("l".to_string()),
-                            TestInput::Chars("26.47".to_string()),
-                            TestInput::Key(Key::Backspace),
-                            TestInput::Chars("\n".to_string()),
-    ];
-    context.handle_inputs(c);
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_selection(Parameter::Oscillator, 3, Parameter::Level, ParameterValue::Float(26.4)));
-}
-
-#[test]
-fn test_state_function_id_is_skipped_for_len_1() {
-    let mut context = TestContext::new();
-    context.handle_input(TestInput::Chars("d".to_string())); // Only single delay, skip function ID input
-    assert_eq!(context.ps.state, SelectorState::Param);
-}
-
-#[test]
-fn test_alpha_key_in_state_value_selects_parameter() {
-    let mut context = TestContext::new();
-
-    context.handle_input(TestInput::Chars("o1l3v".to_string()));
-
-    // Verify that we left level input and are now in voices
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
-
-    // Go back to level and verify the correct value was set
-    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("o1l".to_string())];
-    context.handle_inputs(c);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(3.0)));
 }
 
 // TODO:
