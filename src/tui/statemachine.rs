@@ -162,7 +162,7 @@ mod tests {
     }
 
     #[test]
-    fn test_initial_state_can_be_entered() {
+    fn initial_state_can_be_entered() {
         let context = TestContext::new();
 
         assert_eq!(context.app.state1, TestState::Entered);
@@ -171,7 +171,7 @@ mod tests {
     }
 
     #[test]
-    fn test_events_are_handled() {
+    fn events_are_handled() {
         let mut context = TestContext::new();
 
         assert_eq!(context.app.state1, TestState::Entered);
@@ -184,7 +184,7 @@ mod tests {
     }
 
     #[test]
-    fn test_state_can_be_changed() {
+    fn state_can_be_changed() {
         let mut context = TestContext::new();
 
         context.sm.handle_event(&mut context.app, &SmEvent::Event(2));

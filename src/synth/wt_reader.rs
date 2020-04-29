@@ -134,13 +134,13 @@ impl TestContext {
 }
 
 #[test]
-fn test_single_wave_can_be_read() {
+fn single_wave_can_be_read() {
     let mut context = TestContext::new();
     assert!(context.test(SINGLE_WAVE));
 }
 
 #[test]
-fn test_partial_wave_is_rejected() {
+fn partial_wave_is_rejected() {
     let mut context = TestContext::new();
     assert!(!context.test(PARTIAL_WAVE));
 }

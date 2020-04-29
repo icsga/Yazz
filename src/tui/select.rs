@@ -1259,7 +1259,7 @@ const DEFAULT_FACTOR: i64 = 3;
 // ----------------
 
 #[test]
-fn test_direct_shortcuts_select_parameter() {
+fn direct_shortcuts_select_parameter() {
     let mut context = TestContext::new();
 
     // Initial state: Osc 1 something
@@ -1282,7 +1282,7 @@ fn test_direct_shortcuts_select_parameter() {
 }
 
 #[test]
-fn test_invalid_shortcut_doesnt_change_function() {
+fn invalid_shortcut_doesnt_change_function() {
     let mut context = TestContext::new();
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
     assert_eq!(context.handle_input(TestInput::Chars("@".to_string())), false);
@@ -1291,7 +1291,7 @@ fn test_invalid_shortcut_doesnt_change_function() {
 }
 
 #[test]
-fn test_function_id_can_be_entered_directly() {
+fn function_id_can_be_entered_directly() {
     let mut context = TestContext::new();
     context.handle_input(TestInput::Chars("o2v".to_string()));
     assert!(context.verify_selection(Parameter::Oscillator, 2, Parameter::Voices, ParameterValue::Int(1)));
@@ -1310,7 +1310,7 @@ fn test_function_id_can_be_entered_directly() {
 }
 
 #[test]
-fn test_tempstring_for_function_id_is_cleared() {
+fn tempstring_for_function_id_is_cleared() {
     let mut context = TestContext::new();
 
     // Enter a double-digit value to fill the tempstring.
@@ -1326,14 +1326,14 @@ fn test_tempstring_for_function_id_is_cleared() {
 }
 
 #[test]
-fn test_state_function_id_is_skipped_for_len_1() {
+fn state_function_id_is_skipped_for_len_1() {
     let mut context = TestContext::new();
     context.handle_input(TestInput::Chars("d".to_string())); // Only single delay, skip function ID input
     assert_eq!(context.ps.state, SelectorState::Param);
 }
 
 #[test]
-fn test_multi_digit_index() {
+fn multi_digit_index() {
     let mut context = TestContext::new();
     context.handle_input(TestInput::Chars("m".to_string()));
     assert!(context.verify_function(Parameter::Modulation));
@@ -1344,7 +1344,7 @@ fn test_multi_digit_index() {
 }
 
 #[test]
-fn test_param_selection_reads_current_value() {
+fn param_selection_reads_current_value() {
     let mut context = TestContext::new();
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(0.0)));
 
@@ -1354,7 +1354,7 @@ fn test_param_selection_reads_current_value() {
 }
 
 #[test]
-fn test_alpha_key_in_state_value_selects_parameter() {
+fn alpha_key_in_state_value_selects_parameter() {
     let mut context = TestContext::new();
 
     context.handle_input(TestInput::Chars("o1l3v".to_string()));
@@ -1369,7 +1369,7 @@ fn test_alpha_key_in_state_value_selects_parameter() {
 }
 
 #[test]
-fn test_right_bracket_selects_nextparameter_in_state_value() {
+fn right_bracket_selects_nextparameter_in_state_value() {
     let mut context = TestContext::new();
 
     // Move to oscillator 1 level
@@ -1393,7 +1393,31 @@ fn test_right_bracket_selects_nextparameter_in_state_value() {
 }
 
 #[test]
-fn test_cursor_navigation() {
+fn left_bracket_selects_prevparameter_in_state_value() {
+    let mut context = TestContext::new();
+
+    // Move to oscillator 1 level
+    context.handle_input(TestInput::Chars("e2f".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Release, ParameterValue::Float(DEFAULT_RELEASE)));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Sustain, ParameterValue::Float(DEFAULT_SUSTAIN)));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Decay, ParameterValue::Float(DEFAULT_DECAY)));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Attack, ParameterValue::Float(DEFAULT_ATTACK)));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Attack, ParameterValue::Float(DEFAULT_ATTACK)));
+}
+
+#[test]
+fn cursor_navigation() {
     let mut context = TestContext::new();
     assert_eq!(context.ps.state, SelectorState::Function);
 
@@ -1433,7 +1457,7 @@ fn test_cursor_navigation() {
 }
 
 #[test]
-fn test_escape_resets_to_valid_state() {
+fn escape_resets_to_valid_state() {
     // 1. Function state
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Key(Key::Up), TestInput::Key(Key::Esc)];
@@ -1464,7 +1488,7 @@ fn test_escape_resets_to_valid_state() {
 // -------------------
 
 #[test]
-fn test_cursor_up_increments_int_value() {
+fn cursor_up_increments_int_value() {
     let mut context = TestContext::new();
     context.handle_input(TestInput::Chars("o1v".to_string()));
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Voices, ParameterValue::Int(1)));
@@ -1473,7 +1497,7 @@ fn test_cursor_up_increments_int_value() {
 }
 
 #[test]
-fn test_cursor_down_decrements_int_value() {
+fn cursor_down_decrements_int_value() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o1v".to_string()), TestInput::Key(Key::Up)];
     assert_eq!(context.handle_inputs(c), true);
@@ -1483,7 +1507,7 @@ fn test_cursor_down_decrements_int_value() {
 }
 
 #[test]
-fn test_clear_int_tempstring_between_values() {
+fn clear_int_tempstring_between_values() {
 
     // 1. After completing a value
     let mut context = TestContext::new();
@@ -1508,7 +1532,7 @@ fn test_clear_int_tempstring_between_values() {
 // ---------------------
 
 #[test]
-fn test_cursor_up_increments_float_value() {
+fn cursor_up_increments_float_value() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o1l".to_string()), TestInput::Key(Key::Up)];
     assert_eq!(context.handle_inputs(c), true);
@@ -1516,7 +1540,7 @@ fn test_cursor_up_increments_float_value() {
 }
 
 #[test]
-fn test_cursor_up_stops_at_max_for_floats() {
+fn cursor_up_stops_at_max_for_floats() {
     let mut context = TestContext::new();
     // Set level to max
     assert_eq!(context.handle_input(TestInput::Chars("o1l100".to_string())), true);
@@ -1529,7 +1553,7 @@ fn test_cursor_up_stops_at_max_for_floats() {
 }
 
 #[test]
-fn test_cursor_down_decrements_float_value() {
+fn cursor_down_decrements_float_value() {
     let mut context = TestContext::new();
     context.handle_input(TestInput::Chars("o1l".to_string()));
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(DEFAULT_LEVEL)));
@@ -1538,14 +1562,14 @@ fn test_cursor_down_decrements_float_value() {
 }
 
 #[test]
-fn test_multi_digit_float_value() {
+fn multi_digit_float_value() {
     let mut context = TestContext::new();
     context.handle_input(TestInput::Chars("o1l12.3456\n".to_string()));
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(12.3456)));
 }
 
 #[test]
-fn test_float_string_input() {
+fn float_string_input() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o3l".to_string()),
                             TestInput::Chars("13.5\n".to_string())];
@@ -1568,7 +1592,7 @@ fn test_float_string_input() {
 // --------------------
 
 #[test]
-fn test_modulator_source_selection() {
+fn modulator_source_selection() {
     let mut context = TestContext::new();
     context.handle_input(TestInput::Chars("m\nsl1".to_string()));
     let value = FunctionId{function: Parameter::Lfo, function_id: 1};
@@ -1577,7 +1601,7 @@ fn test_modulator_source_selection() {
 }
 
 #[test]
-fn test_modulator_target_selection() {
+fn modulator_target_selection() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("m".to_string()),
                             TestInput::Key(Key::Right),
@@ -1589,7 +1613,7 @@ fn test_modulator_target_selection() {
 }
 
 #[test]
-fn test_modulator_target_sel_with_cursor() {
+fn modulator_target_sel_with_cursor() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("m".to_string()),
                             TestInput::Key(Key::Right), // Mod 1
@@ -1603,7 +1627,7 @@ fn test_modulator_target_sel_with_cursor() {
 }
 
 #[test]
-fn test_leave_subsel_with_cursor() {
+fn leave_subsel_with_cursor() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("m".to_string()),
                             TestInput::Key(Key::Right), // Mod 1
@@ -1620,7 +1644,7 @@ fn test_leave_subsel_with_cursor() {
 // ----------------
 
 #[test]
-fn test_controller_updates_selected_value() {
+fn controller_updates_selected_value() {
     let mut context = TestContext::new();
     let c: &[TestInput] = &[TestInput::Chars("o1l".to_string())];
     context.handle_inputs(c);
@@ -1634,7 +1658,7 @@ fn test_controller_updates_selected_value() {
 }
 
 #[test]
-fn test_controller_is_ignored_in_other_states() {
+fn controller_is_ignored_in_other_states() {
     let mut context = TestContext::new();
 
     // Ignored in state_function
@@ -1657,7 +1681,7 @@ fn test_controller_is_ignored_in_other_states() {
 // -------------
 
 #[test]
-fn test_page_up_changes_function_id() {
+fn page_up_changes_function_id() {
     let mut context = TestContext::new();
 
     // Select Oscillator 1 Finetune

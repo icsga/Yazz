@@ -50,7 +50,7 @@ impl Ringbuffer {
 
 #[cfg(test)]
 #[test]
-fn test_ringbuff() {
+fn ringbuff_can_be_filled_and_read() {
     let mut buffer = [0.0; 4];
     let mut rb = Ringbuffer::new();
     rb.init(&mut buffer);
