@@ -8,9 +8,9 @@ use log::{info, trace, warn};
 use termion::{color, cursor};
 
 use super::{Parameter, ParamId, ParameterValue, SynthParam, SoundData, UiMessage};
-use super::{Bar, Button, Container, ContainerRef, Controller, Dial, Index,
-            Label, MouseHandler, ObserverRef, Scheme, Slider, Value,
-            ValueDisplay, Widget};
+use super::{Bar, Button, Canvas, CanvasRef, Container, ContainerRef, Controller,
+            Dial, Index, Label, MouseHandler, ObserverRef, Scheme, Slider,
+            Value, ValueDisplay, Widget};
 
 pub struct Surface {
     window: Container<ParamId>,
@@ -18,6 +18,7 @@ pub struct Surface {
     mod_targets: HashMap<ParamId, ObserverRef>, // Maps the modulation indicator to the corresponding parameter key
     mouse_handler: MouseHandler<ParamId>,
     colors: Rc<Scheme>,
+    pub canvas: CanvasRef<ParamId>,
 }
 
 impl Surface {
@@ -27,11 +28,14 @@ impl Surface {
         let mod_targets: HashMap<ParamId, ObserverRef> = HashMap::new();
         let mouse_handler = MouseHandler::new();
         let colors = Rc::new(Scheme::new());
+        let canvas: CanvasRef<ParamId> = Canvas::new(50, 21);
+        let canvas_clone = canvas.clone();
         let mut this = Surface{window,
                                controller,
                                mod_targets,
                                mouse_handler,
-                               colors};
+                               colors,
+                               canvas};
 
         let osc: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         osc.borrow_mut().enable_border(true);
@@ -39,29 +43,41 @@ impl Surface {
         this.add_multi_osc(&mut osc.borrow_mut(), 1, 0, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 2, 31, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 3, 63, 0);
-        this.add_child(osc, 1, 1);
+        let (osc_width, osc_height) = osc.borrow().get_size();
+        this.add_child(osc, 1, 0);
 
         let env: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         env.borrow_mut().enable_border(true);
         this.add_env(&mut env.borrow_mut(), 1, 1, 0);
-        let (x, _) = env.borrow().get_size();
+        let x = env.borrow().get_width();
         this.add_env(&mut env.borrow_mut(), 2, x + 3, 0);
-        let (env_width, _) = env.borrow().get_size();
-        let (_, y) = this.window.get_size();
-        this.add_child(env, 1, y + 1);
+        let x = env.borrow().get_width();
+        this.add_env(&mut env.borrow_mut(), 3, x + 3, 0);
+        let (env_width, env_height) = env.borrow().get_size();
+        this.add_child(env, 1, osc_height);
 
         let lfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         lfo.borrow_mut().enable_border(true);
         this.add_lfo(&mut lfo.borrow_mut(), 1, 1, 0);
-        let (x, _) = lfo.borrow().get_size();
+        let x = lfo.borrow().get_width();
         this.add_lfo(&mut lfo.borrow_mut(), 2, x + 2, 0);
-        let (lfo_width, _) = lfo.borrow().get_size();
-        this.add_child(lfo, env_width + 2, y + 1);
+        let (lfo_width, lfo_height) = lfo.borrow().get_size();
+        this.add_child(lfo, env_width + 2, osc_height);
+
+        this.add_child(canvas_clone, 2, osc_height + env_height);
+
+        let glfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
+        glfo.borrow_mut().enable_border(true);
+        this.add_glfo(&mut glfo.borrow_mut(), 1, 1, 0);
+        let (x, _) = glfo.borrow().get_size();
+        this.add_glfo(&mut glfo.borrow_mut(), 2, x + 2, 0);
+        let (glfo_width, glfo_height) = glfo.borrow().get_size();
+        this.add_child(glfo, env_width + 2, osc_height + lfo_height);
 
         let sysinfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         sysinfo.borrow_mut().enable_border(true);
         this.add_sysinfo(&mut sysinfo.borrow_mut(), 1, 0);
-        this.add_child(sysinfo, env_width + lfo_width + 4, y + 1);
+        this.add_child(sysinfo, env_width + 2, osc_height + lfo_height + glfo_height);
 
         this.window.set_position(1, 1);
         this.window.set_color_scheme(this.colors.clone());
@@ -101,7 +117,7 @@ impl Surface {
     }
 
     fn new_mod_dial_float(&mut self,
-                          label: &'static str,
+                          label: &str,
                           min: f64,
                           max: f64,
                           value: f64,
@@ -116,20 +132,20 @@ impl Surface {
         self.controller.add_observer(key, dial.clone());
         self.mod_targets.insert(*key, modul.clone());
         c.add_child(label, 0, 1);
-        c.add_child(dial, 9, 1);
+        c.add_child(dial, 10, 1);
         c.add_child(modul, 0, 2);
         Rc::new(RefCell::new(c))
     }
 
     fn new_mod_dial_int(&mut self,
-                        label: &'static str,
+                        label: &str,
                         min: i64,
                         max: i64,
                         value: i64,
                         log: bool,
                         key: &ParamId) -> ContainerRef<ParamId> {
         let mut c = Container::new();
-        let label = Label::new(label.to_string(), 8);
+        let label = Label::new(label.to_string(), 10);
         let dial = Dial::new(Value::Int(min), Value::Int(max), Value::Int(value));
         dial.borrow_mut().set_logarithmic(log);
         dial.borrow_mut().set_key(key);
@@ -137,13 +153,13 @@ impl Surface {
         self.controller.add_observer(key, dial.clone());
         self.mod_targets.insert(*key, modul.clone());
         c.add_child(label, 0, 1);
-        c.add_child(dial, 9, 1);
+        c.add_child(dial, 10, 1);
         c.add_child(modul, 0, 2);
         Rc::new(RefCell::new(c))
     }
 
     fn new_mod_slider_float(&mut self,
-                            label: &'static str,
+                            label: &str,
                             min: f64,
                             max: f64,
                             value: f64,
@@ -165,7 +181,7 @@ impl Surface {
     }
 
     fn new_label_value(&mut self,
-                       label: &'static str,
+                       label: &str,
                        value: i64,
                        key: &ParamId) -> ContainerRef<ParamId> {
         let mut c = Container::new();
@@ -178,8 +194,21 @@ impl Surface {
         Rc::new(RefCell::new(c))
     }
 
+    fn new_textfield(&mut self,
+                     label: &str,
+                     text: &str,
+                     key: &ParamId) -> ContainerRef<ParamId> {
+        let mut c = Container::new();
+        let label = Label::new(label.to_string(), 10);
+        let value = Label::new(text.to_string(), 15);
+        self.controller.add_observer(key, value.clone());
+        c.add_child(label, 0, 1);
+        c.add_child(value, 0, 11);
+        Rc::new(RefCell::new(c))
+    }
+
     fn new_option(&mut self,
-                  label: &'static str,
+                  label: &str,
                   status: i64,
                   key: &ParamId) -> ContainerRef<ParamId> {
         let mut c = Container::new();
@@ -206,17 +235,17 @@ impl Surface {
         let osc_level = self.new_mod_dial_float("Level", 0.0, 100.0, 0.0, false, &key);
         target.add_child(osc_level, x_offset, 1 + y_offset);
 
-        key.set(Parameter::Oscillator, func_id, Parameter::Frequency);
-        let osc_freq = self.new_mod_dial_int("Pitch", -24, 24, 0, false, &key);
-        target.add_child(osc_freq, x_offset, 4 + y_offset);
-
-        key.set(Parameter::Oscillator, func_id, Parameter::WaveIndex);
-        let osc_wave_id = self.new_mod_dial_float("Wave", 0.0, 1.0, 0.0, false, &key);
-        target.add_child(osc_wave_id, x_offset, 7 + y_offset);
-
         key.set(Parameter::Oscillator, func_id, Parameter::Voices);
         let osc_voices = self.new_mod_dial_int("Voices", 1, 7, 1, false, &key);
         target.add_child(osc_voices, 14 + x_offset, 1 + y_offset);
+
+        key.set(Parameter::Oscillator, func_id, Parameter::WaveIndex);
+        let osc_wave_id = self.new_mod_dial_float("Waveindex", 0.0, 1.0, 0.0, false, &key);
+        target.add_child(osc_wave_id, x_offset, 7 + y_offset);
+
+        key.set(Parameter::Oscillator, func_id, Parameter::Frequency);
+        let osc_freq = self.new_mod_dial_int("Pitch", -24, 24, 0, false, &key);
+        target.add_child(osc_freq, x_offset, 4 + y_offset);
 
         key.set(Parameter::Oscillator, func_id, Parameter::Spread);
         let osc_spread = self.new_mod_dial_float("Spread", 0.0, 2.0, 0.0, false, &key);
@@ -225,6 +254,12 @@ impl Surface {
         key.set(Parameter::Oscillator, func_id, Parameter::KeyFollow);
         let osc_sync = self.new_option("KeyFollow", 0, &key);
         target.add_child(osc_sync, 14 + x_offset, 8 + y_offset);
+
+        /*
+        key.set(Parameter::Oscillator, func_id, Parameter::Wavetable);
+        let osc_sync = self.new_textfield("Wavetable", "default", &key);
+        target.add_child(osc_sync, 14 + x_offset, 10 + y_offset);
+        */
 
         if func_id == 2 {
             key.set(Parameter::Oscillator, func_id, Parameter::Sync);
@@ -273,6 +308,26 @@ impl Surface {
         target.add_child(title, x_offset, y_offset);
 
         let mut key = ParamId::new(Parameter::Lfo, func_id, Parameter::Waveform);
+        let osc_wave = self.new_mod_dial_int("Waveform", 0, 5, 0, false, &key);
+        target.add_child(osc_wave, x_offset, 1 + y_offset);
+
+        key.set(Parameter::Oscillator, func_id, Parameter::Frequency);
+        let osc_freq = self.new_mod_dial_int("Speed", -24, 24, 0, false, &key);
+        target.add_child(osc_freq, x_offset, 4 + y_offset);
+    }
+
+    fn add_glfo(&mut self,
+               target: &mut Container<ParamId>,
+               func_id: usize,
+               x_offset: Index,
+               y_offset: Index) {
+        let mut title = "Global LFO ".to_string();
+        title.push(((func_id as u8) + '0' as u8) as char);
+        let len = title.len();
+        let title = Label::new(title, len as Index);
+        target.add_child(title, x_offset, y_offset);
+
+        let mut key = ParamId::new(Parameter::GlobalLfo, func_id, Parameter::Waveform);
         let osc_wave = self.new_mod_dial_int("Waveform", 0, 5, 0, false, &key);
         target.add_child(osc_wave, x_offset, 1 + y_offset);
 

@@ -86,17 +86,10 @@ impl Voice {
     }
 
     fn get_mod_values(&mut self, sample_clock: i64, sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) {
-        // Copy values that might be modulated from global sound to local sound
-        // TODO: Check if a simple memcopy of the whole sound is faster
-        for m in sound.modul.iter() {
-            if !m.active {
-                continue;
-            }
-            let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
-            let current_val = sound_global.get_value(&param);
-            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: current_val};
-            sound_local.set_parameter(&param);
-        }
+        // Get modulated values from global sound and discard values that were
+        // modulated for the previous sample. Complete copy is faster than
+        // looping over the modulators.
+        *sound_local = *sound_global;
 
         // Then update the local sound with mod values
         for m in sound.modul.iter() {

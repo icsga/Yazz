@@ -75,7 +75,7 @@ struct State {
 }
 
 pub struct WtOsc {
-    sample_rate: Float,
+    pub sample_rate: Float,
     pub id: usize,
     last_update: i64, // Time of last sample generation
     last_sample: Float,

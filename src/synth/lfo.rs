@@ -57,7 +57,7 @@ impl LfoData {
 }
 
 pub struct Lfo {
-    sample_rate: u32,
+    pub sample_rate: u32,
     last_update: i64, // Time of last sample
     position: Float, // Position in the wave at last update
     last_value: Float, // Value of previous iteration (only used for S&H)
@@ -149,6 +149,7 @@ impl Lfo {
         let mut complete = false;
         if reset {
             self.reset(sample_clock - 1);
+            complete = true;
         }
 
         let freq_speed = data.frequency / self.sample_rate as Float;

@@ -7,6 +7,7 @@ use super::{MouseMessage, Scheme};
 pub type Index = u16;
 pub type WidgetRef<T> = Rc<RefCell<dyn Widget<T>>>;
 
+#[derive(Debug)]
 pub struct WidgetProperties<Key: Copy + Eq + Hash> {
     key: Option<Key>,
     pub pos_x: Index,
@@ -65,8 +66,16 @@ impl<Key: Copy + Eq + Hash> WidgetProperties<Key> {
         (self.pos_x, self.pos_y)
     }
 
+    pub fn get_width(&self) -> Index {
+        self.width
+    }
+
+    pub fn get_height(&self) -> Index {
+        self.height
+    }
+
     pub fn get_size(&self) -> (Index, Index) {
-        (self.width, self.height)
+        (self.get_width(), self.get_height())
     }
 
     pub fn is_inside(&self, x: Index, y: Index) -> bool {
@@ -146,6 +155,14 @@ pub trait Widget<Key: Copy + Eq + Hash> {
         } else {
             None
         }
+    }
+
+    fn get_width(&self) -> Index {
+        return self.get_widget_properties().get_width();
+    }
+
+    fn get_height(&self) -> Index {
+        return self.get_widget_properties().get_height();
     }
 
     fn get_size(&self) -> (Index, Index) { // width, height

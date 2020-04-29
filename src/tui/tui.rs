@@ -49,7 +49,6 @@ pub struct Tui {
 
     // Actual UI
     window: Surface,
-    canvas: CanvasRef<ParamId>,
     sync_counter: u32,
     idle: Duration, // Accumulated idle times of the engine
     busy: Duration, // Accumulated busy times of the engine
@@ -71,12 +70,10 @@ pub struct Tui {
 impl Tui {
     pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> Tui {
         let mut window = Surface::new();
-        let canvas: CanvasRef<ParamId> = Canvas::new(50, 21);
         let sound = Rc::new(RefCell::new(SoundPatch::new()));
         window.set_position(1, 3);
         window.update_all(&sound.borrow().data);
         let (_, y) = window.get_size();
-        window.add_child(canvas.clone(), 1, y);
 
         let mut tui = Tui{
             sender: sender,
@@ -84,7 +81,6 @@ impl Tui {
             selector: ParamSelector::new(&FUNCTIONS, &MOD_SOURCES),
             selection_changed: true,
             window: window,
-            canvas: canvas,
             sync_counter: 0,
             idle: Duration::new(0, 0),
             busy: Duration::new(0, 0),
@@ -311,13 +307,14 @@ impl Tui {
 
     /* Received a buffer with samples from the synth engine. */
     fn handle_samplebuffer(&mut self, m: Vec<Float>, p: SynthParam) {
-        self.canvas.borrow_mut().clear();
+        let canvas = &mut self.window.canvas.borrow_mut();
+        canvas.clear();
         match p.function {
-            Parameter::Oscillator => {
-                self.canvas.borrow_mut().plot(&m, -1.0, 1.0);
+            Parameter::Oscillator | Parameter::Lfo | Parameter::GlobalLfo => {
+                canvas.plot(&m, -1.0, 1.0);
             }
             Parameter::Envelope => {
-                self.canvas.borrow_mut().plot(&m, 0.0, 1.0);
+                canvas.plot(&m, 0.0, 1.0);
             }
             _ => ()
         }
@@ -375,9 +372,17 @@ impl Tui {
             ParameterValue::Float(v) => Value::Float(v.into()),
             ParameterValue::Int(v) => Value::Int(v),
             ParameterValue::Choice(v) => Value::Int(v.try_into().unwrap()),
+            ParameterValue::Dynamic(_, v) => Value::Int(v.try_into().unwrap()),
             _ => return
         };
         self.window.update_value(&param_id, value);
+    }
+
+    fn translate_dynamic_value(&self, param: Parameter, value: usize) -> String {
+        match param {
+            Parameter::Wavetable => "default".to_string(),
+            _ => panic!(),
+        }
     }
 
     /* Queries a samplebuffer from the synth engine to display.
@@ -460,7 +465,7 @@ impl Tui {
             }
             display_state = next(display_state);
         }
-        Tui::display_options(selection, x_pos, selector_state);
+        Tui::display_options(s, selection, x_pos);
     }
 
     fn display_function(func: &ItemSelection, selected: bool) {
@@ -524,8 +529,9 @@ impl Tui {
     }
 
 
-    fn display_options(s: &ItemSelection, x_pos: u16, selector_state: SelectorState) {
+    fn display_options(selector: &ParamSelector, s: &ItemSelection, x_pos: u16) {
         print!("{}{}", color::Bg(Black), color::Fg(LightWhite));
+        let selector_state = selector.state;
         if selector_state == SelectorState::Function || selector_state == SelectorState::ValueFunction
         || selector_state == SelectorState::Param || selector_state == SelectorState::ValueParam {
             let mut y_item = 2;
@@ -546,13 +552,22 @@ impl Tui {
                 ValueRange::Int(min, max) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
                 ValueRange::Float(min, max, _) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
                 ValueRange::Choice(list) => print!("{} 1 - {} ", cursor::Goto(x_pos, 2), list.len()),
-                ValueRange::Dynamic(id) => (),
+                ValueRange::Dynamic(param) => Tui::display_dynamic_options(selector, *param, x_pos),
                 ValueRange::Func(list) => (),
                 ValueRange::Param(list) => (),
                 ValueRange::NoRange => ()
             }
         }
         print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+    }
+
+    fn display_dynamic_options(s: &ParamSelector, param: Parameter, x_pos: u16) {
+        let list = s.get_dynamic_list(param);
+        let mut y_item = 2;
+        for (key, value) in list.iter() {
+            print!("{} {} - {} ", cursor::Goto(x_pos, y_item), key, value);
+            y_item += 1;
+        }
     }
 
     fn display_idle_time(&mut self) {

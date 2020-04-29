@@ -129,6 +129,7 @@ pub enum ParameterValue {
     Int(i64),
     Float(Float),
     Choice(usize),
+    Dynamic(Parameter, usize),
     Function(FunctionId),
     Param(ParamId),
     NoValue
@@ -198,16 +199,9 @@ pub enum ValueRange {
     Choice(&'static [MenuItem]), // A list of items to choose from
     Func(&'static [MenuItem]),   // A list of (function-id) function entries
     Param(&'static [MenuItem]),  // A list of (function-id-param) parameter entries
-    Dynamic(DynRangeId),         // List is dynamically generated according to the ID
+    Dynamic(Parameter),          // List is dynamically generated according to the ID
     NoRange
 }
-
-// List of items that are dynamically generated
-#[derive(Clone, Copy, Debug)]
-pub enum DynRangeId {
-    WTName // Wavetable name
-}
-
 
 impl ValueRange {
 
@@ -351,15 +345,15 @@ pub static FUNCTIONS: [MenuItem; 7] = [
 ];
 
 pub static OSC_PARAMS: [MenuItem; 9] = [
-    MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0),      next: &[]},
-    MenuItem{item: Parameter::Wavetable, key: 'w', val_range: ValueRange::Dynamic(DynRangeId::WTName), next: &[]},
-    MenuItem{item: Parameter::WaveIndex, key: 'i', val_range: ValueRange::Float(0.0, 1.0, 0.01),       next: &[]},
-    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Int(-24, 24),                next: &[]},
-    MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::Float(-1200.0, 1200.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::Int(0, 1),                   next: &[]},
-    MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::Int(0, 1),                   next: &[]},
-    MenuItem{item: Parameter::Voices,    key: 'v', val_range: ValueRange::Int(1, 7),                   next: &[]},
-    MenuItem{item: Parameter::Spread,    key: 'e', val_range: ValueRange::Float(0.0, 2.0, 0.1),        next: &[]},
+    MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0),       next: &[]},
+    MenuItem{item: Parameter::Wavetable, key: 'w', val_range: ValueRange::Dynamic(Parameter::Wavetable),next: &[]},
+    MenuItem{item: Parameter::WaveIndex, key: 'i', val_range: ValueRange::Float(0.0, 1.0, 0.01),        next: &[]},
+    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Int(-24, 24),                 next: &[]},
+    MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::Float(-1200.0, 1200.0, 1.0),  next: &[]},
+    MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::Int(0, 1),                    next: &[]},
+    MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::Int(0, 1),                    next: &[]},
+    MenuItem{item: Parameter::Voices,    key: 'v', val_range: ValueRange::Int(1, 7),                    next: &[]},
+    MenuItem{item: Parameter::Spread,    key: 'e', val_range: ValueRange::Float(0.0, 2.0, 0.1),         next: &[]},
 ];
 
 pub static LFO_PARAMS: [MenuItem; 2] = [
@@ -400,8 +394,8 @@ pub static LFO_WAVEFORM: [MenuItem; 6] = [
     MenuItem{item: Parameter::Triangle,  key: 't', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::Saw,       key: 'w', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::Square,    key: 'q', val_range: ValueRange::NoRange, next: &[]},
-    MenuItem{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::SampleHold,key: 'h', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange, next: &[]},
 ];
 
 pub static DELAY_PARAMS: [MenuItem; 4] = [

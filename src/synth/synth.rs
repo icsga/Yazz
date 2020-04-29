@@ -58,6 +58,7 @@ pub struct Synth {
 
     samplebuff_osc: WtOsc,
     samplebuff_env: Envelope,
+    samplebuff_lfo: Lfo,
 }
 
 impl Synth {
@@ -95,6 +96,7 @@ impl Synth {
         let aftertouch = 0.0;
         let samplebuff_osc = WtOsc::new(sample_rate, 0, Arc::clone(&default_table));
         let samplebuff_env = Envelope::new(sample_rate as Float);
+        let samplebuff_lfo = Lfo::new(sample_rate);
         Synth{
             sample_rate,
             sound,
@@ -114,7 +116,8 @@ impl Synth {
             aftertouch,
             sender,
             samplebuff_osc,
-            samplebuff_env}
+            samplebuff_env,
+            samplebuff_lfo}
     }
 
     /* Starts a thread for receiving UI and MIDI messages. */
@@ -150,17 +153,10 @@ impl Synth {
      * the global sound data.
      */
     fn get_mod_values(&mut self, sample_clock: i64) {
-        // Copy values that might be modulated from stored sound to global sound
-        // TODO: Check if a simple memcopy of the whole sound is faster
-        for m in self.sound.modul.iter() {
-            if !m.active {
-                continue;
-            }
-            let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
-            let current_val = self.sound.get_value(&param);
-            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: current_val};
-            self.sound_global.set_parameter(&param);
-        }
+        // Reset the global sound copy to the main sound, discarding values that
+        // were modulated for the previous sample. Complete copy is faster than
+        // looping over the modulators.
+        self.sound_global = self.sound;
 
         // Then apply global modulators
         for m in self.sound.modul.iter() {
@@ -331,12 +327,14 @@ impl Synth {
      */
     fn handle_sample_buffer(&mut self, mut buffer: Vec<Float>, param: SynthParam) {
         let len = buffer.capacity();
+        let freq = self.sample_rate as Float / len as Float;
         match param.function {
             Parameter::Oscillator => {
-                self.samplebuff_osc.reset(0);
-                self.samplebuff_osc.id = param.function_id - 1;
-                for i in 0..buffer.capacity() {
-                    let (sample, complete) = self.samplebuff_osc.get_sample(440.0, i as i64, &self.sound, false);
+                let osc = &mut self.samplebuff_osc;
+                osc.reset(0);
+                osc.id = param.function_id - 1;
+                for i in 0..len {
+                    let (sample, complete) = osc.get_sample(freq, i as i64, &self.sound, false);
                     buffer[i] = sample * self.sound.osc[param.function_id - 1].level;
                 }
             },
@@ -347,29 +345,56 @@ impl Synth {
                 let mut release_point = len_total - env_data.release;
                 len_total *= 44.1; // Samples per second
                 release_point *= 44.1;
-                let samples_per_slot = (len_total / buffer.capacity() as Float) as usize; // Number of samples per slot in the buffer
+                let samples_per_slot = (len_total / len as Float) as usize; // Number of samples per slot in the buffer
                 let mut index: usize = 0;
                 let mut counter: usize = 0;
                 let len_total = len_total as usize;
                 let release_point = release_point as usize;
                 let mut sample = 0.0;
-                self.samplebuff_env.trigger(0, env_data);
+                let env = &mut self.samplebuff_env;
+                env.trigger(0, env_data);
                 for i in 0..len_total {
                     if i == release_point {
-                        self.samplebuff_env.release(i as i64, env_data);
+                        env.release(i as i64, env_data);
                     }
-                    sample += self.samplebuff_env.get_sample(i as i64, env_data);
+                    sample += env.get_sample(i as i64, env_data);
                     counter += 1;
                     if counter == samples_per_slot {
                         sample /= samples_per_slot as Float;
                         buffer[index] = sample;
                         index += 1;
-                        if index == buffer.capacity() {
+                        if index == len {
                             index -= 1;
                         }
                         sample = 0.0;
                         counter = 0;
                     }
+                }
+            },
+            Parameter::Lfo => {
+                let lfo = &mut self.samplebuff_lfo;
+                lfo.reset(0);
+                let mut sound_copy = self.sound.lfo[param.function_id - 1];
+                sound_copy.frequency = freq;
+                // Get first sample explicitly to reset LFO (for S&H)
+                let (sample, complete) = lfo.get_sample(0, &sound_copy, true);
+                buffer[0] = sample;
+                for i in 1..len {
+                    let (sample, complete) = lfo.get_sample(i as i64, &sound_copy, false);
+                    buffer[i] = sample;
+                }
+            },
+            Parameter::GlobalLfo => {
+                let lfo = &mut self.samplebuff_lfo;
+                lfo.reset(0);
+                let mut sound_copy = self.sound.glfo[param.function_id - 1];
+                sound_copy.frequency = freq;
+                // Get first sample explicitly to reset LFO (for S&H)
+                let (sample, complete) = lfo.get_sample(0, &sound_copy, true);
+                buffer[0] = sample;
+                for i in 1..len {
+                    let (sample, complete) = lfo.get_sample(i as i64, &sound_copy, false);
+                    buffer[i] = sample;
                 }
             },
             _ => {},
