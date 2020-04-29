@@ -73,7 +73,7 @@ impl MidiLearn {
 // ----------------------------------------------
 
 #[test]
-fn test_full_absolute_value_can_be_set() {
+fn full_absolute_value_can_be_set() {
     let mut ml = MidiLearn::new();
     assert_eq!(ml.complete, false);
 
@@ -87,7 +87,7 @@ fn test_full_absolute_value_can_be_set() {
 }
 
 #[test]
-fn test_full_relative_value_can_be_set() {
+fn full_relative_value_can_be_set() {
     let mut ml = MidiLearn::new();
     assert_eq!(ml.complete, false);
 
@@ -101,7 +101,7 @@ fn test_full_relative_value_can_be_set() {
 }
 
 #[test]
-fn test_same_values_are_not_counted() {
+fn same_values_are_not_counted() {
     let mut ml = MidiLearn::new();
     ml.handle_controller(7, 5);
     assert_eq!(ml.complete, false);
@@ -110,7 +110,7 @@ fn test_same_values_are_not_counted() {
 }
 
 #[test]
-fn test_reset_works_after_full_value() {
+fn reset_works_after_full_value() {
     let mut ml = MidiLearn::new();
     ml.handle_controller(7, 5);
     ml.handle_controller(7, 1);
@@ -120,7 +120,7 @@ fn test_reset_works_after_full_value() {
 }
 
 #[test]
-fn test_reset_works_after_partial_value() {
+fn reset_works_after_partial_value() {
     let mut ml = MidiLearn::new();
     ml.handle_controller(7, 5);
     ml.reset();

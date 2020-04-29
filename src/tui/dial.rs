@@ -122,7 +122,7 @@ impl<Key: Copy + Eq + Hash> Observer for Dial<Key> {
 }
 
 #[test]
-fn test_dial_translation() {
+fn dial_translation() {
     // =====
     // Float
     // =====

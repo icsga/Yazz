@@ -214,20 +214,20 @@ impl TestContext {
 }
 
 #[test]
-fn test_controller_without_mapping_returns_no_value() {
+fn controller_without_mapping_returns_no_value() {
     let mut context = TestContext::new();
     assert_eq!(context.handle_controller(1, 50), false);
 }
 
 #[test]
-fn test_absolute_controller_can_be_added() {
+fn absolute_controller_can_be_added() {
     let mut context = TestContext::new();
     context.add_controller(1, MappingType::Absolute);
     assert_eq!(context.handle_controller(1, 50), true);
 }
 
 #[test]
-fn test_value_can_be_changed_absolute() {
+fn value_can_be_changed_absolute() {
     let mut context = TestContext::new();
     assert_eq!(context.has_value(92.0), true);
     context.add_controller(1, MappingType::Absolute);
@@ -236,14 +236,14 @@ fn test_value_can_be_changed_absolute() {
 }
 
 #[test]
-fn test_relative_controller_can_be_added() {
+fn relative_controller_can_be_added() {
     let mut context = TestContext::new();
     context.add_controller(1, MappingType::Relative);
     assert_eq!(context.handle_controller(1, 50), true);
 }
 
 #[test]
-fn test_value_can_be_changed_relative() {
+fn value_can_be_changed_relative() {
     let mut context = TestContext::new();
     assert_eq!(context.has_value(92.0), true);
     context.add_controller(1, MappingType::Relative);
