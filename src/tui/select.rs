@@ -601,6 +601,11 @@ impl ParamSelector {
         }
     }
 
+    /* Handle some shortcut keys for easier navigation.
+     *
+     * - PageUp/ PageDown change the function ID
+     * - '['/- ']' change the selected parameter
+     */
     fn handle_navigation_keys(&mut self, c: &termion::event::Key)
             -> SmResult<ParamSelector, SelectorEvent> {
         match *c {
@@ -1484,6 +1489,46 @@ fn left_bracket_in_state_value_selects_prevparameter() {
 
     context.handle_input(TestInput::Chars("[".to_string()));
     assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Attack, ParameterValue::Float(DEFAULT_ATTACK)));
+}
+
+#[test]
+fn bracket_in_state_value_updates_value_state_to_match_value_type() {
+    let mut context = TestContext::new();
+
+    // From state_value to state_value_function
+    context.handle_input(TestInput::Chars("m2a".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_parameter(Parameter::Amount));
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert_eq!(context.ps.state, SelectorState::ValueFunction);
+    assert!(context.verify_parameter(Parameter::Target));
+
+    // From state_value_function to state_value
+    context.handle_input(TestInput::Key(Key::Esc));
+    context.handle_input(TestInput::Chars("m2t".to_string()));
+    assert_eq!(context.ps.state, SelectorState::ValueFunction);
+    assert!(context.verify_parameter(Parameter::Target));
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_parameter(Parameter::Amount));
+
+    // From state_value_function_id to state_value
+    context.handle_input(TestInput::Key(Key::Esc));
+    context.handle_input(TestInput::Chars("m2to".to_string()));
+    assert_eq!(context.ps.state, SelectorState::ValueFunctionIndex);
+    assert!(context.verify_parameter(Parameter::Target));
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_parameter(Parameter::Amount));
+
+    // From state_value_parameter to state_value
+    context.handle_input(TestInput::Key(Key::Esc));
+    context.handle_input(TestInput::Chars("m2to1".to_string()));
+    assert_eq!(context.ps.state, SelectorState::ValueParam);
+    assert!(context.verify_parameter(Parameter::Target));
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_parameter(Parameter::Amount));
 }
 
 #[test]
