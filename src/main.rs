@@ -134,36 +134,22 @@ fn setup_audio() -> (Engine, u32) {
     (engine, sample_rate)
 }
 
-/*
-fn save_wave() -> std::io::Result<()> {
-    let mut osc = MultiOscillator::new(44100, 0);
-    let mut data = SoundData::new();
-    data.init();
-    data.osc[0].select_wave(1);
-    data.osc[0].num_voices = 1;
-    data.osc[0].level = 1.0;
-    let mut file = File::create("synth_data.csv")?;
-    file.write_all(b"time,sample\n")?;
-    for i in 0..441 {
-        let (sample, reset) = osc.get_sample(100.0, i, &data, false);
-        let s = format!("{}, {:?}\n", i, sample);
+/* Save one table of a wavetable set as a CSV file. */
+fn save_wave(id: usize) -> std::io::Result<()> {
+    let wt_manager = WtManager::new(44100.0);
+    let mut filename = "synth_wave_".to_string();
+    filename += &id.to_string();
+    filename += ".csv";
+    let mut file = File::create(filename)?;
+    let wt = wt_manager.get_table("default").unwrap();
+    let t = &wt.table[id];
+    // Write only the first octave table (= first 2048 values)
+    for i in 0..2048 {
+        let s = format!("{}, {:?}\n", i, t[i]);
         file.write_all(s.as_bytes())?;
     }
     Ok(())
 }
-
-fn save_wave() -> std::io::Result<()> {
-    let osc = WtOsc::new(44100, 0);
-    let mut file = File::create("synth_data.csv")?;
-    let mut table = [0.0; 2097];
-    WtOsc::insert_saw(&mut table, 10.0, 44100.0);
-    for i in 0..table.len() {
-        let s = format!("{}, {:?}\n", i, table[i]);
-        file.write_all(s.as_bytes())?;
-    }
-    Ok(())
-}
-*/
 
 fn main() {
     setup_logging();
@@ -172,6 +158,11 @@ fn main() {
     let matches = App::new("Yazz")
                         .version(SYNTH_ENGINE_VERSION)
                         .about("Yet Another Subtractive Synth")
+                        .arg(Arg::with_name("savewave")
+                            .short("s")
+                            .long("save")
+                            .help("Saves selected wave to file")
+                            .takes_value(true))
                         .arg(Arg::with_name("midiport")
                             .short("m")
                             .long("midiport")
@@ -181,7 +172,13 @@ fn main() {
     let midi_port = matches.value_of("midiport").unwrap_or("1");
     let midi_port: usize = midi_port.parse().unwrap_or(1);
 
-    //save_wave().unwrap();
+    // For debugging: Save selected wavetable as file
+    let wave_index = matches.value_of("savewave").unwrap_or("");
+    if wave_index.len() > 0 {
+        let wave_index: usize = wave_index.parse().unwrap_or(1);
+        save_wave(wave_index).unwrap();
+        return;
+    }
 
     // Do setup
     let (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver) = setup_messaging();

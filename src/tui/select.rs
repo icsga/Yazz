@@ -97,6 +97,7 @@ pub struct ParamSelector {
     pub value_param_selection: ItemSelection,
     pub value: ParameterValue,
     pub ml: MidiLearn,
+    wavetable_list: Vec<(usize, String)>,
     sound: Option<Rc<RefCell<SoundPatch>>>,
     pending_key: Option<Key>,
 }
@@ -125,6 +126,9 @@ impl ParamSelector {
             value: ParameterValue::Int(1),
             temp_string: String::new()};
         value_param_selection.reset();
+        let mut wavetable_list: Vec<(usize, String)> = vec!{};
+        wavetable_list.push((0, "default".to_string()));
+        wavetable_list.push((1, "TheOther".to_string()));
         ParamSelector{value_changed: false,
                       state: SelectorState::Function,
                       func_selection: func_selection,
@@ -133,6 +137,7 @@ impl ParamSelector {
                       value_param_selection: value_param_selection,
                       value: ParameterValue::Int(0),
                       ml: MidiLearn::new(),
+                      wavetable_list: wavetable_list,
                       sound: Option::None,
                       pending_key: Option::None,
         }
@@ -1036,6 +1041,13 @@ impl ParamSelector {
     /** A value has changed outside of the selector, update the local value. */
     pub fn value_has_changed(&mut self, sm: &mut StateMachine<ParamSelector, SelectorEvent>, param: SynthParam) {
         sm.handle_event(self, &SmEvent::Event(SelectorEvent::ValueChange(param)));
+    }
+
+    pub fn get_dynamic_list<'a>(&'a self, param: Parameter) -> &'a Vec<(usize, String)> {
+        match param {
+            Parameter::Wavetable => return &self.wavetable_list,
+            _ => panic!()
+        }
     }
 }
 
