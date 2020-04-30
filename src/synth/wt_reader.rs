@@ -1,12 +1,11 @@
 /* Reads wavetable files */
 
-use super::Wavetable;
+use super::{Wavetable, WavetableRef};
 use super::Float;
 
 use std::fs::File;
 use std::io::{Read, BufReader};
 use std::mem;
-use std::sync::Arc;
 
 use log::{info, trace, warn};
 
@@ -18,15 +17,27 @@ struct ChunkHeader {
 }
 
 pub struct WtReader {
+    pub base_path: String,
 }
 
 impl WtReader {
-    pub fn read_file(filename: &str) -> Result<Arc<Wavetable>, ()> {
+    pub fn new(path: &str) -> Self {
+        let mut base_path = path.to_string();
+        let path_bytes = base_path.as_bytes();
+        if path_bytes[path_bytes.len() - 1] != b'/' {
+            info!("Appending slash to base path");
+            base_path.push('/');
+        }
+        WtReader{base_path: base_path}
+    }
+
+    pub fn read_file(&self, filename: &str) -> Result<WavetableRef, ()> {
+        let filename = self.base_path.clone() + filename;
         let f = File::open(filename).unwrap();
         WtReader::read_wavetable(f, 2048)
     }
 
-    pub fn read_wavetable<R: Read>(mut source: R, samples_per_table: usize) -> Result<Arc<Wavetable>, ()> {
+    pub fn read_wavetable<R: Read>(mut source: R, samples_per_table: usize) -> Result<WavetableRef, ()> {
         // Read RIFF header
         let result = WtReader::read_header(&mut source);
         match result {
@@ -47,7 +58,7 @@ impl WtReader {
                         let result = WtReader::read_samples(&mut source, header.size, samples_per_table);
                         let samples = if let Ok(s) = result { s } else { return Err(()) };
                         let num_tables = samples.len();
-                        return Result::Ok(Arc::new(Wavetable::new_from_vector("ReadFromBuffer", num_tables, 1, samples_per_table, samples)));
+                        return Result::Ok(Wavetable::new_from_vector(num_tables, 1, samples_per_table, samples));
                     } else {
                         WtReader::skip_chunk(&mut source, header.size);
                     }
@@ -78,7 +89,11 @@ impl WtReader {
 
     /** Read samples into multiple tables.
      *
-     * Every table receives <samples_per_table> values. One more value is added automatically.
+     * A file is assumed to hold multiple waveshapes, each with
+     * <samples_per_table> values. One more value is added to the end of the
+     * table automatically.
+     *
+     * Multiple octave tables per waveshape are currently not supported.
      */
     fn read_samples<R: Read>(source: &mut R, num_bytes: u32, samples_per_table: usize) -> Result<Vec<Vec<Float>>, ()> {
         let mut buf: f32 = unsafe { mem::zeroed() };
@@ -143,6 +158,15 @@ fn single_wave_can_be_read() {
 fn partial_wave_is_rejected() {
     let mut context = TestContext::new();
     assert!(!context.test(PARTIAL_WAVE));
+}
+
+#[test]
+fn base_path_is_set_up_correctly() {
+    let wtr = WtReader::new("NoSlash");
+    assert!(wtr.base_path == "NoSlash/".to_string());
+
+    let wtr = WtReader::new("WithSlash/");
+    assert!(wtr.base_path == "WithSlash/".to_string());
 }
 
 const PARTIAL_WAVE: &[u8] = &[

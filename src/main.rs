@@ -29,6 +29,7 @@ use synth::*;
 use tui::Index;
 use termion_wrapper::TermionWrapper;
 use voice::Voice;
+use wt_manager::WtInfo;
 
 use std::error::Error;
 use std::fs::File;
@@ -61,18 +62,21 @@ extern crate clap;
 use clap::{Arg, App};
 
 pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.4";
-pub const SOUND_DATA_VERSION: &'static str = "0.0.3";
+pub const SOUND_DATA_VERSION: &'static str = "0.0.4";
 
 type Float = f32;
 
+// Messages sent to the synth engine
 pub enum SynthMessage {
     Midi(MidiMessage),
     Param(SynthParam),
     Sound(SoundData),
+    Wavetable(WtInfo),
     SampleBuffer(Vec<Float>, SynthParam),
     Exit
 }
 
+// Messages sent to the UI
 pub enum UiMessage {
     Midi(MidiMessage),
     Key(Key),
@@ -141,7 +145,7 @@ fn save_wave(id: usize) -> std::io::Result<()> {
     filename += &id.to_string();
     filename += ".csv";
     let mut file = File::create(filename)?;
-    let wt = wt_manager.get_table("default").unwrap();
+    let wt = wt_manager.get_table(0).unwrap();
     let t = &wt.table[id];
     // Write only the first octave table (= first 2048 values)
     for i in 0..2048 {

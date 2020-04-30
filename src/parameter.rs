@@ -226,6 +226,9 @@ impl ValueRange {
                 let value = (val as Float * inc) as i64;
                 ParameterValue::Choice(value as usize)
             }
+            ValueRange::Dynamic(param) => {
+                ParameterValue::Dynamic(*param, val as usize)
+            }
             _ => ParameterValue::NoValue
         }
     }

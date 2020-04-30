@@ -47,4 +47,5 @@ use super::{SoundBank, SoundPatch};
 use super::SynthMessage;
 use super::{Parameter, ParameterValue, ParamId, FunctionId, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
 use super::UiMessage;
+use super::WtInfo;
 use super::{SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION};

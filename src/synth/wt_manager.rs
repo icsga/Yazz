@@ -5,54 +5,65 @@
  */
 
 use super::Float;
-use super::Wavetable;
+use super::{Wavetable, WavetableRef};
 use super::WtReader;
 
 use log::{info, trace, warn};
+use serde::{Serialize, Deserialize};
 
-//use std::collections::HashMap;
+use std::collections::HashMap;
 use std::sync::Arc;
 //use std::rc::Weak;
 
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct WtInfo {
+    pub id: usize,       // Index to wavetable used in the sound data
+    pub valid: bool,     // True if file exists
+    pub name: String,    // Name of wavetable as shown in the UI
+    pub filename: String // Wavetable filename, empty if internal table
+}
+
 pub struct WtManager {
     sample_rate: Float,
-    default_table: Arc<Wavetable>, // Table with default waveshapes
-
-    // Can't have a HashMap here, as it's not thread safe. Need to find a
-    // better way.
-    //cache: HashMap<String, Weak<Wavetable>>,
+    default_table: WavetableRef, // Table with default waveshapes
+    cache: HashMap<usize, WavetableRef>,
+    reader: WtReader,
 }
 
 impl WtManager {
     pub fn new(sample_rate: Float) -> WtManager {
         let default_table = WtManager::initialize_default_tables(sample_rate);
-        //let cache = HashMap::new();
-        //let def_copy = Arc::clone(&default_table);
-        let wt = WtManager{sample_rate, default_table};
-        //wt.add_to_cache(def_copy);
+        let cache = HashMap::new();
+        let def_copy = default_table.clone();
+        let reader = WtReader::new("data/");
+        let mut wt = WtManager{sample_rate, default_table, cache, reader};
+        wt.add_to_cache(0, def_copy);
         wt
     }
 
-    /** Get a single wavetable by name. */
-    pub fn get_table(&self, table_name: &str) -> Option<Arc<Wavetable>> {
-        /*
-        if self.cache.contains_key(table_name) {
-            let weak_ref = self.cache.get(table_name).unwrap();
-            weak_ref.upgrade()
-        } else {
-            // TODO: Call Wavetable to construct new table
-            // (search for file etc.)
-            None
-        }
-        */
-        return Some(Arc::clone(&self.default_table));
+    /** Receives information about a wavetable to load.
+     *
+     * Tries to load the table from the given file and put it into the cache.
+     * If loading the file fails, the default table is inserted instead.
+     */
+    pub fn add_table(&mut self, wt: WtInfo) {
+        let result = self.reader.read_file(&wt.filename);
+        let table = if let Ok(wt) = result { wt } else { self.default_table.clone() };
+        self.add_to_cache(wt.id, table);
     }
 
-    /*
-    fn add_to_cache(&mut self, wt: Arc<Wavetable>) {
-        self.cache.insert(wt.name.clone(), Arc::downgrade(&wt));
+    /** Get a single wavetable by id. */
+    pub fn get_table(&self, id: usize) -> Option<WavetableRef> {
+        if self.cache.contains_key(&id) {
+            Some(self.cache.get(&id).unwrap().clone())
+        } else {
+            None
+        }
     }
-    */
+
+    fn add_to_cache(&mut self, id: usize, wt: WavetableRef) {
+        self.cache.insert(id, wt);
+    }
 
     // ------------------
     // Default waveshapes
@@ -119,10 +130,9 @@ impl WtManager {
     }
 
     /** Create tables of common waveforms (sine, triangle, square, saw). */
-    fn initialize_default_tables(sample_rate: Float) -> Arc<Wavetable> {
+    fn initialize_default_tables(sample_rate: Float) -> WavetableRef {
         info!("Initializing default waveshapes");
-        let name = "Basic".to_string();
-        let mut wt = Wavetable::new(&name, 4, 11, 2048);
+        let mut wt = Wavetable::new(4, 11, 2048);
         let two: Float = 2.0;
         let start_freq = (440.0 / 32.0) * (two.powf((-9.0) / 12.0));
         wt.create_tables(0, start_freq, sample_rate, WtManager::insert_sine);
@@ -131,10 +141,6 @@ impl WtManager {
         wt.create_tables(3, start_freq, sample_rate, WtManager::insert_square);
         info!("Finished");
         Arc::new(wt)
-        /*
-        let result = WtReader::read_file("data/ESW Digital - Formantish.wav");
-        if let Ok(wt) = result { wt } else { panic!(); }
-        */
     }
 }
 

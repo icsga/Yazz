@@ -11,6 +11,7 @@ use super::Value;
 use super::{SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION};
 use super::RetCode;
 use super::{StateMachine, SmEvent, SmResult};
+use super::WtInfo;
 
 use crossbeam_channel::{Sender, Receiver};
 use log::{info, trace, warn};
@@ -18,7 +19,11 @@ use termion::{clear, color, cursor};
 use termion::color::{Black, White, Red, LightWhite, Reset, Rgb};
 use termion::event::Key;
 
+extern crate regex;
+use regex::Regex;
+
 use std::convert::TryInto;
+use std::fs::{self, DirEntry};
 use std::io;
 use std::io::{stdout, Write};
 use std::thread::spawn;
@@ -96,11 +101,28 @@ impl Tui {
             state: TuiState::Play,
         };
         tui.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
+        tui.load_wavetables();
         tui.select_sound(0);
         match tui.ctrl_map.load("Yazz_ControllerMapping.ysn") {
             _ => ()
         }
         tui
+    }
+
+    fn load_wavetables(&mut self) {
+        // For all wavetable list entries:
+        let list = self.selector.get_dynamic_list(Parameter::Wavetable);
+        for entry in &mut self.bank.wt_list {
+            // Check if file exists
+            let filename = "data/".to_string() + &entry.filename;
+            if !std::path::Path::new(&filename).exists() {
+                entry.valid = false; // Invalid => Won't show up in menu, sounds get default wavetable
+            }
+            // Send struct to synth
+            self.sender.send(SynthMessage::Wavetable(entry.clone())).unwrap();
+            // Add to selector for option display
+            list.push((entry.id, entry.name.clone()));
+        }
     }
 
     /** Start input handling thread.
@@ -157,6 +179,11 @@ impl Tui {
                 self.bank.set_sound(self.selected_sound, &self.sound.borrow());
                 // Write bank to disk
                 self.bank.save_bank("Yazz_FactoryBank.ysn").unwrap();
+                true
+            },
+            Key::F(10) => {
+                // Scan data folder for new wavetable files
+                self.scan_wavetables();
                 true
             },
             Key::Char(c) => {
@@ -222,6 +249,36 @@ impl Tui {
                 TuiState::Play
             }
             _ => TuiState::CtrlSetSelect
+        }
+    }
+
+    fn scan_wavetables(&mut self) {
+        let wt_list = &mut self.bank.wt_list;
+        let re = Regex::new(r"(.*).wav").unwrap();
+        for entry in fs::read_dir("data").unwrap() {
+            let entry = entry.unwrap();
+            let filename = entry.file_name();
+            for cap in re.captures_iter(filename.to_str().unwrap()) {
+                let table_name = &cap[1];
+                let mut found = false;
+                for wti in &self.bank.wt_list {
+                    if wti.name == table_name {
+                        info!("{} already in wavetable list, skipping.", table_name);
+                        found = true;
+                        break;
+                    }
+                }
+                if !found {
+                    info!("Adding new table {}.", table_name);
+                    let new_entry = WtInfo{
+                        id: self.bank.wt_list.len(),
+                        valid: true,
+                        name: table_name.to_string(),
+                        filename: filename.to_str().unwrap().to_string()};
+                    self.sender.send(SynthMessage::Wavetable(new_entry.clone())).unwrap();
+                    self.bank.wt_list.push(new_entry);
+                }
+            }
         }
     }
 
@@ -372,7 +429,7 @@ impl Tui {
             ParameterValue::Float(v) => Value::Float(v.into()),
             ParameterValue::Int(v) => Value::Int(v),
             ParameterValue::Choice(v) => Value::Int(v.try_into().unwrap()),
-            ParameterValue::Dynamic(_, v) => Value::Int(v.try_into().unwrap()),
+            ParameterValue::Dynamic(p, v) => Value::Int(v.try_into().unwrap()), // TODO: Display string, not int
             _ => return
         };
         self.window.update_value(&param_id, value);
@@ -562,7 +619,7 @@ impl Tui {
     }
 
     fn display_dynamic_options(s: &ParamSelector, param: Parameter, x_pos: u16) {
-        let list = s.get_dynamic_list(param);
+        let list = s.get_dynamic_list_no_mut(param);
         let mut y_item = 2;
         for (key, value) in list.iter() {
             print!("{} {} - {} ", cursor::Goto(x_pos, y_item), key, value);
