@@ -1,31 +1,38 @@
-/* A wavetable representing a single waveshape.
+/* A wavetable representing a collection of waveshapes.
  *
- * Every wavetable can contain multiple bandlimited tables for use in different
+ * A wavetable consists of a collection of waveshapes. Every waveshape in the
+ * wavetable itself contains multiple bandlimited tables for use in different
  * octaves.
+ *
+ * In memory, the table is stored as a vector of vectors. The inner vector
+ * holds the samples of a single waveshape, with the different octave tables
+ * octaves stored as a contiguous piece of memory. The outer vector holds the
+ * different waveshapes.
  */
 
 use super::Float;
 
 use log::{info, debug, trace, warn};
 
+use std::sync::Arc;
+
 pub struct Wavetable {
-    pub name: String,
     pub num_tables: usize,  // Number of different waveshapes
-    pub num_octaves: usize, // Number of octave tables to generate
-    pub num_values: usize,  // Length of a single octave table, including duplicated first element
-    pub num_samples: usize, // Length of a single octave table - 1, actual number of unique values
-    pub table: Vec<Vec<Float>>, // Vector of vectors holding all tables in a sequential layout
+    pub num_octaves: usize, // Number of octave tables to generate per waveshape
+    pub num_values: usize,  // Length of a single octave table, including duplicated first element (usually 2049)
+    pub num_samples: usize, // Length of a single octave table - 1, actual number of unique values (usually 2048)
+    pub table: Vec<Vec<Float>>, // Vector of vectors holding all tables
 }
 
+pub type WavetableRef = Arc<Wavetable>;
+
 impl Wavetable {
-    pub fn new(name: &str, num_tables: usize, num_octaves: usize, num_samples: usize) -> Wavetable {
-        let name = name.to_string();
+    pub fn new(num_tables: usize, num_octaves: usize, num_samples: usize) -> Wavetable {
         let num_values = num_samples + 1;
         let table = vec!(vec!(0.0; num_values * num_octaves); num_tables);
         info!("New Wavetable: {} tables for {} octaves, {} samples",
               num_tables, num_octaves, num_samples);
         Wavetable {
-            name,
             num_tables,
             num_octaves,
             num_values,
@@ -34,33 +41,17 @@ impl Wavetable {
         }
     }
 
-    pub fn new_from_vector(name: &str, num_tables: usize, num_octaves: usize, num_samples: usize, table: Vec<Vec<Float>>) -> Wavetable {
-        let name = name.to_string();
+    pub fn new_from_vector(num_tables: usize, num_octaves: usize, num_samples: usize, table: Vec<Vec<Float>>) -> WavetableRef {
         let num_values = num_samples + 1;
         info!("New Wavetable: {} tables for {} octaves, {} samples",
               num_tables, num_octaves, num_samples);
-        Wavetable {
-            name,
+        Arc::new(Wavetable {
             num_tables,
             num_octaves,
             num_values,
             num_samples,
             table
-        }
-    }
-
-    pub fn load(filename: &str) -> Wavetable {
-        Wavetable {
-            name: "Loaded".to_string(),
-            num_tables: 1,
-            num_octaves: 11,
-            num_values: 2049,
-            num_samples: 2048,
-            table: vec!(vec!(0.0; 2049 * 11); 1)
-        }
-    }
-
-    pub fn save(&self) {
+        })
     }
 
     /** Return a table vector for the selected waveshape. */
@@ -182,3 +173,4 @@ impl Wavetable {
     }
 }
 
+// TODO: Add tests for wave generation

@@ -9,7 +9,7 @@ use super::SoundData;
 use super::voice::Voice;
 use super::SampleGenerator;
 use super::Float;
-use super::{WtOsc, WtManager, Wavetable};
+use super::{WtOsc, WtManager, Wavetable, WtInfo};
 
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
@@ -56,6 +56,7 @@ pub struct Synth {
     aftertouch: Float,
     sender: Sender<UiMessage>,
 
+    // Extra oscillators to display the waveshape
     samplebuff_osc: WtOsc,
     samplebuff_env: Envelope,
     samplebuff_lfo: Lfo,
@@ -70,16 +71,16 @@ impl Synth {
         sound_global.init();
         sound_local.init();
         let wt_manager = WtManager::new(sample_rate as Float);
-        let default_table = wt_manager.get_table("default").unwrap();
+        let default_table = wt_manager.get_table(0).unwrap(); // Table 0
         let voice = [
-            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
-            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
-            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
-            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
-            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
-            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
-            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
-            Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)), Voice::new(sample_rate, Arc::clone(&default_table)),
+            Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
+            Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
+            Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
+            Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
+            Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
+            Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
+            Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
+            Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
         ];
         let delay = Delay::new(sample_rate);
         let glfo = [
@@ -94,7 +95,7 @@ impl Synth {
         let pitch_wheel = 0.0;
         let mod_wheel = 0.0;
         let aftertouch = 0.0;
-        let samplebuff_osc = WtOsc::new(sample_rate, 0, Arc::clone(&default_table));
+        let samplebuff_osc = WtOsc::new(sample_rate, 0, default_table.clone());
         let samplebuff_env = Envelope::new(sample_rate as Float);
         let samplebuff_lfo = Lfo::new(sample_rate);
         Synth{
@@ -131,6 +132,7 @@ impl Synth {
                     SynthMessage::Param(m) => locked_synth.handle_ui_message(m),
                     SynthMessage::Midi(m)  => locked_synth.handle_midi_message(m),
                     SynthMessage::Sound(s) => locked_synth.handle_sound_update(&s),
+                    SynthMessage::Wavetable(i) => locked_synth.handle_wavetable_info(i),
                     SynthMessage::SampleBuffer(m, p) => locked_synth.handle_sample_buffer(m, p),
                     SynthMessage::Exit     => {
                         keep_running = false;
@@ -233,24 +235,37 @@ impl Synth {
         }
     }
 
-    /* Handles a message received from the UI. */
     fn handle_ui_message(&mut self, msg: SynthParam) {
         info!("handle_ui_message - {:?}", msg);
         self.sound.set_parameter(&msg);
-        self.sound_global = self.sound;
-        self.sound_local = self.sound;
+        //self.sound_global = self.sound;
+        //self.sound_local = self.sound;
 
         // Let components check if they need to react to a changed
         // parameter.
-        self.delay.update(&self.sound.delay);
+        match msg.function {
+            Parameter::Oscillator => {
+                if msg.parameter == Parameter::Wavetable {
+                    // New wavetable has been selected, update all oscillators
+                    let osc_id = msg.function_id - 1;
+                    let id = self.sound.osc[osc_id].wavetable;
+                    info!("Updating oscillator {} to wavetable {}", osc_id, id);
+                    let wt = self.wt_manager.get_table(id).unwrap();
+                    for v in self.voice.iter_mut() {
+                        v.set_wavetable(osc_id, wt.clone());
+                    }
+                }
+            }
+            Parameter::Delay => self.delay.update(&self.sound.delay),
+            _ => ()
+        }
     }
 
-    /* Handles a received MIDI message. */
     fn handle_midi_message(&mut self, msg: MidiMessage) {
         match msg {
             MidiMessage::NoteOn{channel, key, velocity} => self.handle_note_on(key, velocity),
             MidiMessage::NoteOff{channel, key, velocity} => self.handle_note_off(key, velocity),
-            MidiMessage::KeyAT{channel, key, pressure} => (),
+            MidiMessage::KeyAT{channel, key, pressure} => (), // Polyphonic aftertouch not supported yet
             MidiMessage::ChannelAT{channel, pressure} => self.handle_channel_aftertouch(pressure),
             MidiMessage::PitchWheel{channel, pitch} => self.handle_pitch_wheel(pitch),
             MidiMessage::ControlChg{channel, controller, value} => self.handle_controller(controller, value),
@@ -262,6 +277,10 @@ impl Synth {
         self.sound = *sound;
         self.sound_global = self.sound;
         self.sound_local = self.sound;
+    }
+
+    fn handle_wavetable_info(&mut self, wt_info: WtInfo) {
+        self.wt_manager.add_table(wt_info);
     }
 
     fn handle_note_on(&mut self, key: u8, velocity: u8) {

@@ -1,7 +1,7 @@
 use super::Float;
 use super::SampleGenerator;
 use super::sound::SoundData;
-use super::{Wavetable, WtManager};
+use super::{Wavetable, WtManager, WavetableRef};
 
 use rand::prelude::*;
 use serde::{Serialize, Deserialize};
@@ -81,7 +81,7 @@ pub struct WtOsc {
     last_sample: Float,
     last_complete: bool,
     state: [State; MAX_VOICES], // State for up to MAX_VOICES oscillators running in sync
-    wave: Arc<Wavetable>,
+    wave: WavetableRef,
 }
 
 /** Wavetable oscillator implementation.
@@ -97,7 +97,7 @@ impl WtOsc {
      * \param sample_rate The global sample rate of the synth
      * \param id The voice ID of the oscillator (0 - 2)
      */
-    pub fn new(sample_rate: u32, id: usize, wave: Arc<Wavetable>) -> WtOsc {
+    pub fn new(sample_rate: u32, id: usize, wave: WavetableRef) -> WtOsc {
         let sample_rate = sample_rate as Float;
         let last_update = 0;
         let last_sample = 0.0;
@@ -113,6 +113,10 @@ impl WtOsc {
               last_complete,
               state,
               wave}
+    }
+
+    pub fn set_wavetable(&mut self, wavetable: WavetableRef) {
+        self.wave = wavetable;
     }
 
     /** Interpolate between two sample values with the given ratio. */

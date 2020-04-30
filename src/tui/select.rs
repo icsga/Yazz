@@ -126,9 +126,7 @@ impl ParamSelector {
             value: ParameterValue::Int(1),
             temp_string: String::new()};
         value_param_selection.reset();
-        let mut wavetable_list: Vec<(usize, String)> = vec!{};
-        wavetable_list.push((0, "default".to_string()));
-        wavetable_list.push((1, "TheOther".to_string()));
+        let wavetable_list: Vec<(usize, String)> = vec!{};
         ParamSelector{value_changed: false,
                       state: SelectorState::Function,
                       func_selection: func_selection,
@@ -736,6 +734,7 @@ impl ParamSelector {
                     ValueRange::Int(min, max) => ParamSelector::get_value_int(item, min, max, c),
                     ValueRange::Float(min, max, _) => ParamSelector::get_value_float(item, min, max, c),
                     ValueRange::Choice(choice_list) => ParamSelector::get_value_choice(item, choice_list, c),
+                    ValueRange::Dynamic(param) => ParamSelector::get_value_dynamic(item, 0, 128, c), // TODO: Use a closure as parameter instead
                     _ => panic!(),
                 }
             }
@@ -811,6 +810,74 @@ impl ParamSelector {
         };
         match result {
             RetCode::ValueUpdated | RetCode::ValueComplete => ParamSelector::update_value(item, ParameterValue::Int(current)),
+            _ => (),
+        }
+        result
+    }
+
+    fn get_value_dynamic(item: &mut ItemSelection,
+                         min: usize,
+                         max: usize,
+                         c: termion::event::Key) -> RetCode {
+        let (param, mut current) = if let ParameterValue::Dynamic(p, x) = item.value { (p, x) } else { panic!() };
+        let result = match c {
+            Key::Char(x) => {
+                match x {
+                    '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.' => {
+                        let y = x as usize - '0' as usize;
+                        if item.temp_string.len() > 0 {
+                            // Something already in temp string, append to end if possible.
+                            let current_temp: Result<usize, ParseIntError> = item.temp_string.parse();
+                            let current_temp = if let Ok(x) = current_temp {
+                                x
+                            } else {
+                                item.temp_string.clear();
+                                0
+                            };
+                            let val_digit_added = current_temp * 10 + y;
+                            if val_digit_added > max {
+                                // Value would be too big, ignore key
+                                RetCode::KeyConsumed
+                            } else {
+                                item.temp_string.push(x);
+                                let value: Result<usize, ParseIntError> = item.temp_string.parse();
+                                current = if let Ok(x) = value { x } else { current };
+                                if current * 10 > max {
+                                    // No more digits can be added: Finished.
+                                    RetCode::ValueComplete
+                                } else {
+                                    // Wait for more digits
+                                    RetCode::ValueUpdated
+                                }
+                            }
+                        } else {
+                            if y * 10 < max {
+                                // More digits could come, start temp_string
+                                item.temp_string.push(x);
+                                let value: Result<usize, ParseIntError> = item.temp_string.parse();
+                                current = if let Ok(x) = value { x } else { current };
+                                RetCode::ValueUpdated
+                            } else {
+                                current = y;
+                                RetCode::ValueComplete
+                            }
+                        }
+                    },
+                    '+' => { current += 1; RetCode::ValueUpdated },
+                    '-' => if current > min { current -= 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
+                    '\n' => RetCode::ValueComplete,
+                    _ => RetCode::KeyMissmatch,
+                }
+            }
+            Key::Up        => { current += 1; RetCode::ValueUpdated },
+            Key::Down      => if current > min { current -= 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
+            Key::Left      => RetCode::Cancel,
+            Key::Right     => RetCode::ValueComplete,
+            Key::Backspace => RetCode::Cancel,
+            _              => RetCode::ValueComplete,
+        };
+        match result {
+            RetCode::ValueUpdated | RetCode::ValueComplete => ParamSelector::update_value(item, ParameterValue::Dynamic(param, current)),
             _ => (),
         }
         result
@@ -1043,7 +1110,14 @@ impl ParamSelector {
         sm.handle_event(self, &SmEvent::Event(SelectorEvent::ValueChange(param)));
     }
 
-    pub fn get_dynamic_list<'a>(&'a self, param: Parameter) -> &'a Vec<(usize, String)> {
+    pub fn get_dynamic_list<'a>(&'a mut self, param: Parameter) -> &'a mut Vec<(usize, String)> {
+        match param {
+            Parameter::Wavetable => return &mut self.wavetable_list,
+            _ => panic!()
+        }
+    }
+
+    pub fn get_dynamic_list_no_mut<'a>(&'a self, param: Parameter) -> &'a Vec<(usize, String)> {
         match param {
             Parameter::Wavetable => return &self.wavetable_list,
             _ => panic!()

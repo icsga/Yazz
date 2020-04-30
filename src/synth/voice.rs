@@ -4,7 +4,7 @@ use super::Float;
 use super::Lfo;
 use super::{Parameter, ParameterValue, ParamId, SynthParam, MenuItem};
 use super::SampleGenerator;
-use super::{WtOsc, WtOscData, Wavetable};
+use super::{WtOsc, WtOscData, Wavetable, WavetableRef};
 use super::SoundData;
 
 use std::sync::Arc;
@@ -195,6 +195,10 @@ impl Voice {
 
     pub fn set_velocity(&mut self, velocity: u8) {
         self.velocity = velocity as Float;
+    }
+
+    pub fn set_wavetable(&mut self, osc_id: usize, wt: WavetableRef) {
+        self.osc[osc_id].set_wavetable(wt);
     }
 
     pub fn trigger(&mut self, trigger_seq: u64, trigger_time: i64, sound: &SoundData) {
