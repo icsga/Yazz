@@ -9,7 +9,7 @@ use super::SoundData;
 use super::voice::Voice;
 use super::SampleGenerator;
 use super::Float;
-use super::{WtOsc, WtManager, Wavetable, WtInfo};
+use super::{WtOsc, WtManager, Wavetable, WavetableRef, WtInfo};
 
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
@@ -60,6 +60,7 @@ pub struct Synth {
     samplebuff_osc: WtOsc,
     samplebuff_env: Envelope,
     samplebuff_lfo: Lfo,
+    osc_wave: [WavetableRef; 3],
 }
 
 impl Synth {
@@ -98,6 +99,7 @@ impl Synth {
         let samplebuff_osc = WtOsc::new(sample_rate, 0, default_table.clone());
         let samplebuff_env = Envelope::new(sample_rate as Float);
         let samplebuff_lfo = Lfo::new(sample_rate);
+        let osc_wave = [default_table.clone(), default_table.clone(), default_table.clone()];
         Synth{
             sample_rate,
             sound,
@@ -118,7 +120,9 @@ impl Synth {
             sender,
             samplebuff_osc,
             samplebuff_env,
-            samplebuff_lfo}
+            samplebuff_lfo,
+            osc_wave,
+        }
     }
 
     /* Starts a thread for receiving UI and MIDI messages. */
@@ -238,8 +242,6 @@ impl Synth {
     fn handle_ui_message(&mut self, msg: SynthParam) {
         info!("handle_ui_message - {:?}", msg);
         self.sound.set_parameter(&msg);
-        //self.sound_global = self.sound;
-        //self.sound_local = self.sound;
 
         // Let components check if they need to react to a changed
         // parameter.
@@ -254,6 +256,7 @@ impl Synth {
                     for v in self.voice.iter_mut() {
                         v.set_wavetable(osc_id, wt.clone());
                     }
+                    self.osc_wave[osc_id] = wt.clone();
                 }
             }
             Parameter::Delay => self.delay.update(&self.sound.delay),
@@ -352,6 +355,7 @@ impl Synth {
                 let osc = &mut self.samplebuff_osc;
                 osc.reset(0);
                 osc.id = param.function_id - 1;
+                osc.set_wavetable(self.osc_wave[osc.id].clone());
                 for i in 0..len {
                     let (sample, complete) = osc.get_sample(freq, i as i64, &self.sound, false);
                     buffer[i] = sample * self.sound.osc[param.function_id - 1].level;
