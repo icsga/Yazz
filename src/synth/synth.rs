@@ -17,8 +17,8 @@ use std::thread::spawn;
 
 use crossbeam_channel::unbounded;
 use crossbeam_channel::{Sender, Receiver};
-
 use log::{info, trace, warn};
+use serde::{Serialize, Deserialize};
 
 const NUM_VOICES: usize = 32;
 const NUM_KEYS: usize = 128;
@@ -30,6 +30,18 @@ pub enum Synth2UIMessage {
     Param(SynthParam),
     Control(u32),
     Log(String)
+}
+
+// Data of the currently selected sound patch
+#[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
+pub struct PatchData {
+    pub level: Float,
+}
+
+impl PatchData {
+    pub fn init(&mut self) {
+        self.level = 90.0;
+    }
 }
 
 pub struct Synth {
@@ -216,6 +228,8 @@ impl Synth {
 
         // Pass sample into global effects
         value = self.delay.process(value, sample_clock, &self.sound_global.delay);
+
+        value *= self.sound_global.patch.level;
 
         self.last_clock = sample_clock;
         (value, value)
