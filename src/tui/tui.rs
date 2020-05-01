@@ -102,6 +102,7 @@ impl Tui {
         };
         tui.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
         tui.load_wavetables();
+        //tui.scan_wavetables();
         tui.select_sound(0);
         match tui.ctrl_map.load("Yazz_ControllerMapping.ysn") {
             _ => ()
@@ -270,13 +271,15 @@ impl Tui {
                 }
                 if !found {
                     info!("Adding new table {}.", table_name);
+                    let id = self.bank.wt_list.len();
                     let new_entry = WtInfo{
-                        id: self.bank.wt_list.len(),
+                        id: id,
                         valid: true,
                         name: table_name.to_string(),
                         filename: filename.to_str().unwrap().to_string()};
                     self.sender.send(SynthMessage::Wavetable(new_entry.clone())).unwrap();
                     self.bank.wt_list.push(new_entry);
+                    self.selector.wavetable_list.push((id, table_name.to_string()));
                 }
             }
         }
@@ -494,7 +497,7 @@ impl Tui {
                     x_pos = 14;
                 }
                 SelectorState::Value => {
-                    Tui::display_value(&s.param_selection, selector_state == SelectorState::Value);
+                    Tui::display_value(&s.param_selection, selector_state == SelectorState::Value, &s.wavetable_list);
                     x_pos = 23;
                 }
                 SelectorState::MidiLearn => {
@@ -558,7 +561,7 @@ impl Tui {
         }
     }
 
-    fn display_value(param: &ItemSelection, selected: bool) {
+    fn display_value(param: &ItemSelection, selected: bool, wt_list: &Vec<(usize, String)>) {
         if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
@@ -571,6 +574,14 @@ impl Tui {
                 let selection = if let ValueRange::Choice(list) = range { list } else { panic!() };
                 let item = selection[x].item;
                 print!(" {}", item);
+            },
+            ParameterValue::Dynamic(p, x) => {
+                for (k, v) in wt_list {
+                    if *k == x {
+                        print!(" {}", v);
+                        break;
+                    }
+                }
             },
             _ => ()
         }

@@ -69,10 +69,9 @@ impl Engine {
 
                         for sample in buffer.chunks_mut(num_channels) {
                             sample_clock = sample_clock + 1;
-                            let value = locked_synth.get_sample(sample_clock);
-                            for out in sample.iter_mut() {
-                                *out = value;
-                            }
+                            let (left, right) = locked_synth.get_sample(sample_clock);
+                            sample[0] = left;
+                            sample[1] = right;
                         }
 
                         let busy = time.elapsed().expect("Went back in time");
