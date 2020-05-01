@@ -21,6 +21,7 @@ pub struct SoundData {
     pub glfo: [LfoData; NUM_GLOBAL_LFOS],
     pub modul: [ModData; NUM_MODULATORS],
     pub delay: DelayData,
+    pub patch: PatchData,
 }
 
 impl Default for SoundData {
@@ -60,7 +61,8 @@ impl SoundData {
             ModData::new(), ModData::new(), ModData::new(), ModData::new(),
         ];
         let delay = DelayData{..Default::default()};
-        SoundData{osc, env, filter, lfo, glfo, modul, delay}
+        let patch = PatchData{..Default::default()};
+        SoundData{osc, env, filter, lfo, glfo, modul, delay, patch}
     }
 
     pub fn init(&mut self) {
@@ -82,6 +84,7 @@ impl SoundData {
         self.osc[1].level = 0.0;
         self.osc[2].level = 0.0;
         self.delay.init();
+        self.patch.init();
     }
 
     pub fn get_osc_data<'a>(&'a self, id: usize) -> &'a WtOscData {
@@ -161,6 +164,12 @@ impl SoundData {
                     _ => {}
                 }
             }
+            Parameter::Patch => {
+                match msg.parameter {
+                    Parameter::Level => { self.patch.level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
+                    _ => {}
+                }
+            }
             Parameter::System => {}
             _ => {}
         }
@@ -232,6 +241,12 @@ impl SoundData {
                     Parameter::Target => ParameterValue::Param(self.modul[id].get_target()),
                     Parameter::Amount => ParameterValue::Float(self.modul[id].amount),
                     Parameter::Active => ParameterValue::Int(if self.modul[id].active { 1 } else { 0 }),
+                    _ => {panic!();}
+                }
+            }
+            Parameter::Patch => {
+                match param.parameter {
+                    Parameter::Level => ParameterValue::Float(self.patch.level * 100.0),
                     _ => {panic!();}
                 }
             }

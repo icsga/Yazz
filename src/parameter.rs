@@ -18,6 +18,7 @@ pub enum Parameter {
     Envelope,
     Modulation,
     Delay,
+    Patch,
     System,
 
     // Oscillator, Lfo
@@ -337,14 +338,15 @@ impl MenuItem {
 }
 
 /* Top-level menu */
-pub static FUNCTIONS: [MenuItem; 7] = [
+pub static FUNCTIONS: [MenuItem; 8] = [
     MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::Int(1, NUM_OSCILLATORS as i64),  next: &OSC_PARAMS},
-    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::Int(1, NUM_ENVELOPES as i64),  next: &ENV_PARAMS},
-    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::Int(1, NUM_LFOS as i64),  next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::Int(1, NUM_ENVELOPES as i64),    next: &ENV_PARAMS},
+    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::Int(1, NUM_LFOS as i64),         next: &LFO_PARAMS},
     MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::Int(1, NUM_GLOBAL_LFOS as i64),  next: &LFO_PARAMS},
-    MenuItem{item: Parameter::Filter,     key: 'f', val_range: ValueRange::Int(1, NUM_FILTERS as i64),  next: &FILTER_PARAMS},
-    MenuItem{item: Parameter::Delay,      key: 'd', val_range: ValueRange::Int(1, 1),  next: &DELAY_PARAMS},
-    MenuItem{item: Parameter::Modulation, key: 'm', val_range: ValueRange::Int(1, NUM_MODULATORS as i64), next: &MOD_PARAMS},
+    MenuItem{item: Parameter::Filter,     key: 'f', val_range: ValueRange::Int(1, NUM_FILTERS as i64),      next: &FILTER_PARAMS},
+    MenuItem{item: Parameter::Delay,      key: 'd', val_range: ValueRange::Int(1, 1),                       next: &DELAY_PARAMS},
+    MenuItem{item: Parameter::Modulation, key: 'm', val_range: ValueRange::Int(1, NUM_MODULATORS as i64),   next: &MOD_PARAMS},
+    MenuItem{item: Parameter::Patch,      key: 'p', val_range: ValueRange::Int(1, 1),                       next: &PATCH_PARAMS},
 ];
 
 pub static OSC_PARAMS: [MenuItem; 9] = [
@@ -413,6 +415,10 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Target,    key: 't', val_range: ValueRange::Param(&MOD_TARGETS),   next: &MOD_TARGETS},
     MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::Float(0.0, 1.0, 0.01), next: &[]},
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
+];
+
+pub static PATCH_PARAMS: [MenuItem; 1] = [
+    MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
 ];
 
 pub static MOD_SOURCES: [MenuItem; 8] = [
