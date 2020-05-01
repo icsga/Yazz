@@ -346,12 +346,12 @@ impl Tui {
                         // source update.
                         self.sender.send(SynthMessage::Midi(*m)).unwrap();
                     }
-
-                    // All controllers (including ModWheel) might be
-                    // mapped to control a parameter directly
-                    self.handle_ctrl_change(controller.into(), value.into());
-
                 }
+
+                // All controllers (including ModWheel) might be
+                // mapped to control a parameter directly
+                self.handle_ctrl_change(controller.into(), value.into());
+
             },
             MidiMessage::ProgramChg{channel, program} => self.select_sound(program as usize - 1),
             _ => ()
