@@ -25,7 +25,6 @@ impl WtReader {
         let mut base_path = path.to_string();
         let path_bytes = base_path.as_bytes();
         if path_bytes[path_bytes.len() - 1] != b'/' {
-            info!("Appending slash to base path");
             base_path.push('/');
         }
         WtReader{base_path: base_path}
@@ -33,8 +32,9 @@ impl WtReader {
 
     pub fn read_file(&self, filename: &str) -> Result<WavetableRef, ()> {
         let filename = self.base_path.clone() + filename;
-        let f = File::open(filename).unwrap();
-        WtReader::read_wavetable(f, 2048)
+        let file = File::open(filename).unwrap();
+        let reader = BufReader::new(file);
+        WtReader::read_wavetable(reader, 2048)
     }
 
     pub fn read_wavetable<R: Read>(mut source: R, samples_per_table: usize) -> Result<WavetableRef, ()> {

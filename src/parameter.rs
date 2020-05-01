@@ -352,7 +352,7 @@ pub static OSC_PARAMS: [MenuItem; 9] = [
     MenuItem{item: Parameter::Wavetable, key: 'w', val_range: ValueRange::Dynamic(Parameter::Wavetable),next: &[]},
     MenuItem{item: Parameter::WaveIndex, key: 'i', val_range: ValueRange::Float(0.0, 1.0, 0.01),        next: &[]},
     MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Int(-24, 24),                 next: &[]},
-    MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::Float(-1200.0, 1200.0, 1.0),  next: &[]},
+    MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::Float(-100.0, 100.0, 1.0),    next: &[]},
     MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::Int(0, 1),                    next: &[]},
     MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::Int(0, 1),                    next: &[]},
     MenuItem{item: Parameter::Voices,    key: 'v', val_range: ValueRange::Int(1, 7),                    next: &[]},

@@ -200,7 +200,7 @@ impl Synth {
     }
 
     /* Called by the audio engine to get the next sample to be output. */
-    pub fn get_sample(&mut self, sample_clock: i64) -> Float {
+    pub fn get_sample(&mut self, sample_clock: i64) -> (Float, Float) {
         let mut value: Float = 0.0;
 
         self.get_mod_values(sample_clock);
@@ -218,7 +218,7 @@ impl Synth {
         value = self.delay.process(value, sample_clock, &self.sound_global.delay);
 
         self.last_clock = sample_clock;
-        value
+        (value, value)
     }
 
     /* Update the bitmap with currently active voices. */
