@@ -221,7 +221,7 @@ impl Synth {
         if self.voices_playing > 0 {
             for i in 0..32 {
                 if self.voices_playing & (1 << i) > 0 {
-                    value += self.voice[i].get_sample(sample_clock, &self.sound, &self.sound_global, &mut self.sound_local);
+                    value += self.voice[i].get_sample(sample_clock, &self.sound_global, &mut self.sound_local);
                 }
             }
         }

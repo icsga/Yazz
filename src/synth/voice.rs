@@ -25,11 +25,10 @@ pub struct Voice {
 
     // Current state
     triggered: bool,
-    pub trigger_seq: u64,
+    pub trigger_seq: u64, // Sequence number for keeping track of trigger order
     pub key: u8,          // Key that was pressed to trigger this voice
     velocity: Float,      // Velocity of NoteOn event
     input_freq: Float,    // Frequency to play as received from Synth
-    osc_amp: Float,
     last_update: i64,
 }
 
@@ -58,7 +57,6 @@ impl Voice {
         let key = 0;
         let velocity = 0.0;
         let input_freq = 440.0;
-        let osc_amp = 0.5;
         let last_update = 0i64;
         let voice = Voice{
                 osc,
@@ -70,7 +68,6 @@ impl Voice {
                 key,
                 velocity,
                 input_freq,
-                osc_amp,
                 last_update};
         voice
     }
@@ -85,14 +82,14 @@ impl Voice {
         freq
     }
 
-    fn get_mod_values(&mut self, sample_clock: i64, sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) {
+    fn get_mod_values(&mut self, sample_clock: i64, sound_global: &SoundData, sound_local: &mut SoundData) {
         // Get modulated values from global sound and discard values that were
         // modulated for the previous sample. Complete copy is faster than
         // looping over the modulators.
         *sound_local = *sound_global;
 
         // Then update the local sound with mod values
-        for m in sound.modul.iter() {
+        for m in sound_global.modul.iter() {
 
             if !m.active {
                 continue;
@@ -140,35 +137,28 @@ impl Voice {
         }
     }
 
-    pub fn get_sample(&mut self, sample_clock: i64, sound: &SoundData, sound_global: &SoundData, sound_local: &mut SoundData) -> Float {
+    pub fn get_sample(&mut self, sample_clock: i64, sound_global: &SoundData, sound_local: &mut SoundData) -> Float {
         if !self.is_running() {
             return 0.0;
         }
         let mut result = 0.0;
-        //let amp_mod = self.get_amp_mod(sample_clock);
-        let amp_mod = 0.0;
         self.last_update = sample_clock;
         let mut reset = false;
         let mut freq: Float;
 
         // Prepare modulation values
-        self.get_mod_values(sample_clock, sound, sound_global, sound_local);
+        self.get_mod_values(sample_clock, sound_global, sound_local);
 
         // Get mixed output from oscillators
         for (i, osc) in self.osc.iter_mut().enumerate() {
             freq = Voice::get_frequency(&sound_local.osc[i], self.input_freq);
             let (sample, wave_complete) = osc.get_sample(freq, sample_clock, sound_local, reset);
-            result += sample * sound_local.osc[i].level * (self.osc_amp + amp_mod);
+            result += sample * sound_local.osc[i].level;
             if i == 0 && wave_complete && sound_local.osc[1].sync == 1 {
                 reset = true; // Sync next oscillator in list (osc 1)
             } else {
                 reset = false;
             }
-        }
-        let level_sum = sound_local.osc[0].level + sound_local.osc[1].level + sound_local.osc[2].level;
-        if level_sum > 1.0 {
-            // Normalize level to avoid distortion
-            result /= level_sum;
         }
 
         // Feed it into the filter
@@ -180,6 +170,8 @@ impl Voice {
         if result > 1.0 {
             //panic!("Voice: {}", result);
             result = 1.0;
+        } else if result < -1.0 {
+            result = -1.0;
         }
 
         result

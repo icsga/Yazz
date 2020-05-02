@@ -65,6 +65,7 @@ impl Filter {
         match data.filter_type {
             0 => self.process_rlpf(sample, sample_clock, data),
             1 => self.process_reson_z(sample, sample_clock, data),
+            2 => sample, // Bypass, needs to be set manually
             _ => panic!(),
         }
     }
