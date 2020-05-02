@@ -363,7 +363,7 @@ pub static OSC_PARAMS: [MenuItem; 9] = [
 
 pub static LFO_PARAMS: [MenuItem; 2] = [
     MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::Choice(&LFO_WAVEFORM),    next: &[]},
-    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Float(0.0, 22000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Float(0.0, 44.1, 0.1), next: &[]},
 ];
 
 pub static FILTER_PARAMS: [MenuItem; 4] = [

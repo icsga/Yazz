@@ -9,7 +9,7 @@
       "data": {
         "osc": [
           {
-            "level": 0.27559054,
+            "level": 1.0,
             "num_voices": 3,
             "voice_spread": 0.44094488,
             "tune_halfsteps": 0,
@@ -21,7 +21,7 @@
             "wavetable": 0
           },
           {
-            "level": 0.59842515,
+            "level": 1.0,
             "num_voices": 1,
             "voice_spread": 0.0,
             "tune_halfsteps": 0,
@@ -296,7 +296,7 @@
       "data": {
         "osc": [
           {
-            "level": 0.15748031,
+            "level": 0.4173228,
             "num_voices": 3,
             "voice_spread": 0.047244094,
             "tune_halfsteps": 0,
@@ -583,7 +583,7 @@
       "data": {
         "osc": [
           {
-            "level": 0.5,
+            "level": 0.97637796,
             "num_voices": 1,
             "voice_spread": 0.0,
             "tune_halfsteps": 0,
@@ -866,11 +866,23 @@
       }
     },
     {
-      "name": "Init",
+      "name": "Bells",
       "data": {
         "osc": [
           {
-            "level": 0.92,
+            "level": 0.0,
+            "num_voices": 1,
+            "voice_spread": 0.0,
+            "tune_halfsteps": 0,
+            "tune_cents": 0.0,
+            "freq_offset": 1.0,
+            "wave_index": 0.0,
+            "sync": 0,
+            "key_follow": 1,
+            "wavetable": 0
+          },
+          {
+            "level": 1.0,
             "num_voices": 1,
             "voice_spread": 0.0,
             "tune_halfsteps": 0,
@@ -885,21 +897,9 @@
             "level": 0.0,
             "num_voices": 1,
             "voice_spread": 0.0,
-            "tune_halfsteps": 0,
+            "tune_halfsteps": 12,
             "tune_cents": 0.0,
-            "freq_offset": 1.0,
-            "wave_index": 0.0,
-            "sync": 0,
-            "key_follow": 1,
-            "wavetable": 0
-          },
-          {
-            "level": 0.0,
-            "num_voices": 1,
-            "voice_spread": 0.0,
-            "tune_halfsteps": 0,
-            "tune_cents": 0.0,
-            "freq_offset": 1.0,
+            "freq_offset": 1.9999985,
             "wave_index": 0.0,
             "sync": 0,
             "key_follow": 1,
@@ -909,9 +909,9 @@
         "env": [
           {
             "attack": 30.0,
-            "decay": 50.0,
-            "sustain": 0.7,
-            "release": 100.0,
+            "decay": 1543.3071,
+            "sustain": 0.0,
+            "release": 944.8819,
             "factor": 3.0
           },
           {
@@ -965,26 +965,26 @@
         ],
         "modul": [
           {
-            "source_func": "Lfo",
-            "source_func_id": 1,
+            "source_func": "Oscillator",
+            "source_func_id": 3,
             "target_func": "Oscillator",
-            "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_func_id": 2,
+            "target_param": "Frequency",
+            "amount": 1.0,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 24.0
           },
           {
-            "source_func": "Lfo",
-            "source_func_id": 1,
+            "source_func": "Oscillator",
+            "source_func_id": 2,
             "target_func": "Oscillator",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "Frequency",
+            "amount": 1.0,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 24.0
           },
           {
             "source_func": "Lfo",
@@ -1148,7 +1148,7 @@
           "tone": 1600.0
         },
         "patch": {
-          "level": 0.9
+          "level": 0.6456692
         }
       }
     },
