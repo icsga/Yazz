@@ -155,6 +155,36 @@ fn save_wave(id: usize) -> std::io::Result<()> {
     Ok(())
 }
 
+/* Save one samplebuffer of a voice as CSV file. */
+fn save_voice() -> std::io::Result<()> {
+    let wt_manager = WtManager::new(44100.0);
+    let filename = "synth_voice.csv".to_string();
+    let mut file = File::create(filename)?;
+    let wt = wt_manager.get_table(0).unwrap();
+    let mut voice = Voice::new(44100, wt);
+    let mut sound_global = SoundData::new();
+    let mut sound_local = SoundData::new();
+
+    sound_global.init();
+    sound_global.osc[0].level = 1.0;
+    sound_global.osc[0].num_voices = 2;
+    sound_global.env[0].attack = 0.0;
+    sound_global.env[0].decay = 0.0;
+    sound_global.env[0].sustain = 1.0;
+    sound_global.env[0].factor = 1.0;
+    sound_global.filter[0].filter_type = 2;
+
+    voice.set_freq(21.533203125);
+    voice.trigger(0, 0, &sound_global);
+
+    for i in 0..2048 {
+        let value = voice.get_sample(i, &mut sound_global, &mut sound_local);
+        let s = format!("{}, {:?}\n", i, value);
+        file.write_all(s.as_bytes())?;
+    }
+    Ok(())
+}
+
 fn main() {
     setup_logging();
 
@@ -167,6 +197,10 @@ fn main() {
                             .long("save")
                             .help("Saves selected wave to file")
                             .takes_value(true))
+                        .arg(Arg::with_name("savevoice")
+                            .short("v")
+                            .long("voice")
+                            .help("Saves output of single voice to file"))
                         .arg(Arg::with_name("midiport")
                             .short("m")
                             .long("midiport")
@@ -181,6 +215,11 @@ fn main() {
     if wave_index.len() > 0 {
         let wave_index: usize = wave_index.parse().unwrap_or(1);
         save_wave(wave_index).unwrap();
+        return;
+    }
+    if matches.is_present("savevoice") {
+        println!("Saving voice output");
+        save_voice().unwrap();
         return;
     }
 

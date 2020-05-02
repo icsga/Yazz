@@ -29,10 +29,10 @@ pub struct EnvelopeData {
 
 impl EnvelopeData {
     pub fn init(&mut self) {
-        self.attack = 30.0;
-        self.decay = 50.0;
-        self.sustain = 0.7;
-        self.release = 100.0;
+        self.attack = 15.0;
+        self.decay = 15.0;
+        self.sustain = 1.0;
+        self.release = 15.0;
         self.factor = 3.0;
     }
 }

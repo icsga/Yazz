@@ -4,6 +4,7 @@ use std::rc::Rc;
 use std::vec::Vec;
 
 use termion::{color, cursor};
+use termion::color::{Black, Rgb};
 
 use super::Float;
 use super::{Index, Widget, WidgetProperties};
@@ -41,16 +42,14 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
 
     // Transfer the graph into the output buffer.
     pub fn plot(&mut self, buff: &Vec<Float>, min: Float, max: Float) {
-        let scale_y = self.props.height as Float / (max - min);
-        let scale_x = self.props.width as Float / buff.len() as Float;
-        let offset = min * -1.0;
+        let (scale_x, scale_y, offset) = self.calc_scaling(min, max, buff.len());
         if min < 0.0 && max > 0.0 {
             // Calculate position of X axis and print it
-            let x_axis = (self.props.height as Float / (max - min)) * (min * -1.0);
+            let x_axis = self.calc_x_axis_position(min, max);
             self.plot_x_axis(x_axis as Index);
         }
         // Plot points
-        let mut prev_y_pos = self.val_to_y(buff[0], offset, scale_y);
+        let mut prev_y_pos = self.val_to_y(buff[0], offset, scale_y, min, max);
         let mut prev_x_pos: Index = 0;
         let mut y_accu: Float = 0.0;
         let mut y_num_values = 0.0;
@@ -66,7 +65,7 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
                 let mean = y_accu / y_num_values;
                 y_accu = 0.0;
                 y_num_values = 0.0;
-                let y_pos = self.val_to_y(mean, offset, scale_y);
+                let y_pos = self.val_to_y(mean, offset, scale_y, min, max);
 
 
                 let diff: i64 = Self::diff(y_pos, prev_y_pos);
@@ -103,8 +102,24 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
         self.props.set_dirty(true);
     }
 
+    pub fn calc_scaling(&self, min: Float, max: Float, num_values: usize) -> (Float, Float, Float) {
+        let scale_x = self.props.width as Float / num_values as Float;
+        let scale_y = (self.props.height - 1) as Float / (max - min);
+        let offset = min * -1.0;
+        (scale_x, scale_y, offset)
+    }
+
+    pub fn calc_x_axis_position(&self, min: Float, max: Float) -> Index {
+        ((self.props.height as Float / (max - min)) * (min * -1.0)) as Index
+    }
+
     // Transform a value to a graph coordinate
-    fn val_to_y(&self, value: Float, offset: Float, scale: Float) -> Index {
+    fn val_to_y(&self, mut value: Float, offset: Float, scale: Float, min: Float, max: Float) -> Index {
+        if value < min {
+            value = min;
+        } else if value > max {
+            value = max;
+        }
         ((value + offset) * scale) as Index
     }
 
@@ -140,9 +155,83 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Canvas<Key> {
         let pos_y = self.props.pos_y;
         print!("{}{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_dark), color::Fg(self.props.colors.fg_light2));
         for y in 0..self.props.height {
+            print!("{}", cursor::Goto(pos_x, pos_y + ((self.props.height - 1) - y)));
             for x in 0..self.props.width {
-                print!("{}{}", cursor::Goto(x + pos_x, pos_y + ((self.props.height - 1) - y)), self.byte[(y * self.props.width + x) as usize]);
+                print!("{}", self.byte[(y * self.props.width + x) as usize]);
             }
         }
+        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
     }
+}
+
+// ----------
+// Unit tests
+// ----------
+
+#[test]
+fn scaling_works() {
+    let canvas: CanvasRef<u32> = Canvas::new(100, 21); // 100 wide, 21 high
+    let c = canvas.borrow();
+
+    let (scale_x, scale_y, offset) = c.calc_scaling(-1.0, 1.0, 100); // 100 values from -1.0 to 1.0
+    assert_eq!(scale_x, 1.0);
+    assert_eq!(scale_y, 10.0); // 10.5 up and 10.5 down
+    assert_eq!(offset, 1.0);
+
+    let (scale_x, scale_y, offset) = c.calc_scaling(0.0, 1.0, 200); // 200 values from 0.0 to 1.0
+    assert_eq!(scale_x, 0.5);
+    assert_eq!(scale_y, 20.0); // 21 up
+    assert_eq!(offset, 0.0);
+}
+
+#[test]
+fn x_axis_is_placed_correctly() {
+    let canvas: CanvasRef<u32> = Canvas::new(100, 21);
+    let c = canvas.borrow();
+    let x_axis = c.calc_x_axis_position(-1.0, 1.0);
+    assert_eq!(x_axis, 10);
+}
+
+#[test]
+fn translation_works() {
+    let canvas: CanvasRef<u32> = Canvas::new(100, 21);
+    let c = canvas.borrow();
+
+    let (min, max) = (-1.0, 1.0);
+    let (_, scale_y, offset) = c.calc_scaling(min, max, 100);
+    let y = c.val_to_y(0.0, offset, scale_y, min, max);
+    assert_eq!(y, 10);
+    let y = c.val_to_y(-1.0, offset, scale_y, min, max);
+    assert_eq!(y, 0);
+    let y = c.val_to_y(1.0, offset, scale_y, min, max);
+    assert_eq!(y, 20);
+
+    let (min, max) = (0.0, 1.0);
+    let (_, scale_y, offset) = c.calc_scaling(min, max, 100);
+    let y = c.val_to_y(0.0, offset, scale_y, min, max);
+    assert_eq!(y, 0);
+    let y = c.val_to_y(0.5, offset, scale_y, min, max);
+    assert_eq!(y, 10);
+    let y = c.val_to_y(1.0, offset, scale_y, min, max);
+    assert_eq!(y, 20);
+}
+
+#[test]
+fn out_of_range_values_are_caught() {
+    let canvas: CanvasRef<u32> = Canvas::new(100, 21);
+    let c = canvas.borrow();
+
+    let (min, max) = (-1.0, 1.0);
+    let (_, scale_y, offset) = c.calc_scaling(min, max, 100);
+    let y = c.val_to_y(-1.1, offset, scale_y, min, max);
+    assert_eq!(y, 0);
+    let y = c.val_to_y(1.1, offset, scale_y, min, max);
+    assert_eq!(y, 20);
+
+    let (min, max) = (0.0, 1.0);
+    let (_, scale_y, offset) = c.calc_scaling(min, max, 100);
+    let y = c.val_to_y(-0.1, offset, scale_y, min, max);
+    assert_eq!(y, 0);
+    let y = c.val_to_y(1.1, offset, scale_y, min, max);
+    assert_eq!(y, 20);
 }

@@ -213,9 +213,6 @@ impl SampleGenerator for WtOsc {
             result += voice_result;
         }
         self.last_update += dt;
-        if result > 1.0 {
-            result = 1.0;
-        }
         self.last_sample = result;
         self.last_complete = complete;
         (result, complete)
