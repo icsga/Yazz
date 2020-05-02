@@ -40,66 +40,92 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
         self.byte[(y * self.props.width + x) as usize] = val;
     }
 
-    // Transfer the graph into the output buffer.
+    /** Transfer the graph into the output buffer.
+     *
+     * The number of values to print can be greater or less than the width of
+     * the Canvas, so we need to either combine or stretch the values to make
+     * them fit.
+     *
+     * To make things look nice, we also fill spaces between points that are in
+     * neighboring columns, but more than one row apart.
+     */
     pub fn plot(&mut self, buff: &Vec<Float>, min: Float, max: Float) {
         let (scale_x, scale_y, offset) = self.calc_scaling(min, max, buff.len());
         if min < 0.0 && max > 0.0 {
-            // Calculate position of X axis and print it
+            // X axis lies on screen. Calculate its position and print it.
             let x_axis = self.calc_x_axis_position(min, max);
             self.plot_x_axis(x_axis as Index);
         }
+
         // Plot points
+        let mut x_pos: Index = 0;
+        let mut y_pos: Index;
         let mut prev_y_pos = self.val_to_y(buff[0], offset, scale_y, min, max);
         let mut prev_x_pos: Index = 0;
         let mut y_accu: Float = 0.0;
-        let mut y_num_values = 0.0;
+
         for (i, value) in buff.iter().enumerate() {
-            let x_pos = (i as Float * scale_x) as Index;
-            y_accu += *value;
-            y_num_values += 1.0;
-            if x_pos == prev_x_pos && prev_x_pos > 0 {
-                // Accumulate values
-                continue;
+            x_pos = (i as Float * scale_x) as Index;
+            if x_pos == prev_x_pos {
+                // Take min/ max of all values that fall on the same column on screen
+                if *value >= 0.0 && *value > y_accu
+                || *value < 0.0 && *value < y_accu {
+                    y_accu = *value;
+                }
             } else {
-                // Next index, build average for previous values
-                let mean = y_accu / y_num_values;
-                y_accu = 0.0;
-                y_num_values = 0.0;
-                let y_pos = self.val_to_y(mean, offset, scale_y, min, max);
-
-
-                let diff: i64 = Self::diff(y_pos, prev_y_pos);
-                if diff > 1 {
-                    // Current and previous values are more than one row apart, fill the space between
-                    let end_y_pos: Index;
-                    let start_y_pos: Index;
-                    if y_pos > prev_y_pos {
-                        start_y_pos = prev_y_pos + 1;
-                        end_y_pos = y_pos;
-                    } else {
-                        start_y_pos = prev_y_pos;
-                        end_y_pos = y_pos + 1;
-                    };
-                    let (x1, from, x2, to) = Self::sort(x_pos as Index, start_y_pos, x_pos as Index, end_y_pos);
-                    for i in from..to {
-                        self.set(x1, i, '⋅');
-                    }
-
-                }
-
-                // Stretch value over skipped places if needed
-                if x_pos - prev_x_pos > 1 {
-                    for x in prev_x_pos..x_pos {
-                        self.set(x as Index, y_pos, '∘');
-                    }
-                } else {
-                    self.set(x_pos, y_pos, '∘');
-                }
+                // Advanced to next column, print previous max value
+                y_pos = self.val_to_y(y_accu, offset, scale_y, min, max);
+                self.draw_point(prev_x_pos, x_pos, prev_y_pos, y_pos);
+                y_accu = *value;
                 prev_x_pos = x_pos;
                 prev_y_pos = y_pos;
             }
         }
+
+        // Plot last point
+        y_pos = self.val_to_y(y_accu, offset, scale_y, min, max);
+        self.draw_point(prev_x_pos, x_pos, prev_y_pos, y_pos);
         self.props.set_dirty(true);
+    }
+
+    fn draw_point(&mut self, prev_x_pos: Index, x_pos: Index, prev_y_pos: Index, y_pos: Index) {
+        let diff: i64 = Self::diff(y_pos, prev_y_pos);
+        if diff > 1 {
+            // Current and previous points are more than one row apart, fill
+            // the space between.
+            self.connect_points(prev_x_pos, y_pos, prev_y_pos);
+        }
+
+        // Draw actualy point
+        self.set(prev_x_pos, y_pos, '∘');
+
+        // Stretch point over skipped columns if needed
+        if x_pos - prev_x_pos > 1 {
+            self.stretch_point(prev_x_pos + 1, x_pos, y_pos);
+        }
+    }
+
+    // Draw a vertical line between values more than one row apart.
+    fn connect_points(&mut self, x_pos: Index, y_pos: Index, prev_y_pos: Index) {
+        let end_y_pos: Index;
+        let start_y_pos: Index;
+        if y_pos > prev_y_pos {
+            start_y_pos = prev_y_pos + 1;
+            end_y_pos = y_pos;
+        } else {
+            start_y_pos = prev_y_pos;
+            end_y_pos = y_pos + 1;
+        };
+        let (x1, from, x2, to) = Self::sort(x_pos as Index, start_y_pos, x_pos as Index, end_y_pos);
+        for i in from..to {
+            self.set(x1, i, '⋅');
+        }
+    }
+
+    fn stretch_point(&mut self, prev_x_pos: Index, x_pos: Index, y_pos: Index) {
+        for x in prev_x_pos..x_pos {
+            self.set(x as Index, y_pos, '∘');
+        }
     }
 
     pub fn calc_scaling(&self, min: Float, max: Float, num_values: usize) -> (Float, Float, Float) {
@@ -120,7 +146,7 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
         } else if value > max {
             value = max;
         }
-        ((value + offset) * scale) as Index
+        ((value + offset) * scale).round() as Index
     }
 
     // Draw the x-axis line into the buffer
