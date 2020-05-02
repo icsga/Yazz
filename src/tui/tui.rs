@@ -102,7 +102,7 @@ impl Tui {
         };
         tui.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
         tui.load_wavetables();
-        //tui.scan_wavetables();
+        tui.scan_wavetables();
         tui.select_sound(0);
         match tui.ctrl_map.load("Yazz_ControllerMapping.ysn") {
             _ => ()
