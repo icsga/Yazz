@@ -33,7 +33,7 @@ pub struct ModSource {
 static MOD_SOURCE: [ModSource; 8] = [
     ModSource{function: Parameter::GlobalLfo,  index_range: (1, NUM_GLOBAL_LFOS), val_range: ValueRange::Float(-1.0, 1.0, 0.1), is_global: true},
     ModSource{function: Parameter::Aftertouch, index_range: (1, 1),               val_range: ValueRange::Float(0.0, 127.0, 0.0),is_global: true},
-    ModSource{function: Parameter::PitchWheel, index_range: (1, 1),               val_range: ValueRange::Float(-8192.0, 8191.0, 0.0),is_global: true},
+    ModSource{function: Parameter::Pitchbend,  index_range: (1, 1),               val_range: ValueRange::Float(-1.0, 1.0, 0.0), is_global: true},
     ModSource{function: Parameter::ModWheel,   index_range: (1, 1),               val_range: ValueRange::Float(0.0, 127.0, 0.0),is_global: true},
 
     ModSource{function: Parameter::Envelope,   index_range: (1, NUM_ENVELOPES),   val_range: ValueRange::Float(0.0, 1.0, 0.1),  is_global: false},

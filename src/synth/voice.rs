@@ -4,6 +4,7 @@ use super::Float;
 use super::Lfo;
 use super::{Parameter, ParameterValue, ParamId, SynthParam, MenuItem};
 use super::SampleGenerator;
+use super::SynthState;
 use super::{WtOsc, WtOscData, Wavetable, WavetableRef};
 use super::SoundData;
 
@@ -52,23 +53,17 @@ impl Voice {
             Lfo::new(sample_rate),
             Lfo::new(sample_rate),
         ];
-        let triggered = false;
-        let trigger_seq = 0;
-        let key = 0;
-        let velocity = 0.0;
-        let input_freq = 440.0;
-        let last_update = 0i64;
         let voice = Voice{
-                osc,
-                env,
-                filter,
-                lfo,
-                triggered,
-                trigger_seq,
-                key,
-                velocity,
-                input_freq,
-                last_update};
+                osc: osc,
+                env: env,
+                filter: filter,
+                lfo: lfo,
+                triggered: false,
+                trigger_seq: 0,
+                key: 0,
+                velocity: 0.0,
+                input_freq: 440.0,
+                last_update: 0i64};
         voice
     }
 
@@ -137,7 +132,11 @@ impl Voice {
         }
     }
 
-    pub fn get_sample(&mut self, sample_clock: i64, sound_global: &SoundData, sound_local: &mut SoundData) -> Float {
+    pub fn get_sample(&mut self,
+                      sample_clock: i64,
+                      sound_global: &SoundData,
+                      sound_local: &mut SoundData,
+                      global_state: &SynthState) -> Float {
         if !self.is_running() {
             return 0.0;
         }
@@ -151,7 +150,7 @@ impl Voice {
 
         // Get mixed output from oscillators
         for (i, osc) in self.osc.iter_mut().enumerate() {
-            freq = Voice::get_frequency(&sound_local.osc[i], self.input_freq);
+            freq = Voice::get_frequency(&sound_local.osc[i], self.input_freq * global_state.freq_factor);
             let (sample, wave_complete) = osc.get_sample(freq, sample_clock, sound_local, reset);
             result += sample * sound_local.osc[i].level;
             if i == 0 && wave_complete && sound_local.osc[1].sync == 1 {

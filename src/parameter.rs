@@ -79,7 +79,7 @@ pub enum Parameter {
     Velocity,
     KeyAftertouch,
     Aftertouch,
-    PitchWheel,
+    Pitchbend,
     ModWheel,
 
     // System parameters
@@ -417,8 +417,9 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 
-pub static PATCH_PARAMS: [MenuItem; 1] = [
+pub static PATCH_PARAMS: [MenuItem; 2] = [
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Pitchbend ,key: 'p', val_range: ValueRange::Int(0, 12),             next: &[]},
 ];
 
 pub static MOD_SOURCES: [MenuItem; 8] = [
@@ -428,7 +429,7 @@ pub static MOD_SOURCES: [MenuItem; 8] = [
     MenuItem{item: Parameter::Velocity,   key: 'v', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
     MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},
     MenuItem{item: Parameter::Aftertouch, key: 'a', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::PitchWheel, key: 'p', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Pitchbend,  key: 'p', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
     MenuItem{item: Parameter::ModWheel,   key: 'm', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
 ];
 
