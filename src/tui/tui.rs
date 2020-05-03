@@ -111,9 +111,22 @@ impl Tui {
     }
 
     fn load_wavetables(&mut self) {
+        // send default wavetable to synth (already in list)
+        self.sender.send(SynthMessage::Wavetable(WtInfo{id: 0, valid: true, name: "Basic".to_string(), filename: "".to_string()})).unwrap();
+
         // For all wavetable list entries:
         let list = self.selector.get_dynamic_list(Parameter::Wavetable);
         for entry in &mut self.bank.wt_list {
+            // Check if entry is already in list
+            let mut found_entry = false;
+            for (id, name) in list.iter() {
+                if *id == entry.id && *name == entry.name {
+                    found_entry = true;
+                }
+            }
+            if found_entry {
+                continue;
+            }
             // Check if file exists
             let filename = "data/".to_string() + &entry.filename;
             if !std::path::Path::new(&filename).exists() {
@@ -124,6 +137,8 @@ impl Tui {
             // Add to selector for option display
             list.push((entry.id, entry.name.clone()));
         }
+        // Send list to synth
+
     }
 
     /** Start input handling thread.
@@ -271,7 +286,7 @@ impl Tui {
                 }
                 if !found {
                     info!("Adding new table {}.", table_name);
-                    let id = self.bank.wt_list.len();
+                    let id = self.bank.wt_list.len() + 1; // Default wavetable is not in this list, so add 1
                     let new_entry = WtInfo{
                         id: id,
                         valid: true,

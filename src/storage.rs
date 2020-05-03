@@ -40,7 +40,7 @@ impl Default for SoundPatch {
 pub struct SoundBank {
     info: SoundBankInfo,     // Binary and sound version
     sounds: Vec<SoundPatch>, // List of sound patches
-    pub wt_list: Vec<WtInfo>     // List of available wavetables
+    pub wt_list: Vec<WtInfo> // List of available wavetables
 }
 
 impl SoundBank {

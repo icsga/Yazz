@@ -31,6 +31,9 @@ impl WtReader {
     }
 
     pub fn read_file(&self, filename: &str) -> Result<WavetableRef, ()> {
+        if filename == "" {
+            return Err(());
+        }
         let filename = self.base_path.clone() + filename;
         let file = File::open(filename).unwrap();
         let reader = BufReader::new(file);
