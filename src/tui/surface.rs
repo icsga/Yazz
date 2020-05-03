@@ -376,6 +376,7 @@ impl Surface {
     }
 
     pub fn set_sound_info(&mut self, program: usize, name: &str) {
+        let name = (program + 1).to_string() + ": " + name;
         self.window.set_title(name);
     }
 }
