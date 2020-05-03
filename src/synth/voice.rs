@@ -28,7 +28,8 @@ pub struct Voice {
     triggered: bool,
     pub trigger_seq: u64, // Sequence number for keeping track of trigger order
     pub key: u8,          // Key that was pressed to trigger this voice
-    velocity: Float,      // Velocity of NoteOn event
+    velocity: Float,      // Raw velocity of NoteOn event (for use as modulation source)
+    scaled_vel: Float,    // Velocity scaled according to sound settings (for use as amplifier)
     input_freq: Float,    // Frequency to play as received from Synth
     last_update: i64,
 }
@@ -62,6 +63,7 @@ impl Voice {
                 trigger_seq: 0,
                 key: 0,
                 velocity: 0.0,
+                scaled_vel: 0.0,
                 input_freq: 440.0,
                 last_update: 0i64};
         voice
@@ -152,7 +154,7 @@ impl Voice {
         for (i, osc) in self.osc.iter_mut().enumerate() {
             freq = Voice::get_frequency(&sound_local.osc[i], self.input_freq * global_state.freq_factor);
             let (sample, wave_complete) = osc.get_sample(freq, sample_clock, sound_local, reset);
-            result += sample * sound_local.osc[i].level;
+            result += sample * sound_local.osc[i].level * self.scaled_vel;
             if i == 0 && wave_complete && sound_local.osc[1].sync == 1 {
                 reset = true; // Sync next oscillator in list (osc 1)
             } else {
@@ -184,8 +186,11 @@ impl Voice {
         self.input_freq = freq;
     }
 
-    pub fn set_velocity(&mut self, velocity: u8) {
-        self.velocity = velocity as Float;
+    pub fn set_velocity(&mut self, velocity: u8, sensitivity: Float) {
+        self.velocity = velocity as Float / 127.0;
+        // Sensitivity gives us the range of velocity values from the maximum.
+        // Sens 0.7 means scaled_velocity ranges from 0.3 - 1.0.
+        self.scaled_vel = (1.0 - sensitivity) + (self.velocity * sensitivity);
     }
 
     pub fn set_wavetable(&mut self, osc_id: usize, wt: WavetableRef) {

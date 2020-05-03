@@ -32,6 +32,7 @@ pub enum Parameter {
     KeyFollow,
     Voices,
     Spread,
+    VelSens,
 
     // Filter
     Type,
@@ -417,9 +418,10 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 
-pub static PATCH_PARAMS: [MenuItem; 2] = [
+pub static PATCH_PARAMS: [MenuItem; 3] = [
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
     MenuItem{item: Parameter::Pitchbend ,key: 'p', val_range: ValueRange::Int(0, 12),             next: &[]},
+    MenuItem{item: Parameter::VelSens,   key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
 ];
 
 pub static MOD_SOURCES: [MenuItem; 8] = [
