@@ -37,12 +37,14 @@ pub enum Synth2UIMessage {
 pub struct PatchData {
     pub level: Float,
     pub pitchbend: Float, // Range of the pitchwheel
+    pub vel_sens: Float,  // Velocity sensitivity
 }
 
 impl PatchData {
     pub fn init(&mut self) {
         self.level = 90.0;
         self.pitchbend = 2.0;
+        self.vel_sens = 1.0;
     }
 }
 
@@ -308,7 +310,7 @@ impl Synth {
         let voice = &mut self.voice[voice_id];
         voice.set_key(key);
         voice.set_freq(freq);
-        voice.set_velocity(velocity);
+        voice.set_velocity(velocity, self.sound.patch.vel_sens);
         voice.trigger(self.trigger_seq, self.last_clock, &self.sound);
         self.num_voices_triggered += 1;
         self.trigger_seq += 1;

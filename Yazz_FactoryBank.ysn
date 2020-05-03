@@ -288,7 +288,8 @@
         },
         "patch": {
           "level": 1.0,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -576,7 +577,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -864,7 +866,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -1152,7 +1155,8 @@
         },
         "patch": {
           "level": 0.6456692,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -1440,7 +1444,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -1728,7 +1733,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -2016,7 +2022,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -2304,7 +2311,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -2592,7 +2600,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -2880,7 +2889,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -3168,7 +3178,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -3456,7 +3467,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -3744,7 +3756,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -4032,7 +4045,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -4320,7 +4334,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -4608,7 +4623,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -4896,7 +4912,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -5184,7 +5201,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -5472,7 +5490,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -5760,7 +5779,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -6048,7 +6068,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -6336,7 +6357,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -6624,7 +6646,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -6912,7 +6935,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -7200,7 +7224,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -7488,7 +7513,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -7776,7 +7802,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -8064,7 +8091,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -8352,7 +8380,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -8640,7 +8669,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -8928,7 +8958,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -9216,7 +9247,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -9504,7 +9536,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -9792,7 +9825,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -10080,7 +10114,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -10368,7 +10403,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -10656,7 +10692,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -10944,7 +10981,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -11232,7 +11270,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -11520,7 +11559,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -11808,7 +11848,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -12096,7 +12137,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -12384,7 +12426,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -12672,7 +12715,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -12960,7 +13004,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -13248,7 +13293,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -13536,7 +13582,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -13824,7 +13871,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -14112,7 +14160,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -14400,7 +14449,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -14688,7 +14738,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -14976,7 +15027,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -15264,7 +15316,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -15552,7 +15605,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -15840,7 +15894,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -16128,7 +16183,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -16416,7 +16472,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -16704,7 +16761,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -16992,7 +17050,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -17280,7 +17339,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -17568,7 +17628,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -17856,7 +17917,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -18144,7 +18206,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -18432,7 +18495,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -18720,7 +18784,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -19008,7 +19073,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -19296,7 +19362,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -19584,7 +19651,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -19872,7 +19940,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -20160,7 +20229,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -20448,7 +20518,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -20736,7 +20807,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -21024,7 +21096,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -21312,7 +21385,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -21600,7 +21674,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -21888,7 +21963,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -22176,7 +22252,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -22464,7 +22541,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -22752,7 +22830,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -23040,7 +23119,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -23328,7 +23408,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -23616,7 +23697,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -23904,7 +23986,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -24192,7 +24275,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -24480,7 +24564,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -24768,7 +24853,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -25056,7 +25142,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -25344,7 +25431,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -25632,7 +25720,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -25920,7 +26009,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -26208,7 +26298,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -26496,7 +26587,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -26784,7 +26876,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -27072,7 +27165,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -27360,7 +27454,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -27648,7 +27743,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -27936,7 +28032,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -28224,7 +28321,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -28512,7 +28610,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -28800,7 +28899,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -29088,7 +29188,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -29376,7 +29477,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -29664,7 +29766,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -29952,7 +30055,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -30240,7 +30344,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -30528,7 +30633,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -30816,7 +30922,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -31104,7 +31211,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -31392,7 +31500,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -31680,7 +31789,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -31968,7 +32078,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -32256,7 +32367,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -32544,7 +32656,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -32832,7 +32945,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -33120,7 +33234,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -33408,7 +33523,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -33696,7 +33812,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -33984,7 +34101,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -34272,7 +34390,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -34560,7 +34679,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -34848,7 +34968,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -35136,7 +35257,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -35424,7 +35546,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -35712,7 +35835,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -36000,7 +36124,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -36288,7 +36413,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -36576,7 +36702,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     },
@@ -36864,7 +36991,8 @@
         },
         "patch": {
           "level": 0.9,
-          "pitchbend": 2.0
+          "pitchbend": 2.0,
+          "vel_sens": 1.0
         }
       }
     }
