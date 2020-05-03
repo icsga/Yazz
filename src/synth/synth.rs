@@ -36,12 +36,22 @@ pub enum Synth2UIMessage {
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
 pub struct PatchData {
     pub level: Float,
+    pub pitchbend: Float, // Range of the pitchwheel
 }
 
 impl PatchData {
     pub fn init(&mut self) {
         self.level = 90.0;
+        self.pitchbend = 2.0;
     }
+}
+
+/** Global synth state.
+ *
+ * Holds dynamically calculated parameters like pitch offset.
+ */
+pub struct SynthState {
+    pub freq_factor: Float,
 }
 
 pub struct Synth {
@@ -63,10 +73,11 @@ pub struct Synth {
     voices_playing: u32, // Bitmap with currently playing voices
     trigger_seq: u64,
     last_clock: i64,
-    pitch_wheel: Float,
+    pitch_bend: Float,
     mod_wheel: Float,
     aftertouch: Float,
     sender: Sender<UiMessage>,
+    global_state: SynthState,
 
     // Extra oscillators to display the waveshape
     samplebuff_osc: WtOsc,
@@ -95,45 +106,35 @@ impl Synth {
             Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
             Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
         ];
-        let delay = Delay::new(sample_rate);
         let glfo = [
             Lfo::new(sample_rate), Lfo::new(sample_rate)
         ];
         let mut keymap: [Float; NUM_KEYS] = [0.0; NUM_KEYS];
         Synth::calculate_keymap(&mut keymap, REF_FREQUENCY);
-        let num_voices_triggered = 0;
-        let voices_playing = 0;
-        let trigger_seq = 0;
-        let last_clock = 0i64;
-        let pitch_wheel = 0.0;
-        let mod_wheel = 0.0;
-        let aftertouch = 0.0;
-        let samplebuff_osc = WtOsc::new(sample_rate, 0, default_table.clone());
-        let samplebuff_env = Envelope::new(sample_rate as Float);
-        let samplebuff_lfo = Lfo::new(sample_rate);
         let osc_wave = [default_table.clone(), default_table.clone(), default_table.clone()];
         Synth{
-            sample_rate,
-            sound,
-            sound_global,
-            sound_local,
-            keymap,
-            wt_manager,
-            voice,
-            delay,
-            glfo,
-            num_voices_triggered,
-            voices_playing,
-            trigger_seq,
-            last_clock,
-            pitch_wheel,
-            mod_wheel,
-            aftertouch,
-            sender,
-            samplebuff_osc,
-            samplebuff_env,
-            samplebuff_lfo,
-            osc_wave,
+            sample_rate: sample_rate,
+            sound: sound,
+            sound_global: sound_global,
+            sound_local: sound_local,
+            keymap: keymap,
+            wt_manager: wt_manager,
+            voice: voice,
+            delay: Delay::new(sample_rate),
+            glfo:glfo,
+            num_voices_triggered: 0,
+            voices_playing: 0,
+            trigger_seq: 0,
+            last_clock: 0i64,
+            pitch_bend: 0.0,
+            mod_wheel: 0.0,
+            aftertouch: 0.0,
+            sender: sender,
+            global_state: SynthState{freq_factor: 1.0},
+            samplebuff_osc: WtOsc::new(sample_rate, 0, default_table.clone()),
+            samplebuff_env: Envelope::new(sample_rate as Float),
+            samplebuff_lfo: Lfo::new(sample_rate),
+            osc_wave: osc_wave,
         }
     }
 
@@ -189,7 +190,7 @@ impl Synth {
                     val
                 },
                 Parameter::Aftertouch => self.aftertouch,
-                Parameter::PitchWheel => self.pitch_wheel,
+                Parameter::Pitchbend => self.pitch_bend,
                 Parameter::ModWheel => self.mod_wheel,
                 _ => 0.0,
             } * m.scale;
@@ -221,7 +222,7 @@ impl Synth {
         if self.voices_playing > 0 {
             for i in 0..32 {
                 if self.voices_playing & (1 << i) > 0 {
-                    value += self.voice[i].get_sample(sample_clock, &self.sound_global, &mut self.sound_local);
+                    value += self.voice[i].get_sample(sample_clock, &self.sound_global, &mut self.sound_local, &self.global_state);
                 }
             }
         }
@@ -284,7 +285,7 @@ impl Synth {
             MidiMessage::NoteOff{channel, key, velocity} => self.handle_note_off(key, velocity),
             MidiMessage::KeyAT{channel, key, pressure} => (), // Polyphonic aftertouch not supported yet
             MidiMessage::ChannelAT{channel, pressure} => self.handle_channel_aftertouch(pressure),
-            MidiMessage::PitchWheel{channel, pitch} => self.handle_pitch_wheel(pitch),
+            MidiMessage::Pitchbend{channel, pitch} => self.handle_pitch_bend(pitch),
             MidiMessage::ControlChg{channel, controller, value} => self.handle_controller(controller, value),
             MidiMessage::ProgramChg{channel, program} => (), // This shouldn't get here, it's a UI event
         }
@@ -328,8 +329,10 @@ impl Synth {
         self.aftertouch = pressure as Float;
     }
 
-    fn handle_pitch_wheel(&mut self, value: i16) {
-        self.pitch_wheel = value as Float;
+    fn handle_pitch_bend(&mut self, value: i16) {
+        self.pitch_bend = (value + (value & 0x01)) as Float / 8192.0;
+        let inc: Float = 1.059463;
+        self.global_state.freq_factor = inc.powf(self.pitch_bend * self.sound.patch.pitchbend);
     }
 
     fn handle_controller(&mut self, ctrl: u8, value: u8) {

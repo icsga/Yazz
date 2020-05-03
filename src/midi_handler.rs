@@ -13,7 +13,7 @@ pub enum MidiMessage {
     ControlChg {channel: u8, controller: u8, value: u8},
     ProgramChg {channel: u8, program: u8},
     ChannelAT  {channel: u8, pressure: u8},
-    PitchWheel {channel: u8, pitch: i16},
+    Pitchbend  {channel: u8, pitch: i16},
 }
 
 pub struct MidiHandler {
@@ -63,7 +63,7 @@ impl MidiHandler {
                 let mut pitch: i16 = param as i16;
                 pitch |= (value as i16) << 7;
                 pitch -= 0x2000;
-                MidiMessage::PitchWheel{channel, pitch}
+                MidiMessage::Pitchbend{channel, pitch}
             },
             _ => panic!(),
         }

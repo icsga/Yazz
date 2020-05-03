@@ -51,7 +51,7 @@ impl WtOscData {
         self.calc_freq_offset();
     }
 
-    /** Fine tuning of oscillator (0 - 1 octave). */
+    /** Fine tuning of oscillator (+/- 1 halfsteps). */
     pub fn set_cents(&mut self, cents: Float) {
         self.tune_cents = cents;
         self.calc_freq_offset();

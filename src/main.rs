@@ -164,6 +164,7 @@ fn save_voice() -> std::io::Result<()> {
     let mut voice = Voice::new(44100, wt);
     let mut sound_global = SoundData::new();
     let mut sound_local = SoundData::new();
+    let global_state = SynthState{freq_factor: 1.0};
 
     sound_global.init();
     sound_global.osc[0].level = 1.0;
@@ -178,7 +179,7 @@ fn save_voice() -> std::io::Result<()> {
     voice.trigger(0, 0, &sound_global);
 
     for i in 0..2048 {
-        let value = voice.get_sample(i, &mut sound_global, &mut sound_local);
+        let value = voice.get_sample(i, &mut sound_global, &mut sound_local, &global_state);
         let s = format!("{}, {:?}\n", i, value);
         file.write_all(s.as_bytes())?;
     }
