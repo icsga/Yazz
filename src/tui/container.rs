@@ -71,8 +71,8 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         self.draw_border = enable;
     }
 
-    pub fn set_title(&mut self, title: &str) {
-        self.title = format!("┤ {} ├", title.to_string());
+    pub fn set_title(&mut self, title: String) {
+        self.title = format!("┤ {} ├", title);
     }
 
     fn draw_border(&self) {
