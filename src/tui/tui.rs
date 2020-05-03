@@ -510,6 +510,27 @@ impl Tui {
                     Tui::display_param(&s.param_selection, selector_state == SelectorState::Param);
                     selection = &s.param_selection;
                     x_pos = 14;
+                    if selector_state == SelectorState::Param {
+                        // Display value after parameter
+                        match s.param_selection.value {
+                            ParameterValue::Int(_)
+                            | ParameterValue::Float(_)
+                            | ParameterValue::Choice(_)
+                            | ParameterValue::Dynamic(_, _) => {
+                                Tui::display_value(&s.param_selection, false, &s.wavetable_list);
+                            },
+                            ParameterValue::Function(_) => {
+                                Tui::display_function(&s.value_func_selection, false);
+                                Tui::display_function_index(&s.value_func_selection, false);
+                            },
+                            ParameterValue::Param(_) => {
+                                Tui::display_function(&s.value_func_selection, false);
+                                Tui::display_function_index(&s.value_func_selection, false);
+                                Tui::display_param(&s.value_param_selection, false);
+                            }
+                            _ => ()
+                        }
+                    }
                 }
                 SelectorState::Value => {
                     Tui::display_value(&s.param_selection, selector_state == SelectorState::Value, &s.wavetable_list);
@@ -570,7 +591,7 @@ impl Tui {
         if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
-        print!(" {}: ", param.item_list[param.item_index].item);
+        print!(" {} ", param.item_list[param.item_index].item);
         if selected {
             print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
         }
