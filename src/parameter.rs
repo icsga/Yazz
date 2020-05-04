@@ -9,6 +9,8 @@ use log::{info, trace, warn};
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
 pub enum Parameter {
+    None,
+
     // Function
     Oscillator,
     Filter,
@@ -43,6 +45,7 @@ pub enum Parameter {
     // Filter types
     RLPF,
     ResonZ,
+    Moog,
 
     // Amp
     Volume,
@@ -383,9 +386,11 @@ pub static FILTER_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Gain,      key: 'g', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
 ];
 
-pub static FILTER_TYPE: [MenuItem; 2] = [
-    MenuItem{item: Parameter::RLPF,      key: 'l', val_range: ValueRange::NoRange, next: &[]},
+pub static FILTER_TYPE: [MenuItem; 4] = [
+    MenuItem{item: Parameter::None,      key: 'n', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::ResonZ,    key: 'r', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::RLPF,      key: 'l', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Moog,      key: 'm', val_range: ValueRange::NoRange, next: &[]},
 ];
 
 pub static ENV_PARAMS: [MenuItem; 5] = [
