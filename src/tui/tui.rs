@@ -541,6 +541,16 @@ impl Tui {
                         Tui::display_midi_learn();
                     }
                 }
+                SelectorState::AddMarker => {
+                    if selector_state == SelectorState::AddMarker {
+                        Tui::display_add_marker();
+                    }
+                }
+                SelectorState::GotoMarker => {
+                    if selector_state == SelectorState::GotoMarker {
+                        Tui::display_goto_marker();
+                    }
+                }
                 SelectorState::ValueFunction => {
                     Tui::display_function(&s.value_func_selection, selector_state == SelectorState::ValueFunction);
                     selection = &s.value_func_selection;
@@ -632,6 +642,17 @@ impl Tui {
         print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
     }
 
+    fn display_add_marker() {
+        print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+        print!("  Select marker to add");
+        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+    }
+
+    fn display_goto_marker() {
+        print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+        print!("  Select marker to go to");
+        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+    }
 
     fn display_options(selector: &ParamSelector, s: &ItemSelection, x_pos: u16) {
         print!("{}{}", color::Bg(Black), color::Fg(LightWhite));

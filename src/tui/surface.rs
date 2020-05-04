@@ -38,13 +38,14 @@ impl Surface {
                                canvas};
 
         let osc: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
-        osc.borrow_mut().enable_border(true);
+        //osc.borrow_mut().enable_border(true);
         this.window.enable_border(true);
         this.add_multi_osc(&mut osc.borrow_mut(), 1, 0, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 2, 31, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 3, 63, 0);
-        let (osc_width, osc_height) = osc.borrow().get_size();
-        this.add_child(osc, 1, 0);
+        let (osc_width, mut osc_height) = osc.borrow().get_size();
+        this.add_child(osc, 1, 1);
+        osc_height = osc_height + 1; // Leave a little space
 
         let env: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         env.borrow_mut().enable_border(true);

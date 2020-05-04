@@ -336,6 +336,15 @@ impl MenuItem {
         }
         panic!();
     }
+
+    pub fn get_item_index(item: Parameter, item_list: &'static [MenuItem]) -> usize {
+        for (i, s) in item_list.iter().enumerate() {
+            if s.item == item {
+                return i;
+            }
+        }
+        panic!();
+    }
 }
 
 /* Top-level menu */
