@@ -195,6 +195,8 @@ impl Synth {
         self.sound_global = self.sound;
 
         // Then apply global modulators
+        let mut param_id = ParamId{..Default::default()};
+        let mut synth_param = SynthParam{..Default::default()};
         for m in self.sound.modul.iter() {
             if !m.active || !m.is_global {
                 continue;
@@ -214,18 +216,18 @@ impl Synth {
 
 
             // Get current value of target parameter
-            let param = ParamId{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param};
-            let mut current_val = self.sound_global.get_value(&param);
+            param_id.set(m.target_func, m.target_func_id, m.target_param);
+            let mut current_val = self.sound_global.get_value(&param_id);
             let mut val = current_val.as_float();
 
             // Update value
-            let dest_range = MenuItem::get_val_range(param.function, param.parameter);
+            let dest_range = MenuItem::get_val_range(param_id.function, param_id.parameter);
             val = dest_range.safe_add(val, mod_val);
 
             // Update parameter in global sound data
             current_val.set_from_float(val);
-            let param = SynthParam{function: m.target_func, function_id: m.target_func_id, parameter: m.target_param, value: current_val};
-            self.sound_global.set_parameter(&param);
+            synth_param.set(m.target_func, m.target_func_id, m.target_param, current_val);
+            self.sound_global.set_parameter(&synth_param);
         }
     }
 
@@ -271,9 +273,13 @@ impl Synth {
     /* Calculates the frequencies for the default keymap with equal temperament. */
     fn calculate_keymap(map: &mut[Float; 128], reference_pitch: Float) {
         for i in 0..128 {
-            let two: Float = 2.0;
-            map[i] = (reference_pitch / 32.0) * (two.powf((i as Float - 9.0) / 12.0));
+            map[i] = Synth::calculate_frequency(i as Float, reference_pitch);
         }
+    }
+
+    fn calculate_frequency(key: Float, reference_pitch: Float) -> Float {
+        const TWO: Float = 2.0;
+        (reference_pitch / 32.0) * (TWO.powf((key - 9.0) / 12.0))
     }
 
     fn handle_ui_message(&mut self, msg: SynthParam) {

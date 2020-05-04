@@ -70,8 +70,8 @@ impl Engine {
                         for sample in buffer.chunks_mut(num_channels) {
                             sample_clock = sample_clock + 1;
                             let (left, right) = locked_synth.get_sample(sample_clock);
-                            sample[0] = left;
-                            sample[1] = right;
+                            sample[0] = left as f32;
+                            sample[1] = right as f32;
                         }
 
                         let busy = time.elapsed().expect("Went back in time");

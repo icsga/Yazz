@@ -1,5 +1,5 @@
 use super::Float;
-use super::OnePole;
+use super::filter::OnePole;
 
 use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};

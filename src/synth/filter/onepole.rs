@@ -1,4 +1,4 @@
-use super::Float;
+use crate::Float;
 
 /* Taken from https://www.earlevel.com/main/2012/12/15/a-one-pole-filter/ */
 pub struct OnePole {
@@ -15,7 +15,7 @@ impl OnePole {
 
     pub fn update(&mut self, cutoff: Float) {
         let freq = cutoff / self.sample_rate;
-        self.b1 = (-2.0 * std::f32::consts::PI * freq).exp();
+        self.b1 = (-2.0 * std::f64::consts::PI * freq).exp();
         self.a0 = 1.0 - self.b1;
     }
 

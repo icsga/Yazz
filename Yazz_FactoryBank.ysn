@@ -71,15 +71,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -362,15 +364,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -587,7 +591,7 @@
       }
     },
     {
-      "name": "Eff'em",
+      "name": "Bowed Glass",
       "data": {
         "osc": [
           {
@@ -629,11 +633,11 @@
         ],
         "env": [
           {
-            "attack": 30.0,
-            "decay": 50.0,
+            "attack": 440.9448818897638,
+            "decay": 377.9527559055118,
             "sustain": 0.7,
-            "release": 100.0,
-            "factor": 3.0
+            "release": 1070.8661417322835,
+            "factor": 1.0
           },
           {
             "attack": 30.0,
@@ -653,15 +657,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -697,15 +703,15 @@
             "scale": 600.0
           },
           {
-            "source_func": "Oscillator",
-            "source_func_id": 3,
+            "source_func": "Lfo",
+            "source_func_id": 1,
             "target_func": "Oscillator",
-            "target_func_id": 2,
+            "target_func_id": 1,
             "target_param": "Finetune",
-            "amount": 0.0,
+            "amount": 0.13385826771653542,
             "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 13.38582677165354
           },
           {
             "source_func": "Lfo",
@@ -944,15 +950,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -1169,17 +1177,17 @@
       }
     },
     {
-      "name": "Init",
+      "name": "PWM",
       "data": {
         "osc": [
           {
-            "level": 0.92,
-            "num_voices": 1,
-            "voice_spread": 0.0,
+            "level": 0.4488188976377953,
+            "num_voices": 3,
+            "voice_spread": 0.1889763779527559,
             "tune_halfsteps": 0,
             "tune_cents": 0.0,
             "freq_offset": 1.0,
-            "wave_index": 0.5,
+            "wave_index": 0.0,
             "sync": 0,
             "key_follow": 1,
             "wavetable": 1
@@ -1211,11 +1219,11 @@
         ],
         "env": [
           {
-            "attack": 30.0,
-            "decay": 50.0,
+            "attack": 15.0,
+            "decay": 15.0,
             "sustain": 0.7,
-            "release": 100.0,
-            "factor": 3.0
+            "release": 30.0,
+            "factor": 2.0
           },
           {
             "attack": 30.0,
@@ -1234,22 +1242,24 @@
         ],
         "filter": [
           {
-            "filter_type": 2,
-            "cutoff": 1000.0,
+            "filter_type": 1,
+            "cutoff": 2778.3228346456694,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 0.3
           },
           {
             "waveform": "Sine",
@@ -1272,22 +1282,22 @@
             "source_func_id": 1,
             "target_func": "Oscillator",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 1.0,
+            "target_param": "WaveIndex",
+            "amount": 0.2,
             "active": true,
             "is_global": false,
-            "scale": 0.78740156
+            "scale": 0.2
           },
           {
             "source_func": "Lfo",
             "source_func_id": 1,
             "target_func": "Oscillator",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "WaveIndex",
+            "amount": 0.3,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 0.15
           },
           {
             "source_func": "Lfo",
@@ -1445,7 +1455,7 @@
           }
         ],
         "delay": {
-          "level": 0.0,
+          "level": 0.047244094488188976,
           "feedback": 0.5,
           "time": 0.5,
           "tone": 1600.0
@@ -1470,7 +1480,7 @@
             "tune_halfsteps": 0,
             "tune_cents": 0.0,
             "freq_offset": 1.0,
-            "wave_index": 0.0,
+            "wave_index": 0.6535433070866141,
             "sync": 0,
             "key_follow": 1,
             "wavetable": 0
@@ -1525,16 +1535,18 @@
         ],
         "filter": [
           {
-            "filter_type": 2,
-            "cutoff": 1000.0,
+            "filter_type": 1,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -1817,15 +1829,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -2108,15 +2122,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -2399,15 +2415,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -2690,15 +2708,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -2981,15 +3001,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -3272,15 +3294,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -3563,15 +3587,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -3854,15 +3880,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -4145,15 +4173,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -4436,15 +4466,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -4727,15 +4759,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -5018,15 +5052,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -5309,15 +5345,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -5600,15 +5638,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -5891,15 +5931,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -6182,15 +6224,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -6473,15 +6517,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -6764,15 +6810,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -7055,15 +7103,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -7346,15 +7396,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -7637,15 +7689,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -7928,15 +7982,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -8219,15 +8275,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -8510,15 +8568,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -8801,15 +8861,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -9092,15 +9154,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -9383,15 +9447,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -9674,15 +9740,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -9965,15 +10033,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -10256,15 +10326,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -10547,15 +10619,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -10838,15 +10912,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -11129,15 +11205,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -11420,15 +11498,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -11711,15 +11791,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -12002,15 +12084,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -12293,15 +12377,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -12584,15 +12670,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -12875,15 +12963,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -13166,15 +13256,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -13457,15 +13549,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -13748,15 +13842,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -14039,15 +14135,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -14330,15 +14428,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -14621,15 +14721,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -14912,15 +15014,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -15203,15 +15307,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -15494,15 +15600,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -15785,15 +15893,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -16076,15 +16186,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -16367,15 +16479,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -16658,15 +16772,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -16949,15 +17065,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -17240,15 +17358,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -17531,15 +17651,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -17822,15 +17944,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -18113,15 +18237,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -18404,15 +18530,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -18695,15 +18823,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -18986,15 +19116,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -19277,15 +19409,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -19568,15 +19702,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -19859,15 +19995,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -20150,15 +20288,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -20441,15 +20581,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -20732,15 +20874,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -21023,15 +21167,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -21314,15 +21460,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -21605,15 +21753,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -21896,15 +22046,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -22187,15 +22339,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -22478,15 +22632,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -22769,15 +22925,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -23060,15 +23218,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -23351,15 +23511,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -23642,15 +23804,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -23933,15 +24097,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -24224,15 +24390,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -24515,15 +24683,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -24806,15 +24976,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -25097,15 +25269,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -25388,15 +25562,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -25679,15 +25855,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -25970,15 +26148,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -26261,15 +26441,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -26552,15 +26734,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -26843,15 +27027,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -27134,15 +27320,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -27425,15 +27613,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -27716,15 +27906,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -28007,15 +28199,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -28298,15 +28492,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -28589,15 +28785,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -28880,15 +29078,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -29171,15 +29371,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -29462,15 +29664,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -29753,15 +29957,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -30044,15 +30250,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -30335,15 +30543,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -30626,15 +30836,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -30917,15 +31129,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -31208,15 +31422,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -31499,15 +31715,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -31790,15 +32008,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -32081,15 +32301,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -32372,15 +32594,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -32663,15 +32887,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -32954,15 +33180,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -33245,15 +33473,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -33536,15 +33766,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -33827,15 +34059,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -34118,15 +34352,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -34409,15 +34645,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -34700,15 +34938,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -34991,15 +35231,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -35282,15 +35524,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -35573,15 +35817,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -35864,15 +36110,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -36155,15 +36403,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -36446,15 +36696,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -36737,15 +36989,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [
@@ -37028,15 +37282,17 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           },
           {
             "filter_type": 2,
-            "cutoff": 1000.0,
+            "cutoff": 2000.0,
             "resonance": 1.0,
-            "gain": 1.0
+            "gain": 1.0,
+            "key_follow": 1
           }
         ],
         "lfo": [

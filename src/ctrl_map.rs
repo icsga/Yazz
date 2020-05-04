@@ -1,9 +1,11 @@
 /** Maps MIDI controllers to synth parameters. */
 
 use super::Float;
-use super::{Parameter, ParamId, ParameterValue, ValueRange, MenuItem};
-use super::{SoundData, SoundPatch};
+use super::{Parameter, ParamId, ParameterValue, MenuItem};
+use super::SoundData;
+use super::SoundPatch;
 use super::SynthParam;
+use super::ValueRange;
 
 use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};

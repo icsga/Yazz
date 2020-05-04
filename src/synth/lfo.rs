@@ -163,7 +163,7 @@ impl Lfo {
     pub fn get_sample(&mut self, sample_clock: i64, data: &LfoData, reset: bool) -> (Float, bool) {
         let dt = sample_clock - self.last_update;
         let dt_f = dt as Float;
-        let mut result: Float;
+        let result: Float;
         let mut complete = false;
         if reset {
             self.reset(sample_clock - 1);

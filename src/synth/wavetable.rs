@@ -121,7 +121,7 @@ impl Wavetable {
     fn add_wave(table: &mut [Float], freq: Float, amplitude: Float, wave_func: fn(Float) -> Float) {
         let num_samples = table.len() - 1;
         let num_samples_f = num_samples as Float;
-        let mult = freq * 2.0 * std::f32::consts::PI;
+        let mult = freq * 2.0 * std::f64::consts::PI;
         let mut position: Float;
         for i in 0..num_samples {
             position = mult * (i as Float / num_samples_f);
@@ -132,12 +132,12 @@ impl Wavetable {
 
     /** Add a sine wave with given frequency and amplitude to the buffer. */
     pub fn add_sine_wave(table: &mut [Float], freq: Float, amplitude: Float) {
-        Wavetable::add_wave(table, freq, amplitude, f32::sin);
+        Wavetable::add_wave(table, freq, amplitude, f64::sin);
     }
 
     /** Add a cosine wave with given frequency and amplitude to the buffer. */
     pub fn add_cosine_wave(table: &mut [Float], freq: Float, amplitude: Float) {
-        Wavetable::add_wave(table, freq, amplitude, f32::cos);
+        Wavetable::add_wave(table, freq, amplitude, f64::cos);
     }
 
     /** Create octave tables with given insert function.
