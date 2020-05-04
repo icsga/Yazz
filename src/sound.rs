@@ -133,6 +133,7 @@ impl SoundData {
                     Parameter::Cutoff =>    { self.filter[id].cutoff = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Resonance => { self.filter[id].resonance = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Gain =>      { self.filter[id].gain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::KeyFollow => { self.filter[id].key_follow = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -146,8 +147,8 @@ impl SoundData {
             }
             Parameter::GlobalLfo => {
                 match msg.parameter {
-                    Parameter::Waveform =>  { self.lfo[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Frequency => { self.lfo[id].frequency = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Waveform =>  { self.glfo[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Frequency => { self.glfo[id].frequency = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -217,6 +218,7 @@ impl SoundData {
                     Parameter::Cutoff => ParameterValue::Float(self.filter[id].cutoff),
                     Parameter::Resonance => ParameterValue::Float(self.filter[id].resonance),
                     Parameter::Gain => ParameterValue::Float(self.filter[id].gain),
+                    Parameter::KeyFollow => ParameterValue::Int(self.filter[id].key_follow),
                     _ => {panic!();}
                 }
             }
@@ -230,8 +232,8 @@ impl SoundData {
             }
             Parameter::GlobalLfo => {
                 match param.parameter {
-                    Parameter::Waveform =>  ParameterValue::Choice(self.lfo[id].get_waveform() as usize),
-                    Parameter::Frequency => ParameterValue::Float(self.lfo[id].frequency),
+                    Parameter::Waveform =>  ParameterValue::Choice(self.glfo[id].get_waveform() as usize),
+                    Parameter::Frequency => ParameterValue::Float(self.glfo[id].frequency),
                     _ => {panic!();}
                 }
             }

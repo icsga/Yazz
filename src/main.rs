@@ -1,45 +1,54 @@
+//! Yazz - Yet another subtractive synthesizer
+//!
+//! # Running the synth
+//!
+//! The synth needs to find a MIDI interface and a soundcard in the system.
+//! For sound, the default output device is used. The MIDI device to use as
+//! input can be selected with the "-m <ID>" command line parameter.
+//!
+//! # Running the tests
+//!
+//! The test code supports writing output to a logfile. Since only a single
+//! logfile writer can exist, the tests currently can't run in parallel. The
+//! easiest way around this problem is by starting the test with a single
+//! thread:
+//! > RUST_TEST_THREADS=1 cargo test
+//!
+
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(unreachable_code)]
 
 mod ctrl_map;
-mod midi_handler;
-mod modulation;
-mod parameter;
-mod ringbuffer;
-mod sound;
-mod storage;
-mod synth;
-mod tui;
-
-use synth::*;
-use tui::*;
-
-use canvas::{Canvas, CanvasRef};
 use ctrl_map::{CtrlMap, MappingType};
+
+mod midi_handler;
 use midi_handler::{MidiHandler, MidiMessage};
+
+mod modulation;
 use modulation::ModData;
+
+mod parameter;
 use parameter::*;
-use ringbuffer::Ringbuffer;
-use select::{SelectorState, ParamSelector, next, ItemSelection};
+
+mod sound;
 use sound::SoundData;
+
+mod storage;
 use storage::{SoundBank, SoundPatch};
+
+mod synth;
 use synth::*;
-use tui::Index;
-use termion_wrapper::TermionWrapper;
 use voice::Voice;
 use wt_manager::WtInfo;
 
-use std::error::Error;
-use std::fs::File;
-use std::io::{stdin, stdout, Write};
-use std::io::prelude::*;
-use std::path::Path;
-use std::sync::{Arc, Mutex};
-use std::thread::JoinHandle;
-use std::time::{Duration, SystemTime};
-use std::vec::Vec;
+mod tui;
+use tui::{Tui, Index};
+use tui::termion_wrapper::TermionWrapper;
+
+mod value_range;
+use value_range::ValueRange;
 
 extern crate termion;
 use termion::event::Key;
@@ -61,10 +70,20 @@ use flexi_logger::{Logger, opt_format};
 extern crate clap;
 use clap::{Arg, App};
 
+use std::error::Error;
+use std::fs::File;
+use std::io::{stdin, stdout, Write};
+use std::io::prelude::*;
+use std::path::Path;
+use std::sync::{Arc, Mutex};
+use std::thread::JoinHandle;
+use std::time::{Duration, SystemTime};
+use std::vec::Vec;
+
 pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.4";
 pub const SOUND_DATA_VERSION: &'static str = "0.0.4";
 
-type Float = f32;
+type Float = f64;
 
 // Messages sent to the synth engine
 pub enum SynthMessage {
@@ -138,7 +157,7 @@ fn setup_audio() -> (Engine, u32) {
     (engine, sample_rate)
 }
 
-/* Save one table of a wavetable set as a CSV file. */
+// Save one table of a wavetable set as a CSV file.
 fn save_wave(id: usize) -> std::io::Result<()> {
     let wt_manager = WtManager::new(44100.0);
     let mut filename = "synth_wave_".to_string();
@@ -155,7 +174,7 @@ fn save_wave(id: usize) -> std::io::Result<()> {
     Ok(())
 }
 
-/* Save one samplebuffer of a voice as CSV file. */
+// Save one samplebuffer of a voice as CSV file.
 fn save_voice() -> std::io::Result<()> {
     let wt_manager = WtManager::new(44100.0);
     let filename = "synth_voice.csv".to_string();
@@ -173,7 +192,7 @@ fn save_voice() -> std::io::Result<()> {
     sound_global.env[0].decay = 0.0;
     sound_global.env[0].sustain = 1.0;
     sound_global.env[0].factor = 1.0;
-    sound_global.filter[0].filter_type = 2;
+    sound_global.filter[0].filter_type = 0; // Bypass
 
     voice.set_freq(21.533203125);
     voice.trigger(0, 0, &sound_global);

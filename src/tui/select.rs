@@ -1,5 +1,6 @@
 use super::Float;
 use super::{FunctionId, ParamId};
+use super::ItemSelection;
 use super::{Parameter, ParameterValue, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
 use super::MidiLearn;
 use super::{SoundData, SoundPatch};
@@ -12,8 +13,6 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::convert::TryInto;
 use std::fmt::{self, Debug};
-use std::num::ParseFloatError;
-use std::num::ParseIntError;
 use std::rc::Rc;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -36,7 +35,7 @@ impl fmt::Display for SelectorState {
     }
 }
 
-// Order in which the states are displayed
+/// Defines the order in which items are displayed on the command line.
 pub fn next(current: SelectorState) -> SelectorState {
     use SelectorState::*;
     match current {
@@ -53,30 +52,7 @@ pub fn next(current: SelectorState) -> SelectorState {
     }
 }
 
-#[derive(Debug)]
-pub struct ItemSelection {
-    pub item_list: &'static [MenuItem], // List of MenuItems to select from
-    pub item_index: usize,              // Index into the MenuItem list to the chosen item
-    pub value: ParameterValue,          // ID or value of the selected item
-    pub temp_string: String,
-}
-
-impl ItemSelection {
-    pub fn reset(&mut self) {
-        self.item_index = 0;
-        self.value = match self.item_list[0].val_range {
-            ValueRange::Int(min, _) => ParameterValue::Int(min),
-            ValueRange::Float(min, _, _) => ParameterValue::Float(min),
-            ValueRange::Choice(_) => ParameterValue::Choice(0),
-            ValueRange::Dynamic(_) => ParameterValue::Choice(0),
-            ValueRange::Func(func_list) => ParameterValue::Function(FunctionId{function: func_list[0].item, function_id: 0}),
-            ValueRange::Param(func_list) => ParameterValue::Function(FunctionId{function: func_list[0].item, function_id: 0}),
-            ValueRange::NoRange => panic!(),
-        };
-    }
-}
-
-/* Return code from functions handling user input. */
+/// Return code from functions handling user input.
 #[derive(Debug, PartialEq)]
 pub enum RetCode {
     KeyConsumed,   // Key has been used, but value is not updated yet
@@ -87,12 +63,21 @@ pub enum RetCode {
     Reset,         // Reset parameter selection to initial state (function selection)
 }
 
+/// Type of event that can be pased to the Selector state machine.
 pub enum SelectorEvent {
     Key(termion::event::Key), // A key has been pressed
     ControlChange(u64, u64),  // The input controller has been updated
     ValueChange(SynthParam),  // A sound parameter has changed outside of the selector (by MIDI controller)
 }
 
+/// Handles user input to change synthesizer values.
+///
+/// The ParamSelector uses input events (key strokes, MIDI controller events)
+/// to change synthesizer parameters. It shows the current state of the
+/// parameter change in the command line (top line of the synth TUI).
+///
+/// When a parameter has changed, the ParamSelector signals this back to the
+/// TUI, which in turn sends the changed value to the synth engine.
 #[derive(Debug)]
 pub struct ParamSelector {
     value_changed: bool,
@@ -161,7 +146,7 @@ impl ParamSelector {
         SmResult::ChangeState(ParamSelector::state_function)
     }
 
-    /* Received a keyboard event from the terminal.
+    /** Received a keyboard event from the terminal.
      *
      * Return 
      * - true if value has changed and can be sent to the synth engine
@@ -172,9 +157,7 @@ impl ParamSelector {
                              c: termion::event::Key,
                              sound: Rc<RefCell<SoundPatch>>) -> bool {
         info!("handle_user_input {:?} in state {:?}", c, self.state);
-        self.sound = Option::Some(Rc::clone(&sound));
-        self.value_changed = false;
-        sm.handle_event(self, &SmEvent::Event(SelectorEvent::Key(c)));
+        let result = self.handle_input_event(&SmEvent::Event(SelectorEvent::Key(c)), sm, sound);
 
         // If we received a key that wasn't used but caused a state change, we
         // need to pass it in again as a new event for it to be handled.
@@ -183,18 +166,16 @@ impl ParamSelector {
             sm.handle_event(self, &SmEvent::Event(SelectorEvent::Key(key)));
         }
 
-        if self.value_changed {
-            info!("Value changed");
-        }
-
-        self.value_changed
+        result
     }
 
-    /* Received a controller event.
+    /** Received a controller event.
      *
      * This event is used as a direct value control for the UI menu line.
      *
-     * \todo This is the same as handle_user_input, consolidate
+     * Return 
+     * - true if value has changed and can be sent to the synth engine
+     * - false if value has not changed
      */
     pub fn handle_control_input(&mut self,
                                 sm: &mut StateMachine<ParamSelector, SelectorEvent>,
@@ -202,13 +183,20 @@ impl ParamSelector {
                                 value: u64,
                                 sound: Rc<RefCell<SoundPatch>>) -> bool {
         info!("handle_control_input {:?} in state {:?}", value, self.state);
+        self.handle_input_event(&SmEvent::Event(SelectorEvent::ControlChange(controller, value)), sm, sound)
+    }
+
+    fn handle_input_event(&mut self,
+                              event: &SmEvent<SelectorEvent>,
+                              sm: &mut StateMachine<ParamSelector, SelectorEvent>,
+                              sound: Rc<RefCell<SoundPatch>>) -> bool {
         self.sound = Option::Some(Rc::clone(&sound));
         self.value_changed = false;
-        sm.handle_event(self, &SmEvent::Event(SelectorEvent::ControlChange(controller, value)));
+        sm.handle_event(self, event);
         self.value_changed
     }
 
-    // Select the function group to edit (Oscillator, Envelope, ...)
+    /** Select the function group to edit (Oscillator, Envelope, ...) */
     pub fn state_function(self: &mut ParamSelector,
                       e: &SmEvent<SelectorEvent>)
     -> SmResult<ParamSelector, SelectorEvent> {
@@ -224,19 +212,20 @@ impl ParamSelector {
             SmEvent::Event(selector_event) => {
                 match selector_event {
                     SelectorEvent::Key(c) => {
-                        match ParamSelector::select_item(&mut self.func_selection, *c) {
+                        match self.func_selection.select_item(*c) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Selection updated
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore key that doesn't match a selection
                             RetCode::ValueUpdated  => SmResult::EventHandled, // Selection updated
                             RetCode::Cancel        => SmResult::EventHandled,
                             RetCode::ValueComplete => {
                                 // Function selected
-                                self.param_selection.item_list = self.func_selection.item_list[self.func_selection.item_index].next;
-                                self.param_selection.item_index = 0; // TODO: Remember last position for this function
+                                self.param_selection.set_list_from(&self.func_selection, 0);
+
                                 // Check if there are more then one instances of the selected function
-                                let val_range = &self.func_selection.item_list[self.func_selection.item_index].val_range;
+                                let val_range = self.func_selection.get_val_range();
                                 if let ValueRange::Int(_, num_instances) = val_range {
                                     if *num_instances == 1 {
+                                        // Single instance, skip function_index state
                                         self.func_selection.value = ParameterValue::Int(1);
                                         SmResult::ChangeState(ParamSelector::state_parameter)
                                     } else {
@@ -256,7 +245,7 @@ impl ParamSelector {
         }
     }
 
-    // Select which item in the function group to edit (Oscillator 1, 2, 3, ...)
+    /** Select which item in the function group to edit (Oscillator 1, 2, 3, ...) */
     fn state_function_index(self: &mut ParamSelector,
                             e: &SmEvent<SelectorEvent>)
     -> SmResult<ParamSelector, SelectorEvent> {
@@ -275,7 +264,7 @@ impl ParamSelector {
             SmEvent::Event(selector_event) => {
                 match selector_event {
                     SelectorEvent::Key(c) => {
-                        match ParamSelector::get_value(&mut self.func_selection, *c, &self.wavetable_list) {
+                        match self.func_selection.handle_input(*c, &self.wavetable_list) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Key has been used, but value hasn't changed
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore unmatched keys
                             RetCode::ValueUpdated  => SmResult::EventHandled, // Selection not complete yet
@@ -295,7 +284,7 @@ impl ParamSelector {
         }
     }
 
-    // Select the parameter of the function to edit (Waveshape, Frequency, ...)
+    /** Select the parameter of the function to edit (Waveshape, Frequency, ...) */
     fn state_parameter(self: &mut ParamSelector,
                        e: &SmEvent<SelectorEvent>)
     -> SmResult<ParamSelector, SelectorEvent> {
@@ -316,7 +305,7 @@ impl ParamSelector {
                             SmResult::Error => (), // Continue processing the key
                             _ => return result     // Key was handled
                         }
-                        match ParamSelector::select_item(&mut self.param_selection, *c) {
+                        match self.param_selection.select_item(*c) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Value has changed, but not complete yet
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore invalid key
                             RetCode::ValueUpdated  => {                       // Pararmeter selection updated
@@ -340,7 +329,7 @@ impl ParamSelector {
         }
     }
 
-    // Select the parameter value
+    /** Select the parameter value */
     fn state_value(self: &mut ParamSelector,
                    e: &SmEvent<SelectorEvent>)
     -> SmResult<ParamSelector, SelectorEvent> {
@@ -365,7 +354,7 @@ impl ParamSelector {
                         if let Key::Ctrl('l') = c {
                             return SmResult::ChangeState(ParamSelector::state_midi_learn);
                         }
-                        match ParamSelector::get_value(&mut self.param_selection, *c, &self.wavetable_list) {
+                        match self.param_selection.handle_input(*c, &self.wavetable_list) {
                             RetCode::KeyConsumed   => SmResult::EventHandled,
                             RetCode::KeyMissmatch  => {
                                 // Key can't be used for value, so it probably is the short cut for a
@@ -388,14 +377,14 @@ impl ParamSelector {
                         }
                     }
                     SelectorEvent::ControlChange(ctrl, value) => {
-                        ParamSelector::set_control_value(&mut self.param_selection, *value);
+                        self.param_selection.set_control_value(*value);
                         self.value_changed = true;
                         SmResult::EventHandled
                     }
                     SelectorEvent::ValueChange(p) => {
                         let selected_param = self.get_param_id();
                         if p.equals(&selected_param) {
-                            ParamSelector::update_value(&mut self.param_selection, p.value);
+                            self.param_selection.update_value(p.value);
                         }
                         SmResult::EventHandled
                     }
@@ -404,7 +393,7 @@ impl ParamSelector {
         }
     }
 
-    // Select the function group to edit (Oscillator, Envelope, ...)
+    /** Select the function group to edit (Oscillator, Envelope, ...) */
     fn state_value_function(self: &mut ParamSelector,
                             e: &SmEvent<SelectorEvent>)
     -> SmResult<ParamSelector, SelectorEvent> {
@@ -438,14 +427,14 @@ impl ParamSelector {
                             SmResult::Error => (), // Continue processing the key
                             _ => return result     // Key was handled
                         }
-                        match ParamSelector::select_item(&mut self.value_func_selection, *c) {
+                        match self.value_func_selection.select_item(*c) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Selection updated
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore key that doesn't match a selection
                             RetCode::ValueUpdated  => SmResult::EventHandled, // Selection updated
                             RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_parameter), // Stop updating the value, back to parameter selection
                             RetCode::ValueComplete => { // Function selected
                                 // Check if there are more then one instances of the selected function
-                                let val_range = &self.value_func_selection.item_list[self.value_func_selection.item_index].val_range;
+                                let val_range = self.value_func_selection.get_val_range();
                                 if let ValueRange::Int(_, num_instances) = val_range {
                                     if *num_instances == 1 {
                                         // Only single instance of this
@@ -482,7 +471,7 @@ impl ParamSelector {
         }
     }
 
-    // Select which item in the function group to edit (Oscillator 1, 2, 3, ...)
+    /** Select which item in the function group to edit (Oscillator 1, 2, 3, ...) */
     fn state_value_function_index(self: &mut ParamSelector,
                                   e: &SmEvent<SelectorEvent>)
     -> SmResult<ParamSelector, SelectorEvent> {
@@ -514,7 +503,7 @@ impl ParamSelector {
                             SmResult::Error => (), // Continue processing the key
                             _ => return result     // Key was handled
                         }
-                        match ParamSelector::get_value(&mut self.value_func_selection, *c, &self.wavetable_list) {
+                        match self.value_func_selection.handle_input(*c, &self.wavetable_list) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Key has been used, but value hasn't changed
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore unmatched keys
                             RetCode::ValueUpdated  => SmResult::EventHandled, // Selection not complete yet
@@ -528,7 +517,7 @@ impl ParamSelector {
                                         SmResult::ChangeState(ParamSelector::state_parameter)
                                     },
                                     ParameterValue::Param(id) => {
-                                        self.value_param_selection.item_list = self.value_func_selection.item_list[self.value_func_selection.item_index].next;
+                                        self.value_param_selection.set_list_from(&self.value_func_selection, 0);
 
                                         // If function is same as before, set
                                         // value_param_selection.item_index to current value,
@@ -545,7 +534,7 @@ impl ParamSelector {
                         }
                     }
                     SelectorEvent::ControlChange(ctrl, value) => {
-                        ParamSelector::set_control_value(&mut self.value_func_selection, *value);
+                        self.value_func_selection.set_control_value(*value);
                         SmResult::EventHandled
                     }
                     _ => SmResult::EventHandled,
@@ -554,7 +543,7 @@ impl ParamSelector {
         }
     }
 
-    // Select the parameter of the function to edit (Waveshape, Frequency, ...)
+    /** Select the parameter of the function to edit (Waveshape, Frequency, ...) */
     fn state_value_parameter(self: &mut ParamSelector,
                              e: &SmEvent<SelectorEvent>)
     -> SmResult<ParamSelector, SelectorEvent> {
@@ -586,7 +575,7 @@ impl ParamSelector {
                             SmResult::Error => (), // Continue processing the key
                             _ => return result     // Key was handled
                         }
-                        match ParamSelector::select_item(&mut self.value_param_selection, *c) {
+                        match self.value_param_selection.select_item(*c) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Value has changed, but not complete yet
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore invalid key
                             RetCode::ValueUpdated  => {                       // Pararmeter selection updated
@@ -609,6 +598,7 @@ impl ParamSelector {
         }
     }
 
+    /** Assign a MIDI controller to control the current parameter. */
     fn state_midi_learn(self: &mut ParamSelector,
                         e: &SmEvent<SelectorEvent>)
     -> SmResult<ParamSelector, SelectorEvent> {
@@ -643,6 +633,11 @@ impl ParamSelector {
         }
     }
 
+    /** Assign a marker to the currently selected parameter.
+     *
+     * Recalling the marker while editing a different parameter will reset the
+     * command line to this parameter.
+     */
     fn state_add_marker(self: &mut ParamSelector,
                         e: &SmEvent<SelectorEvent>)
     -> SmResult<ParamSelector, SelectorEvent> {
@@ -673,15 +668,7 @@ impl ParamSelector {
         }
     }
 
-    fn change_to_value_state(&self) -> SmResult<ParamSelector, SelectorEvent> {
-        match self.param_selection.value {
-            ParameterValue::Function(id) => SmResult::ChangeState(ParamSelector::state_value_function),
-            ParameterValue::Param(id) => SmResult::ChangeState(ParamSelector::state_value_function),
-            ParameterValue::NoValue => panic!(),
-            _ => SmResult::ChangeState(ParamSelector::state_value),
-        }
-    }
-
+    /** Reset the input state to the parameter of the marker. */
     fn state_goto_marker(self: &mut ParamSelector,
                         e: &SmEvent<SelectorEvent>)
     -> SmResult<ParamSelector, SelectorEvent> {
@@ -715,10 +702,22 @@ impl ParamSelector {
         }
     }
 
-    /* Handle some shortcut keys for easier navigation.
+    /** Change to the value state that matches the selected parameter. */
+    fn change_to_value_state(&self) -> SmResult<ParamSelector, SelectorEvent> {
+        match self.param_selection.value {
+            ParameterValue::Function(id) => SmResult::ChangeState(ParamSelector::state_value_function),
+            ParameterValue::Param(id) => SmResult::ChangeState(ParamSelector::state_value_function),
+            ParameterValue::NoValue => panic!(),
+            _ => SmResult::ChangeState(ParamSelector::state_value),
+        }
+    }
+
+    /** Handle some shortcut keys for easier navigation.
      *
      * - PageUp/ PageDown change the function ID
      * - '['/- ']' change the selected parameter
+     * - '<'/ '>' go back/ forwards in the edit history
+     * - '\"'/ '\'' set and recall markers for parameters
      */
     fn handle_navigation_keys(&mut self, c: &termion::event::Key)
             -> SmResult<ParamSelector, SelectorEvent> {
@@ -783,25 +782,25 @@ impl ParamSelector {
     }
 
     fn increase_function_id(&mut self) {
-        ParamSelector::get_value(&mut self.func_selection, Key::Up, &self.wavetable_list);
+        self.func_selection.handle_input(Key::Up, &self.wavetable_list);
         self.query_current_value();
         self.history_add(self.get_param_id());
     }
 
     fn decrease_function_id(&mut self) {
-        ParamSelector::get_value(&mut self.func_selection, Key::Down, &self.wavetable_list);
+        self.func_selection.handle_input(Key::Down, &self.wavetable_list);
         self.query_current_value();
         self.history_add(self.get_param_id());
     }
 
     fn increase_param_id(&mut self) {
-        ParamSelector::select_item(&mut self.param_selection, Key::Up);
+        self.param_selection.select_item(Key::Up);
         self.query_current_value();
         self.history_add(self.get_param_id());
     }
 
     fn decrease_param_id(&mut self) {
-        ParamSelector::select_item(&mut self.param_selection, Key::Down);
+        self.param_selection.select_item(Key::Down);
         self.query_current_value();
         self.history_add(self.get_param_id());
     }
@@ -844,257 +843,10 @@ impl ParamSelector {
     fn apply_param_id(&mut self, param_id: &ParamId) {
         self.func_selection.item_index = MenuItem::get_item_index(param_id.function, &self.func_selection.item_list);
         self.func_selection.value = ParameterValue::Int(param_id.function_id as i64);
-        self.param_selection.item_list = self.func_selection.item_list[self.func_selection.item_index].next;
-        self.param_selection.item_index = MenuItem::get_item_index(param_id.parameter, &self.param_selection.item_list);
+        self.param_selection.set_list_from(&self.func_selection, 0);
+        let item_index = MenuItem::get_item_index(param_id.parameter, &self.param_selection.item_list);
+        self.param_selection.item_index = item_index;
         self.query_current_value();
-    }
-
-    /* Select one of the items of functions or parameters.
-     *
-     * Called when a new user input is received and we're in the right state for function selection.
-     * Updates the item_index of the ItemSelection.
-     */
-    fn select_item(item: &mut ItemSelection, c: termion::event::Key) -> RetCode {
-        let result = match c {
-            Key::Up => {
-                if item.item_index < item.item_list.len() - 1 {
-                    item.item_index += 1;
-                }
-                RetCode::ValueUpdated
-            },
-            Key::Down => {
-                if item.item_index > 0 {
-                    item.item_index -= 1;
-                }
-                RetCode::ValueUpdated
-            },
-            Key::Left | Key::Backspace => RetCode::Cancel,
-            Key::Right => RetCode::ValueComplete,
-            Key::Esc => RetCode::Reset,
-            Key::Char('\n') => RetCode::ValueComplete,
-            Key::Char(c) => {
-                for (count, f) in item.item_list.iter().enumerate() {
-                    if f.key == c {
-                        item.item_index = count;
-                        return RetCode::ValueComplete;
-                    }
-                }
-                RetCode::KeyConsumed
-            },
-            _ => RetCode::KeyConsumed
-        };
-        info!("select_item {:?} (index {})", item.item_list[item.item_index].item, item.item_index);
-        result
-    }
-
-    /* Construct the value of the selected item.
-     *
-     * Supports entering the value by
-     * - Direct ascii input of the number
-     * - Adjusting current value with Up or Down keys
-     *
-     * \todo Passing the wavetable list as parameter is an ugly hack, need to
-     *       find something better.
-     */
-    fn get_value(item: &mut ItemSelection, c: termion::event::Key, wt_list: &Vec<(usize, String)>) -> RetCode {
-        info!("get_value {:?}", item.item_list[item.item_index].item);
-
-        match c {
-            // Common keys
-            Key::Esc   => RetCode::Reset,
-
-            // All others
-            _ => {
-                match item.item_list[item.item_index].val_range {
-                    ValueRange::Int(min, max) => ParamSelector::get_value_int(item, min, max, c),
-                    ValueRange::Float(min, max, _) => ParamSelector::get_value_float(item, min, max, c),
-                    ValueRange::Choice(choice_list) => ParamSelector::get_value_choice(item, choice_list, c),
-                    ValueRange::Dynamic(param) => ParamSelector::get_value_dynamic(item, 0, wt_list.len() - 1, c), // TODO: Use a closure as parameter instead
-                    _ => panic!(),
-                }
-            }
-        }
-    }
-
-    /* Evaluate the MIDI control change message (ModWheel) */
-    fn set_control_value(item: &mut ItemSelection, val: u64) {
-        let value = item.item_list[item.item_index].val_range.translate_value(val);
-        ParamSelector::update_value(item, value);
-    }
-
-    fn get_value_int(item: &mut ItemSelection,
-                     min: i64,
-                     max: i64,
-                     c: termion::event::Key) -> RetCode {
-        let mut current = if let ParameterValue::Int(x) = item.value { x } else { panic!() };
-        let result = match c {
-            Key::Char(x) => {
-                match x {
-                    '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.' => {
-                        let y = x as i64 - '0' as i64;
-                        if item.temp_string.len() > 0 {
-                            // Something already in temp string, append to end if possible.
-                            let current_temp: Result<i64, ParseIntError> = item.temp_string.parse();
-                            let current_temp = if let Ok(x) = current_temp {
-                                x
-                            } else {
-                                item.temp_string.clear();
-                                0
-                            };
-                            let val_digit_added = current_temp * 10 + y;
-                            if val_digit_added > max {
-                                // Value would be too big, ignore key
-                                RetCode::KeyConsumed
-                            } else {
-                                item.temp_string.push(x);
-                                let value: Result<i64, ParseIntError> = item.temp_string.parse();
-                                current = if let Ok(x) = value { x } else { current };
-                                if current * 10 > max {
-                                    // No more digits can be added: Finished.
-                                    RetCode::ValueComplete
-                                } else {
-                                    // Wait for more digits
-                                    RetCode::ValueUpdated
-                                }
-                            }
-                        } else {
-                            if y * 10 < max {
-                                // More digits could come, start temp_string
-                                item.temp_string.push(x);
-                                let value: Result<i64, ParseIntError> = item.temp_string.parse();
-                                current = if let Ok(x) = value { x } else { current };
-                                RetCode::ValueUpdated
-                            } else {
-                                current = y;
-                                RetCode::ValueComplete
-                            }
-                        }
-                    },
-                    '+' => { current += 1; RetCode::ValueUpdated },
-                    '-' => if current > min { current -= 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
-                    '\n' => RetCode::ValueComplete,
-                    _ => RetCode::KeyMissmatch,
-                }
-            }
-            Key::Up        => { current += 1; RetCode::ValueUpdated },
-            Key::Down      => if current > min { current -= 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
-            Key::Left      => RetCode::Cancel,
-            Key::Right     => RetCode::ValueComplete,
-            Key::Backspace => RetCode::Cancel,
-            _              => RetCode::ValueComplete,
-        };
-        match result {
-            RetCode::ValueUpdated | RetCode::ValueComplete => ParamSelector::update_value(item, ParameterValue::Int(current)),
-            _ => (),
-        }
-        result
-    }
-
-    fn get_value_dynamic(item: &mut ItemSelection,
-                         min: usize,
-                         max: usize,
-                         c: termion::event::Key) -> RetCode {
-        let (param, mut current) = if let ParameterValue::Dynamic(p, x) = item.value { (p, x) } else { panic!() };
-        let result = match c {
-            Key::Char('+') |
-            Key::Up         => if current < max { current += 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
-            Key::Char('-') |
-            Key::Down       => if current > 0 { current -= 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
-            Key::Left       => RetCode::Cancel,
-            Key::Right      => RetCode::ValueComplete,
-            Key::Backspace  => RetCode::Cancel,
-            Key::Char('\n') => RetCode::ValueComplete,
-            _ => RetCode::KeyMissmatch,
-        };
-        match result {
-            RetCode::ValueUpdated | RetCode::ValueComplete => ParamSelector::update_value(item, ParameterValue::Dynamic(param, current)),
-            _ => (),
-        }
-        result
-    }
-
-    fn get_value_float(item: &mut ItemSelection,
-                       min: Float,
-                       max: Float,
-                       c: termion::event::Key) -> RetCode {
-        let mut current = if let ParameterValue::Float(x) = item.value { x } else { panic!() };
-        let result = match c {
-            Key::Char(x) => {
-                match x {
-                    '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.' => {
-                        info!("Adding char {}", x);
-                        item.temp_string.push(x);
-                        let value: Result<Float, ParseFloatError> = item.temp_string.parse();
-                        current = if let Ok(x) = value { x } else { current };
-                        RetCode::ValueUpdated
-                    },
-                    '+' => { current += 1.0; RetCode::ValueUpdated },
-                    '-' => { current -= 1.0; RetCode::ValueUpdated },
-                    '\n' => RetCode::ValueComplete,
-                    _ => RetCode::KeyMissmatch,
-                }
-            }
-            // TODO: Use ValueRange 'step' value for inc/ dec, some for +/ - above
-            Key::Up        => { current += 1.0; RetCode::ValueUpdated },
-            Key::Down      => { current -= 1.0; RetCode::ValueUpdated },
-            Key::Left      => RetCode::Cancel,
-            Key::Right     => RetCode::ValueComplete,
-            Key::Backspace => {
-                let len = item.temp_string.len();
-                if len > 0 {
-                    item.temp_string.pop();
-                    if item.temp_string.len() >= 1 {
-                        let value = item.temp_string.parse();
-                        current = if let Ok(x) = value { x } else { current };
-                    } else {
-                        item.temp_string.push('0');
-                        current = 0.0;
-                    }
-                } else {
-                    item.temp_string.push('0');
-                    current = 0.0;
-                }
-                info!("BS for float value, remaining: {}, current = {}", item.temp_string, current);
-                RetCode::ValueUpdated
-            },
-            _ => RetCode::KeyMissmatch,
-        };
-        match result {
-            RetCode::ValueUpdated | RetCode::ValueComplete => ParamSelector::update_value(item, ParameterValue::Float(current)),
-            _ => (),
-        }
-        result
-    }
-
-    fn get_value_choice(item: &mut ItemSelection,
-                        choice_list: &'static [MenuItem],
-                        c: termion::event::Key) -> RetCode {
-        let mut current = if let ParameterValue::Choice(x) = item.value { x } else { panic!() };
-        let result = match c {
-            Key::Char('+') |
-            Key::Up         => {current += 1; RetCode::ValueUpdated },
-            Key::Char('-') |
-            Key::Down       => if current > 0 { current -= 1; RetCode::ValueUpdated } else { RetCode::KeyConsumed },
-            Key::Left       => RetCode::Cancel,
-            Key::Right      => RetCode::ValueComplete,
-            Key::Backspace  => RetCode::Cancel,
-            Key::Char('\n') => RetCode::ValueComplete,
-            _ => RetCode::KeyMissmatch,
-        };
-        match result {
-            RetCode::ValueUpdated | RetCode::ValueComplete => ParamSelector::update_value(item, ParameterValue::Choice(current)),
-            _ => (),
-        }
-        result
-    }
-
-    fn get_list_index(list: &[MenuItem], param: Parameter) -> usize {
-        for (id, item) in list.iter().enumerate() {
-            if item.item == param {
-                return id;
-            }
-        }
-        panic!("Didn't find parameter {:?} in list {:?}", param, list);
     }
 
     fn get_param_id_internal(fs: &ItemSelection, ps: &ItemSelection) -> ParamId {
@@ -1104,10 +856,18 @@ impl ParamSelector {
         ParamId::new(function.item, function_id, parameter.item)
     }
 
+    /** Return a ParamId matching the currently selected parameter.
+     *
+     * A ParamId does not include the value of the parameter.
+     */
     pub fn get_param_id(&self) -> ParamId {
         ParamSelector::get_param_id_internal(&self.func_selection, &self.param_selection)
     }
 
+    /** Return a SynthParam matching the currently selected parameter.
+     *
+     * A SynthParam does include the current value of the selected parameter.
+     */
     pub fn get_synth_param(&self) -> SynthParam {
         let function = &self.func_selection.item_list[self.func_selection.item_index];
         let function_id = if let ParameterValue::Int(x) = &self.func_selection.value { *x as usize } else { panic!() };
@@ -1115,12 +875,12 @@ impl ParamSelector {
         SynthParam::new(function.item, function_id, parameter.item, self.param_selection.value)
     }
 
-    /* Get value range for currently selected parameter. */
+    /** Get the value range for currently selected parameter. */
     pub fn get_value_range(&self) -> &'static ValueRange {
-        &self.param_selection.item_list[self.param_selection.item_index].val_range
+        self.param_selection.get_val_range()
     }
 
-    /* Select the parameter chosen by input, set value to current sound data. */
+    /** Select the parameter chosen by input, set value to current sound data. */
     fn query_current_value(&mut self) {
         let param = self.get_param_id();
         info!("query_current_value {:?}", param);
@@ -1129,23 +889,22 @@ impl ParamSelector {
         let sound = if let Some(sound) = &self.sound { sound } else { panic!() };
         let value = sound.borrow_mut().data.get_value(&param);
         info!("Sound has value {:?}", value);
-        let next_item_list = &self.param_selection.item_list[self.param_selection.item_index].next;
         match value {
             // Let the two ItemSelection structs point to the currently active
             // values.
             ParameterValue::Function(id) => {
                 let fs = &mut self.value_func_selection;
-                fs.item_list = next_item_list;
-                fs.item_index = ParamSelector::get_list_index(fs.item_list, id.function);
+                fs.set_list_from(&self.param_selection, 0);
+                fs.item_index = MenuItem::get_item_index(id.function, fs.item_list);
                 fs.value = ParameterValue::Int(id.function_id as i64);
             }
             ParameterValue::Param(id) => {
                 let fs = &mut self.value_func_selection;
-                fs.item_list = next_item_list;
-                fs.item_index = ParamSelector::get_list_index(fs.item_list, id.function);
+                fs.set_list_from(&self.param_selection, 0);
+                fs.item_index = MenuItem::get_item_index(id.function, fs.item_list);
                 fs.value = ParameterValue::Int(id.function_id as i64);
                 let ps = &mut self.value_param_selection;
-                ps.item_index = ParamSelector::get_list_index(ps.item_list, id.parameter);
+                ps.item_index = MenuItem::get_item_index(id.parameter, ps.item_list);
             }
             ParameterValue::NoValue => panic!(),
             _ => ()
@@ -1153,7 +912,7 @@ impl ParamSelector {
         self.param_selection.value = value;
     }
 
-    /* Select the parameter chosen by input, set value to current sound data. */
+    /** Select the parameter chosen by input, set value to current sound data. */
     fn query_current_value_param_index(&mut self) {
         // Get current sound entry
         // Compare function
@@ -1174,7 +933,7 @@ impl ParamSelector {
                 let function = &fs.item_list[fs.item_index];
                 if function.item == id.function {
                     info!("Same function, keep parameter index");
-                    ps.item_index = ParamSelector::get_list_index(ps.item_list, id.parameter);
+                    ps.item_index = MenuItem::get_item_index(id.parameter, ps.item_list);
                 } else {
                     info!("Function differs, set parameter index to safe value");
                     ps.item_index = 1;
@@ -1184,62 +943,17 @@ impl ParamSelector {
         }
     }
 
-    /* Store a new value in the selected parameter. */
-    fn update_value(selection: &mut ItemSelection, val: ParameterValue) {
-        info!("update_value item: {:?}, value: {:?}", selection.item_list[selection.item_index].item, val);
-        let temp_string = &mut selection.temp_string;
-        match selection.item_list[selection.item_index].val_range {
-            ValueRange::Int(min, max) => {
-                let mut value = if let ParameterValue::Int(x) = val { x } else { panic!(); };
-                if value > max {
-                    value = max;
-                }
-                if value < min {
-                    value = min;
-                }
-                selection.value = ParameterValue::Int(value);
-            }
-            ValueRange::Float(min, max, _) => {
-                let mut value = if let ParameterValue::Float(x) = val { x } else { panic!(); };
-                let has_period =  temp_string.contains(".");
-                if value > max {
-                    value = max;
-                }
-                if value < min {
-                    value = min;
-                }
-                temp_string.clear();
-                temp_string.push_str(value.to_string().as_str());
-                if !temp_string.contains(".") && has_period {
-                    temp_string.push('.');
-                }
-                selection.value = ParameterValue::Float(value);
-            }
-            ValueRange::Choice(selection_list) => {
-                let mut value = if let ParameterValue::Choice(x) = val { x as usize } else { panic!("{:?}", val); };
-                if value >= selection_list.len() {
-                    value = selection_list.len() - 1;
-                }
-                selection.value = ParameterValue::Choice(value);
-            }
-            ValueRange::Dynamic(id) => {
-                selection.value = val;
-            }
-            ValueRange::Func(selection_list) => {
-                //panic!();
-            }
-            ValueRange::Param(selection_list) => {
-                //panic!();
-            }
-            ValueRange::NoRange => {}
-        };
-    }
-
     /** A value has changed outside of the selector, update the local value. */
     pub fn value_has_changed(&mut self, sm: &mut StateMachine<ParamSelector, SelectorEvent>, param: SynthParam) {
         sm.handle_event(self, &SmEvent::Event(SelectorEvent::ValueChange(param)));
     }
 
+    /** Get a dynamic list for the given parameter.
+     *
+     * Some parameter lists change during the runtime of the program. This
+     * function is responsible for returning a matching list to the caller.
+     * Example: The wavetable list can change after scanning a directory.
+     */
     pub fn get_dynamic_list<'a>(&'a mut self, param: Parameter) -> &'a mut Vec<(usize, String)> {
         match param {
             Parameter::Wavetable => return &mut self.wavetable_list,
@@ -1247,6 +961,7 @@ impl ParamSelector {
         }
     }
 
+    /** Same as get_dynamic_list, but unmutable reference. */
     pub fn get_dynamic_list_no_mut<'a>(&'a self, param: Parameter) -> &'a Vec<(usize, String)> {
         match param {
             Parameter::Wavetable => return &self.wavetable_list,
@@ -1438,7 +1153,6 @@ impl TestContext {
                 }
             },
             ParameterValue::Function(expected) => {
-                info!("Expected value {:?}", expected);
                 let actual = if let ParameterValue::Function(j) = ps.value { j } else { panic!() };
                 if expected.function != actual.function
                 || expected.function_id != actual.function_id {
@@ -1483,10 +1197,10 @@ impl TestContext {
 // -----------------------
 
 const DEFAULT_LEVEL: Float = 92.0;
-const DEFAULT_ATTACK: Float = 30.0;
-const DEFAULT_DECAY: Float = 50.0;
-const DEFAULT_SUSTAIN: Float = 0.7;
-const DEFAULT_RELEASE: Float = 100.0;
+const DEFAULT_ATTACK: Float = 15.0;
+const DEFAULT_DECAY: Float = 15.0;
+const DEFAULT_SUSTAIN: Float = 1.0;
+const DEFAULT_RELEASE: Float = 15.0;
 const DEFAULT_FACTOR: i64 = 3;
 
 // ----------------
@@ -1601,150 +1315,6 @@ fn alpha_key_in_state_value_selects_parameter() {
     let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("o1l".to_string())];
     context.handle_inputs(c);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(3.0)));
-}
-
-#[test]
-fn right_bracket_in_state_param_selects_nextparameter() {
-    let mut context = TestContext::new();
-
-    context.handle_input(TestInput::Chars("e3".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Attack));
-
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Decay));
-
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Sustain));
-
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Release));
-
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Factor));
-
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Factor));
-}
-
-#[test]
-fn left_bracket_in_state_param_selects_nextparameter() {
-    let mut context = TestContext::new();
-
-    context.handle_input(TestInput::Chars("e3f\n".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Factor));
-
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Release));
-
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Sustain));
-
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Decay));
-
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Attack));
-
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Attack));
-}
-
-#[test]
-fn right_bracket_in_state_value_selects_nextparameter() {
-    let mut context = TestContext::new();
-
-    context.handle_input(TestInput::Chars("e3a".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Attack, ParameterValue::Float(DEFAULT_ATTACK)));
-
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Decay, ParameterValue::Float(DEFAULT_DECAY)));
-
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Sustain, ParameterValue::Float(DEFAULT_SUSTAIN)));
-
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Release, ParameterValue::Float(DEFAULT_RELEASE)));
-
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
-
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
-}
-
-#[test]
-fn left_bracket_in_state_value_selects_prevparameter() {
-    let mut context = TestContext::new();
-
-    context.handle_input(TestInput::Chars("e2f".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
-
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Release, ParameterValue::Float(DEFAULT_RELEASE)));
-
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Sustain, ParameterValue::Float(DEFAULT_SUSTAIN)));
-
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Decay, ParameterValue::Float(DEFAULT_DECAY)));
-
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Attack, ParameterValue::Float(DEFAULT_ATTACK)));
-
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Attack, ParameterValue::Float(DEFAULT_ATTACK)));
-}
-
-#[test]
-fn bracket_in_state_value_updates_value_state_to_match_value_type() {
-    let mut context = TestContext::new();
-
-    // From state_value to state_value_function
-    context.handle_input(TestInput::Chars("m2a".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Value);
-    assert!(context.verify_parameter(Parameter::Amount));
-    context.handle_input(TestInput::Chars("[".to_string()));
-    assert_eq!(context.ps.state, SelectorState::ValueFunction);
-    assert!(context.verify_parameter(Parameter::Target));
-
-    // From state_value_function to state_value
-    context.handle_input(TestInput::Key(Key::Esc));
-    context.handle_input(TestInput::Chars("m2t".to_string()));
-    assert_eq!(context.ps.state, SelectorState::ValueFunction);
-    assert!(context.verify_parameter(Parameter::Target));
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Value);
-    assert!(context.verify_parameter(Parameter::Amount));
-
-    // From state_value_function_id to state_value
-    context.handle_input(TestInput::Key(Key::Esc));
-    context.handle_input(TestInput::Chars("m2to".to_string()));
-    assert_eq!(context.ps.state, SelectorState::ValueFunctionIndex);
-    assert!(context.verify_parameter(Parameter::Target));
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Value);
-    assert!(context.verify_parameter(Parameter::Amount));
-
-    // From state_value_parameter to state_value
-    context.handle_input(TestInput::Key(Key::Esc));
-    context.handle_input(TestInput::Chars("m2to1".to_string()));
-    assert_eq!(context.ps.state, SelectorState::ValueParam);
-    assert!(context.verify_parameter(Parameter::Target));
-    context.handle_input(TestInput::Chars("]".to_string()));
-    assert_eq!(context.ps.state, SelectorState::Value);
-    assert!(context.verify_parameter(Parameter::Amount));
 }
 
 #[test]
@@ -2012,7 +1582,151 @@ fn controller_is_ignored_in_other_states() {
 // -------------
 
 #[test]
-fn page_up_changes_function_id() {
+fn right_bracket_in_state_param_selects_nextparameter() {
+    let mut context = TestContext::new();
+
+    context.handle_input(TestInput::Chars("e3".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Attack));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Decay));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Sustain));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Release));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Factor));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Factor));
+}
+
+#[test]
+fn left_bracket_in_state_param_selects_nextparameter() {
+    let mut context = TestContext::new();
+
+    context.handle_input(TestInput::Chars("e3f\n".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Factor));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Release));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Sustain));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Decay));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Attack));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Attack));
+}
+
+#[test]
+fn right_bracket_in_state_value_selects_nextparameter() {
+    let mut context = TestContext::new();
+
+    context.handle_input(TestInput::Chars("e3a".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Attack, ParameterValue::Float(DEFAULT_ATTACK)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Decay, ParameterValue::Float(DEFAULT_DECAY)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Sustain, ParameterValue::Float(DEFAULT_SUSTAIN)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Release, ParameterValue::Float(DEFAULT_RELEASE)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
+}
+
+#[test]
+fn left_bracket_in_state_value_selects_prevparameter() {
+    let mut context = TestContext::new();
+
+    context.handle_input(TestInput::Chars("e2f".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Release, ParameterValue::Float(DEFAULT_RELEASE)));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Sustain, ParameterValue::Float(DEFAULT_SUSTAIN)));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Decay, ParameterValue::Float(DEFAULT_DECAY)));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Attack, ParameterValue::Float(DEFAULT_ATTACK)));
+
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Attack, ParameterValue::Float(DEFAULT_ATTACK)));
+}
+
+#[test]
+fn bracket_in_state_value_updates_value_state_to_match_value_type() {
+    let mut context = TestContext::new();
+
+    // From state_value to state_value_function
+    context.handle_input(TestInput::Chars("m2a".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_parameter(Parameter::Amount));
+    context.handle_input(TestInput::Chars("[".to_string()));
+    assert_eq!(context.ps.state, SelectorState::ValueFunction);
+    assert!(context.verify_parameter(Parameter::Target));
+
+    // From state_value_function to state_value
+    context.handle_input(TestInput::Key(Key::Esc));
+    context.handle_input(TestInput::Chars("m2t".to_string()));
+    assert_eq!(context.ps.state, SelectorState::ValueFunction);
+    assert!(context.verify_parameter(Parameter::Target));
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_parameter(Parameter::Amount));
+
+    // From state_value_function_id to state_value
+    context.handle_input(TestInput::Key(Key::Esc));
+    context.handle_input(TestInput::Chars("m2to".to_string()));
+    assert_eq!(context.ps.state, SelectorState::ValueFunctionIndex);
+    assert!(context.verify_parameter(Parameter::Target));
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_parameter(Parameter::Amount));
+
+    // From state_value_parameter to state_value
+    context.handle_input(TestInput::Key(Key::Esc));
+    context.handle_input(TestInput::Chars("m2to1".to_string()));
+    assert_eq!(context.ps.state, SelectorState::ValueParam);
+    assert!(context.verify_parameter(Parameter::Target));
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_parameter(Parameter::Amount));
+}
+
+#[test]
+fn page_up_down_change_function_id() {
     let mut context = TestContext::new();
 
     // Select Oscillator 1 Finetune
@@ -2037,7 +1751,69 @@ fn page_up_changes_function_id() {
     assert!(context.verify_selection(Parameter::Oscillator, 2, Parameter::Finetune, ParameterValue::Float(0.0)));
 }
 
+#[test]
+fn history_back_and_forward() {
+    let mut context = TestContext::new();
+
+    // Push 3 items in the history
+    context.handle_input(TestInput::Chars("o1l".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("e2d".to_string())];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Decay, ParameterValue::Float(DEFAULT_DECAY)));
+
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("m12s".to_string())];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::ValueFunction);
+    let value = FunctionId{function: Parameter::Lfo, function_id: 1};
+    assert!(context.verify_selection(Parameter::Modulation, 12, Parameter::Source, ParameterValue::Function(value)));
+
+    // Walk backwards through history
+    context.handle_input(TestInput::Chars("<".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Decay, ParameterValue::Float(DEFAULT_DECAY)));
+
+    context.handle_input(TestInput::Chars("<".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+
+    // Walk forwards through history
+    context.handle_input(TestInput::Chars(">".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Decay, ParameterValue::Float(DEFAULT_DECAY)));
+
+    context.handle_input(TestInput::Chars(">".to_string()));
+    assert_eq!(context.ps.state, SelectorState::ValueFunction);
+    let value = FunctionId{function: Parameter::Lfo, function_id: 1};
+    assert!(context.verify_selection(Parameter::Modulation, 12, Parameter::Source, ParameterValue::Function(value)));
+}
+
+#[test]
+fn set_and_recall_marker() {
+    let mut context = TestContext::new();
+
+    context.handle_input(TestInput::Chars("o1l".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+
+    // Set marker a
+    context.handle_input(TestInput::Chars("\"a".to_string()));
+
+    // Go somewhere else
+    let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("e2d".to_string())];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Envelope, 2, Parameter::Decay, ParameterValue::Float(DEFAULT_DECAY)));
+
+    // Return to marker a
+    context.handle_input(TestInput::Chars("\'a".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Value);
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+}
+
 // TODO:
-// - Select next param from value state with param shortcut
 // - Delete controller assignment in MIDI learn mode
 

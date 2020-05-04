@@ -1,4 +1,5 @@
 use super::Float;
+use super::value_range::ValueRange;
 use super::synth::*;
 use super::voice::*;
 
@@ -107,6 +108,7 @@ pub struct FunctionId {
     pub function_id: usize,
 }
 
+/** Identifies a synth parameter. */
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq, Serialize, Deserialize)]
 pub struct ParamId {
     pub function: Parameter,
@@ -135,15 +137,27 @@ impl ParamId {
     }
 }
 
+/** List of possible value types of a synth parameter. */
 #[derive(Clone, Copy, Debug)]
 pub enum ParameterValue {
+    /// Integer value
     Int(i64),
+    /// Float value
     Float(Float),
+    /// Index into a static list
     Choice(usize),
+    /// Index into a dynamic list
     Dynamic(Parameter, usize),
+    /// Value is itself a function ID (e.g. modulation source)
     Function(FunctionId),
+    /// Value is itself a parameter ID (e.g. modulation target)
     Param(ParamId),
+    /// No value
     NoValue
+}
+
+impl Default for ParameterValue {
+    fn default() -> Self { ParameterValue::NoValue }
 }
 
 impl ParameterValue {
@@ -172,7 +186,7 @@ impl fmt::Display for Parameter {
     }
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Default)]
 pub struct SynthParam {
     pub function: Parameter,
     pub function_id: usize,
@@ -195,123 +209,22 @@ impl SynthParam {
                    value: ParameterValue::NoValue}
     }
 
+    pub fn set(&mut self,
+               func: Parameter,
+               func_id: usize,
+               param: Parameter,
+               value: ParameterValue) {
+        self.function = func;
+        self.function_id = func_id;
+        self.parameter = param;
+        self.value = value;
+    }
+
     pub fn equals(&self, other: &ParamId) -> bool {
         self.function == other.function &&
         self.function_id == other.function_id &&
         self.parameter == other.parameter
     }
-}
-
-/** Enum for ranges of valid values */
-#[derive(Clone, Copy, Debug)]
-pub enum ValueRange {
-    Int(i64, i64),               // Range (min, max) of integer values
-    Float(Float, Float, Float),  // Range (min, max, step) of float values
-    Choice(&'static [MenuItem]), // A list of items to choose from
-    Func(&'static [MenuItem]),   // A list of (function-id) function entries
-    Param(&'static [MenuItem]),  // A list of (function-id-param) parameter entries
-    Dynamic(Parameter),          // List is dynamically generated according to the ID
-    NoRange
-}
-
-impl ValueRange {
-
-    /** Translates an integer value into a parameter value of the value range.
-     *
-     * This is currently only used for controller values in the range 0 - 127.
-     */
-    pub fn translate_value(&self, val: u64) -> ParameterValue {
-        match self {
-            ValueRange::Int(min, max) => {
-                let inc: Float = (max - min) as Float / 127.0;
-                let value = min + (val as Float * inc) as i64;
-                ParameterValue::Int(value)
-            }
-            ValueRange::Float(min, max, _) => {
-                let inc: Float = (max - min) / 127.0;
-                let value = min + val as Float * inc;
-                ParameterValue::Float(value)
-            }
-            ValueRange::Choice(choice_list) => {
-                let inc: Float = choice_list.len() as Float / 127.0;
-                let value = (val as Float * inc) as i64;
-                ParameterValue::Choice(value as usize)
-            }
-            ValueRange::Dynamic(param) => {
-                ParameterValue::Dynamic(*param, val as usize)
-            }
-            _ => ParameterValue::NoValue
-        }
-    }
-
-    /** Adds or subtracts two integers if the result is within the given range. */
-    pub fn add_value(&self, val: ParameterValue, addsub: i64) -> ParameterValue {
-        match self {
-            ValueRange::Int(min, max) => {
-                let mut value = if let ParameterValue::Int(x) = val {
-                    x
-                } else {
-                    panic!()
-                };
-                let result = value + addsub;
-                if result >= *min && result <= *max {
-                    value = result;
-                }
-                ParameterValue::Int(value)
-            }
-            ValueRange::Float(min, max, step) => {
-                let mut value = if let ParameterValue::Float(x) = val {
-                    x
-                } else {
-                    panic!()
-                };
-                let result = value + (addsub as Float * step);
-                if result >= *min && result <= *max {
-                    value = result;
-                }
-                ParameterValue::Float(value)
-            }
-            ValueRange::Choice(choice_list) => {
-                let mut value = if let ParameterValue::Choice(x) = val {
-                    x
-                } else {
-                    panic!()
-                };
-                let result = value + addsub as usize;
-                if result < choice_list.len() {
-                    value = result;
-                }
-                ParameterValue::Choice(value)
-            }
-            _ => ParameterValue::NoValue
-        }
-    }
-
-    pub fn get_min_max(&self) -> (Float, Float) {
-        match self {
-            ValueRange::Int(min, max) => (*min as Float, *max as Float),
-            ValueRange::Float(min, max, _) => (*min, *max),
-            ValueRange::Choice(itemlist) => (0.0, itemlist.len() as Float),
-            _ => panic!("Unexpected value range, cannot get min and max"),
-        }
-    }
-
-    /** Adds two floats, keeps result within value range. */
-    pub fn safe_add(&self, a: Float, b: Float) -> Float {
-        let result = a + b;
-        let (min, max) = self.get_min_max();
-        if result < min {
-            min
-        } else if result > max {
-            max
-        } else {
-            result
-        }
-    }
-}
-
-impl Default for ValueRange {
-    fn default() -> Self { ValueRange::NoRange }
 }
 
 #[derive(Debug)]
@@ -352,7 +265,7 @@ impl MenuItem {
                 return i;
             }
         }
-        panic!();
+        panic!("Unable to find item {}", item);
     }
 }
 
@@ -385,17 +298,18 @@ pub static LFO_PARAMS: [MenuItem; 2] = [
     MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Float(0.0, 44.1, 0.1), next: &[]},
 ];
 
-pub static FILTER_PARAMS: [MenuItem; 4] = [
+pub static FILTER_PARAMS: [MenuItem; 5] = [
     MenuItem{item: Parameter::Type,      key: 't', val_range: ValueRange::Choice(&FILTER_TYPE),    next: &[]},
-    MenuItem{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::Float(1.0, 5000.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::Float(1.0, 100.0, 1.0),  next: &[]},
-    MenuItem{item: Parameter::Gain,      key: 'g', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
+    MenuItem{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::Float(1.0, 8000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
+    MenuItem{item: Parameter::Gain,      key: 'g', val_range: ValueRange::Float(0.0, 2.0, 0.01),   next: &[]},
+    MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::Int(0, 1),               next: &[]},
 ];
 
 pub static FILTER_TYPE: [MenuItem; 4] = [
     MenuItem{item: Parameter::None,      key: 'n', val_range: ValueRange::NoRange, next: &[]},
-    MenuItem{item: Parameter::ResonZ,    key: 'r', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::RLPF,      key: 'l', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::ResonZ,    key: 'r', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::Moog,      key: 'm', val_range: ValueRange::NoRange, next: &[]},
 ];
 
