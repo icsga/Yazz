@@ -1,7 +1,8 @@
 # Yazz - Yet Another Subtractive Synth
 
 ## Introduction
-Thanks for trying out Yazz. This project is still under development, so not
+
+Thanks for trying out Yazz. This project is still in development, so not
 everything works as expected, or at all. I'm happy about any feedback.
 
 **IMPORTANT: The filter is currently unstable, so certain settings will create
@@ -16,7 +17,7 @@ Yazz has a fixed signal flow with the following components:
 * 3 wavetable-based oscillators per voice
 * 2 (well, currently only one) filters with LP-/ HP- and BP-Modes (well, currently
   only LP) per voice
-* 2 ADSR envelopes per voice
+* 3 ADSR envelopes per voice
 * 2 LFOs per voice
 * 2 global LFOs
 * Delay
@@ -39,7 +40,15 @@ list. There is also no safety dialog yet to prevent accidentally overwriting
 sounds. Making manual backups might be a good idea if you made a cool sound and
 want to keep it.
 
-## Editing parameters
+## Operating modes
+
+Yazz has two distinct operating modes: Edit mode and Play mode. The mode is
+switched with the TAB key. The main difference is that Edit mode captures one
+dedicated MIDI controller (modulation wheel per default) as data input to
+change parameter values, while play mode allows easy switching between MIDI
+controller sets.
+
+## Edit Mode: Editing parameters
 
 Yazz is controlled entirely with the (computer-)keyboard and/ or MIDI
 controllers. The top line of the UI is the **command line** that is used
@@ -84,8 +93,8 @@ The value can be changed by:
 
 * Typing in the target value and pressing Enter, e.g. "3.14" for a float value,
 * Using '+'/ '-' to increment/ decrement the value,
-* Using the assigned input controller (currently the modulation wheel) to set
-  the value.
+* Using the input controller (currently the modulation wheel) to set the value.
+* Using a MIDI controller assigned to this parameter to set the value.
 
 After adjusting the value, pressing Enter will return to the Parameter
 selection, pressing Escape will return to the function selection.
@@ -93,12 +102,17 @@ selection, pressing Escape will return to the function selection.
 ### Keyboard shortcuts
 
 While setting the value in the command line, there are a number of additional
-keyboard shortcuts for easier navigation:
+keyboard shortcuts for faster navigation:
 
 * **PageUp/ PageDown** will change the function ID of the current parameter.
   That way it is easy to adjust the same parameter for all 3 oscillators, or to
   search for the modulation slot that is assigned to a particular target.
-* More to come
+* **[/ ]** will step through the parameter list of the selected function.
+* **</ >** will move backwards/ forwards through the history of selected
+  parameters.
+* **"<MarkerId>** adds a marker at the selected parameter. MarkerId can be any
+  valid ASCII character.
+* **'<MarkerId>** goes to the selected marker if it has been defined.
 
 ## Assigning MIDI controllers
 
@@ -107,7 +121,7 @@ controller:
 
 * Select the target parameter in the command line (e.g. "o1l" to select
   oscillator 1 level.
-* Enter MIDI learn mode by pressing "l". The command line will show the text
+* Enter MIDI learn mode by pressing "Ctrl-l". The command line will show the text
   **MIDI learn: Send controller data**.
 * Send values with the MIDI controller. Yazz needs at least two distinct values
   to be able to distinguish between absolute and relative controller types.
@@ -116,6 +130,9 @@ After having detected the controller, the command line switches back to value
 input mode.
 
 To cancel MIDI learn mode without assigning a controller, press Escape.
+
+Controller assignments are global settings, not sound specific. They are saved
+automatically after every controller assignment change.
 
 ## Modulation ##
 
@@ -126,6 +143,7 @@ modulation sources and targets:
 * Global modulation sources:
     * Channel aftertouch
     * Global LFOs
+    * Pitch wheel
 * Local modulation sources:
     * Key velocity
     * Per-voice signals (oscillator, envelope and LFO outputs)
@@ -138,12 +156,8 @@ modulation sources and targets:
 To assign a modulator, select one the 20 available Modulation function slots.
 Both the source and the target parameters can be entered the same way as
 selecting a synth parameter. Modulation source requires only Function and
-Function ID, while Modulation Target also requires the Parameter to assign.
+Function ID, while Modulation Target also requires the Parameter to assign to.
 
-In addition, any modulator can be adjusted in intensity and can be turned on/
-off.
+Any modulator can be adjusted in intensity and can be turned on/ off.
 
-The value ranges for most of these are not finished yet, so not all assignments
-have the desired effect, and some will cause the program to exit. Working on
-it.
-
+## Play Mode: Select controller set

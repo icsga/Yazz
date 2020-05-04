@@ -9,6 +9,7 @@ use log::{info, trace, warn};
 use termion::event::Key;
 
 use std::cell::RefCell;
+use std::collections::HashMap;
 use std::convert::TryInto;
 use std::fmt::{self, Debug};
 use std::num::ParseFloatError;
@@ -22,6 +23,8 @@ pub enum SelectorState {
     Param,
     Value,
     MidiLearn,
+    AddMarker,
+    GotoMarker,
     ValueFunction,
     ValueFunctionIndex,
     ValueParam,
@@ -33,6 +36,7 @@ impl fmt::Display for SelectorState {
     }
 }
 
+// Order in which the states are displayed
 pub fn next(current: SelectorState) -> SelectorState {
     use SelectorState::*;
     match current {
@@ -40,7 +44,9 @@ pub fn next(current: SelectorState) -> SelectorState {
         FunctionIndex => Param,
         Param => Value,
         Value => MidiLearn,
-        MidiLearn => ValueFunction,
+        MidiLearn => AddMarker,
+        AddMarker => GotoMarker,
+        GotoMarker => ValueFunction,
         ValueFunction => ValueFunctionIndex,
         ValueFunctionIndex => ValueParam,
         ValueParam => ValueParam,
@@ -100,6 +106,9 @@ pub struct ParamSelector {
     pub wavetable_list: Vec<(usize, String)>,
     sound: Option<Rc<RefCell<SoundPatch>>>,
     pending_key: Option<Key>,
+    history: Vec<ParamId>,
+    rev_history: Vec<ParamId>,
+    marker: HashMap<char, ParamId>,
 }
 
 impl ParamSelector {
@@ -139,6 +148,9 @@ impl ParamSelector {
                       wavetable_list: wavetable_list,
                       sound: Option::None,
                       pending_key: Option::None,
+                      history: vec!{},
+                      rev_history: vec!{},
+                      marker: HashMap::new(),
         }
     }
 
@@ -312,12 +324,8 @@ impl ParamSelector {
                             },
                             RetCode::ValueComplete => {                       // Prepare to read the value
                                 self.query_current_value();
-                                match self.param_selection.value {
-                                    ParameterValue::Function(id) => SmResult::ChangeState(ParamSelector::state_value_function),
-                                    ParameterValue::Param(id) => SmResult::ChangeState(ParamSelector::state_value_function),
-                                    ParameterValue::NoValue => panic!(),
-                                    _ => SmResult::ChangeState(ParamSelector::state_value),
-                                }
+                                self.history_add(self.get_param_id());
+                                self.change_to_value_state()
                                 
                             },
                             RetCode::Cancel        => SmResult::ChangeState(ParamSelector::state_function_index), // Cancel parameter selection
@@ -606,6 +614,78 @@ impl ParamSelector {
         }
     }
 
+    fn state_add_marker(self: &mut ParamSelector,
+                        e: &SmEvent<SelectorEvent>)
+    -> SmResult<ParamSelector, SelectorEvent> {
+        match e {
+            SmEvent::EnterState => {
+                info!("state_add_marker Enter");
+                self.state = SelectorState::AddMarker;
+                SmResult::EventHandled
+            }
+            SmEvent::ExitState => {
+                SmResult::EventHandled
+            }
+            SmEvent::Event(selector_event) => {
+                match selector_event {
+                    SelectorEvent::Key(c) => {
+                        match c {
+                            Key::Char(m) => {
+                                self.marker.insert(*m, self.get_param_id());
+                                self.change_to_value_state()
+                            }
+                            Key::Esc => self.change_to_value_state(),
+                            _ => SmResult::EventHandled
+                        }
+                    }
+                    _ => SmResult::EventHandled,
+                }
+            }
+        }
+    }
+
+    fn change_to_value_state(&self) -> SmResult<ParamSelector, SelectorEvent> {
+        match self.param_selection.value {
+            ParameterValue::Function(id) => SmResult::ChangeState(ParamSelector::state_value_function),
+            ParameterValue::Param(id) => SmResult::ChangeState(ParamSelector::state_value_function),
+            ParameterValue::NoValue => panic!(),
+            _ => SmResult::ChangeState(ParamSelector::state_value),
+        }
+    }
+
+    fn state_goto_marker(self: &mut ParamSelector,
+                        e: &SmEvent<SelectorEvent>)
+    -> SmResult<ParamSelector, SelectorEvent> {
+        match e {
+            SmEvent::EnterState => {
+                info!("state_goto_marker Enter");
+                self.state = SelectorState::GotoMarker;
+                SmResult::EventHandled
+            }
+            SmEvent::ExitState => {
+                SmResult::EventHandled
+            }
+            SmEvent::Event(selector_event) => {
+                match selector_event {
+                    SelectorEvent::Key(c) => {
+                        match c {
+                            Key::Char(c) => {
+                                if self.marker.contains_key(c) {
+                                    let id = self.marker[c];
+                                    self.apply_param_id(&id);
+                                }
+                                self.change_to_value_state()
+                            }
+                            Key::Esc => self.change_to_value_state(),
+                            _ => SmResult::EventHandled
+                        }
+                    }
+                    _ => SmResult::EventHandled,
+                }
+            }
+        }
+    }
+
     /* Handle some shortcut keys for easier navigation.
      *
      * - PageUp/ PageDown change the function ID
@@ -631,6 +711,20 @@ impl ParamSelector {
                     '[' => {
                         self.decrease_param_id();
                         true
+                    }
+                    '<' => {
+                        self.history_backwards();
+                        true
+                    }
+                    '>' => {
+                        self.history_forwards();
+                        true
+                    }
+                    '"' => {
+                        return SmResult::ChangeState(ParamSelector::state_add_marker);
+                    }
+                    '\'' => {
+                        return SmResult::ChangeState(ParamSelector::state_goto_marker);
                     }
                     _ => false
                 };
@@ -662,20 +756,67 @@ impl ParamSelector {
     fn increase_function_id(&mut self) {
         ParamSelector::get_value(&mut self.func_selection, Key::Up, &self.wavetable_list);
         self.query_current_value();
+        self.history_add(self.get_param_id());
     }
 
     fn decrease_function_id(&mut self) {
         ParamSelector::get_value(&mut self.func_selection, Key::Down, &self.wavetable_list);
         self.query_current_value();
+        self.history_add(self.get_param_id());
     }
 
     fn increase_param_id(&mut self) {
         ParamSelector::select_item(&mut self.param_selection, Key::Up);
         self.query_current_value();
+        self.history_add(self.get_param_id());
     }
 
     fn decrease_param_id(&mut self) {
         ParamSelector::select_item(&mut self.param_selection, Key::Down);
+        self.query_current_value();
+        self.history_add(self.get_param_id());
+    }
+
+    fn history_add(&mut self, p: ParamId) {
+        self.history.push(p);
+        self.rev_history.clear();
+    }
+
+    fn history_backwards(&mut self) {
+        if self.history.len() < 2 {
+            return; // Nothing to go back to
+        }
+        let current_param_id = self.history.pop();
+        if let Some(p) = current_param_id {
+            self.rev_history.push(p);
+        } else {
+            panic!();
+        }
+        let prev_param_id = self.history.last();
+        let p = if let Some(p) = prev_param_id { *p } else { panic!() };
+        self.apply_param_id(&p);
+    }
+
+    fn history_forwards(&mut self) {
+        if self.rev_history.len() < 1 {
+            return; // Nothing to go forward to
+        }
+        let current_param_id = self.rev_history.pop();
+        if let Some(p) = current_param_id {
+            self.history.push(p);
+        } else {
+            panic!();
+        }
+        let prev_param_id = self.history.last();
+        let p = if let Some(p) = prev_param_id { *p } else { panic!() };
+        self.apply_param_id(&p);
+    }
+
+    fn apply_param_id(&mut self, param_id: &ParamId) {
+        self.func_selection.item_index = MenuItem::get_item_index(param_id.function, &self.func_selection.item_list);
+        self.func_selection.value = ParameterValue::Int(param_id.function_id as i64);
+        self.param_selection.item_list = self.func_selection.item_list[self.func_selection.item_index].next;
+        self.param_selection.item_index = MenuItem::get_item_index(param_id.parameter, &self.param_selection.item_list);
         self.query_current_value();
     }
 
