@@ -49,6 +49,7 @@ pub enum Parameter {
 
     // Amp
     Volume,
+    Drive,
 
     // Lfo
 
@@ -69,6 +70,7 @@ pub enum Parameter {
     Sine,
     Triangle,
     Saw,
+    SawDown,
     Square,
     Noise,
     SampleHold,
@@ -409,10 +411,11 @@ pub static OSC_WAVEFORM: [MenuItem; 5] = [
     MenuItem{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange, next: &[]},
 ];
 
-pub static LFO_WAVEFORM: [MenuItem; 6] = [
+pub static LFO_WAVEFORM: [MenuItem; 7] = [
     MenuItem{item: Parameter::Sine,      key: 's', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::Triangle,  key: 't', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::Saw,       key: 'w', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::SawDown,   key: 'd', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::Square,    key: 'q', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::SampleHold,key: 'h', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange, next: &[]},
@@ -432,10 +435,11 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 
-pub static PATCH_PARAMS: [MenuItem; 3] = [
+pub static PATCH_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Drive,     key: 'd', val_range: ValueRange::Float(0.0, 10.0, 1.0),  next: &[]},
     MenuItem{item: Parameter::Pitchbend ,key: 'p', val_range: ValueRange::Int(0, 12),             next: &[]},
-    MenuItem{item: Parameter::VelSens,   key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
+    MenuItem{item: Parameter::VelSens,   key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
 ];
 
 pub static MOD_SOURCES: [MenuItem; 8] = [

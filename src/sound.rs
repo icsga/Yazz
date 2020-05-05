@@ -167,6 +167,7 @@ impl SoundData {
             Parameter::Patch => {
                 match msg.parameter {
                     Parameter::Level => { self.patch.level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
+                    Parameter::Drive => { self.patch.drive = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Pitchbend => { self.patch.pitchbend = if let ParameterValue::Int(x) = msg.value { x as Float } else { panic!() }; }
                     Parameter::VelSens => { self.patch.vel_sens = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
@@ -249,6 +250,7 @@ impl SoundData {
             Parameter::Patch => {
                 match param.parameter {
                     Parameter::Level => ParameterValue::Float(self.patch.level * 100.0),
+                    Parameter::Drive => ParameterValue::Float(self.patch.drive),
                     Parameter::Pitchbend => ParameterValue::Int(self.patch.pitchbend as i64),
                     Parameter::VelSens => ParameterValue::Float(self.patch.vel_sens),
                     _ => {panic!();}
