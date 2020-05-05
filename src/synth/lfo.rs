@@ -12,9 +12,10 @@ pub enum LfoWaveform {
     Sine,
     Tri,
     Saw,
+    SawDown,
     Square,
-    Noise,
     SnH,
+    Noise,
 }
 
 impl Default for LfoWaveform {
@@ -37,9 +38,10 @@ impl LfoData {
             0 => LfoWaveform::Sine,
             1 => LfoWaveform::Tri,
             2 => LfoWaveform::Saw,
-            3 => LfoWaveform::Square,
-            4 => LfoWaveform::Noise,
+            3 => LfoWaveform::SawDown,
+            4 => LfoWaveform::Square,
             5 => LfoWaveform::SnH,
+            6 => LfoWaveform::Noise,
             _ => panic!(),
         }
     }
@@ -49,9 +51,10 @@ impl LfoData {
             LfoWaveform::Sine => 0,
             LfoWaveform::Tri => 1,
             LfoWaveform::Saw => 2,
-            LfoWaveform::Square => 3,
-            LfoWaveform::Noise => 4,
+            LfoWaveform::SawDown => 3,
+            LfoWaveform::Square => 4,
             LfoWaveform::SnH => 5,
+            LfoWaveform::Noise => 6,
         }
     }
 }
@@ -104,10 +107,18 @@ impl Lfo {
                 self.stabilization_counter = 0;
         }
 
-        self.phasor.im // return the 'sine' component of the phasor
+        let mut value = self.phasor.im; // return the 'sine' component of the phasor
+        if value > 1.0 {
+            value = 1.0;
+        } else if value < -1.0 {
+            value = -1.0;
+        }
+        value
     }
 
     fn get_sample_triangle(&mut self, dt: Float, phase: Float) -> Float {
+        /* This version allows for asymmetrical triangle, but we're not using
+         * it at the moment.
         let rate_q1 = 2.0 / phase;
         let rate_q2 = 2.0 / (1.0 - phase);
         let mut pos = self.position + (phase / 2.0);
@@ -117,10 +128,17 @@ impl Lfo {
         } else {
             1.0 - ((pos - phase) * rate_q2)
         }
+        */
+        // Faster version
+        1.0 - 2.0 * (2.0 * self.position - 1.0).abs()
     }
 
-    fn get_sample_saw(&mut self, dt: Float) -> Float {
+    fn get_sample_saw_down(&mut self, dt: Float) -> Float {
         1.0 - (self.position * 2.0)
+    }
+
+    fn get_sample_saw_up(&mut self, dt: Float) -> Float {
+        (self.position * 2.0) - 1.0
     }
 
     fn get_sample_square(&mut self, dt: Float, phase: Float) -> Float {
@@ -164,7 +182,8 @@ impl Lfo {
         result = match data.waveform {
             LfoWaveform::Sine => self.get_sample_sine(data.frequency, dt),
             LfoWaveform::Tri => self.get_sample_triangle(dt_f, 0.5),
-            LfoWaveform::Saw => self.get_sample_saw(dt_f),
+            LfoWaveform::Saw => self.get_sample_saw_up(dt_f),
+            LfoWaveform::SawDown => self.get_sample_saw_down(dt_f),
             LfoWaveform::Square => self.get_sample_square(dt_f, 0.5),
             LfoWaveform::Noise => self.get_sample_noise(dt_f),
             LfoWaveform::SnH => self.get_sample_snh(complete),
@@ -172,7 +191,7 @@ impl Lfo {
 
         self.last_update += dt;
         if result > 1.0 {
-            result = 1.0;
+            panic!("LFO overrun");
         }
         (result, complete)
     }

@@ -36,6 +36,7 @@ pub enum Synth2UIMessage {
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
 pub struct PatchData {
     pub level: Float,
+    pub drive: Float,
     pub pitchbend: Float, // Range of the pitchwheel
     pub vel_sens: Float,  // Velocity sensitivity
 }
@@ -43,6 +44,7 @@ pub struct PatchData {
 impl PatchData {
     pub fn init(&mut self) {
         self.level = 90.0;
+        self.drive = 0.0;
         self.pitchbend = 2.0;
         self.vel_sens = 1.0;
     }
@@ -229,6 +231,11 @@ impl Synth {
             }
         }
 
+        // Apply clipping
+        if self.sound_global.patch.drive > 0.0 {
+            value = (value * self.sound_global.patch.drive).tanh();
+        }
+
         // Pass sample into global effects
         value = self.delay.process(value, sample_clock, &self.sound_global.delay);
 
@@ -376,7 +383,13 @@ impl Synth {
                 osc.id = param.function_id - 1;
                 osc.set_wavetable(self.osc_wave[osc.id].clone());
                 for i in 0..len {
-                    let (sample, complete) = osc.get_sample(freq, i as i64, &self.sound, false);
+                    let (mut sample, complete) = osc.get_sample(freq, i as i64, &self.sound, false);
+
+                    // Apply clipping
+                    if self.sound_global.patch.drive > 0.0 {
+                        sample = (sample * self.sound_global.patch.drive).tanh();
+                    }
+
                     buffer[i] = sample * self.sound.osc[param.function_id - 1].level;
                 }
             },
