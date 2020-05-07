@@ -13,9 +13,10 @@ some features are still missing.
 - Up to 7 instances per oscillator with frequency spreading
 - Wavetable scanning
 - Oscillator sync
-- Up to 20 modulation assignments from x sources to y targets
+- User wavetables
+- Up to 16 modulation assignments
 - 2 LFOs per voice plus 2 global LFOs
-- 2 ADSR envelopes per voice, with adjustable slope
+- 3 ADSR envelopes per voice, with adjustable slope
 - Delay
 
 For a detailed description, have a look at the manual in the doc folder.
@@ -24,11 +25,11 @@ For a detailed description, have a look at the manual in the doc folder.
 
 - The UI isn't drawn correctly on the MacOS terminal (as of 10.14.6). It works
   fine with Tmux or iTerm2, so please try one of these if you're on MacOS.
-- The filter is a bit unstable and produces loud noise on some settings.
+- The filter is a bit unstable and produces loud noise in some extreme
+  settings.
 
 ## Near future enhancements
 
-- Resonant filter
 - Chorus
 - Multitap delay
 - Additional key tuning tables for alternate tunings
