@@ -2,7 +2,9 @@ use super::Float;
 use super::{FunctionId, ParamId};
 use super::ItemSelection;
 use super::{Parameter, ParameterValue, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
+use super::MarkerManager;
 use super::MidiLearn;
+use crate::ModData;
 use super::{SoundData, SoundPatch};
 use super::{StateMachine, SmEvent, SmResult};
 
@@ -93,7 +95,7 @@ pub struct ParamSelector {
     pending_key: Option<Key>,
     history: Vec<ParamId>,
     rev_history: Vec<ParamId>,
-    marker: HashMap<char, ParamId>,
+    marker_manager: MarkerManager,
 }
 
 impl ParamSelector {
@@ -136,7 +138,7 @@ impl ParamSelector {
                       pending_key: Option::None,
                       history: vec!{},
                       rev_history: vec!{},
-                      marker: HashMap::new(),
+                      marker_manager: MarkerManager::new(),
         }
     }
 
@@ -347,6 +349,11 @@ impl ParamSelector {
                 match selector_event {
                     SelectorEvent::Key(c) => {
                         let result = self.handle_navigation_keys(c);
+                        match result {
+                            SmResult::Error => (), // Continue processing the key
+                            _ => return result     // Key was handled
+                        }
+                        let result = self.handle_state_value_keys(c);
                         match result {
                             SmResult::Error => (), // Continue processing the key
                             _ => return result     // Key was handled
@@ -655,7 +662,7 @@ impl ParamSelector {
                     SelectorEvent::Key(c) => {
                         match c {
                             Key::Char(m) => {
-                                self.marker.insert(*m, self.get_param_id());
+                                self.marker_manager.add(*m, self.get_param_id());
                                 self.change_to_value_state()
                             }
                             Key::Esc => self.change_to_value_state(),
@@ -686,10 +693,10 @@ impl ParamSelector {
                     SelectorEvent::Key(c) => {
                         match c {
                             Key::Char(c) => {
-                                if self.marker.contains_key(c) {
-                                    let id = self.marker[c];
-                                    self.apply_param_id(&id);
-                                }
+                                match self.marker_manager.get(*c) {
+                                    Some(param_id) => self.apply_param_id(&param_id),
+                                    None => ()
+                                };
                                 self.change_to_value_state()
                             }
                             Key::Esc => self.change_to_value_state(),
@@ -840,6 +847,88 @@ impl ParamSelector {
         self.apply_param_id(&p);
     }
 
+    /** Handle some extra shortcuts for state_value.
+     *
+     * - Ctrl-L switches to MIDI learn mode
+     * - '/' creates a new modulator for the current parameter
+     * - '?' searches active modulators for the current parameter
+     */
+    fn handle_state_value_keys(&mut self, c: &termion::event::Key)
+            -> SmResult<ParamSelector, SelectorEvent> {
+        match *c {
+            Key::Char(c) => {
+                let param_changed = match c {
+                    '/' => self.create_modulator(),
+                    '?' => self.search_modulator(),
+                    _ => false
+                };
+                if param_changed {
+                    // The input state needs to match the value type of the new
+                    // parameter.
+                    match self.param_selection.value {
+                        ParameterValue::Function(_) |
+                        ParameterValue::Param(_) => {
+                            if self.state == SelectorState::Value {
+                                return SmResult::ChangeState(ParamSelector::state_value_function);
+                            }
+                        }
+                        _ => {
+                            if self.state != SelectorState::Value
+                            && self.state != SelectorState::Param {
+                                return SmResult::ChangeState(ParamSelector::state_value);
+                            }
+                        }
+                    }
+                    return SmResult::EventHandled;
+                }
+            }
+            _ => ()
+        }
+        SmResult::Error // Not really an error, but event not handled
+    }
+
+    fn create_modulator(&mut self) -> bool {
+        // Find a modulator that is inactive
+        let sound = if let Some(sound) = &self.sound { sound } else { panic!() };
+        let mut found = false;
+        let mut param_id = self.get_param_id();
+        let mut index: usize = 0;
+        {
+            let modulators = &mut sound.borrow_mut().data.modul;
+            let len = modulators.len();
+            for i in 0..len {
+                if modulators[i].active == false {
+                    index = i;
+                    found = true;
+                    break;
+                }
+            }
+        }
+        if !found { return false; }
+
+        let mut sp = SynthParam::new(Parameter::Modulation, index + 1, Parameter::Target, ParameterValue::Param(param_id));
+        sound.borrow_mut().data.set_parameter(&sp);
+        sp.parameter = Parameter::Active;
+        sp.value = ParameterValue::Int(1);
+        sound.borrow_mut().data.set_parameter(&sp);
+        sp.parameter = Parameter::Amount;
+        sp.value = ParameterValue::Float(1.0);
+        sound.borrow_mut().data.set_parameter(&sp);
+
+        // Prepare param_id to match current param
+        param_id.function = Parameter::Modulation;
+        param_id.function_id = index + 1;
+        param_id.parameter = Parameter::Source;
+
+        // Set up fun, id, param to point to modulator
+        self.apply_param_id(&param_id);
+        true
+    }
+
+    fn search_modulator(&mut self) -> bool {
+        true
+    }
+
     fn apply_param_id(&mut self, param_id: &ParamId) {
         self.func_selection.item_index = MenuItem::get_item_index(param_id.function, &self.func_selection.item_list);
         self.func_selection.value = ParameterValue::Int(param_id.function_id as i64);
@@ -904,6 +993,7 @@ impl ParamSelector {
                 fs.item_index = MenuItem::get_item_index(id.function, fs.item_list);
                 fs.value = ParameterValue::Int(id.function_id as i64);
                 let ps = &mut self.value_param_selection;
+                ps.set_list_from(fs, 0);
                 ps.item_index = MenuItem::get_item_index(id.parameter, ps.item_list);
             }
             ParameterValue::NoValue => panic!(),

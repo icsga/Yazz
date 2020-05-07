@@ -70,9 +70,9 @@
         ],
         "filter": [
           {
-            "filter_type": 2,
-            "cutoff": 2000.0,
-            "resonance": 1.0,
+            "filter_type": 1,
+            "cutoff": 3024.2440944881887,
+            "resonance": 0.2204724409448819,
             "gain": 1.0,
             "key_follow": 1
           },
@@ -364,7 +364,7 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 2000.0,
+            "cutoff": 315.92125984251965,
             "resonance": 1.0,
             "gain": 1.0,
             "key_follow": 1
@@ -657,8 +657,8 @@
         "filter": [
           {
             "filter_type": 2,
-            "cutoff": 2000.0,
-            "resonance": 1.0,
+            "cutoff": 315.92125984251965,
+            "resonance": 0.0,
             "gain": 1.0,
             "key_follow": 1
           },
@@ -926,7 +926,7 @@
         ],
         "env": [
           {
-            "attack": 30.0,
+            "attack": 15.0,
             "decay": 1543.3071,
             "sustain": 0.0,
             "release": 944.8819,
@@ -949,9 +949,9 @@
         ],
         "filter": [
           {
-            "filter_type": 2,
-            "cutoff": 2000.0,
-            "resonance": 1.0,
+            "filter_type": 1,
+            "cutoff": 3087.2283464566926,
+            "resonance": 0.0,
             "gain": 1.0,
             "key_follow": 1
           },
@@ -1243,8 +1243,8 @@
         "filter": [
           {
             "filter_type": 1,
-            "cutoff": 2778.3228346456694,
-            "resonance": 1.0,
+            "cutoff": 2709.322834645669,
+            "resonance": 0.6456692913385826,
             "gain": 1.0,
             "key_follow": 1
           },
@@ -1470,29 +1470,29 @@
       }
     },
     {
-      "name": "Init",
+      "name": "Strings",
       "data": {
         "osc": [
           {
-            "level": 0.92,
+            "level": 0.31496062992125984,
             "num_voices": 1,
-            "voice_spread": 0.0,
+            "voice_spread": 0.031496062992125984,
             "tune_halfsteps": 0,
-            "tune_cents": 0.0,
-            "freq_offset": 1.0,
-            "wave_index": 0.6535433070866141,
+            "tune_cents": -0.023622047244094377,
+            "freq_offset": 0.9986364696034682,
+            "wave_index": 0.5354330708661417,
             "sync": 0,
             "key_follow": 1,
             "wavetable": 0
           },
           {
-            "level": 0.0,
+            "level": 0.2677165354330709,
             "num_voices": 1,
             "voice_spread": 0.0,
             "tune_halfsteps": 0,
-            "tune_cents": 0.0,
-            "freq_offset": 1.0,
-            "wave_index": 0.0,
+            "tune_cents": 0.03937007874015748,
+            "freq_offset": 1.0022766891465087,
+            "wave_index": 0.6141732283464567,
             "sync": 0,
             "key_follow": 1,
             "wavetable": 0
@@ -1512,11 +1512,11 @@
         ],
         "env": [
           {
-            "attack": 30.0,
-            "decay": 50.0,
-            "sustain": 0.7,
-            "release": 100.0,
-            "factor": 3.0
+            "attack": 180.0,
+            "decay": 100.0,
+            "sustain": 0.9212598425196851,
+            "release": 503.93700787401576,
+            "factor": 1.0
           },
           {
             "attack": 30.0,
@@ -1536,8 +1536,8 @@
         "filter": [
           {
             "filter_type": 1,
-            "cutoff": 2000.0,
-            "resonance": 1.0,
+            "cutoff": 1449.6377952755904,
+            "resonance": 0.0,
             "gain": 1.0,
             "key_follow": 1
           },
@@ -1552,11 +1552,11 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 4.166929133858268
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 4.861417322834646
           }
         ],
         "glfo": [
@@ -1574,23 +1574,23 @@
             "source_func": "Lfo",
             "source_func_id": 1,
             "target_func": "Oscillator",
-            "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_func_id": 2,
+            "target_param": "Finetune",
+            "amount": 0.06299212598425197,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 6.299212598425196
           },
           {
             "source_func": "Lfo",
-            "source_func_id": 1,
+            "source_func_id": 2,
             "target_func": "Oscillator",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "Finetune",
+            "amount": 0.07086614173228346,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 7.086614173228346
           },
           {
             "source_func": "Lfo",
@@ -1748,10 +1748,10 @@
           }
         ],
         "delay": {
-          "level": 0.0,
-          "feedback": 0.5,
-          "time": 0.5,
-          "tone": 1600.0
+          "level": 0.10236220472440945,
+          "feedback": 0.6377952755905512,
+          "time": 0.3685826771653543,
+          "tone": 833.0708661417324
         },
         "patch": {
           "level": 0.9,

@@ -1,0 +1,39 @@
+{
+  "marker": {
+    "2": {
+      "function": "Oscillator",
+      "function_id": 2,
+      "parameter": "Level"
+    },
+    "m": {
+      "function": "Modulation",
+      "function_id": 1,
+      "parameter": "Target"
+    },
+    "f": {
+      "function": "Filter",
+      "function_id": 1,
+      "parameter": "Cutoff"
+    },
+    "e": {
+      "function": "Envelope",
+      "function_id": 1,
+      "parameter": "Attack"
+    },
+    "1": {
+      "function": "Oscillator",
+      "function_id": 1,
+      "parameter": "Level"
+    },
+    "3": {
+      "function": "Oscillator",
+      "function_id": 3,
+      "parameter": "Level"
+    },
+    "r": {
+      "function": "Filter",
+      "function_id": 1,
+      "parameter": "Resonance"
+    }
+  }
+}
