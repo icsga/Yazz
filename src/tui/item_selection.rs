@@ -32,6 +32,7 @@ impl ItemSelection {
     pub fn set_list_from(&mut self, from: &ItemSelection, item_index: usize) {
         self.item_list = from.item_list[from.item_index].next;
         self.item_index = item_index;
+        info!("Set list to {:?}", self.item_list);
     }
 
     /** Select one of the items in the function list.

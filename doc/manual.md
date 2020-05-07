@@ -113,6 +113,8 @@ keyboard shortcuts for faster navigation:
 * **"<MarkerId>** adds a marker at the selected parameter. MarkerId can be any
   valid ASCII character.
 * **'<MarkerId>** goes to the selected marker if it has been defined.
+* **/** creates a new modulator with the current parameter as target,
+  activates it and sets the command line to the modulation source selection.
 
 ## Assigning MIDI controllers
 
@@ -161,3 +163,6 @@ Function ID, while Modulation Target also requires the Parameter to assign to.
 Any modulator can be adjusted in intensity and can be turned on/ off.
 
 ## Play Mode: Select controller set
+
+In play mode, pressing any alphanumeric key will activate the controller set
+with that ID.

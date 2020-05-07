@@ -38,7 +38,6 @@ enum Mode {
 
 enum TuiState {
     Play,
-    CtrlSetSelect
 }
 
 type TuiEvent = termion::event::Key;
@@ -236,37 +235,21 @@ impl Tui {
     fn handle_play_mode_input(&mut self, key: Key) {
         self.state = match self.state {
             TuiState::Play => self.state_play(key),
-            TuiState::CtrlSetSelect => self.state_ctrl_set_select(key),
         }
     }
 
     fn state_play(&mut self, key: Key) -> TuiState {
         match key {
             Key::Char(c) => {
-                match c {
-                    'c' => TuiState::CtrlSetSelect,
-                    _ => TuiState::Play,
-                }
-            }
-            _ => TuiState::Play,
-        }
-    }
-
-    fn state_ctrl_set_select(&mut self, key: Key) -> TuiState {
-        match key {
-            Key::Char(c) => {
                 if c >= '0' && c <= '9' {
                     self.active_ctrl_set = c as usize - '0' as usize;
                 } else if c >= 'a' && c <= 'z' {
                     self.active_ctrl_set = c as usize - 'a' as usize + 10;
-                } else {
-                    // Stay in this state until valid key received
-                    return TuiState::CtrlSetSelect;
                 }
-                TuiState::Play
             }
-            _ => TuiState::CtrlSetSelect
+            _ => ()
         }
+        TuiState::Play
     }
 
     fn scan_wavetables(&mut self) {
