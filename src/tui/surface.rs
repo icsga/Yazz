@@ -65,7 +65,7 @@ impl Surface {
         let (lfo_width, lfo_height) = lfo.borrow().get_size();
         this.add_child(lfo, env_width + 2, osc_height);
 
-        this.add_child(canvas_clone, 2, osc_height + env_height);
+        this.add_child(canvas_clone, 2, osc_height + env_height + 1);
 
         let glfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         glfo.borrow_mut().enable_border(true);
@@ -75,10 +75,16 @@ impl Surface {
         let (glfo_width, glfo_height) = glfo.borrow().get_size();
         this.add_child(glfo, env_width + 2, osc_height + lfo_height);
 
+        let filter: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
+        filter.borrow_mut().enable_border(true);
+        this.add_filter(&mut filter.borrow_mut(), 1, 1, 0);
+        let (_, filter_height) = filter.borrow().get_size();
+        this.add_child(filter, env_width + 2, osc_height + lfo_height + glfo_height);
+
         let sysinfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         sysinfo.borrow_mut().enable_border(true);
         this.add_sysinfo(&mut sysinfo.borrow_mut(), 1, 0);
-        this.add_child(sysinfo, env_width + 2, osc_height + lfo_height + glfo_height);
+        this.add_child(sysinfo, env_width + 2, osc_height + lfo_height + glfo_height + filter_height);
 
         this.window.set_position(1, 1);
         this.window.set_color_scheme(this.colors.clone());
@@ -335,6 +341,34 @@ impl Surface {
         key.set(Parameter::Oscillator, func_id, Parameter::Frequency);
         let osc_freq = self.new_mod_dial_int("Speed", -24, 24, 0, false, &key);
         target.add_child(osc_freq, x_offset, 4 + y_offset);
+    }
+
+    fn add_filter(&mut self,
+                  target: &mut Container<ParamId>,
+                  func_id: usize,
+                  x_offset: Index,
+                  y_offset: Index) {
+        let mut title = "Filter ".to_string();
+        title.push(((func_id as u8) + '0' as u8) as char);
+        let len = title.len();
+        let title = Label::new(title, len as Index);
+        target.add_child(title, x_offset, y_offset);
+
+        let mut key = ParamId::new(Parameter::Filter, func_id, Parameter::Cutoff);
+        let filter_cutoff = self.new_mod_dial_float("Cutoff", 1.0, 8000.0, 2000.0, false, &key);
+        target.add_child(filter_cutoff, x_offset, 1 + y_offset);
+
+        key.set(Parameter::Filter, func_id, Parameter::Resonance);
+        let filter_reso = self.new_mod_dial_float("Resonance", 0.0, 1.0, 0.5, false, &key);
+        target.add_child(filter_reso, 16 + x_offset, 1 + y_offset);
+
+        key.set(Parameter::Filter, func_id, Parameter::Gain);
+        let filter_gain = self.new_mod_dial_float("Gain", 0.0, 2.0, 1.0, false, &key);
+        target.add_child(filter_gain, x_offset, 4 + y_offset);
+
+        key.set(Parameter::Filter, func_id, Parameter::KeyFollow);
+        let filter_follow = self.new_option("KeyFollow", 0, &key);
+        target.add_child(filter_follow, 16 + x_offset, 5 + y_offset);
     }
 
     fn add_sysinfo(&mut self,

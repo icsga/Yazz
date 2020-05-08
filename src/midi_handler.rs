@@ -20,15 +20,24 @@ pub struct MidiHandler {
 }
 
 impl MidiHandler {
+    /** Starts the thread for receiving MIDI events.
+     *
+     * If the midi_channel argument is 0, all events are forwarded. If it is
+     * between 1 and 16, only events arriving on that channel are forwarded.
+     */
     pub fn run(m2s_sender: Sender<SynthMessage>,
-            m2u_sender: Sender<UiMessage>,
-            midi_port: usize) -> MidiInputConnection<()> {
+               m2u_sender: Sender<UiMessage>,
+               midi_port: usize,
+               midi_channel: u8) -> MidiInputConnection<()> {
         let input = String::new();
         let mut midi_in = MidiInput::new("midir reading input").unwrap();
         midi_in.ignore(Ignore::None);
         let in_port_name = midi_in.port_name(midi_port).unwrap();
         let conn_in = midi_in.connect(midi_port, "midir-read-input", move |stamp, message, _| {
             if message.len() >= 2 {
+                if midi_channel < 16 && (message[0] & 0x0F) != midi_channel {
+                    return;
+                }
                 let m = MidiHandler::get_midi_message(message);
                 info!("MidiMessage: {:?}", m);
                 let command = message[0] & 0xF0;

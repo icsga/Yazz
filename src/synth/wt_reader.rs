@@ -35,9 +35,13 @@ impl WtReader {
             return Err(());
         }
         let filename = self.base_path.clone() + filename;
-        let file = File::open(filename).unwrap();
-        let reader = BufReader::new(file);
-        WtReader::read_wavetable(reader, 2048)
+        let result = File::open(filename);
+        if let Ok(file) = result {
+            let reader = BufReader::new(file);
+            WtReader::read_wavetable(reader, 2048)
+        } else {
+            Err(())
+        }
     }
 
     pub fn read_wavetable<R: Read>(mut source: R, samples_per_table: usize) -> Result<WavetableRef, ()> {
