@@ -241,10 +241,12 @@ impl Tui {
     fn state_play(&mut self, key: Key) -> TuiState {
         match key {
             Key::Char(c) => {
-                if c >= '0' && c <= '9' {
-                    self.active_ctrl_set = c as usize - '0' as usize;
-                } else if c >= 'a' && c <= 'z' {
-                    self.active_ctrl_set = c as usize - 'a' as usize + 10;
+                match c {
+                    '0' ..= '9' => self.active_ctrl_set = c as usize - '0' as usize,
+                    'a' ..= 'z' => self.active_ctrl_set = c as usize - 'a' as usize + 10,
+                    '+' => self.select_sound(self.selected_sound + 1),
+                    '-' => self.select_sound(self.selected_sound - 1),
+                    _ => ()
                 }
             }
             _ => ()
@@ -291,8 +293,10 @@ impl Tui {
      * sound again before saving discards any changes.
      */
     fn select_sound(&mut self, mut sound_index: usize) {
-        if sound_index > 127 {
-            sound_index = 127;
+        if sound_index == 128 {
+            sound_index = 0;
+        } else if sound_index > 127 {
+            sound_index = 127; // Overflow, went below zero
         }
         self.selected_sound = sound_index;
         let sound_ref: &SoundPatch = self.bank.get_sound(self.selected_sound);

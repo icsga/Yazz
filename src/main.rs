@@ -123,9 +123,14 @@ fn setup_messaging() -> (Sender<UiMessage>, Receiver<UiMessage>, Sender<SynthMes
     (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver)
 }
 
-fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>, midi_port: usize) -> MidiInputConnection<()> {
+fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>, midi_port: usize, mut midi_channel: u8) -> MidiInputConnection<()> {
     println!("Setting up MIDI... ");
-    let conn_in = MidiHandler::run(m2s_sender, m2u_sender, midi_port);
+    if midi_channel < 1 || midi_channel > 16 {
+        midi_channel = 16; // Omni
+    } else {
+        midi_channel -= 1; // 0 - 15
+    }
+    let conn_in = MidiHandler::run(m2s_sender, m2u_sender, midi_port, midi_channel);
     println!("... finished.");
     conn_in
 }
@@ -224,11 +229,18 @@ fn main() {
                         .arg(Arg::with_name("midiport")
                             .short("m")
                             .long("midiport")
-                            .help("Selects the MIDI port to receive MIDI events on")
+                            .help("Selects the MIDI port to receive MIDI events on (1 - n, default 1)")
+                            .takes_value(true))
+                        .arg(Arg::with_name("midichannel")
+                            .short("c")
+                            .long("midichannel")
+                            .help("Selects the MIDI channel to receive MIDI events on (1 - 16, default = omni)")
                             .takes_value(true))
                         .get_matches();
     let midi_port = matches.value_of("midiport").unwrap_or("1");
     let midi_port: usize = midi_port.parse().unwrap_or(1);
+    let midi_channel = matches.value_of("midichannel").unwrap_or("0");
+    let midi_channel: u8 = midi_channel.parse().unwrap_or(0);
 
     // For debugging: Save selected wavetable as file
     let wave_index = matches.value_of("savewave").unwrap_or("");
@@ -245,7 +257,7 @@ fn main() {
 
     // Do setup
     let (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver) = setup_messaging();
-    let midi_connection = setup_midi(to_synth_sender.clone(), to_ui_sender.clone(), midi_port);
+    let midi_connection = setup_midi(to_synth_sender.clone(), to_ui_sender.clone(), midi_port, midi_channel);
     let (term_handle, tui_handle) = setup_ui(to_synth_sender, to_ui_sender.clone(), ui_receiver);
     let (mut engine, sample_rate) = setup_audio();
     let (synth, synth_handle) = setup_synth(sample_rate, to_ui_sender.clone(), synth_receiver);

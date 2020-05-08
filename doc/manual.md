@@ -29,7 +29,8 @@ This functionality is still under construction.
 Currently the sound filename is hardwired to "Yazz_FactoryBank.ysn". To load
 the file, press F1.
 
-To change the current program, send MIDI program change commands.
+You can change the current program by sending MIDI program change commands.
+In Play mode, you can additionally use the '+', '-' keys for program changeing.
 
 **WARNING: All changes made to a sound will be lost when changing the current
 program without saving.**
@@ -110,9 +111,9 @@ keyboard shortcuts for faster navigation:
 * **[/ ]** will step through the parameter list of the selected function.
 * **</ >** will move backwards/ forwards through the history of selected
   parameters.
-* **"<MarkerId>** adds a marker at the selected parameter. MarkerId can be any
+* **"\<MarkerId\>** adds a marker at the selected parameter. MarkerId can be any
   valid ASCII character.
-* **'<MarkerId>** goes to the selected marker if it has been defined.
+* **'\<MarkerId\>** goes to the selected marker if it has been defined.
 * **/** creates a new modulator with the current parameter as target,
   activates it and sets the command line to the modulation source selection.
 
