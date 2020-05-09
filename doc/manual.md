@@ -27,7 +27,7 @@ Yazz has a fixed signal flow with the following components:
 This functionality is still under construction.
 
 Currently the sound filename is hardwired to "Yazz_FactoryBank.ysn". It is
-loaded automatically on startup.  To load the file manually, press F1.
+loaded automatically on startup.  To load the file manually, press F3.
 
 You can change the current program by sending MIDI program change commands.
 In Play mode, you can additionally use the '+', '-' keys for program changing.
