@@ -42,6 +42,14 @@ impl Delay {
         Delay{sample_rate, bb, position, quant_pos, filter}
     }
 
+    pub fn reset(&mut self) {
+        for sample in self.bb.iter_mut() {
+            *sample = 0.0;
+        }
+        self.position = 0.1;
+        self.quant_pos = 0;
+    }
+
     pub fn process(&mut self, sample: Float, sample_clock: i64, data: &DelayData) -> Float {
         let step = (self.bb.len() as Float / data.time) / self.sample_rate; // The amount of samples we step forward, as float
         let step = Delay::addf(step, 0.0);

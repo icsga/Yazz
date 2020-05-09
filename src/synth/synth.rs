@@ -183,6 +183,13 @@ impl Synth {
         info!("Stopping synth engine");
     }
 
+    fn reset(&mut self) {
+        for v in &mut self.voice {
+            v.reset();
+        }
+        self.delay.reset();
+    }
+
     /* Get global modulation values.
      *
      * Calculates the values for global modulation sources and applies them to
@@ -325,6 +332,7 @@ impl Synth {
     }
 
     fn handle_sound_update(&mut self, sound: &SoundData) {
+        self.reset();
         self.sound = *sound;
         self.sound_global = self.sound;
         self.sound_local = self.sound;
