@@ -96,6 +96,7 @@ pub struct ParamSelector {
     history: Vec<ParamId>,
     rev_history: Vec<ParamId>,
     marker_manager: MarkerManager,
+    changed_values: Vec<SynthParam>,
 }
 
 impl ParamSelector {
@@ -139,6 +140,7 @@ impl ParamSelector {
                       history: vec!{},
                       rev_history: vec!{},
                       marker_manager: MarkerManager::new(),
+                      changed_values: vec!{},
         }
     }
 
@@ -907,13 +909,14 @@ impl ParamSelector {
         if !found { return false; }
 
         let mut sp = SynthParam::new(Parameter::Modulation, index + 1, Parameter::Target, ParameterValue::Param(param_id));
-        sound.borrow_mut().data.set_parameter(&sp);
+        self.add_changed_value(&sp);
         sp.parameter = Parameter::Active;
         sp.value = ParameterValue::Int(1);
-        sound.borrow_mut().data.set_parameter(&sp);
+        self.add_changed_value(&sp);
         sp.parameter = Parameter::Amount;
         sp.value = ParameterValue::Float(1.0);
-        sound.borrow_mut().data.set_parameter(&sp);
+        self.add_changed_value(&sp);
+        self.value_changed = true;
 
         // Prepare param_id to match current param
         param_id.function = Parameter::Modulation;
@@ -923,6 +926,14 @@ impl ParamSelector {
         // Set up fun, id, param to point to modulator
         self.apply_param_id(&param_id);
         true
+    }
+
+    fn add_changed_value(&mut self, parameter: &SynthParam) {
+        self.changed_values.push(*parameter);
+    }
+
+    pub fn get_changed_value(&mut self) -> Option<SynthParam> {
+        self.changed_values.pop()
     }
 
     fn search_modulator(&mut self) -> bool {

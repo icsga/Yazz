@@ -32,7 +32,6 @@ impl ItemSelection {
     pub fn set_list_from(&mut self, from: &ItemSelection, item_index: usize) {
         self.item_list = from.item_list[from.item_index].next;
         self.item_index = item_index;
-        info!("Set list to {:?}", self.item_list);
     }
 
     /** Select one of the items in the function list.
@@ -192,7 +191,6 @@ impl ItemSelection {
             Key::Char(x) => {
                 match x {
                     '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.' => {
-                        info!("Adding char {}", x);
                         self.temp_string.push(x);
                         let value: Result<Float, ParseFloatError> = self.temp_string.parse();
                         current = if let Ok(x) = value { x } else { current };
@@ -224,7 +222,6 @@ impl ItemSelection {
                     self.temp_string.push('0');
                     current = 0.0;
                 }
-                info!("BS for float value, remaining: {}, current = {}", self.temp_string, current);
                 RetCode::ValueUpdated
             },
             _ => RetCode::KeyMissmatch,

@@ -16,7 +16,7 @@ Yazz has a fixed signal flow with the following components:
 * 32 voices
 * 3 wavetable-based oscillators per voice
 * 2 (well, currently only one) filters with LP-/ HP- and BP-Modes (well, currently
-  only LP) per voice
+  only LP and HP) per voice
 * 3 ADSR envelopes per voice
 * 2 LFOs per voice
 * 2 global LFOs
@@ -26,11 +26,11 @@ Yazz has a fixed signal flow with the following components:
 
 This functionality is still under construction.
 
-Currently the sound filename is hardwired to "Yazz_FactoryBank.ysn". To load
-the file, press F1.
+Currently the sound filename is hardwired to "Yazz_FactoryBank.ysn". It is
+loaded automatically on startup.  To load the file manually, press F1.
 
 You can change the current program by sending MIDI program change commands.
-In Play mode, you can additionally use the '+', '-' keys for program changeing.
+In Play mode, you can additionally use the '+', '-' keys for program changing.
 
 **WARNING: All changes made to a sound will be lost when changing the current
 program without saving.**
@@ -112,7 +112,7 @@ keyboard shortcuts for faster navigation:
 * **</ >** will move backwards/ forwards through the history of selected
   parameters.
 * **"\<MarkerId\>** adds a marker at the selected parameter. MarkerId can be any
-  valid ASCII character.
+  valid ASCII character. Markers are saved between sessions.
 * **'\<MarkerId\>** goes to the selected marker if it has been defined.
 * **/** creates a new modulator with the current parameter as target,
   activates it and sets the command line to the modulation source selection.
@@ -147,23 +147,56 @@ modulation sources and targets:
     * Channel aftertouch
     * Global LFOs
     * Pitch wheel
+    * Modulation wheel
 * Local modulation sources:
-    * Key velocity
-    * Per-voice signals (oscillator, envelope and LFO outputs)
+    * Note on velocity
+    * Oscillator output
+    * Envelope output
+    * LFO output
 * Global modulation targets:
     * Patch volume
     * Delay parameters
+    * Modulation amount and status
 * Local modulation targets:
-    * Most voice parameters (not all included yet)
+    * All voice parameters
 
-To assign a modulator, select one the 20 available Modulation function slots.
+To assign a modulator, select one the 16 available Modulation function slots.
 Both the source and the target parameters can be entered the same way as
 selecting a synth parameter. Modulation source requires only Function and
-Function ID, while Modulation Target also requires the Parameter to assign to.
+Function ID, while Modulation Target also requires the Parameter to modulate.
 
 Any modulator can be adjusted in intensity and can be turned on/ off.
 
+## User wavetables
+
+It's possible to use external wavetables as sound source. On startup, Yazz looks
+for a "data" folder in its runtime directory. If the folder exists, it is
+scanned for Wave files. Any files found that are in the right format are added
+to the list of available wavetables.
+
+Currently the only supported format for wavetable files is single-channel files
+with 32-bit float values.
+
+Sounds only store a reference to the wavetable, not the actual wavetable data
+itself, so if an external table was used for a sound, the corresponding file
+needs to remain in the data folder. If a wavetable file is not found, the sound
+will use the internal default wavetable instead.
+
 ## Play Mode: Select controller set
 
-In play mode, pressing any alphanumeric key will activate the controller set
-with that ID.
+Yazz groups MIDI controllers assignments into 36 controller sets. That means
+that even with just a single controller available, it is possible to control 36
+different parameters by switching the active set.
+
+In play mode, pressing any valid controller set identifier ('0' - '9',
+'a' - 'z') will activate the controller set with that ID. The default set
+active on startup is '0'.
+
+A typical setup would be to group the controllers according to the controller
+set ID, so that the assignment is easy to remember. If for example the used
+MIDI controller has 8 knobs or faders, one could use controller set '1' for
+controlling level, tune, spread and wave index of oscillator 1, and attack,
+decay, sustain, release of envelope 1. Set '2' could control the same
+parameters for oscillator and envelope 2 and so on. Set 'd' can be used for
+delay values, while 'p' controlls the patch parameters like patch level.
+
