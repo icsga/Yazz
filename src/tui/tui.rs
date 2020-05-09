@@ -310,9 +310,11 @@ impl Tui {
         let sound = &mut self.sound.borrow_mut();
         sound.name = sound_ref.name.clone();
         sound.data = sound_ref.data;
+
         // Send new sound to synth engine
         let sound_copy = sound.data;
         self.sender.send(SynthMessage::Sound(sound_copy)).unwrap();
+
         // Update display
         self.window.set_sound_info(self.selected_sound, &sound.name);
         self.window.update_all(&sound.data);

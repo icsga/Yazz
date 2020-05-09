@@ -53,6 +53,20 @@ impl MoogImproved {
         }
     }
 
+    pub fn reset(&mut self) {
+        for v in &mut self.v {
+            *v = 0.0;
+        }
+        for dv in &mut self.dv {
+            *dv = 0.0;
+        }
+        for tv in &mut self.tv {
+            *tv = 0.0;
+        }
+        self.x = 0.0;
+        self.g = 0.0;
+    }
+
     pub fn process(&mut self, sample: Float, data: &FilterData) -> Float {
 
         // Thermal voltage (26 milliwats at room temperature)

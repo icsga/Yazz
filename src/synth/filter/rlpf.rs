@@ -25,6 +25,14 @@ impl Rlpf {
              y1: 0.0, y2: 0.0, a0: 0.0, b1: 0.0, b2: 0.0}
     }
 
+    pub fn reset(&mut self) {
+        self.y1 = 0.0;
+        self.y2 = 0.0;
+        self.a0 = 0.0;
+        self.b1 = 0.0;
+        self.b2 = 0.0;
+    }
+
     pub fn process(&mut self, sample: Float, data: &FilterData) -> Float {
         let y0 = self.a0 * sample + self.b1 * self.y1 + self.b2 * self.y2;
         let result = y0 + 2.0 * self.y1 + self.y2;

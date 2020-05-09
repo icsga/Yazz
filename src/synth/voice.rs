@@ -69,6 +69,16 @@ impl Voice {
         voice
     }
 
+    pub fn reset(&mut self) {
+        self.triggered = false;
+        for e in &mut self.env {
+            e.reset();
+        }
+        for f in &mut self.filter {
+            f.reset();
+        }
+    }
+
     fn get_frequency(data: &WtOscData, input_freq: Float) -> Float {
         let mut freq: Float = if data.key_follow == 0 {
             440.0

@@ -48,6 +48,12 @@ impl Filter {
         }
     }
 
+    pub fn reset(&mut self) {
+        self.rlpf.reset();
+        self.reson_z.reset();
+        self.moog_improved.reset();
+    }
+
     pub fn process(&mut self, sample: Float, data: &mut FilterData, freq: Float) -> Float {
         let mut cutoff = data.cutoff;
         if data.key_follow == 1 {

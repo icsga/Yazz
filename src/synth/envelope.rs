@@ -5,19 +5,6 @@ use std::sync::Arc;
 use serde::{Serialize, Deserialize};
 use log::{info, trace, warn};
 
-#[derive(Debug)]
-pub struct Envelope {
-    sample_rate: Float,
-    rate_mul: Float,
-
-    end_time: i64,
-    increment: Float,
-    last_update: i64,
-    last_value: Float,
-    is_held: bool,
-    state: State,
-}
-
 #[derive(Serialize, Deserialize, Copy, Clone, Default, Debug)]
 pub struct EnvelopeData {
     pub attack: Float,
@@ -58,6 +45,19 @@ impl State {
     }
 }
 
+#[derive(Debug)]
+pub struct Envelope {
+    sample_rate: Float,
+    rate_mul: Float,
+
+    end_time: i64,
+    increment: Float,
+    last_update: i64,
+    last_value: Float,
+    is_held: bool,
+    state: State,
+}
+
 impl Envelope {
     pub fn new(sample_rate: Float) -> Envelope {
         Envelope{sample_rate: sample_rate,
@@ -69,6 +69,12 @@ impl Envelope {
                  is_held: false,
                  state: State::Idle,
         }
+    }
+
+    pub fn reset(&mut self) {
+        self.end_time = 0;
+        self.is_held = false;
+        self.state = State::Idle;
     }
 
     pub fn trigger(&mut self, sample_time: i64, data: &EnvelopeData) {
