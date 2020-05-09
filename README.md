@@ -19,7 +19,7 @@ some features are still missing.
 - 3 ADSR envelopes per voice, with adjustable slope
 - Delay
 
-For a detailed description, have a look at the manual in the doc folder.
+For a detailed description, have a look at the [manual in the doc folder](docs/manual.md).
 
 ## Known issues
 
