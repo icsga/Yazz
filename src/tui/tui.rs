@@ -31,6 +31,7 @@ use std::time::{Duration, SystemTime};
 use std::cell::RefCell;
 use std::rc::Rc;
 
+#[derive(Debug)]
 enum Mode {
     Play,
     Edit
@@ -38,6 +39,7 @@ enum Mode {
 
 enum TuiState {
     Play,
+    Help,
 }
 
 type TuiEvent = termion::event::Key;
@@ -185,16 +187,20 @@ impl Tui {
         // Top-level keys that work in both modes
         if !match key {
             Key::F(1) => {
-                // Read bank from disk
-                self.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
-                self.select_sound(0);
+                self.display_help();
                 true
-            },
+            }
             Key::F(2) => {
                 // Copy current sound to selected sound in bank
                 self.bank.set_sound(self.selected_sound, &self.sound.borrow());
                 // Write bank to disk
                 self.bank.save_bank("Yazz_FactoryBank.ysn").unwrap();
+                true
+            },
+            Key::F(3) => {
+                // Read bank from disk
+                self.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
+                self.select_sound(0);
                 true
             },
             Key::F(10) => {
@@ -215,6 +221,7 @@ impl Tui {
         } {
             // Mode-specific key handling
             if let Mode::Edit = self.mode {
+                self.state = TuiState::Play; // Exit help state (no need to check, just overwrite it)
                 if self.selector.handle_user_input(&mut self.selector_sm, key, self.sound.clone()) {
                     loop {
                         let p = self.selector.get_changed_value();
@@ -242,6 +249,7 @@ impl Tui {
     fn handle_play_mode_input(&mut self, key: Key) {
         self.state = match self.state {
             TuiState::Play => self.state_play(key),
+            TuiState::Help => self.state_help(key),
         }
     }
 
@@ -258,6 +266,10 @@ impl Tui {
             }
             _ => ()
         }
+        TuiState::Play
+    }
+
+    fn state_help(&mut self, key: Key) -> TuiState {
         TuiState::Play
     }
 
@@ -471,6 +483,10 @@ impl Tui {
 
     /** Display the UI. */
     fn display(&mut self) {
+        if let TuiState::Help = self.state {
+            return;
+        }
+
         if self.selection_changed {
             print!("{}", clear::All);
             self.selection_changed = false;
@@ -483,8 +499,8 @@ impl Tui {
             print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
             Tui::display_selector(&self.selector);
         }
-
         self.display_idle_time();
+        self.display_status_line();
 
         io::stdout().flush().ok();
     }
@@ -705,5 +721,41 @@ impl Tui {
 
         self.idle = Duration::new(0, 0);
         self.busy = Duration::new(0, 0);
+    }
+
+    fn display_status_line(&mut self) {
+        let ctrl_set = self.active_ctrl_set as u8;
+        let ctrl_set = (ctrl_set + if ctrl_set <= 9 { '0' as u8 } else { 'a' as u8 - 10 }) as char;
+        print!("{}| Mode: {:?} | Active controller set: {} |                               Press <F1> for help ",
+            cursor::Goto(1, 50),
+            self.mode,
+            ctrl_set);
+    }
+
+    fn display_help(&mut self) {
+        self.state = TuiState::Help;
+        print!("{}{}", clear::All, cursor::Goto(1, 1));
+        println!("Global keys:\r");
+        println!("------------\r");
+        println!("<TAB> - Switch between Edit and Play mode\r");
+        println!("<F1> - Show this help text\r");
+        println!("<F2> - Save current sound bank\r");
+        println!("<F3> - Load current sound bank\r");
+        println!("\r");
+        println!("Keys in Edit mode:\r");
+        println!("------------------\r");
+        println!("</ > - Move backwards/ forwards in the parameter history\r");
+        println!("PgUp/ PgDown - Increase/ decrease function ID of current parameter\r");
+        println!("[/ ] - Move down/ up through the parameters of the current function\r");
+        println!("\"<MarkerID> - Set a marker with the MarkerID at the current parameter\r");
+        println!("\'<MarkerID> - Recall the parameter at the given MarkerID\r");
+        println!("\r");
+        println!("Keys in Play mode:\r");
+        println!("------------------\r");
+        println!("+/ - - Select next/ previous patch\r");
+        println!("0 - 9, a - z - Select MIDI controller assignment set\r");
+        println!("\r");
+        println!("Press any key to continue.\r");
+        io::stdout().flush().ok();
     }
 }

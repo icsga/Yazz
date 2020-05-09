@@ -1,25 +1,31 @@
-# Yazz - Yet Another Subtractive Synth
+# Yazz - Yet Another Software Synth
 
-This is a subtractive synth written in Rust. It comes with a simple terminal
+Yazz is a subtractive synth written in Rust. It comes with a simple terminal
 UI that allows all parameters to be edited by key sequences and/ or MIDI
 controllers.
 
-This is still very much work in progress. The basic sound engine works, but
-some features are still missing.
+![rust-screenshot.png](doc/Screenshot1.png)
+
+The main focus of this project is on mouse-free editing: Yazz is a synth for
+terminal lovers.
+
+This is still work in progress. The sound engine works, but some features are
+missing, and the parameter ranges are not perfectly balanced yet.
 
 ## Features
 
 - 3 wavetable oscillators per voice, 32 voice polyphony
 - Up to 7 instances per oscillator with frequency spreading
-- Wavetable scanning
 - Oscillator sync
+- Wavetable scanning
 - User wavetables
 - Up to 16 modulation assignments
 - 2 LFOs per voice plus 2 global LFOs
 - 3 ADSR envelopes per voice, with adjustable slope
 - Delay
+- 36 sets of MIDI controller assignments
 
-For a detailed description, have a look at the [manual in the doc folder](docs/manual.md).
+For a detailed description, have a look at the [manual in the doc folder](doc/manual.md).
 
 ## Known issues
 
