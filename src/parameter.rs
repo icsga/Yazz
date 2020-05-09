@@ -349,7 +349,7 @@ pub static DELAY_PARAMS: [MenuItem; 4] = [
 pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Source,    key: 's', val_range: ValueRange::Func(&MOD_SOURCES),    next: &MOD_SOURCES},
     MenuItem{item: Parameter::Target,    key: 't', val_range: ValueRange::Param(&MOD_TARGETS),   next: &MOD_TARGETS},
-    MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::Float(0.0, 1.0, 0.01), next: &[]},
+    MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::Float(-1.0, 1.0, 0.01),next: &[]},
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 

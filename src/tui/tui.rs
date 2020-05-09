@@ -216,6 +216,13 @@ impl Tui {
             // Mode-specific key handling
             if let Mode::Edit = self.mode {
                 if self.selector.handle_user_input(&mut self.selector_sm, key, self.sound.clone()) {
+                    loop {
+                        let p = self.selector.get_changed_value();
+                        match p {
+                            Some(param) => self.send_parameter(&param),
+                            None => break,
+                        }
+                    }
                     self.send_event();
                 }
             } else {
