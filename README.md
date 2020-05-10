@@ -27,6 +27,22 @@ missing, and the parameter ranges are not perfectly balanced yet.
 
 For a detailed description, have a look at the [manual in the doc folder](doc/manual.md).
 
+## Compiling and running
+
+Yazz should run on both MacOS and Linux. Assuming you have the Rust toolchain
+installed, a simple "cargo build --release" should download all dependencies
+and compile everything.
+
+For Linux, the dev-package for ALSA needs to be installed (usually
+libasound2-dev, see https://github.com/RustAudio/cpal for more infos).
+
+Make sure to run the release version, otherwise the audio engine might have
+performance problems (it's not optimized yet):
+
+cargo run --release
+
+Check the documentation for additional command line parameters.
+
 ## Known issues
 
 - The UI isn't drawn correctly on the MacOS terminal (as of 10.14.6). It works
