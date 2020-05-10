@@ -91,18 +91,11 @@ impl Wavetable {
      * do not exceed the Nyquist frequency.
      */
     pub fn calc_num_harmonics(base_freq: Float, sample_freq: Float) -> usize {
-        debug!("Calculating harmonics for frequency {} Hz with sample frequency {} Hz", base_freq, sample_freq);
         let nyquist_freq = sample_freq / 2.0;
-        let mut part_freq = base_freq * 2.0;
-        let mut prev_part = part_freq;
-        let mut num_harmonics = 0.0;
-        while part_freq < nyquist_freq {
-            num_harmonics += 1.0;
-            prev_part = part_freq;
-            part_freq = base_freq * (num_harmonics + 2.0);
-        }
-        debug!("Got {} harmonics, highest at {} Hz ", num_harmonics as usize, prev_part);
-        num_harmonics as usize
+        let num_harmonics = (nyquist_freq / base_freq) as usize - 1; // Don't count the base frequency itself
+        debug!("Base frequency {}: {} harmonics, highest at {} Hz with sample frequency {}",
+            base_freq, num_harmonics, base_freq * (num_harmonics + 1) as Float, sample_freq);
+        num_harmonics
     }
 
     /** Add a wave with given frequency to the wave in a table.

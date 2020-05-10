@@ -33,6 +33,7 @@ impl MidiHandler {
         let mut midi_in = MidiInput::new("midir reading input").unwrap();
         midi_in.ignore(Ignore::None);
         let in_port_name = midi_in.port_name(midi_port).unwrap();
+        println!("  Connecting to MIDI port {}", in_port_name);
         let conn_in = midi_in.connect(midi_port, "midir-read-input", move |stamp, message, _| {
             if message.len() >= 2 {
                 if midi_channel < 16 && (message[0] & 0x0F) != midi_channel {

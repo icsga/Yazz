@@ -137,8 +137,6 @@ impl Voice {
                 let dest_range = MenuItem::get_val_range(param_id.function, param_id.parameter);
                 val = dest_range.safe_add(val, mod_val);
 
-                info!("mod_val {}, result {}", mod_val, val);
-
                 // Update parameter in voice sound data
                 current_val.set_from_float(val);
             }
