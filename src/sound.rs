@@ -168,6 +168,7 @@ impl SoundData {
                     Parameter::Level =>    { self.delay.level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Feedback => { self.delay.feedback = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Tone =>     { self.delay.tone = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Type =>     { self.delay.delay_type = if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -253,6 +254,7 @@ impl SoundData {
                     Parameter::Level => ParameterValue::Float(self.delay.level),
                     Parameter::Feedback => ParameterValue::Float(self.delay.feedback),
                     Parameter::Tone => ParameterValue::Float(self.delay.tone),
+                    Parameter::Type => ParameterValue::Choice(self.delay.delay_type),
                     _ => {panic!();}
                 }
             }

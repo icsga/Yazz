@@ -286,7 +286,8 @@
           "level": 0.33858266,
           "feedback": 0.5590551,
           "time": 0.29062992,
-          "tone": 1180.315
+          "tone": 1180.315,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.2755905511811024,
@@ -576,10 +577,11 @@
           }
         ],
         "delay": {
-          "level": 0.14173228,
+          "level": 0.30708661417322836,
           "feedback": 0.5984252,
-          "time": 0.4153543,
-          "tone": 5000.0
+          "time": 0.2126771653543307,
+          "tone": 5000.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.4803149606299213,
@@ -872,7 +874,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.4488188976377953,
@@ -1162,10 +1165,11 @@
           }
         ],
         "delay": {
-          "level": 0.0,
-          "feedback": 0.5,
-          "time": 0.5,
-          "tone": 1600.0
+          "level": 0.2992125984251969,
+          "feedback": 0.5905511811023622,
+          "time": 0.19708661417322831,
+          "tone": 833.0708661417324,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.2992125984251969,
@@ -1455,10 +1459,11 @@
           }
         ],
         "delay": {
-          "level": 0.047244094488188976,
+          "level": 0.3858267716535433,
           "feedback": 0.5,
-          "time": 0.5,
-          "tone": 1600.0
+          "time": 0.2516535433070866,
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.25196850393700787,
@@ -1565,8 +1570,8 @@
             "frequency": 1.0
           },
           {
-            "waveform": "Sine",
-            "frequency": 1.0
+            "waveform": "Tri",
+            "frequency": 2.777952755905512
           }
         ],
         "modul": [
@@ -1593,15 +1598,15 @@
             "scale": 7.086614173228346
           },
           {
-            "source_func": "Lfo",
-            "source_func_id": 1,
-            "target_func": "Oscillator",
+            "source_func": "GlobalLfo",
+            "source_func_id": 2,
+            "target_func": "Delay",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
-            "is_global": false,
-            "scale": 0.0
+            "target_param": "Time",
+            "amount": 1e-14,
+            "active": true,
+            "is_global": true,
+            "scale": 0.003897637795275583
           },
           {
             "source_func": "Lfo",
@@ -1748,10 +1753,11 @@
           }
         ],
         "delay": {
-          "level": 0.10236220472440943,
-          "feedback": 0.6377952755905512,
+          "level": 0.45669291338582674,
+          "feedback": 0.44881889763779526,
           "time": 0.3685826771653543,
-          "tone": 833.0708661417324
+          "tone": 871.6535433070867,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.23622047244094488,
@@ -2044,7 +2050,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.2283464566929134,
@@ -2337,7 +2344,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -2630,7 +2638,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -2923,7 +2932,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -3216,7 +3226,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -3509,7 +3520,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -3802,7 +3814,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -4095,7 +4108,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -4388,7 +4402,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -4681,7 +4696,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -4974,7 +4990,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -5267,7 +5284,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -5560,7 +5578,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -5853,7 +5872,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -6146,7 +6166,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -6439,7 +6460,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -6732,7 +6754,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -7025,7 +7048,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -7318,7 +7342,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -7611,7 +7636,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -7904,7 +7930,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -8197,7 +8224,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -8490,7 +8518,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -8783,7 +8812,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -9076,7 +9106,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -9369,7 +9400,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -9662,7 +9694,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -9955,7 +9988,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -10248,7 +10282,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -10541,7 +10576,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -10834,7 +10870,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -11127,7 +11164,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -11420,7 +11458,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -11713,7 +11752,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -12006,7 +12046,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -12299,7 +12340,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -12592,7 +12634,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -12885,7 +12928,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -13178,7 +13222,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -13471,7 +13516,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -13764,7 +13810,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -14057,7 +14104,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -14350,7 +14398,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -14643,7 +14692,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -14936,7 +14986,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -15229,7 +15280,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -15522,7 +15574,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -15815,7 +15868,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -16108,7 +16162,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -16401,7 +16456,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -16694,7 +16750,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -16987,7 +17044,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -17280,7 +17338,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -17573,7 +17632,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -17866,7 +17926,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -18159,7 +18220,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -18452,7 +18514,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -18745,7 +18808,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -19038,7 +19102,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -19331,7 +19396,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -19624,7 +19690,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -19917,7 +19984,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -20210,7 +20278,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -20503,7 +20572,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -20796,7 +20866,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -21089,7 +21160,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -21382,7 +21454,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -21675,7 +21748,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -21968,7 +22042,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -22261,7 +22336,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -22554,7 +22630,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -22847,7 +22924,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -23140,7 +23218,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -23433,7 +23512,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -23726,7 +23806,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -24019,7 +24100,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -24312,7 +24394,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -24605,7 +24688,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -24898,7 +24982,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -25191,7 +25276,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -25484,7 +25570,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -25777,7 +25864,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -26070,7 +26158,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -26363,7 +26452,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -26656,7 +26746,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -26949,7 +27040,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -27242,7 +27334,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -27535,7 +27628,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -27828,7 +27922,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -28121,7 +28216,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -28414,7 +28510,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -28707,7 +28804,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -29000,7 +29098,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -29293,7 +29392,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -29586,7 +29686,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -29879,7 +29980,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -30172,7 +30274,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -30465,7 +30568,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -30758,7 +30862,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -31051,7 +31156,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -31344,7 +31450,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -31637,7 +31744,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -31930,7 +32038,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -32223,7 +32332,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -32516,7 +32626,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -32809,7 +32920,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -33102,7 +33214,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -33395,7 +33508,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -33688,7 +33802,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -33981,7 +34096,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -34274,7 +34390,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -34567,7 +34684,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -34860,7 +34978,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -35153,7 +35272,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -35446,7 +35566,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -35739,7 +35860,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -36032,7 +36154,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -36325,7 +36448,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -36618,7 +36742,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -36911,7 +37036,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -37204,7 +37330,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,
@@ -37497,7 +37624,8 @@
           "level": 0.0,
           "feedback": 0.5,
           "time": 0.5,
-          "tone": 1600.0
+          "tone": 1600.0,
+          "delay_type": 1
         },
         "patch": {
           "level": 0.9,

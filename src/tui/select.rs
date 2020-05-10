@@ -459,6 +459,7 @@ impl ParamSelector {
                                             ParameterValue::Param(_) => {
                                                 // Parameter has to be selected
                                                 self.value_func_selection.value = ParameterValue::Int(1);
+                                                self.value_param_selection.set_list_from(&self.value_func_selection, 0);
                                                 SmResult::ChangeState(ParamSelector::state_value_parameter)
                                             }
                                             _ => panic!(),
