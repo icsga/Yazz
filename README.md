@@ -27,7 +27,7 @@ missing, and the parameter ranges are not perfectly balanced yet.
 
 For a detailed description, have a look at the [manual in the doc folder](doc/manual.md).
 
-## Compiling and running
+## Compiling, running and troubleshooting
 
 Yazz should run on both MacOS and Linux. Assuming you have the Rust toolchain
 installed, a simple "cargo build --release" should download all dependencies
@@ -40,6 +40,15 @@ Make sure to run the release version, otherwise the audio engine might have
 performance problems (it's not optimized yet):
 
 cargo run --release
+
+Yazz connects to MIDI device 1 per default, which is probably incorrect for
+most systems. If you get a MIDI port error on startup, try connectin to
+device 0 instead:
+
+cargo run --release -- -m 0
+
+If you get a "file not found" error on startup, please create a "data"
+folder in the directory you are starting the program from.
 
 Check the documentation for additional command line parameters.
 
