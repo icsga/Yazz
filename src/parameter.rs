@@ -80,6 +80,8 @@ pub enum Parameter {
     Time,
     Feedback,
     Tone,
+    // Delay types
+    PingPong,
 
     // MIDI parameters
     KeyValue,
@@ -339,11 +341,17 @@ pub static LFO_WAVEFORM: [MenuItem; 7] = [
     MenuItem{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange, next: &[]},
 ];
 
-pub static DELAY_PARAMS: [MenuItem; 4] = [
+pub static DELAY_PARAMS: [MenuItem; 5] = [
     MenuItem{item: Parameter::Time,      key: 't', val_range: ValueRange::Float(0.01, 1.0, 0.01),    next: &[]},
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
     MenuItem{item: Parameter::Feedback,  key: 'f', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
     MenuItem{item: Parameter::Tone,      key: 'o', val_range: ValueRange::Float(100.0, 5000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Type,      key: 'y', val_range: ValueRange::Choice(&DELAY_TYPE),       next: &[]},
+];
+
+pub static DELAY_TYPE: [MenuItem; 2] = [
+    MenuItem{item: Parameter::Mono,      key: 'm', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::PingPong,  key: 'p', val_range: ValueRange::NoRange, next: &[]},
 ];
 
 pub static MOD_PARAMS: [MenuItem; 4] = [

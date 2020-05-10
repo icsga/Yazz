@@ -12,6 +12,7 @@ pub struct DelayData {
     pub feedback: Float,
     pub time: Float,
     pub tone: Float,
+    pub delay_type: usize,
 }
 
 impl DelayData {
@@ -25,67 +26,104 @@ impl DelayData {
 
 pub struct Delay {
     sample_rate: Float,
-    bb: [Float; BUFF_LEN], // Buffer with samples
+    bb_l: [Float; BUFF_LEN], // Buffer with samples
+    bb_r: [Float; BUFF_LEN], // Second buffer with samples
     position: Float,       // Current read/ write position
     quant_pos: usize,    // Last position, quantized to usize
-    filter: OnePole,
+    filter_l: OnePole,
+    filter_r: OnePole,
 }
 
 impl Delay {
     pub fn new(sample_rate: u32) -> Delay {
-        let mut filter = OnePole::new(sample_rate);
+        let mut filter_l = OnePole::new(sample_rate);
+        let mut filter_r = OnePole::new(sample_rate);
         let sample_rate = sample_rate as Float;
-        let bb = [0.0; BUFF_LEN];
+        let bb_l = [0.0; BUFF_LEN];
+        let bb_r = [0.0; BUFF_LEN];
         let position = 0.1;
         let quant_pos = 0;
-        filter.update(2000.0); // Initial frequency at 2kHz
-        Delay{sample_rate, bb, position, quant_pos, filter}
+        filter_l.update(2000.0); // Initial frequency at 2kHz
+        filter_r.update(2000.0); // Initial frequency at 2kHz
+        Delay{sample_rate, bb_l, bb_r, position, quant_pos, filter_l, filter_r}
     }
 
     pub fn reset(&mut self) {
-        for sample in self.bb.iter_mut() {
+        for sample in self.bb_l.iter_mut() {
+            *sample = 0.0;
+        }
+        for sample in self.bb_r.iter_mut() {
             *sample = 0.0;
         }
         self.position = 0.1;
         self.quant_pos = 0;
     }
 
-    pub fn process(&mut self, sample: Float, sample_clock: i64, data: &DelayData) -> Float {
-        let step = (self.bb.len() as Float / data.time) / self.sample_rate; // The amount of samples we step forward, as float
+    pub fn process(&mut self, sample: Float, sample_clock: i64, data: &DelayData) -> (Float, Float) {
+        let step = (self.bb_l.len() as Float / data.time) / self.sample_rate; // The amount of samples we step forward, as float
         let step = Delay::addf(step, 0.0);
         self.position = Delay::addf(self.position, step);
         let new_quant_pos = Delay::add(self.position.round() as usize, 0); // Add 0 to get the wrapping protection
         let num_samples = Delay::diff(new_quant_pos, self.quant_pos); // Actual number of samples we will be stepping over
-        //info!("sample={}, time={}, step={}, position={}, new_quant_pos={}, num_samples={}", sample, data.time, step, self.position, new_quant_pos, num_samples);
 
+        // Left side
+        // ---------
         // Get the average of all samples we're stepping over
-        let mut sample_sum = 0.0;
+        let mut sample_sum_l = 0.0;
+        let mut sample_sum_r = 0.0;
         let mut pos = self.quant_pos;
         for i in 0..num_samples {
             pos = Delay::add(pos, 1);
-            sample_sum += self.bb[pos];
+            sample_sum_l += self.bb_l[pos];
         }
-        sample_sum /= num_samples as Float;
+        sample_sum_l /= num_samples as Float;
 
-        // Run sample through filter
-        //let sample_sum = self.filter.process(sample_sum);
-
-        // Mix delay signal to input and update memory
-        // (steps through all positions that we jumped over)
-        let mixed_sample = sample + sample_sum * data.level;
+        let mut filtered_value_l: Float;
+        let mut filtered_value_r: Float;
         pos = self.quant_pos;
-        let mut filtered_value: Float;
-        for i in 0..num_samples as usize {
-            pos = Delay::add(pos, 1);
-            //filtered_value = self.filter.process(self.bb[pos]);
-            self.bb[pos] = self.filter.process(sample + self.bb[pos] * data.feedback);
+        if data.delay_type == 1 {
+            // PingPong
+
+            // Right side
+            // ----------
+            for i in 0..num_samples {
+                pos = Delay::add(pos, 1);
+                sample_sum_r += self.bb_r[pos];
+            }
+            sample_sum_r /= num_samples as Float;
+
+            // Mix delay signal to input and update memory. This step exchanges
+            // the samples between left and right.
+            // (steps through all positions that we jumped over when averaging)
+            pos = self.quant_pos;
+            for i in 0..num_samples as usize {
+                pos = Delay::add(pos, 1);
+                filtered_value_l = self.filter_l.process(sample + self.bb_l[pos] * data.feedback);
+                filtered_value_r = self.filter_r.process(         self.bb_r[pos] * data.feedback);
+                self.bb_l[pos] = filtered_value_r;
+                self.bb_r[pos] = filtered_value_l;
+            }
+        } else {
+            sample_sum_r = sample_sum_l;
+
+            // Mix delay signal to input and update memory
+            // (steps through all positions that we jumped over when averaging)
+            for i in 0..num_samples as usize {
+                pos = Delay::add(pos, 1);
+                filtered_value_l = self.filter_l.process(sample + self.bb_l[pos] * data.feedback);
+                self.bb_l[pos] = filtered_value_l;
+            }
         }
+
+        let mixed_sample_l = sample + sample_sum_l * data.level;
+        let mixed_sample_r = sample + sample_sum_r * data.level;
         self.quant_pos = new_quant_pos;
-        mixed_sample
+        (mixed_sample_l, mixed_sample_r)
     }
 
     pub fn update(&mut self, data: &DelayData) {
-        self.filter.update(data.tone);
+        self.filter_l.update(data.tone);
+        self.filter_r.update(data.tone);
     }
 
     fn add(mut value: usize, add: usize) -> usize {

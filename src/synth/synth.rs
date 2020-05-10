@@ -259,12 +259,13 @@ impl Synth {
         }
 
         // Pass sample into global effects
-        value = self.delay.process(value, sample_clock, &self.sound_global.delay);
+        let (mut value_l, mut value_r) = self.delay.process(value, sample_clock, &self.sound_global.delay);
 
-        value *= self.sound_global.patch.level;
+        value_l *= self.sound_global.patch.level;
+        value_r *= self.sound_global.patch.level;
 
         self.last_clock = sample_clock;
-        (value, value)
+        (value_l, value_r)
     }
 
     /* Update the bitmap with currently active voices. */
