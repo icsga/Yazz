@@ -1,5 +1,6 @@
 use super::ParamId;
 
+use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};
 
 use std::collections::HashMap;
@@ -33,13 +34,18 @@ impl MarkerManager {
     }
 
     pub fn load(&mut self) -> std::io::Result<()> {
-        let file = File::open("Yazz_Markers.ysn")?;
-        let mut reader = BufReader::new(file);
-        let mut serialized = String::new();
-        reader.read_to_string(&mut serialized)?;
-        let result: Result<MarkerManager, serde_json::error::Error> = serde_json::from_str(&serialized);
-        if let Ok(data) = result {
-            *self = data;
+        let result = File::open("Yazz_Markers.ysn");
+        match result {
+            Ok(file) => {
+                let mut reader = BufReader::new(file);
+                let mut serialized = String::new();
+                reader.read_to_string(&mut serialized)?;
+                let result: Result<MarkerManager, serde_json::error::Error> = serde_json::from_str(&serialized);
+                if let Ok(data) = result {
+                    *self = data;
+                }
+            }
+            Err(err) => info!("Error loading marker file: {}", err),
         }
         Ok(())
     }

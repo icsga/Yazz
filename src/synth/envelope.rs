@@ -20,7 +20,7 @@ impl EnvelopeData {
         self.decay = 15.0;
         self.sustain = 1.0;
         self.release = 15.0;
-        self.factor = 3.0;
+        self.factor = 1.0;
     }
 }
 

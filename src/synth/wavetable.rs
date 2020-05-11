@@ -187,7 +187,6 @@ impl Wavetable {
                 table[j] = table_a[j] - table_b[index_b];
                 //info!("{}, {}: {} - {} = {}", j, index_b, table_a[j], table_b[index_b], table[j]);
             }
-            //Wavetable::polarize(&mut table[from..to]);
             Wavetable::expand(&mut table[from..to]);
         }
     }
@@ -256,22 +255,6 @@ impl Wavetable {
         for i in 0..table.len() {
             new_val = (table[i] - offset) * scale;
             table[i] = new_val;
-        }
-    }
-
-    pub fn polarize(table: &mut [Float]) {
-        let (min, max) = Wavetable::get_extremes(table);
-        let halfpoint = (max + min) / 2.0;
-        let shift_up = 1.0 - max;
-        let shift_down = -1.0 - min;
-        let mut val: Float;
-        for i in 0..table.len() {
-            val = table[i];
-            table[i] = if val > halfpoint {
-                val + shift_up
-            } else {
-                val + shift_down
-            };
         }
     }
 

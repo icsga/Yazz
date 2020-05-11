@@ -26,6 +26,7 @@ use std::convert::TryInto;
 use std::fs::{self, DirEntry};
 use std::io;
 use std::io::{stdout, Write};
+use std::path::Path;
 use std::thread::spawn;
 use std::time::{Duration, SystemTime};
 use std::cell::RefCell;
@@ -131,7 +132,7 @@ impl Tui {
             }
             // Check if file exists
             let filename = "data/".to_string() + &entry.filename;
-            if !std::path::Path::new(&filename).exists() {
+            if !Path::new(&filename).exists() {
                 entry.valid = false; // Invalid => Won't show up in menu, sounds get default wavetable
             }
             // Send struct to synth
@@ -276,6 +277,15 @@ impl Tui {
     fn scan_wavetables(&mut self) {
         let wt_list = &mut self.bank.wt_list;
         let re = Regex::new(r"(.*).wav").unwrap();
+        if !Path::new("data").exists() {
+            // Create data directory
+            let result = fs::create_dir("data");
+            match result {
+                Ok(()) => info!("Created data directory"),
+                Err(err) => info!("Error, can't create data directory: {}", err),
+            }
+            return;
+        }
         for entry in fs::read_dir("data").unwrap() {
             let entry = entry.unwrap();
             let filename = entry.file_name();
