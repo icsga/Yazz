@@ -55,7 +55,7 @@ pub struct PatchData {
 
 impl PatchData {
     pub fn init(&mut self) {
-        self.level = 90.0;
+        self.level = 0.9;
         self.drive = 0.0;
         self.pitchbend = 2.0;
         self.vel_sens = 1.0;

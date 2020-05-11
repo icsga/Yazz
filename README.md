@@ -30,25 +30,19 @@ For a detailed description, have a look at the [manual in the doc folder](doc/ma
 ## Compiling, running and troubleshooting
 
 Yazz should run on both MacOS and Linux. Assuming you have the Rust toolchain
-installed, a simple "cargo build --release" should download all dependencies
-and compile everything.
-
-For Linux, the dev-package for ALSA needs to be installed (usually
-libasound2-dev, see https://github.com/RustAudio/cpal for more infos).
+installed, a simple `cargo run --release` should download all dependencies,
+compile everything and run the synth.
 
 Make sure to run the release version, otherwise the audio engine might have
-performance problems (it's not optimized yet):
+performance problems (it's not optimized yet).
 
-cargo run --release
+For Linux, the dev-package for ALSA needs to be installed (usually
+libasound2-dev or alsa-lib-devel, see https://github.com/RustAudio/cpal for
+more infos).
 
-Yazz connects to MIDI device 1 per default, which is probably incorrect for
-most systems. If you get a MIDI port error on startup, try connectin to
-device 0 instead:
-
-cargo run --release -- -m 0
-
-If you get a "file not found" error on startup, please create a "data"
-folder in the directory you are starting the program from.
+Yazz connects to MIDI port 0 per default. If you get a MIDI port error on
+startup, or if Yazz doesn't react to MIDI messages, try connecting to a
+different port with `cargo run --release -- -m 1`.
 
 Check the documentation for additional command line parameters.
 

@@ -20,7 +20,7 @@ pub struct FilterData {
 
 impl FilterData {
     pub fn init(&mut self) {
-        self.filter_type = 3; // Moog as default
+        self.filter_type = 1; // RLPF as default
         self.cutoff = 3000.0;
         self.resonance = 0.0;
         self.gain = 1.0;

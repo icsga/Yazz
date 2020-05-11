@@ -53,13 +53,18 @@ impl SoundBank {
     }
 
     pub fn load_bank(&mut self, filename: &str) -> std::io::Result<()> {
-        let file = File::open(filename)?;
-        let mut reader = BufReader::new(file);
-        let mut serialized = String::new();
-        reader.read_to_string(&mut serialized)?;
-        let result: Result<SoundBank, serde_json::error::Error> = serde_json::from_str(&serialized);
-        if let Ok(data) = result {
-            *self = data;
+        let result = File::open(filename);
+        match result {
+            Ok(file) => {
+                let mut reader = BufReader::new(file);
+                let mut serialized = String::new();
+                reader.read_to_string(&mut serialized)?;
+                let result: Result<SoundBank, serde_json::error::Error> = serde_json::from_str(&serialized);
+                if let Ok(data) = result {
+                    *self = data;
+                }
+            }
+            Err(err) => info!("Error reading default sound file, using empty bank."),
         }
         Ok(())
     }
