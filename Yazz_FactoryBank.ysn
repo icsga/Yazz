@@ -1769,32 +1769,32 @@
       }
     },
     {
-      "name": "Init",
+      "name": "5th sync",
       "data": {
         "osc": [
           {
-            "level": 0.96,
+            "level": 0.3700787401574804,
             "num_voices": 1,
             "voice_spread": 0.0,
-            "tune_halfsteps": 0,
+            "tune_halfsteps": -24,
             "tune_cents": 0.0,
-            "freq_offset": 1.0,
-            "wave_index": 0.0,
+            "freq_offset": 0.2500005343804845,
+            "wave_index": 0.6456692913385826,
             "sync": 0,
             "key_follow": 1,
-            "wavetable": 0
+            "wavetable": 1
           },
           {
-            "level": 0.0,
+            "level": 0.3228346456692913,
             "num_voices": 1,
             "voice_spread": 0.0,
-            "tune_halfsteps": 0,
-            "tune_cents": 0.0,
-            "freq_offset": 1.0,
-            "wave_index": 0.0,
-            "sync": 0,
+            "tune_halfsteps": -3,
+            "tune_cents": 0.7165354330708663,
+            "freq_offset": 0.8764304896924524,
+            "wave_index": 0.5669291338582677,
+            "sync": 1,
             "key_follow": 1,
-            "wavetable": 0
+            "wavetable": 1
           },
           {
             "level": 0.0,
@@ -1811,10 +1811,10 @@
         ],
         "env": [
           {
-            "attack": 30.0,
-            "decay": 50.0,
+            "attack": 15.0,
+            "decay": 5.0,
             "sustain": 1.0,
-            "release": 100.0,
+            "release": 188.9763779527559,
             "factor": 3.0
           },
           {
@@ -1834,8 +1834,8 @@
         ],
         "filter": [
           {
-            "filter_type": 0,
-            "cutoff": 8000.0,
+            "filter_type": 1,
+            "cutoff": 3213.1968503937005,
             "resonance": 0.0,
             "gain": 1.0,
             "key_follow": 1
@@ -1860,8 +1860,8 @@
         ],
         "glfo": [
           {
-            "waveform": "Sine",
-            "frequency": 1.0
+            "waveform": "Square",
+            "frequency": 0.8
           },
           {
             "waveform": "Sine",
@@ -1870,15 +1870,15 @@
         ],
         "modul": [
           {
-            "source_func": "Lfo",
+            "source_func": "GlobalLfo",
             "source_func_id": 1,
             "target_func": "Oscillator",
-            "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
-            "is_global": false,
-            "scale": 0.0
+            "target_func_id": 2,
+            "target_param": "Frequency",
+            "amount": 0.1,
+            "active": true,
+            "is_global": true,
+            "scale": 2.4000000000000004
           },
           {
             "source_func": "Lfo",
@@ -2047,44 +2047,44 @@
           }
         ],
         "delay": {
-          "level": 0.0,
+          "level": 0.7559055118110236,
           "feedback": 0.5,
-          "time": 0.5,
+          "time": 0.35299212598425195,
           "tone": 1600.0,
           "delay_type": 1
         },
         "patch": {
-          "level": 0.2283464566929134,
-          "drive": 0.0,
+          "level": 0.11811023622047244,
+          "drive": 3.385826771653543,
           "pitchbend": 2.0,
           "vel_sens": 0.0,
-          "play_mode": "Poly"
+          "play_mode": "Mono"
         }
       }
     },
     {
-      "name": "Init",
+      "name": "Squeezebox",
       "data": {
         "osc": [
           {
-            "level": 0.92,
+            "level": 0.4960629921259843,
             "num_voices": 1,
             "voice_spread": 0.0,
             "tune_halfsteps": 0,
             "tune_cents": 0.0,
             "freq_offset": 1.0,
-            "wave_index": 0.0,
+            "wave_index": 0.5039370078740157,
             "sync": 0,
             "key_follow": 1,
-            "wavetable": 0
+            "wavetable": 1
           },
           {
             "level": 0.0,
             "num_voices": 1,
             "voice_spread": 0.0,
-            "tune_halfsteps": 0,
+            "tune_halfsteps": 7,
             "tune_cents": 0.0,
-            "freq_offset": 1.0,
+            "freq_offset": 1.498306142767566,
             "wave_index": 0.0,
             "sync": 0,
             "key_follow": 1,
@@ -2105,11 +2105,11 @@
         ],
         "env": [
           {
-            "attack": 30.0,
+            "attack": 94.48818897637796,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 2.0
           },
           {
             "attack": 30.0,
@@ -2145,7 +2145,7 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 6.94488188976378
           },
           {
             "waveform": "Sine",
@@ -2164,37 +2164,37 @@
         ],
         "modul": [
           {
-            "source_func": "Lfo",
-            "source_func_id": 1,
+            "source_func": "Oscillator",
+            "source_func_id": 2,
             "target_func": "Oscillator",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "WaveIndex",
+            "amount": 0.3385826771653544,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 0.1692913385826772
           },
           {
-            "source_func": "Lfo",
+            "source_func": "ModWheel",
             "source_func_id": 1,
             "target_func": "Oscillator",
-            "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
-            "is_global": false,
-            "scale": 0.0
+            "target_func_id": 2,
+            "target_param": "Finetune",
+            "amount": 0.5,
+            "active": true,
+            "is_global": true,
+            "scale": 0.7874015748031497
           },
           {
-            "source_func": "Lfo",
+            "source_func": "ModWheel",
             "source_func_id": 1,
-            "target_func": "Oscillator",
+            "target_func": "Delay",
             "target_func_id": 1,
             "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
-            "is_global": false,
-            "scale": 0.0
+            "amount": 1.0,
+            "active": true,
+            "is_global": true,
+            "scale": 0.007874015748031496
           },
           {
             "source_func": "Lfo",
@@ -2342,16 +2342,16 @@
         ],
         "delay": {
           "level": 0.0,
-          "feedback": 0.5,
-          "time": 0.5,
+          "feedback": 0.6456692913385826,
+          "time": 0.30622047244094486,
           "tone": 1600.0,
           "delay_type": 1
         },
         "patch": {
-          "level": 0.9,
+          "level": 0.3307086614173229,
           "drive": 0.0,
-          "pitchbend": 2.0,
-          "vel_sens": 1.0,
+          "pitchbend": 12.0,
+          "vel_sens": 0.0,
           "play_mode": "Poly"
         }
       }
@@ -37638,35 +37638,5 @@
     }
   ],
   "wt_list": [
-    {
-      "id": 2,
-      "valid": true,
-      "name": "ESW Basics - Deep High",
-      "filename": "ESW Basics - Deep High.wav"
-    },
-    {
-      "id": 3,
-      "valid": true,
-      "name": "ESW Metallic - Chime 01",
-      "filename": "ESW Metallic - Chime 01.wav"
-    },
-    {
-      "id": 4,
-      "valid": true,
-      "name": "ESW Basics - Square Morph 01",
-      "filename": "ESW Basics - Square Morph 01.wav"
-    },
-    {
-      "id": 5,
-      "valid": true,
-      "name": "ESW Metallic - Waves",
-      "filename": "ESW Metallic - Waves.wav"
-    },
-    {
-      "id": 6,
-      "valid": true,
-      "name": "ESW Chill - Purple Haze",
-      "filename": "ESW Chill - Purple Haze.wav"
-    }
   ]
 }

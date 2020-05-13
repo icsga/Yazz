@@ -3,6 +3,7 @@ use super::Filter;
 use super::Float;
 use super::Lfo;
 use super::{Parameter, ParameterValue, ParamId, SynthParam, MenuItem};
+use super::PlayMode;
 use super::SampleGenerator;
 use super::SynthState;
 use super::{WtOsc, WtOscData, Wavetable, WavetableRef};
@@ -212,16 +213,25 @@ impl Voice {
     }
 
     pub fn trigger(&mut self, trigger_seq: u64, trigger_time: i64, sound: &SoundData) {
+        let trigger = match sound.patch.play_mode {
+            PlayMode::Poly => true, // Poly: Always retrigger
+            PlayMode::Mono => true, // Mono: Always retrigger
+            PlayMode::Legato => {   // Legator: Only retrigger if not already triggered
+                !self.triggered
+            }
+        };
         self.triggered = true;
         self.trigger_seq = trigger_seq;
-        for i in 0..NUM_ENVELOPES {
-            self.env[i].trigger(trigger_time, &sound.env[i]);
-        }
-        for osc in self.osc.iter_mut() {
-            osc.reset(trigger_time);
-        }
-        for lfo in self.lfo.iter_mut() {
-            lfo.reset(trigger_time);
+        if trigger {
+            for i in 0..NUM_ENVELOPES {
+                self.env[i].trigger(trigger_time, &sound.env[i]);
+            }
+            for osc in self.osc.iter_mut() {
+                osc.reset(trigger_time);
+            }
+            for lfo in self.lfo.iter_mut() {
+                lfo.reset(trigger_time);
+            }
         }
     }
 

@@ -897,7 +897,7 @@ impl ParamSelector {
         let mut param_id = self.get_param_id();
         let mut index: usize = 0;
         {
-            let modulators = &mut sound.borrow_mut().data.modul;
+            let modulators = &sound.borrow().data.modul;
             let len = modulators.len();
             for i in 0..len {
                 if modulators[i].active == false {
@@ -909,6 +909,8 @@ impl ParamSelector {
         }
         if !found { return false; }
 
+        // Add changed parameters to the change stack. They will be applied by
+        // Tui after this function finishes.
         let mut sp = SynthParam::new(Parameter::Modulation, index + 1, Parameter::Target, ParameterValue::Param(param_id));
         self.add_changed_value(&sp);
         sp.parameter = Parameter::Active;
@@ -919,12 +921,11 @@ impl ParamSelector {
         self.add_changed_value(&sp);
         self.value_changed = true;
 
-        // Prepare param_id to match current param
+        // Prepare param_id to match current param. This is the position that
+        // the command line goes to after applying the values.
         param_id.function = Parameter::Modulation;
         param_id.function_id = index + 1;
         param_id.parameter = Parameter::Source;
-
-        // Set up fun, id, param to point to modulator
         self.apply_param_id(&param_id);
         true
     }
@@ -988,7 +989,7 @@ impl ParamSelector {
 
         // The value in the selected parameter needs to point to the right type.
         let sound = if let Some(sound) = &self.sound { sound } else { panic!() };
-        let value = sound.borrow_mut().data.get_value(&param);
+        let value = sound.borrow().data.get_value(&param);
         info!("Sound has value {:?}", value);
         match value {
             // Let the two ItemSelection structs point to the currently active
@@ -1025,7 +1026,7 @@ impl ParamSelector {
 
         // The value in the selected parameter needs to point to the right type.
         let sound = if let Some(sound) = &self.sound { sound } else { panic!() };
-        let value = sound.borrow_mut().data.get_value(&param);
+        let value = sound.borrow().data.get_value(&param);
         info!("Sound has value {:?}", value);
 
         match value {
