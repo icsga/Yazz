@@ -6,12 +6,13 @@ use super::{Parameter, ParameterValue, ParamId, SynthParam, MenuItem};
 use super::PlayMode;
 use super::SampleGenerator;
 use super::SynthState;
-use super::{WtOsc, WtOscData, Wavetable, WavetableRef};
+use super::{WtOsc, WtOscData};
 use super::SoundData;
 
-use std::sync::Arc;
-
 use log::{info, trace, warn};
+use wavetable::{Wavetable, WavetableRef};
+
+use std::sync::Arc;
 
 pub const NUM_OSCILLATORS: usize = 3;
 pub const NUM_ENVELOPES: usize = 3;

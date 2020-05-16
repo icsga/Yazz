@@ -1,7 +1,7 @@
 use super::Float;
 use super::SampleGenerator;
 use super::sound::SoundData;
-use super::{Wavetable, WtManager, WavetableRef};
+use wavetable::{Wavetable, WtManager, WavetableRef};
 
 use rand::prelude::*;
 use serde::{Serialize, Deserialize};

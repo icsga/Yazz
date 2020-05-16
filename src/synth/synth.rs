@@ -9,7 +9,7 @@ use super::SoundData;
 use super::voice::Voice;
 use super::SampleGenerator;
 use super::Float;
-use super::{WtOsc, WtManager, Wavetable, WavetableRef, WtInfo};
+use super::WtOsc;
 
 use std::rc::Rc;
 use std::sync::{Arc, Mutex};
@@ -19,6 +19,7 @@ use crossbeam_channel::unbounded;
 use crossbeam_channel::{Sender, Receiver};
 use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};
+use wavetable::{WtManager, Wavetable, WavetableRef, WtInfo};
 
 const NUM_VOICES: usize = 32;
 const NUM_KEYS: usize = 128;
@@ -111,7 +112,9 @@ impl Synth {
         sound.init();
         sound_global.init();
         sound_local.init();
-        let wt_manager = WtManager::new(sample_rate as Float);
+        let mut wt_manager = WtManager::new(sample_rate as Float, "data");
+        wt_manager.add_basic_tables(0);
+        wt_manager.add_pwm_tables(1, 64);
         let default_table = wt_manager.get_table(0).unwrap(); // Table 0
         let voice = [
             Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
@@ -342,8 +345,8 @@ impl Synth {
         self.update_wavetable(2);
     }
 
-    fn handle_wavetable_info(&mut self, wt_info: WtInfo) {
-        self.wt_manager.add_table(wt_info);
+    fn handle_wavetable_info(&mut self, mut wt_info: WtInfo) {
+        self.wt_manager.load_table(&mut wt_info, self.wt_manager.get_table(0).unwrap(), false);
     }
 
     fn handle_note_on(&mut self, key: u8, velocity: u8) {

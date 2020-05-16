@@ -41,7 +41,6 @@ use storage::{SoundBank, SoundPatch};
 mod synth;
 use synth::*;
 use voice::Voice;
-use wt_manager::WtInfo;
 
 mod tui;
 use tui::{Tui, Index};
@@ -69,6 +68,9 @@ use flexi_logger::{Logger, opt_format};
 
 extern crate clap;
 use clap::{Arg, App};
+
+extern crate wavetable;
+use wavetable::{WtInfo, WtManager};
 
 use std::error::Error;
 use std::fs::File;
@@ -164,7 +166,7 @@ fn setup_audio() -> (Engine, u32) {
 
 // Save one table of a wavetable set as a CSV file.
 fn save_wave(id: usize) -> std::io::Result<()> {
-    let wt_manager = WtManager::new(44100.0);
+    let wt_manager = WtManager::new(44100.0, ".");
     let mut filename = "synth_wave_".to_string();
     filename += &id.to_string();
     filename += ".csv";
@@ -181,7 +183,7 @@ fn save_wave(id: usize) -> std::io::Result<()> {
 
 // Save one samplebuffer of a voice as CSV file.
 fn save_voice() -> std::io::Result<()> {
-    let wt_manager = WtManager::new(44100.0);
+    let wt_manager = WtManager::new(44100.0, ".");
     let filename = "synth_voice.csv".to_string();
     let mut file = File::create(filename)?;
     let wt = wt_manager.get_table(0).unwrap();
