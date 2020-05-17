@@ -30,16 +30,17 @@ pub struct ModSource {
 }
 
 /** Static list of available modulation data sources. */
-static MOD_SOURCE: [ModSource; 8] = [
-    ModSource{function: Parameter::GlobalLfo,  index_range: (1, NUM_GLOBAL_LFOS), val_range: ValueRange::Float(-1.0, 1.0, 0.1),  is_global: true},
-    ModSource{function: Parameter::Aftertouch, index_range: (1, 1),               val_range: ValueRange::Float(0.0, 1.0, 0.1),   is_global: true},
-    ModSource{function: Parameter::Pitchbend,  index_range: (1, 1),               val_range: ValueRange::Float(-1.0, 1.0, 0.01), is_global: true},
-    ModSource{function: Parameter::ModWheel,   index_range: (1, 1),               val_range: ValueRange::Float(0.0, 127.0, 0.1), is_global: true},
+static MOD_SOURCE: [ModSource; 9] = [
+    ModSource{function: Parameter::GlobalLfo,   index_range: (1, NUM_GLOBAL_LFOS), val_range: ValueRange::Float(-1.0, 1.0, 0.1),  is_global: true},
+    ModSource{function: Parameter::Aftertouch,  index_range: (1, 1),               val_range: ValueRange::Float(0.0, 1.0, 0.1),   is_global: true},
+    ModSource{function: Parameter::Pitchbend,   index_range: (1, 1),               val_range: ValueRange::Float(-1.0, 1.0, 0.01), is_global: true},
+    ModSource{function: Parameter::ModWheel,    index_range: (1, 1),               val_range: ValueRange::Float(0.0, 127.0, 0.1), is_global: true},
+    ModSource{function: Parameter::SustainPedal,index_range: (1, 1),               val_range: ValueRange::Float(0.0, 1.0, 1.0),   is_global: true},
 
-    ModSource{function: Parameter::Envelope,   index_range: (1, NUM_ENVELOPES),   val_range: ValueRange::Float(0.0, 1.0, 0.01),  is_global: false},
-    ModSource{function: Parameter::Lfo,        index_range: (1, NUM_LFOS),        val_range: ValueRange::Float(-1.0, 1.0, 0.01), is_global: false},
-    ModSource{function: Parameter::Oscillator, index_range: (1, NUM_OSCILLATORS), val_range: ValueRange::Float(-1.0, 1.0, 0.01), is_global: false},
-    ModSource{function: Parameter::Velocity,   index_range: (1, 1),               val_range: ValueRange::Float(0.0, 1.0, 0.1), is_global: false},
+    ModSource{function: Parameter::Envelope,    index_range: (1, NUM_ENVELOPES),   val_range: ValueRange::Float(0.0, 1.0, 0.01),  is_global: false},
+    ModSource{function: Parameter::Lfo,         index_range: (1, NUM_LFOS),        val_range: ValueRange::Float(-1.0, 1.0, 0.01), is_global: false},
+    ModSource{function: Parameter::Oscillator,  index_range: (1, NUM_OSCILLATORS), val_range: ValueRange::Float(-1.0, 1.0, 0.01), is_global: false},
+    ModSource{function: Parameter::Velocity,    index_range: (1, 1),               val_range: ValueRange::Float(0.0, 1.0, 0.1), is_global: false},
 ];
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]

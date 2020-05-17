@@ -223,6 +223,7 @@ impl Tui {
             // Mode-specific key handling
             if let Mode::Edit = self.mode {
                 self.state = TuiState::Play; // Exit help state (no need to check, just overwrite it)
+                let last_selector_state = self.selector.state;
                 if self.selector.handle_user_input(&mut self.selector_sm, key, self.sound.clone()) {
                     loop {
                         let p = self.selector.get_changed_value();
@@ -232,6 +233,11 @@ impl Tui {
                         }
                     }
                     self.send_event();
+                }
+
+                if last_selector_state == SelectorState::MidiLearn {
+                    // Check if user has aborted MIDI learn state
+                    self.check_midi_learn_status();
                 }
             } else {
                 self.handle_play_mode_input(key);
@@ -347,48 +353,74 @@ impl Tui {
         match *m {
             MidiMessage::ControlChg{channel, controller, value} => {
                 if self.selector.state == SelectorState::MidiLearn {
-
                     // MIDI learn: Send all controller events to the selector
                     self.selector.handle_control_input(&mut self.selector_sm, controller.into(), value.into(), self.sound.clone());
-
-                    // Check if complete, if yes set CtrlMap
-                    if self.selector.ml.complete {
-                        let val_range = self.selector.get_value_range();
-                        let param = self.selector.get_param_id();
-                        let ml = &mut self.selector.ml;
-                        self.ctrl_map.add_mapping(self.active_ctrl_set,
-                                                  ml.ctrl,
-                                                  ml.mapping_type,
-                                                  param,
-                                                  val_range);
-                        self.ctrl_map.save("Yazz_ControllerMapping.ysn").unwrap();
-                    }
+                    self.check_midi_learn_status();
                     return;
                 }
-                let edit_mode = if let Mode::Edit = self.mode { true } else { false };
 
-                // Special handling of ModWheel
-                if controller == 0x01 {
-                    if edit_mode {
-                        // ModWheel is used as general data entry for Selector in Edit mode.
-                        if self.selector.handle_control_input(&mut self.selector_sm, controller.into(), value.into(), self.sound.clone()) {
-                            self.send_event();
+                // Special handling of some controllers
+                match controller {
+                    0x01  => {
+                        // ModWheel
+                        let edit_mode = if let Mode::Edit = self.mode { true } else { false };
+                        if edit_mode {
+                            // ModWheel is used as general data entry for Selector in Edit mode.
+                            if self.selector.handle_control_input(&mut self.selector_sm,
+                                                                  controller.into(),
+                                                                  value.into(),
+                                                                  self.sound.clone()) {
+                                self.send_event(); // Sound parameter has been changed
+                            }
+                        } else {
+                            // In play mode, modwheel is both a global mod source and a
+                            // controller. Send message to synth engine about mod
+                            // source update.
+                            self.sender.send(SynthMessage::Midi(*m)).unwrap();
                         }
-                    } else {
-                        // In play mode, modwheel is both a global mod source and a
-                        // controller. Send message to synth engine about mod
-                        // source update.
+                    }
+                    0x40 => {
+                        // Sustain pedal is always sent to synth, in addition to
+                        // controller mappings below
                         self.sender.send(SynthMessage::Midi(*m)).unwrap();
                     }
+                    _ => (),
                 }
 
-                // All controllers (including ModWheel) might be
-                // mapped to control a parameter directly
+                // All controllers (including ModWheel and sustain pedal) might
+                // be mapped to control a parameter directly
                 self.handle_ctrl_change(controller.into(), value.into());
 
             },
             MidiMessage::ProgramChg{channel, program} => self.select_sound(program as usize - 1),
             _ => ()
+        }
+    }
+
+    // Check if MIDI learn has been completed.
+    //
+    // This can be triggered either by having received enough controller data,
+    // or by being cancelled via keyboard (backspace key).
+    fn check_midi_learn_status(&mut self) {
+        // Check if complete, if yes set CtrlMap
+        if self.selector.ml.complete {
+            let val_range = self.selector.get_value_range();
+            let param = self.selector.get_param_id();
+            let ml = &mut self.selector.ml;
+            match ml.mapping_type {
+                MappingType::Relative | MappingType::Absolute => {
+                    self.ctrl_map.add_mapping(self.active_ctrl_set,
+                                              ml.ctrl,
+                                              ml.mapping_type,
+                                              param,
+                                              val_range);
+                }
+                MappingType::None => {
+                    self.ctrl_map.delete_mapping(self.active_ctrl_set,
+                                                 param);
+                }
+            }
+            self.ctrl_map.save("Yazz_ControllerMapping.ysn").unwrap();
         }
     }
 

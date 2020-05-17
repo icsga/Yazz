@@ -134,6 +134,9 @@ input mode.
 
 To cancel MIDI learn mode without assigning a controller, press Escape.
 
+To clear a previous controller assignment of a parameter, select MIDI learn
+mode for that parameter and press Backspace.
+
 Controller assignments are global settings, not sound specific. They are saved
 automatically after every controller assignment change.
 

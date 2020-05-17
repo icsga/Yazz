@@ -94,6 +94,7 @@ pub struct Synth {
     pitch_bend: Float,
     mod_wheel: Float,
     aftertouch: Float,
+    sustain_pedal: Float, // Use a float, so that we can use it as mod source
     sender: Sender<UiMessage>,
     global_state: SynthState,
 
@@ -149,6 +150,7 @@ impl Synth {
             pitch_bend: 0.0,
             mod_wheel: 0.0,
             aftertouch: 0.0,
+            sustain_pedal: 0.0,
             sender: sender,
             global_state: SynthState{freq_factor: 1.0},
             samplebuff_osc: WtOsc::new(sample_rate, 0, default_table.clone()),
@@ -221,6 +223,7 @@ impl Synth {
                 Parameter::Aftertouch => self.aftertouch,
                 Parameter::Pitchbend => self.pitch_bend,
                 Parameter::ModWheel => self.mod_wheel,
+                Parameter::SustainPedal => self.sustain_pedal,
                 _ => 0.0,
             } * m.scale;
 
@@ -383,12 +386,25 @@ impl Synth {
         self.global_state.freq_factor = inc.powf(self.pitch_bend * self.sound.patch.pitchbend);
     }
 
+    // Map controllers with a special function to dedicated parameters
     fn handle_controller(&mut self, ctrl: u8, value: u8) {
-        if ctrl == 0x01 {
-            // The ModWheel gets a special handling in that it can both be
-            // used as a general purpose controller (handled in Tui) and as a
-            // dedicated global modulation source (handled here).
-            self.mod_wheel = value as Float;
+        match ctrl {
+            0x01 => {
+                // Controller 1 = Modulation wheel
+                // The ModWheel gets a special handling in that it can both be
+                // used as a general purpose controller (handled in Tui) and as a
+                // dedicated global modulation source (handled here).
+                self.mod_wheel = value as Float;
+            }
+            0x40 => {
+                // Controller 64 = Sustain pedal
+                if value >= 64 {
+                    self.sustain_pedal = 1.0;
+                } else {
+                    self.sustain_pedal = 0.0;
+                }
+            }
+            _ => (),
         }
     }
 
