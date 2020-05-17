@@ -17,7 +17,7 @@ impl MidiLearn {
         MidiLearn{
             complete: false,
             ctrl: 0,
-            mapping_type: MappingType::Absolute,
+            mapping_type: MappingType::None,
             val1: 0,
             val2: 0,
             num_events_received: 0
@@ -27,7 +27,7 @@ impl MidiLearn {
     pub fn reset(&mut self) {
         self.complete = false;
         self.ctrl = 0;
-        self.mapping_type = MappingType::Absolute;
+        self.mapping_type = MappingType::None;
         self.val1 = 0;
         self.val2 = 0;
         self.num_events_received = 0;
@@ -65,6 +65,11 @@ impl MidiLearn {
             _ => panic!()
         }
         self.complete
+    }
+
+    pub fn clear_controller(&mut self) {
+        self.reset();
+        self.complete = true;
     }
 }
 

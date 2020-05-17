@@ -43,8 +43,10 @@ impl MidiHandler {
                 info!("MidiMessage: {:?}", m);
                 let command = message[0] & 0xF0;
                 if command == 0xB0 || command == 0xC0 {
+                    // Send control change and program change to UI
                     m2u_sender.send(UiMessage::Midi(m)).unwrap();
                 } else {
+                    // Send everything else directly to the synth engine
                     m2s_sender.send(SynthMessage::Midi(m)).unwrap();
                 }
             } else {

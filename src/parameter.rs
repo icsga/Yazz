@@ -43,10 +43,21 @@ pub enum Parameter {
     Q,
     Resonance,
     Gain,
+    Aux,
     // Filter types
     RLPF,
     ResonZ,
     Moog,
+    OnePole,
+    SEM_LPF,
+    SEM_BPF,
+    SEM_HPF,
+    SEM_BSF,
+    K35_LPF,
+    K35_HPF,
+    OM_LPF,
+    OM_BPF,
+    OM_HPF,
 
     // Amp
     Volume,
@@ -90,6 +101,7 @@ pub enum Parameter {
     Aftertouch,
     Pitchbend,
     ModWheel,
+    SustainPedal,
 
     // System parameters
     Idle,
@@ -300,19 +312,26 @@ pub static LFO_PARAMS: [MenuItem; 2] = [
     MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Float(0.0, 44.1, 0.1), next: &[]},
 ];
 
-pub static FILTER_PARAMS: [MenuItem; 5] = [
+pub static FILTER_PARAMS: [MenuItem; 6] = [
     MenuItem{item: Parameter::Type,      key: 't', val_range: ValueRange::Choice(&FILTER_TYPE),    next: &[]},
     MenuItem{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::Float(1.0, 8000.0, 1.0), next: &[]},
     MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
     MenuItem{item: Parameter::Gain,      key: 'g', val_range: ValueRange::Float(0.0, 2.0, 0.01),   next: &[]},
+    MenuItem{item: Parameter::Aux,       key: 'a', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
     MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::Int(0, 1),               next: &[]},
 ];
 
-pub static FILTER_TYPE: [MenuItem; 4] = [
+pub static FILTER_TYPE: [MenuItem; 10] = [
     MenuItem{item: Parameter::None,      key: 'n', val_range: ValueRange::NoRange, next: &[]},
-    MenuItem{item: Parameter::RLPF,      key: 'l', val_range: ValueRange::NoRange, next: &[]},
-    MenuItem{item: Parameter::ResonZ,    key: 'r', val_range: ValueRange::NoRange, next: &[]},
-    MenuItem{item: Parameter::Moog,      key: 'm', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::SEM_LPF,   key: 's', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::SEM_BPF,   key: 'b', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::SEM_HPF,   key: 'h', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::SEM_BSF,   key: 'o', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::K35_LPF,   key: 'k', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::K35_HPF,   key: 'p', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::OM_LPF,    key: 'm', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::OM_BPF,    key: 'g', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::OM_HPF,    key: 'f', val_range: ValueRange::NoRange, next: &[]},
 ];
 
 pub static ENV_PARAMS: [MenuItem; 5] = [
@@ -369,15 +388,16 @@ pub static PATCH_PARAMS: [MenuItem; 5] = [
     MenuItem{item: Parameter::PlayMode,   key: 'p', val_range: ValueRange::Choice(&PLAY_MODES),  next: &[]},
 ];
 
-pub static MOD_SOURCES: [MenuItem; 8] = [
-    MenuItem{item: Parameter::Oscillator, key: 'o', val_range: ValueRange::Int(1, 3), next: &OSC_PARAMS},
-    MenuItem{item: Parameter::Envelope,   key: 'e', val_range: ValueRange::Int(1, 2), next: &ENV_PARAMS},
-    MenuItem{item: Parameter::Lfo,        key: 'l', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::Velocity,   key: 'v', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::GlobalLfo,  key: 'g', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::Aftertouch, key: 'a', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::Pitchbend,  key: 'p', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
-    MenuItem{item: Parameter::ModWheel,   key: 'm', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
+pub static MOD_SOURCES: [MenuItem; 9] = [
+    MenuItem{item: Parameter::Oscillator,  key: 'o', val_range: ValueRange::Int(1, 3), next: &OSC_PARAMS},
+    MenuItem{item: Parameter::Envelope,    key: 'e', val_range: ValueRange::Int(1, 2), next: &ENV_PARAMS},
+    MenuItem{item: Parameter::Lfo,         key: 'l', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Velocity,    key: 'v', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::GlobalLfo,   key: 'g', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Aftertouch,  key: 'a', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::Pitchbend,   key: 'p', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::ModWheel,    key: 'm', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
+    MenuItem{item: Parameter::SustainPedal,key: 's', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
 ];
 
 pub static MOD_TARGETS: [MenuItem; 7] = [

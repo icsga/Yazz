@@ -1,9 +1,10 @@
 use crate::Float;
-use super::{Filter, FilterData};
+use super::{Filter, FilterData, FilterType};
 
 // One pole filter used to construct Oberheim Moog ladder filter
-struct VAOnePole {
+pub struct VAOnePole {
     sample_rate: Float,
+    filter_type: FilterType,
     alpha: Float,
     beta: Float,
     gamma: Float,
@@ -15,9 +16,10 @@ struct VAOnePole {
 }
 
 impl VAOnePole {
-    pub fn new(sample_rate: Float) -> Self {
+    pub fn new(sample_rate: Float, filter_type: FilterType) -> Self {
         VAOnePole{
             sample_rate: sample_rate,
+            filter_type: filter_type,
             alpha: 1.0,
             beta: 0.0,
             gamma: 1.0,
@@ -39,12 +41,24 @@ impl VAOnePole {
         self.z1 = 0.0;
     }
 
-    pub fn tick(&mut self, s: Float) -> Float {
+    pub fn update(&mut self, data: &FilterData, freq: Float) {
+        let wd = (std::f64::consts::PI * 2.0) * freq;
+        let t = 1.0 / self.sample_rate;
+        let wa = (2.0 / t) * (wd * t / 2.0).tan();
+        let g = wa * t / 2.0;
+        self.alpha = g / (1.0 + g);
+    }
+
+    pub fn process(&mut self, s: Float) -> Float {
         let s = s * self.gamma + self.feedback + self.epsilon * self.get_feedback_output();
         let vn = (self.a0 * s - self.z1) * self.alpha;
         let out = vn + self.z1;
         self.z1 = vn + out;
-        out
+        match self.filter_type {
+            FilterType::LPF1 => out,
+            FilterType::HPF1 => s - out,
+            _ => panic!(),
+        }
     }
 
     pub fn set_feedback(&mut self, fb: Float) { self.feedback = fb; }

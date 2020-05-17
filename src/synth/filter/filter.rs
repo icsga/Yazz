@@ -1,7 +1,7 @@
 use crate::Float;
-use super::rlpf::Rlpf;
-use super::reson_z::ResonZ;
-use super::moog_improved::MoogImproved;
+use super::korg35::K35;
+use super::ober_moog::OberMoog;
+use super::sem::SEM;
 
 use serde::{Serialize, Deserialize};
 use log::{info, trace, warn};
@@ -9,12 +9,26 @@ use log::{info, trace, warn};
 use std::f32;
 use std::f64;
 
+#[derive(Debug)]
+pub enum FilterType {
+    LPF1, // 1-pole low pass filter
+    LPF2, // 2-pole low pass filter
+    LPF4, // 4-pole low pass filter
+    BPF2, // 2-pole band pass filter
+    BPF4, // 4-pole band pass filter
+    BSF2, // 2-pole band stop filter
+    HPF1, // 1-pole high pass filter
+    HPF2, // 2-pole high pass filter
+    HPF4, // 4-pole high pass filter
+}
+
 #[derive(Serialize, Deserialize, Copy, Clone, Default, Debug)]
 pub struct FilterData {
     pub filter_type: usize,
     pub cutoff: Float,
     pub resonance: Float,
     pub gain: Float,
+    pub aux: Float, // General purpose control, usage is filter dependent
     pub key_follow: i64,
 } 
 
@@ -24,6 +38,7 @@ impl FilterData {
         self.cutoff = 3000.0;
         self.resonance = 0.0;
         self.gain = 1.0;
+        self.aux = 0.0;
         self.key_follow = 0;
     }
 }
@@ -32,9 +47,15 @@ pub struct Filter {
     last_cutoff: Float,
     last_resonance: Float,
 
-    rlpf: Rlpf,
-    reson_z: ResonZ,
-    moog_improved: MoogImproved
+    sem_lpf: SEM,
+    sem_bpf: SEM,
+    sem_hpf: SEM,
+    sem_bsf: SEM,
+    k35_lpf: K35,
+    k35_hpf: K35,
+    om_lpf: OberMoog,
+    om_bpf: OberMoog,
+    om_hpf: OberMoog,
 }
 
 impl Filter {
@@ -42,16 +63,28 @@ impl Filter {
         let sample_rate: Float = sample_rate as Float;
         Filter{last_cutoff: 0.0,
                last_resonance: 0.0,
-               rlpf: Rlpf::new(sample_rate),
-               reson_z: ResonZ::new(sample_rate),
-               moog_improved: MoogImproved::new(sample_rate)
+               sem_lpf: SEM::new(sample_rate, FilterType::LPF2),
+               sem_bpf: SEM::new(sample_rate, FilterType::BPF2),
+               sem_hpf: SEM::new(sample_rate, FilterType::HPF2),
+               sem_bsf: SEM::new(sample_rate, FilterType::BSF2),
+               k35_lpf: K35::new(sample_rate, FilterType::LPF2),
+               k35_hpf: K35::new(sample_rate, FilterType::HPF2),
+               om_lpf: OberMoog::new(sample_rate, FilterType::LPF4),
+               om_bpf: OberMoog::new(sample_rate, FilterType::BPF4),
+               om_hpf: OberMoog::new(sample_rate, FilterType::HPF4),
         }
     }
 
     pub fn reset(&mut self) {
-        self.rlpf.reset();
-        self.reson_z.reset();
-        self.moog_improved.reset();
+        self.sem_lpf.reset();
+        self.sem_bpf.reset();
+        self.sem_hpf.reset();
+        self.sem_bsf.reset();
+        self.k35_lpf.reset();
+        self.k35_hpf.reset();
+        self.om_lpf.reset();
+        self.om_bpf.reset();
+        self.om_hpf.reset();
     }
 
     pub fn process(&mut self, sample: Float, data: &mut FilterData, freq: Float) -> Float {
@@ -65,9 +98,15 @@ impl Filter {
 
         match data.filter_type {
             0 => sample, // Bypass
-            1 => self.rlpf.process(sample, data),
-            2 => self.reson_z.process(sample, data),
-            3 => self.moog_improved.process(sample, data),
+            1 => self.sem_lpf.process(sample, data),
+            2 => self.sem_bpf.process(sample, data),
+            3 => self.sem_hpf.process(sample, data),
+            4 => self.sem_bsf.process(sample, data),
+            5 => self.k35_lpf.process(sample, data),
+            6 => self.k35_hpf.process(sample, data),
+            7 => self.om_lpf.process(sample, data),
+            8 => self.om_bpf.process(sample, data),
+            9 => self.om_hpf.process(sample, data),
             _ => panic!(),
         }
     }
@@ -76,9 +115,15 @@ impl Filter {
     pub fn update(&mut self, data: &FilterData, freq: Float) {
         match data.filter_type {
             0 => (),
-            1 => self.rlpf.update(data, freq),
-            2 => self.reson_z.update(data, freq),
-            3 => self.moog_improved.update(data, freq),
+            1 => self.sem_lpf.update(data, freq),
+            2 => self.sem_bpf.update(data, freq),
+            3 => self.sem_hpf.update(data, freq),
+            4 => self.sem_bsf.update(data, freq),
+            5 => self.k35_lpf.update(data, freq),
+            6 => self.k35_hpf.update(data, freq),
+            7 => self.om_lpf.update(data, freq),
+            8 => self.om_bpf.update(data, freq),
+            9 => self.om_hpf.update(data, freq),
             _ => panic!(),
         }
         self.last_resonance = data.resonance;

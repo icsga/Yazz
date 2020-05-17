@@ -1,4 +1,4 @@
-/** Maps MIDI controllers to synth parameters. */
+//! Maps MIDI controllers to synth parameters.
 
 use super::Float;
 use super::{Parameter, ParamId, ParameterValue, MenuItem};
@@ -20,6 +20,7 @@ use std::io::prelude::*;
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq)]
 pub enum MappingType {
+    None,
     Absolute,
     Relative
 }
@@ -31,10 +32,10 @@ pub struct CtrlMapEntry {
     val_range: &'static ValueRange,
 }
 
-/* ValueRange contains a reference, so it can't be stored easily. Instead we
- * store only ParamId and MappingType and rely on the TUI to look up the
- * value range when loading the data.
- */
+/// ValueRange contains a reference, so it can't be stored easily. Instead we
+/// store only ParamId and MappingType and rely on the TUI to look up the
+/// value range when loading the data.
+///
 #[derive(Serialize, Deserialize, Clone, Copy, Debug)]
 pub struct CtrlMapStorageEntry {
     id: ParamId,
@@ -54,21 +55,21 @@ impl CtrlMap {
         CtrlMap{map: vec!(CtrlHashMap::new(); 36)}
     }
 
-    /** Reset the map, removing all controller assignments. */
+    /// Reset the map, removing all controller assignments.
     pub fn reset(&mut self) {
         for m in &mut self.map {
             m.clear();
         }
     }
 
-    /** Add a new mapping entry for a controller.
-     *
-     * \param set The selected controller map set
-     * \param controller The controller number to add
-     * \param map_type Type of value change (absolute or relative)
-     * \param parameter The parameter changed with this controller
-     * \param val_range The valid values for the parameter
-     */
+    /// Add a new mapping entry for a controller.
+    ///
+    /// set: The selected controller map set
+    /// controller: The controller number to add
+    /// map_type: Type of value change (absolute or relative)
+    /// parameter: The parameter changed with this controller
+    /// val_range: The valid values for the parameter
+    ///
     pub fn add_mapping(&mut self,
                       set: usize,
                       controller: u64,
@@ -78,24 +79,50 @@ impl CtrlMap {
         trace!("add_mapping: Set {}, ctrl {}, type {:?}, param {:?}, val range {:?}",
             set, controller, map_type, parameter, val_range);
         self.map[set].insert(controller,
-                                 CtrlMapEntry{id: parameter,
-                                              map_type: map_type,
-                                              val_range: val_range});
+                             CtrlMapEntry{id: parameter,
+                                          map_type: map_type,
+                                          val_range: val_range});
     }
 
-    /** Update a value according to the controller value.
-     *
-     * Uses the parameter's val_range to translate the controller value into
-     * a valid parameter value.
-     *
-     * \param set The selected controller map set
-     * \param controller The controller number to look up
-     * \param value New value of the controller
-     * \param sound Currently active sound
-     * \param result SynthParam that receives the changed value
-     *
-     * \return true if result was updated, false otherwise
-     */
+    /// Delete all mappings for a parameter.
+    ///
+    /// Returns true if one or more mappings were deleted, false otherwise
+    pub fn delete_mapping(&mut self,
+                          set: usize,
+                          parameter: ParamId) -> bool {
+        trace!("delete_mapping: Set {}, param {:?}", set, parameter);
+        let mut controller: u64;
+        let mut found = false;
+        loop {
+            controller = 0;
+            for (key, val) in self.map[set].iter() {
+                if val.id == parameter {
+                    controller = *key;
+                }
+            }
+            if controller > 0 {
+                self.map[set].remove(&controller);
+                found = true;
+            } else {
+                break;
+            }
+        }
+        found
+    }
+
+    /// Update a value according to the controller value.
+    ///
+    /// Uses the parameter's val_range to translate the controller value into
+    /// a valid parameter value.
+    ///
+    /// set: The selected controller map set
+    /// controller: The controller number to look up
+    /// value: New value of the controller
+    /// sound: Currently active sound
+    /// result: SynthParam that receives the changed value
+    ///
+    /// Return true if result was updated, false otherwise
+    ///
     pub fn get_value(&self,
                     set: usize,
                     controller: u64,
@@ -119,10 +146,12 @@ impl CtrlMap {
                 let delta = if value >= 126 { -1 } else { 1 };
                 result.value = mapping.val_range.add_value(sound_value, delta);
             }
+            MappingType::None => panic!(),
         };
         Ok(result)
     }
 
+    // Load controller mappings from file
     pub fn load(&mut self, filename: &str) -> std::io::Result<()> {
         info!("Reading controller mapping from {}", filename);
         let file = File::open(filename)?;
@@ -141,6 +170,7 @@ impl CtrlMap {
         Ok(())
     }
 
+    // Store controller mappings to file
     pub fn save(&self, filename: &str) -> std::io::Result<()> {
         info!("Writing controller mapping to {}", filename);
 
@@ -213,6 +243,10 @@ impl TestContext {
             false
         }
     }
+
+    pub fn delete_controller(&mut self) -> bool {
+        self.map.delete_mapping(1, self.param_id)
+    }
 }
 
 #[test]
@@ -257,5 +291,20 @@ fn value_can_be_changed_relative() {
     // Decrease value
     assert_eq!(context.handle_controller(1, 127), true);
     assert_eq!(context.has_value(92.0), true);
+}
+
+#[test]
+fn mapping_can_be_deleted() {
+    let mut context = TestContext::new();
+    context.add_controller(1, MappingType::Relative);
+    assert_eq!(context.handle_controller(1, 127), true);
+    assert_eq!(context.delete_controller(), true);
+    assert_eq!(context.handle_controller(1, 127), false);
+}
+
+#[test]
+fn nonexisting_mapping_isnt_deleted() {
+    let mut context = TestContext::new();
+    assert_eq!(context.delete_controller(), false);
 }
 

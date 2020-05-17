@@ -627,6 +627,10 @@ impl ParamSelector {
                     SelectorEvent::Key(c) => {
                         match c {
                             Key::Esc => SmResult::ChangeState(ParamSelector::state_value),
+                            Key::Backspace => {
+                                self.ml.clear_controller();
+                                SmResult::ChangeState(ParamSelector::state_value)
+                            }
                             _ => SmResult::EventHandled
                         }
                     }
@@ -1304,7 +1308,7 @@ const DEFAULT_ATTACK: Float = 15.0;
 const DEFAULT_DECAY: Float = 15.0;
 const DEFAULT_SUSTAIN: Float = 1.0;
 const DEFAULT_RELEASE: Float = 15.0;
-const DEFAULT_FACTOR: i64 = 3;
+const DEFAULT_FACTOR: i64 = 1;
 
 // ----------------
 // Basic navigation
@@ -1714,7 +1718,7 @@ fn right_bracket_in_state_param_selects_nextparameter() {
 }
 
 #[test]
-fn left_bracket_in_state_param_selects_nextparameter() {
+fn left_bracket_in_state_param_selects_prevparameter() {
     let mut context = TestContext::new();
 
     context.handle_input(TestInput::Chars("e3f\n".to_string()));

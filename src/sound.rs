@@ -133,6 +133,7 @@ impl SoundData {
                     Parameter::Cutoff =>    { self.filter[id].cutoff = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Resonance => { self.filter[id].resonance = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Gain =>      { self.filter[id].gain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Aux =>       { self.filter[id].aux = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::KeyFollow => { self.filter[id].key_follow = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
@@ -219,6 +220,7 @@ impl SoundData {
                     Parameter::Cutoff => ParameterValue::Float(self.filter[id].cutoff),
                     Parameter::Resonance => ParameterValue::Float(self.filter[id].resonance),
                     Parameter::Gain => ParameterValue::Float(self.filter[id].gain),
+                    Parameter::Aux => ParameterValue::Float(self.filter[id].aux),
                     Parameter::KeyFollow => ParameterValue::Int(self.filter[id].key_follow),
                     _ => {panic!();}
                 }
