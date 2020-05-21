@@ -82,7 +82,10 @@ impl Envelope {
     }
 
     pub fn release(&mut self, sample_time: i64, data: &EnvelopeData) {
-        self.change_state(State::Release, sample_time, data);
+        match self.state {
+            State::Release => (), // Don't change to release twice
+            _ => self.change_state(State::Release, sample_time, data),
+        }
     }
 
     pub fn get_sample(&mut self, sample_time: i64, data: &EnvelopeData) -> Float {

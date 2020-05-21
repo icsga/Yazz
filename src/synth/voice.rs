@@ -237,10 +237,16 @@ impl Voice {
     }
 
     // TODO: Release velocity
-    pub fn release(&mut self, velocity: u8, sound: &SoundData) {
+    pub fn key_release(&mut self, velocity: u8, pedal_held: bool, sound: &SoundData) {
         self.triggered = false;
-        for i in 0..NUM_ENVELOPES {
-            self.env[i].release(self.last_update, &sound.env[i]);
+        if !pedal_held {
+            self.release_envelopes(sound);
+        }
+    }
+
+    pub fn pedal_release(&mut self, sound: &SoundData) {
+        if !self.triggered {
+            self.release_envelopes(sound);
         }
     }
 
@@ -250,5 +256,11 @@ impl Voice {
 
     pub fn is_running(&self) -> bool {
         self.triggered || self.env[0].is_running()
+    }
+
+    fn release_envelopes(&mut self, sound: &SoundData) {
+        for i in 0..NUM_ENVELOPES {
+            self.env[i].release(self.last_update, &sound.env[i]);
+        }
     }
 }

@@ -160,7 +160,7 @@ impl Synth {
         }
     }
 
-    /* Starts a thread for receiving UI and MIDI messages. */
+    /// Starts a thread for receiving UI and MIDI messages.
     pub fn run(synth: Arc<Mutex<Synth>>, synth_receiver: Receiver<SynthMessage>) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
             let mut keep_running = true;
@@ -195,11 +195,11 @@ impl Synth {
         self.delay.reset();
     }
 
-    /* Get global modulation values.
-     *
-     * Calculates the values for global modulation sources and applies them to
-     * the global sound data.
-     */
+    // Get global modulation values.
+    //
+    // Calculates the values for global modulation sources and applies them to
+    // the global sound data.
+    //
     fn get_mod_values(&mut self, sample_clock: i64) {
         // Reset the global sound copy to the main sound, discarding values that
         // were modulated for the previous sample. Complete copy is faster than
@@ -244,7 +244,7 @@ impl Synth {
         }
     }
 
-    /* Called by the audio engine to get the next sample to be output. */
+    /// Called by the audio engine to get the next sample to be output.
     pub fn get_sample(&mut self, sample_clock: i64) -> (Float, Float) {
         let mut value: Float = 0.0;
 
@@ -274,7 +274,7 @@ impl Synth {
         (value_l, value_r)
     }
 
-    /* Update the bitmap with currently active voices. */
+    /// Update the bitmap with currently active voices.
     pub fn update(&mut self) {
         self.voices_playing = 0;
         for (i, v) in self.voice.iter_mut().enumerate() {
@@ -284,7 +284,7 @@ impl Synth {
         }
     }
 
-    /* Calculates the frequencies for the default keymap with equal temperament. */
+    // Calculates the frequencies for the default keymap with equal temperament.
     fn calculate_keymap(map: &mut[Float; 128], reference_pitch: Float) {
         for i in 0..128 {
             map[i] = Synth::calculate_frequency(i as Float, reference_pitch);
@@ -315,7 +315,7 @@ impl Synth {
         }
     }
 
-    /* The assigned wavetable of an oscillator has changed. */
+    // The assigned wavetable of an oscillator has changed.
     fn update_wavetable(&mut self, osc_id: usize) {
         let id = self.sound.osc[osc_id].wavetable;
         info!("Updating oscillator {} to wavetable {}", osc_id, id);
@@ -370,7 +370,7 @@ impl Synth {
         for (i, v) in self.voice.iter_mut().enumerate() {
             if v.is_triggered() && v.key == key {
                 self.num_voices_triggered -= 1;
-                v.release(velocity, &self.sound);
+                v.key_release(velocity, self.sustain_pedal > 0.0, &self.sound);
                 break;
             }
         }
@@ -402,13 +402,23 @@ impl Synth {
                     self.sustain_pedal = 1.0;
                 } else {
                     self.sustain_pedal = 0.0;
+                    self.handle_pedal_release();
                 }
             }
             _ => (),
         }
     }
 
-    /* Decide which voice gets to play the next note. */
+    // If any voices have still-running envelopes, trigger the release.
+    fn handle_pedal_release(&mut self) {
+        for (i, v) in self.voice.iter_mut().enumerate() {
+            if v.is_running() {
+                v.pedal_release(&self.sound);
+            }
+        }
+    }
+
+    // Decide which voice gets to play the next note.
     fn select_voice(&mut self) -> usize {
         match self.sound.patch.play_mode {
             PlayMode::Poly => self.select_voice_poly(),
@@ -432,10 +442,11 @@ impl Synth {
         min_id
     }
 
-    /* Fill a received buffer with samples from the model oscillator.
-     *
-     * This puts one wave cycle of the currently active sound into the buffer.
-     */
+    // Fill a received buffer with samples from the model oscillator/ envelope.
+    //
+    // This puts one wave cycle of the currently selected oscillator or
+    // envelope or LFO into the buffer.
+    //
     fn handle_sample_buffer(&mut self, mut buffer: Vec<Float>, param: SynthParam) {
         let len = buffer.capacity();
         let freq = self.sample_rate as Float / len as Float;
@@ -489,23 +500,14 @@ impl Synth {
                     }
                 }
             },
-            Parameter::Lfo => {
+            Parameter::Lfo | Parameter::GlobalLfo => {
                 let lfo = &mut self.samplebuff_lfo;
                 lfo.reset(0);
-                let mut sound_copy = self.sound.lfo[param.function_id - 1];
-                sound_copy.frequency = freq;
-                // Get first sample explicitly to reset LFO (for S&H)
-                let (sample, complete) = lfo.get_sample(0, &sound_copy, true);
-                buffer[0] = sample;
-                for i in 1..len {
-                    let (sample, complete) = lfo.get_sample(i as i64, &sound_copy, false);
-                    buffer[i] = sample;
-                }
-            },
-            Parameter::GlobalLfo => {
-                let lfo = &mut self.samplebuff_lfo;
-                lfo.reset(0);
-                let mut sound_copy = self.sound.glfo[param.function_id - 1];
+                let mut sound_copy = if let Parameter::Lfo = param.function {
+                    self.sound.lfo[param.function_id - 1]
+                } else {
+                    self.sound.glfo[param.function_id - 1]
+                };
                 sound_copy.frequency = freq;
                 // Get first sample explicitly to reset LFO (for S&H)
                 let (sample, complete) = lfo.get_sample(0, &sound_copy, true);
