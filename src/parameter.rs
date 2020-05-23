@@ -3,11 +3,11 @@ use super::value_range::ValueRange;
 use super::synth::*;
 use super::voice::*;
 
-use std::fmt::{self, Debug, Display};
+use std::fmt::{self, Debug};
 
 use serde::{Serialize, Deserialize};
-use log::{info, trace, warn};
 
+#[allow(non_camel_case_types)]
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq, Serialize, Deserialize)]
 pub enum Parameter {
     None,
@@ -30,6 +30,7 @@ pub enum Parameter {
     Wavetable,
     WaveIndex,
     Frequency,
+    Tune,
     Finetune,
     Sync,
     KeyFollow,
@@ -111,6 +112,7 @@ pub enum Parameter {
     Mono,
     Legato
 }
+#[warn(non_camel_case_types)]
 
 impl Default for Parameter {
     fn default() -> Self { Parameter::Oscillator }
@@ -186,9 +188,9 @@ impl ParameterValue {
 
     pub fn set_from_float(&mut self, value: Float) {
         match self {
-            ParameterValue::Int(x) => {*self = ParameterValue::Int(value as i64)},
-            ParameterValue::Float(x) => {*self = ParameterValue::Float(value)},
-            ParameterValue::Choice(x) => {*self = ParameterValue::Choice(value as usize)},
+            ParameterValue::Int(_) => {*self = ParameterValue::Int(value as i64)},
+            ParameterValue::Float(_) => {*self = ParameterValue::Float(value)},
+            ParameterValue::Choice(_) => {*self = ParameterValue::Choice(value as usize)},
             _ => panic!("Cannot convert parameter value to float")
         }
     }
@@ -241,13 +243,6 @@ impl SynthParam {
     }
 }
 
-#[derive(Debug)]
-pub enum ModFunction {
-    Source,
-    Target,
-    NoMod,
-}
-
 /* Item for a list of selectable functions */
 #[derive(Debug)]
 pub struct MenuItem {
@@ -265,7 +260,7 @@ impl MenuItem {
     }
 
     fn get_menu_item(item: Parameter, item_list: &'static [MenuItem]) -> &'static MenuItem {
-        for (i, s) in item_list.iter().enumerate() {
+        for s in item_list {
             if s.item == item {
                 return &s;
             }
@@ -295,16 +290,23 @@ pub static FUNCTIONS: [MenuItem; 8] = [
     MenuItem{item: Parameter::Patch,      key: 'p', val_range: ValueRange::Int(1, 1),                       next: &PATCH_PARAMS},
 ];
 
-pub static OSC_PARAMS: [MenuItem; 9] = [
+pub static OSC_PARAMS: [MenuItem; 10] = [
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0),       next: &[]},
-    MenuItem{item: Parameter::Wavetable, key: 'w', val_range: ValueRange::Dynamic(Parameter::Wavetable),next: &[]},
-    MenuItem{item: Parameter::WaveIndex, key: 'i', val_range: ValueRange::Float(0.0, 1.0, 0.01),        next: &[]},
-    MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Int(-24, 24),                 next: &[]},
-    MenuItem{item: Parameter::Finetune,  key: 't', val_range: ValueRange::Float(-100.0, 100.0, 1.0),    next: &[]},
+    MenuItem{item: Parameter::Tune,      key: 't', val_range: ValueRange::Int(-24, 24),                 next: &[]},
+    MenuItem{item: Parameter::Finetune,  key: 'f', val_range: ValueRange::Float(-100.0, 100.0, 1.0),    next: &[]},
     MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::Int(0, 1),                    next: &[]},
     MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::Int(0, 1),                    next: &[]},
+    MenuItem{item: Parameter::Type,      key: 'y', val_range: ValueRange::Choice(&OSC_TYPES),           next: &[]},
+
+    MenuItem{item: Parameter::Wavetable, key: 'w', val_range: ValueRange::Dynamic(Parameter::Wavetable),next: &[]},
+    MenuItem{item: Parameter::WaveIndex, key: 'i', val_range: ValueRange::Float(0.0, 1.0, 0.01),        next: &[]},
     MenuItem{item: Parameter::Voices,    key: 'v', val_range: ValueRange::Int(1, 7),                    next: &[]},
     MenuItem{item: Parameter::Spread,    key: 'e', val_range: ValueRange::Float(0.0, 2.0, 0.1),         next: &[]},
+];
+
+pub static OSC_TYPES: [MenuItem; 2] = [
+    MenuItem{item: Parameter::Wavetable, key: 'w', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Noise,     key: 'n', val_range: ValueRange::NoRange, next: &[]},
 ];
 
 pub static LFO_PARAMS: [MenuItem; 2] = [
@@ -340,14 +342,6 @@ pub static ENV_PARAMS: [MenuItem; 5] = [
     MenuItem{item: Parameter::Sustain, key: 's', val_range: ValueRange::Float(0.0, 1.0, 0.001),  next: &[]},
     MenuItem{item: Parameter::Release, key: 'r', val_range: ValueRange::Float(0.0, 8000.0, 1.0), next: &[]},
     MenuItem{item: Parameter::Factor,  key: 'f', val_range: ValueRange::Int(1, 5),               next: &[]},
-];
-
-pub static OSC_WAVEFORM: [MenuItem; 5] = [
-    MenuItem{item: Parameter::Sine,      key: 's', val_range: ValueRange::NoRange, next: &[]},
-    MenuItem{item: Parameter::Triangle,  key: 't', val_range: ValueRange::NoRange, next: &[]},
-    MenuItem{item: Parameter::Saw,       key: 'w', val_range: ValueRange::NoRange, next: &[]},
-    MenuItem{item: Parameter::Square,    key: 'q', val_range: ValueRange::NoRange, next: &[]},
-    MenuItem{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange, next: &[]},
 ];
 
 pub static LFO_WAVEFORM: [MenuItem; 7] = [

@@ -1,7 +1,7 @@
 use super::{FunctionId, ParameterValue, ValueRange, MenuItem, RetCode};
 use super::Float;
 
-use log::{info, trace, warn};
+use log::info;
 use termion::event::Key;
 
 use std::num::ParseIntError;
@@ -103,9 +103,9 @@ impl ItemSelection {
             _ => {
                 match self.item_list[self.item_index].val_range {
                     ValueRange::Int(min, max) => self.handle_input_for_int(min, max, c),
-                    ValueRange::Float(min, max, _) => self.handle_input_for_float(min, max, c),
-                    ValueRange::Choice(choice_list) => self.handle_input_for_choice(choice_list, c),
-                    ValueRange::Dynamic(param) => self.handle_input_for_dynamic(0, wt_list.len() - 1, c), // TODO: Use a closure as parameter instead
+                    ValueRange::Float(_min, _max, _step) => self.handle_input_for_float(c),
+                    ValueRange::Choice(_choice_list) => self.handle_input_for_choice(c),
+                    ValueRange::Dynamic(_param) => self.handle_input_for_dynamic(wt_list.len() - 1, c), // TODO: Use a closure as parameter instead
                     _ => panic!(),
                 }
             }
@@ -183,8 +183,6 @@ impl ItemSelection {
 
     /** Received a key for changing a float value. */
     fn handle_input_for_float(&mut self,
-                              min: Float,
-                              max: Float,
                               c: termion::event::Key) -> RetCode {
         let mut current = if let ParameterValue::Float(x) = self.value { x } else { panic!() };
         let result = match c {
@@ -235,7 +233,6 @@ impl ItemSelection {
 
     /** Received a key for selecting an item from a static list. */
     fn handle_input_for_choice(&mut self,
-                               choice_list: &'static [MenuItem],
                                c: termion::event::Key) -> RetCode {
         let mut current = if let ParameterValue::Choice(x) = self.value { x } else { panic!() };
         let result = match c {
@@ -258,7 +255,6 @@ impl ItemSelection {
 
     /** Received a key for selecting an item from a dynamic list. */
     fn handle_input_for_dynamic(&mut self,
-                                min: usize,
                                 max: usize,
                                 c: termion::event::Key) -> RetCode {
         let (param, mut current) = if let ParameterValue::Dynamic(p, x) = self.value { (p, x) } else { panic!() };
@@ -317,13 +313,13 @@ impl ItemSelection {
                 }
                 self.value = ParameterValue::Choice(value);
             }
-            ValueRange::Dynamic(id) => {
+            ValueRange::Dynamic(_id) => {
                 self.value = val;
             }
-            ValueRange::Func(selection_list) => {
+            ValueRange::Func(_selection_list) => {
                 //panic!();
             }
-            ValueRange::Param(selection_list) => {
+            ValueRange::Param(_selection_list) => {
                 //panic!();
             }
             ValueRange::NoRange => {}

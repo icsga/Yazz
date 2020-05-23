@@ -16,9 +16,9 @@
 //!
 
 #![allow(dead_code)]
-#![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(unreachable_code)]
+//#![allow(unused_imports)]
+//#![allow(unused_variables)]
+//#![allow(unreachable_code)]
 
 mod ctrl_map;
 use ctrl_map::{CtrlMap, MappingType};
@@ -53,17 +53,12 @@ extern crate termion;
 use termion::event::Key;
 
 extern crate midir;
-use midir::{MidiInput, MidiInputConnection, Ignore};
+use midir::MidiInputConnection;
 
-#[macro_use]
 extern crate crossbeam_channel;
 use crossbeam_channel::unbounded;
 use crossbeam_channel::{Sender, Receiver};
 
-extern crate rand;
-use rand::Rng;
-
-use log::{info, trace, warn};
 use flexi_logger::{Logger, opt_format};
 
 extern crate clap;
@@ -72,18 +67,15 @@ use clap::{Arg, App};
 extern crate wavetable;
 use wavetable::{WtInfo, WtManager};
 
-use std::error::Error;
-use std::fs::File;
-use std::io::{stdin, stdout, Write};
 use std::io::prelude::*;
-use std::path::Path;
+use std::fs::File;
 use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
-use std::time::{Duration, SystemTime};
+use std::time::Duration;
 use std::vec::Vec;
 
-pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.5";
-pub const SOUND_DATA_VERSION: &'static str = "0.0.5";
+pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.6";
+pub const SOUND_DATA_VERSION: &'static str = "0.0.6";
 
 type Float = f64;
 
@@ -194,7 +186,6 @@ fn save_voice() -> std::io::Result<()> {
 
     sound_global.init();
     sound_global.osc[0].level = 1.0;
-    sound_global.osc[0].num_voices = 2;
     sound_global.env[0].attack = 0.0;
     sound_global.env[0].decay = 0.0;
     sound_global.env[0].sustain = 1.0;

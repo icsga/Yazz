@@ -1,5 +1,3 @@
-use std::fmt::Display;
-
 #[derive(Debug)]
 pub enum SmEvent<E> {
     EnterState,
@@ -7,7 +5,6 @@ pub enum SmEvent<E> {
     Event(E),
 }
 
-//#[derive(Debug)]
 pub enum SmResult<C, E> {
     EventHandled,
     ChangeState(fn(&mut C, &SmEvent<E>) -> SmResult<C, E>),
@@ -20,7 +17,6 @@ impl<C, E> std::fmt::Debug for SmResult<C, E> {
     }
 }
 
-//#[derive(Debug)]
 pub struct StateMachine<C, E> {
     pub current_state: fn(&mut C, &SmEvent<E>) -> SmResult<C, E>,
 }

@@ -1,37 +1,27 @@
 use super::Delay;
 use super::{SynthMessage, UiMessage};
-use super::{Envelope, EnvelopeData};
+use super::Envelope;
 use super::Lfo;
 use super::MidiMessage;
-use super::{Parameter, ParameterValue, ParamId, SynthParam, MenuItem};
-use super::ModData;
+use super::{Parameter, ParamId, SynthParam, MenuItem};
 use super::SoundData;
 use super::voice::Voice;
-use super::SampleGenerator;
+use super::Oscillator;
 use super::Float;
-use super::WtOsc;
 
-use std::rc::Rc;
 use std::sync::{Arc, Mutex};
 use std::thread::spawn;
 
-use crossbeam_channel::unbounded;
 use crossbeam_channel::{Sender, Receiver};
-use log::{info, trace, warn};
+use log::info;
 use serde::{Serialize, Deserialize};
-use wavetable::{WtManager, Wavetable, WavetableRef, WtInfo};
+use wavetable::{WtManager, WavetableRef, WtInfo};
 
 const NUM_VOICES: usize = 32;
 const NUM_KEYS: usize = 128;
 pub const NUM_MODULATORS: usize = 16;
 pub const NUM_GLOBAL_LFOS: usize = 2;
 const REF_FREQUENCY: Float = 440.0;
-
-pub enum Synth2UIMessage {
-    Param(SynthParam),
-    Control(u32),
-    Log(String)
-}
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug)]
 pub enum PlayMode {
@@ -56,7 +46,7 @@ pub struct PatchData {
 
 impl PatchData {
     pub fn init(&mut self) {
-        self.level = 0.9;
+        self.level = 0.5;
         self.drive = 0.0;
         self.pitchbend = 2.0;
         self.vel_sens = 1.0;
@@ -99,7 +89,7 @@ pub struct Synth {
     global_state: SynthState,
 
     // Extra oscillators to display the waveshape
-    samplebuff_osc: WtOsc,
+    samplebuff_osc: Oscillator,
     samplebuff_env: Envelope,
     samplebuff_lfo: Lfo,
     osc_wave: [WavetableRef; 3],
@@ -153,7 +143,7 @@ impl Synth {
             sustain_pedal: 0.0,
             sender: sender,
             global_state: SynthState{freq_factor: 1.0},
-            samplebuff_osc: WtOsc::new(sample_rate, 0, default_table.clone()),
+            samplebuff_osc: Oscillator::new(sample_rate, default_table.clone()),
             samplebuff_env: Envelope::new(sample_rate as Float),
             samplebuff_lfo: Lfo::new(sample_rate),
             osc_wave: osc_wave,
@@ -217,7 +207,7 @@ impl Synth {
             // Get modulator source output
             let mod_val: Float = match m.source_func {
                 Parameter::GlobalLfo => {
-                    let (val, reset) = self.glfo[m.source_func_id - 1].get_sample(sample_clock, &self.sound_global.glfo[m.source_func_id - 1], false);
+                    let (val, _) = self.glfo[m.source_func_id - 1].get_sample(sample_clock, &self.sound_global.glfo[m.source_func_id - 1], false);
                     val
                 },
                 Parameter::Aftertouch => self.aftertouch,
@@ -317,7 +307,7 @@ impl Synth {
 
     // The assigned wavetable of an oscillator has changed.
     fn update_wavetable(&mut self, osc_id: usize) {
-        let id = self.sound.osc[osc_id].wavetable;
+        let id = self.sound.osc[osc_id].wt_osc_data.wavetable;
         info!("Updating oscillator {} to wavetable {}", osc_id, id);
         let wt = self.wt_manager.get_table(id).unwrap();
         for v in self.voice.iter_mut() {
@@ -328,13 +318,13 @@ impl Synth {
 
     fn handle_midi_message(&mut self, msg: MidiMessage) {
         match msg {
-            MidiMessage::NoteOn{channel, key, velocity} => self.handle_note_on(key, velocity),
-            MidiMessage::NoteOff{channel, key, velocity} => self.handle_note_off(key, velocity),
-            MidiMessage::KeyAT{channel, key, pressure} => (), // Polyphonic aftertouch not supported yet
-            MidiMessage::ChannelAT{channel, pressure} => self.handle_channel_aftertouch(pressure),
-            MidiMessage::Pitchbend{channel, pitch} => self.handle_pitch_bend(pitch),
-            MidiMessage::ControlChg{channel, controller, value} => self.handle_controller(controller, value),
-            MidiMessage::ProgramChg{channel, program} => (), // This shouldn't get here, it's a UI event
+            MidiMessage::NoteOn{channel: _, key, velocity} => self.handle_note_on(key, velocity),
+            MidiMessage::NoteOff{channel: _, key, velocity} => self.handle_note_off(key, velocity),
+            MidiMessage::KeyAT{channel: _, key: _, pressure: _} => (), // Polyphonic aftertouch not supported yet
+            MidiMessage::ChannelAT{channel: _, pressure} => self.handle_channel_aftertouch(pressure),
+            MidiMessage::Pitchbend{channel: _, pitch} => self.handle_pitch_bend(pitch),
+            MidiMessage::ControlChg{channel: _, controller, value} => self.handle_controller(controller, value),
+            MidiMessage::ProgramChg{channel: _, program: _} => (), // This shouldn't get here, it's a UI event
         }
     }
 
@@ -367,7 +357,7 @@ impl Synth {
     }
 
     fn handle_note_off(&mut self, key: u8, velocity: u8) {
-        for (i, v) in self.voice.iter_mut().enumerate() {
+        for v in &mut self.voice {
             if v.is_triggered() && v.key == key {
                 self.num_voices_triggered -= 1;
                 v.key_release(velocity, self.sustain_pedal > 0.0, &self.sound);
@@ -411,7 +401,7 @@ impl Synth {
 
     // If any voices have still-running envelopes, trigger the release.
     fn handle_pedal_release(&mut self) {
-        for (i, v) in self.voice.iter_mut().enumerate() {
+        for v in &mut self.voice {
             if v.is_running() {
                 v.pedal_release(&self.sound);
             }
@@ -454,10 +444,10 @@ impl Synth {
             Parameter::Oscillator => {
                 let osc = &mut self.samplebuff_osc;
                 osc.reset(0);
-                osc.id = param.function_id - 1;
-                osc.set_wavetable(self.osc_wave[osc.id].clone());
+                let osc_id = param.function_id - 1;
+                osc.set_wavetable(self.osc_wave[osc_id].clone());
                 for i in 0..len {
-                    let (mut sample, complete) = osc.get_sample(freq, i as i64, &self.sound, false);
+                    let (mut sample, _) = osc.get_sample(freq, i as i64, &self.sound.osc[osc_id], false);
 
                     // Apply clipping
                     if self.sound_global.patch.drive > 0.0 {
@@ -510,10 +500,10 @@ impl Synth {
                 };
                 sound_copy.frequency = freq;
                 // Get first sample explicitly to reset LFO (for S&H)
-                let (sample, complete) = lfo.get_sample(0, &sound_copy, true);
+                let (sample, _) = lfo.get_sample(0, &sound_copy, true);
                 buffer[0] = sample;
                 for i in 1..len {
-                    let (sample, complete) = lfo.get_sample(i as i64, &sound_copy, false);
+                    let (sample, _) = lfo.get_sample(i as i64, &sound_copy, false);
                     buffer[i] = sample;
                 }
             },

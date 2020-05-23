@@ -1,19 +1,15 @@
-use super::Float;
-use super::{FunctionId, ParamId};
+use super::ParamId;
 use super::ItemSelection;
-use super::{Parameter, ParameterValue, SynthParam, ValueRange, MenuItem, FUNCTIONS, OSC_PARAMS, MOD_SOURCES, MOD_TARGETS};
+use super::{Parameter, ParameterValue, SynthParam, ValueRange, MenuItem};
 use super::MarkerManager;
 use super::MidiLearn;
-use crate::ModData;
-use super::{SoundData, SoundPatch};
+use super::SoundPatch;
 use super::{StateMachine, SmEvent, SmResult};
 
-use log::{info, trace, warn};
+use log::{info};
 use termion::event::Key;
 
 use std::cell::RefCell;
-use std::collections::HashMap;
-use std::convert::TryInto;
 use std::fmt::{self, Debug};
 use std::rc::Rc;
 
@@ -208,6 +204,7 @@ impl ParamSelector {
             SmEvent::EnterState => {
                 info!("state_function Enter");
                 self.state = SelectorState::Function;
+                self.func_selection.value = ParameterValue::Int(1); // TODO: Remember last index based on function
                 SmResult::EventHandled
             }
             SmEvent::ExitState => {
@@ -242,7 +239,7 @@ impl ParamSelector {
                             RetCode::Reset         => self.reset(),
                         }
                     }
-                    SelectorEvent::ControlChange(c, i) => SmResult::EventHandled,
+                    SelectorEvent::ControlChange(_, _) => SmResult::EventHandled,
                     _ => SmResult::EventHandled,
                 }
             }
@@ -281,7 +278,7 @@ impl ParamSelector {
                             RetCode::Reset         => self.reset(),
                         }
                     }
-                    SelectorEvent::ControlChange(ctrl, value) => SmResult::EventHandled,
+                    SelectorEvent::ControlChange(_, _) => SmResult::EventHandled,
                     _ => SmResult::EventHandled,
                 }
             }
@@ -326,7 +323,7 @@ impl ParamSelector {
                             RetCode::Reset         => self.reset(),
                         }
                     }
-                    SelectorEvent::ControlChange(c, i) => SmResult::ChangeState(ParamSelector::state_value),
+                    SelectorEvent::ControlChange(_, _) => SmResult::ChangeState(ParamSelector::state_value),
                     _ => SmResult::EventHandled,
                 }
             }
@@ -385,7 +382,7 @@ impl ParamSelector {
                             RetCode::Reset => self.reset(),
                         }
                     }
-                    SelectorEvent::ControlChange(ctrl, value) => {
+                    SelectorEvent::ControlChange(_, value) => {
                         self.param_selection.set_control_value(*value);
                         self.value_changed = true;
                         SmResult::EventHandled
@@ -474,7 +471,7 @@ impl ParamSelector {
                             RetCode::Reset         => self.reset(),
                         }
                     }
-                    SelectorEvent::ControlChange(ctrl, value) => SmResult::ChangeState(ParamSelector::state_value_function_index),
+                    SelectorEvent::ControlChange(_, _) => SmResult::ChangeState(ParamSelector::state_value_function_index),
                     _ => SmResult::EventHandled,
                 }
             }
@@ -521,12 +518,12 @@ impl ParamSelector {
                                 // For modulation source or target, we might be finished here with
                                 // getting the value. Compare current state to expected target state.
                                 match self.param_selection.value {
-                                    ParameterValue::Function(id) => {
+                                    ParameterValue::Function(_) => {
                                         // Value is finished
                                         self.value_changed = true;
                                         SmResult::ChangeState(ParamSelector::state_parameter)
                                     },
-                                    ParameterValue::Param(id) => {
+                                    ParameterValue::Param(_) => {
                                         self.value_param_selection.set_list_from(&self.value_func_selection, 0);
 
                                         // If function is same as before, set
@@ -543,7 +540,7 @@ impl ParamSelector {
                             RetCode::Reset         => self.reset(),
                         }
                     }
-                    SelectorEvent::ControlChange(ctrl, value) => {
+                    SelectorEvent::ControlChange(_, value) => {
                         self.value_func_selection.set_control_value(*value);
                         SmResult::EventHandled
                     }
@@ -599,7 +596,7 @@ impl ParamSelector {
                             RetCode::Reset         => self.reset(),
                         }
                     }
-                    SelectorEvent::ControlChange(ctrl, value) => {
+                    SelectorEvent::ControlChange(_, _) => {
                         SmResult::EventHandled
                     }
                     _ => SmResult::EventHandled,
@@ -719,8 +716,8 @@ impl ParamSelector {
     /** Change to the value state that matches the selected parameter. */
     fn change_to_value_state(&self) -> SmResult<ParamSelector, SelectorEvent> {
         match self.param_selection.value {
-            ParameterValue::Function(id) => SmResult::ChangeState(ParamSelector::state_value_function),
-            ParameterValue::Param(id) => SmResult::ChangeState(ParamSelector::state_value_function),
+            ParameterValue::Function(_) => SmResult::ChangeState(ParamSelector::state_value_function),
+            ParameterValue::Param(_) => SmResult::ChangeState(ParamSelector::state_value_function),
             ParameterValue::NoValue => panic!(),
             _ => SmResult::ChangeState(ParamSelector::state_value),
         }
@@ -1081,6 +1078,23 @@ impl ParamSelector {
 //                  Unit tests
 // ----------------------------------------------
 
+#[cfg(test)]
+mod tests {
+
+use super::{ParamSelector, SelectorEvent, SelectorState};
+
+use super::super::FunctionId;
+use super::super::Float;
+use super::super::{Parameter, ParameterValue, ParamId, FUNCTIONS, MOD_TARGETS};
+use super::super::SoundPatch;
+use super::super::StateMachine;
+
+use log::{info};
+use termion::event::Key;
+
+use std::cell::RefCell;
+use std::rc::Rc;
+
 struct TestContext {
     ps: ParamSelector,
     sound: Rc<RefCell<SoundPatch>>,
@@ -1303,7 +1317,7 @@ impl TestContext {
 // Test function selection
 // -----------------------
 
-const DEFAULT_LEVEL: Float = 92.0;
+const DEFAULT_LEVEL: Float = 50.0;
 const DEFAULT_ATTACK: Float = 15.0;
 const DEFAULT_DECAY: Float = 15.0;
 const DEFAULT_SUSTAIN: Float = 1.0;
@@ -1519,20 +1533,20 @@ fn clear_int_tempstring_between_values() {
 
     // 1. After completing a value
     let mut context = TestContext::new();
-    context.handle_input(TestInput::Chars("o1f23".to_string()));
+    context.handle_input(TestInput::Chars("o1t23".to_string()));
     assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(23)));
-    context.handle_input(TestInput::Chars("f21".to_string()));
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(21)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Tune, ParameterValue::Int(23)));
+    context.handle_input(TestInput::Chars("t21".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Tune, ParameterValue::Int(21)));
 
     // 2. After cancelling input
     let mut context = TestContext::new();
-    let c: &[TestInput] = &[TestInput::Chars("o1f1".to_string()), TestInput::Key(Key::Backspace)];
+    let c: &[TestInput] = &[TestInput::Chars("o1t1".to_string()), TestInput::Key(Key::Backspace)];
     assert!(!context.handle_inputs(c));
     assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(1)));
-    context.handle_input(TestInput::Chars("f23".to_string()));
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Frequency, ParameterValue::Int(23)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Tune, ParameterValue::Int(1)));
+    context.handle_input(TestInput::Chars("t23".to_string()));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Tune, ParameterValue::Int(23)));
 }
 
 // ---------------------
@@ -1837,7 +1851,7 @@ fn page_up_down_change_function_id() {
     let mut context = TestContext::new();
 
     // Select Oscillator 1 Finetune
-    let c: &[TestInput] = &[TestInput::Chars("o1t".to_string())];
+    let c: &[TestInput] = &[TestInput::Chars("o1f".to_string())];
     context.handle_inputs(c);
     assert_eq!(context.ps.state, SelectorState::Value);
     assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Finetune, ParameterValue::Float(0.0)));
@@ -1865,7 +1879,7 @@ fn history_back_and_forward() {
     // Push 3 items in the history
     context.handle_input(TestInput::Chars("o1l".to_string()));
     assert_eq!(context.ps.state, SelectorState::Value);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(DEFAULT_LEVEL)));
 
     let c: &[TestInput] = &[TestInput::Key(Key::Esc), TestInput::Chars("e2d".to_string())];
     context.handle_inputs(c);
@@ -1885,7 +1899,7 @@ fn history_back_and_forward() {
 
     context.handle_input(TestInput::Chars("<".to_string()));
     assert_eq!(context.ps.state, SelectorState::Value);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(DEFAULT_LEVEL)));
 
     // Walk forwards through history
     context.handle_input(TestInput::Chars(">".to_string()));
@@ -1904,7 +1918,7 @@ fn set_and_recall_marker() {
 
     context.handle_input(TestInput::Chars("o1l".to_string()));
     assert_eq!(context.ps.state, SelectorState::Value);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(DEFAULT_LEVEL)));
 
     // Set marker a
     context.handle_input(TestInput::Chars("\"a".to_string()));
@@ -1918,9 +1932,25 @@ fn set_and_recall_marker() {
     // Return to marker a
     context.handle_input(TestInput::Chars("\'a".to_string()));
     assert_eq!(context.ps.state, SelectorState::Value);
-    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(92.0)));
+    assert!(context.verify_selection(Parameter::Oscillator, 1, Parameter::Level, ParameterValue::Float(DEFAULT_LEVEL)));
+}
+
+#[test]
+fn going_from_long_to_shorter_function_index_by_cursor() {
+    let mut context = TestContext::new();
+    context.handle_input(TestInput::Chars("e3".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+
+    let c: &[TestInput] = &[TestInput::Key(Key::Left),  // FunctionId
+                            TestInput::Key(Key::Left),  // Function
+                            TestInput::Key(Key::Up),    // LFO
+                            TestInput::Key(Key::Right), // FunctionId
+                            ];
+    context.handle_inputs(c);
+    assert_eq!(context.ps.state, SelectorState::FunctionIndex);
 }
 
 // TODO:
 // - Delete controller assignment in MIDI learn mode
 
+} // mod tests

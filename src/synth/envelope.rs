@@ -1,9 +1,6 @@
 use super::Float;
 
-use std::sync::Arc;
-
 use serde::{Serialize, Deserialize};
-use log::{info, trace, warn};
 
 #[derive(Serialize, Deserialize, Copy, Clone, Default, Debug)]
 pub struct EnvelopeData {

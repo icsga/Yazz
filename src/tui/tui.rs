@@ -1,34 +1,31 @@
 use super::{CtrlMap, MappingType};
-use super::{Parameter, ParameterValue, ParamId, SynthParam, ValueRange, FUNCTIONS, OSC_PARAMS, MOD_SOURCES};
-use super::{Canvas, CanvasRef};
+use super::{Parameter, ParameterValue, ParamId, SynthParam, ValueRange, FUNCTIONS, MOD_SOURCES};
 use super::Float;
 use super::MidiMessage;
 use super::{SelectorEvent, SelectorState, ParamSelector, next, ItemSelection};
-use super::{SoundBank, SoundData, SoundPatch};
+use super::{SoundBank, SoundPatch};
 use super::{UiMessage, SynthMessage};
 use super::surface::Surface;
 use super::Value;
 use super::{SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION};
-use super::RetCode;
-use super::{StateMachine, SmEvent, SmResult};
+use super::StateMachine;
 use super::WtInfo;
 
 use crossbeam_channel::{Sender, Receiver};
-use log::{info, trace, warn};
+use log::info;
 use termion::{clear, color, cursor};
-use termion::color::{Black, White, Red, LightWhite, Reset, Rgb};
+use termion::color::{Black, LightWhite, Rgb};
 use termion::event::Key;
 
 extern crate regex;
 use regex::Regex;
 
 use std::convert::TryInto;
-use std::fs::{self, DirEntry};
-use std::io;
+use std::fs;
 use std::io::{stdout, Write};
 use std::path::Path;
 use std::thread::spawn;
-use std::time::{Duration, SystemTime};
+use std::time::Duration;
 use std::cell::RefCell;
 use std::rc::Rc;
 
@@ -43,7 +40,7 @@ enum TuiState {
     Help,
 }
 
-type TuiEvent = termion::event::Key;
+//type TuiEvent = termion::event::Key;
 
 pub struct Tui {
     // Function selection
@@ -80,7 +77,6 @@ impl Tui {
         let sound = Rc::new(RefCell::new(SoundPatch::new()));
         window.set_position(1, 3);
         window.update_all(&sound.borrow().data);
-        let (_, y) = window.get_size();
 
         let mut tui = Tui{
             sender: sender,
@@ -106,6 +102,7 @@ impl Tui {
         tui.load_wavetables();
         tui.scan_wavetables();
         tui.select_sound(0);
+        tui.selector_sm.init(&mut tui.selector);
         match tui.ctrl_map.load("Yazz_ControllerMapping.ysn") {
             _ => ()
         }
@@ -167,9 +164,9 @@ impl Tui {
         match msg {
             UiMessage::Midi(m)  => self.handle_midi_event(&m),
             UiMessage::Key(m) => self.handle_key_input(m),
-            UiMessage::MousePress{x, y}
-            | UiMessage::MouseHold{x, y}
-            | UiMessage::MouseRelease{x, y} => self.window.handle_event(&msg),
+            UiMessage::MousePress{x: _, y: _}
+            | UiMessage::MouseHold{x: _, y: _}
+            | UiMessage::MouseRelease{x: _, y: _} => self.window.handle_event(&msg),
             UiMessage::SampleBuffer(m, p) => self.handle_samplebuffer(m, p),
             UiMessage::EngineSync(idle, busy) => {
                 self.update_idle_time(idle, busy);
@@ -276,12 +273,11 @@ impl Tui {
         TuiState::Play
     }
 
-    fn state_help(&mut self, key: Key) -> TuiState {
+    fn state_help(&mut self, _key: Key) -> TuiState {
         TuiState::Play
     }
 
     fn scan_wavetables(&mut self) {
-        let wt_list = &mut self.bank.wt_list;
         let re = Regex::new(r"(.*).wav").unwrap();
         if !Path::new("data").exists() {
             // Create data directory
@@ -351,7 +347,7 @@ impl Tui {
     /* MIDI message received */
     fn handle_midi_event(&mut self, m: &MidiMessage) {
         match *m {
-            MidiMessage::ControlChg{channel, controller, value} => {
+            MidiMessage::ControlChg{channel: _, controller, value} => {
                 if self.selector.state == SelectorState::MidiLearn {
                     // MIDI learn: Send all controller events to the selector
                     self.selector.handle_control_input(&mut self.selector_sm, controller.into(), value.into(), self.sound.clone());
@@ -392,7 +388,7 @@ impl Tui {
                 self.handle_ctrl_change(controller.into(), value.into());
 
             },
-            MidiMessage::ProgramChg{channel, program} => self.select_sound(program as usize - 1),
+            MidiMessage::ProgramChg{channel: _, program} => self.select_sound(program as usize - 1),
             _ => ()
         }
     }
@@ -465,7 +461,6 @@ impl Tui {
     fn handle_engine_sync(&mut self) {
         self.sync_counter += 1;
         if self.sync_counter == 20 {
-            let display_time = SystemTime::now();
             self.display();
 
             self.sync_counter = 0;
@@ -498,17 +493,10 @@ impl Tui {
             ParameterValue::Float(v) => Value::Float(v.into()),
             ParameterValue::Int(v) => Value::Int(v),
             ParameterValue::Choice(v) => Value::Int(v.try_into().unwrap()),
-            ParameterValue::Dynamic(p, v) => Value::Int(v.try_into().unwrap()), // TODO: Display string, not int
+            ParameterValue::Dynamic(_, v) => Value::Int(v.try_into().unwrap()), // TODO: Display string, not int
             _ => return
         };
         self.window.update_value(&param_id, value);
-    }
-
-    fn translate_dynamic_value(&self, param: Parameter, value: usize) -> String {
-        match param {
-            Parameter::Wavetable => "default".to_string(),
-            _ => panic!(),
-        }
     }
 
     /* Queries a samplebuffer from the synth engine to display.
@@ -544,7 +532,7 @@ impl Tui {
         self.display_idle_time();
         self.display_status_line();
 
-        io::stdout().flush().ok();
+        stdout().flush().ok();
     }
 
     fn display_selector(s: &ParamSelector) {
@@ -676,7 +664,7 @@ impl Tui {
                 let item = selection[x].item;
                 print!(" {}", item);
             },
-            ParameterValue::Dynamic(p, x) => {
+            ParameterValue::Dynamic(_, x) => {
                 for (k, v) in wt_list {
                     if *k == x {
                         print!(" {}", v);
@@ -733,8 +721,8 @@ impl Tui {
                 ValueRange::Float(min, max, _) => print!("{} {} - {} ", cursor::Goto(x_pos, 2), min, max),
                 ValueRange::Choice(list) => print!("{} 1 - {} ", cursor::Goto(x_pos, 2), list.len()),
                 ValueRange::Dynamic(param) => Tui::display_dynamic_options(selector, *param, x_pos),
-                ValueRange::Func(list) => (),
-                ValueRange::Param(list) => (),
+                ValueRange::Func(_) => (),
+                ValueRange::Param(_) => (),
                 ValueRange::NoRange => ()
             }
         }
@@ -798,6 +786,6 @@ impl Tui {
         println!("0 - 9, a - z : Select MIDI controller assignment set\r");
         println!("\r");
         println!("Press any key to continue.\r");
-        io::stdout().flush().ok();
+        stdout().flush().ok();
     }
 }

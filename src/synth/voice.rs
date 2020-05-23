@@ -2,14 +2,12 @@ use super::Envelope;
 use super::Filter;
 use super::Float;
 use super::Lfo;
-use super::{Parameter, ParameterValue, ParamId, SynthParam, MenuItem};
+use super::{Parameter, ParamId, SynthParam, MenuItem};
 use super::PlayMode;
-use super::SampleGenerator;
 use super::SynthState;
-use super::{WtOsc, WtOscData};
+use super::{Oscillator, OscData};
 use super::SoundData;
 
-use log::{info, trace, warn};
 use wavetable::{Wavetable, WavetableRef};
 
 use std::sync::Arc;
@@ -21,7 +19,7 @@ pub const NUM_LFOS: usize = 2;
 
 pub struct Voice {
     // Components
-    osc: [WtOsc; NUM_OSCILLATORS],
+    osc: [Oscillator; NUM_OSCILLATORS],
     env: [Envelope; NUM_ENVELOPES],
     pub filter: [Filter; NUM_FILTERS],
     lfo: [Lfo; NUM_LFOS],
@@ -39,9 +37,9 @@ pub struct Voice {
 impl Voice {
     pub fn new(sample_rate: u32, default_wavetable: Arc<Wavetable>) -> Self {
         let osc = [
-            WtOsc::new(sample_rate, 0, Arc::clone(&default_wavetable)),
-            WtOsc::new(sample_rate, 1, Arc::clone(&default_wavetable)),
-            WtOsc::new(sample_rate, 2, Arc::clone(&default_wavetable)),
+            Oscillator::new(sample_rate, Arc::clone(&default_wavetable)),
+            Oscillator::new(sample_rate, Arc::clone(&default_wavetable)),
+            Oscillator::new(sample_rate, Arc::clone(&default_wavetable)),
         ];
         let env = [
             Envelope::new(sample_rate as Float),
@@ -81,7 +79,7 @@ impl Voice {
         }
     }
 
-    fn get_frequency(data: &WtOscData, input_freq: Float) -> Float {
+    fn get_frequency(data: &OscData, input_freq: Float) -> Float {
         let mut freq: Float = if data.key_follow == 0 {
             440.0
         } else {
@@ -117,11 +115,11 @@ impl Voice {
                     Parameter::Oscillator => {
                         let id = m.source_func_id - 1;
                         let freq = Voice::get_frequency(&sound_local.osc[id], self.input_freq);
-                        let (val, wave_complete) = self.osc[id].get_sample(freq, sample_clock, sound_local, false);
+                        let (val, _) = self.osc[id].get_sample(freq, sample_clock, &sound_local.osc[id], false);
                         val
                     },
                     Parameter::Lfo => {
-                        let (val, reset) = self.lfo[m.source_func_id - 1].get_sample(sample_clock, &sound_local.lfo[m.source_func_id - 1], false);
+                        let (val, _) = self.lfo[m.source_func_id - 1].get_sample(sample_clock, &sound_local.lfo[m.source_func_id - 1], false);
                         val
                     },
                     Parameter::Envelope => {
@@ -169,7 +167,7 @@ impl Voice {
         // Get mixed output from oscillators
         for (i, osc) in self.osc.iter_mut().enumerate() {
             freq = Voice::get_frequency(&sound_local.osc[i], input_freq);
-            let (sample, wave_complete) = osc.get_sample(freq, sample_clock, sound_local, reset);
+            let (sample, wave_complete) = osc.get_sample(freq, sample_clock, &sound_local.osc[i], reset);
             result += sample * sound_local.osc[i].level * self.scaled_vel;
             if i == 0 && wave_complete && sound_local.osc[1].sync == 1 {
                 reset = true; // Sync next oscillator in list (osc 1)
@@ -237,7 +235,7 @@ impl Voice {
     }
 
     // TODO: Release velocity
-    pub fn key_release(&mut self, velocity: u8, pedal_held: bool, sound: &SoundData) {
+    pub fn key_release(&mut self, _velocity: u8, pedal_held: bool, sound: &SoundData) {
         self.triggered = false;
         if !pedal_held {
             self.release_envelopes(sound);

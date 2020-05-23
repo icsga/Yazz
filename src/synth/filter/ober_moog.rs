@@ -2,7 +2,7 @@
 //! the book "Designing Software Synthesizer Plug-Ins in C++" by Will Pirkle.
 
 use crate::Float;
-use super::{Filter, FilterData, FilterType};
+use super::{FilterData, FilterType};
 use super::VAOnePole;
 
 pub struct OberMoog {

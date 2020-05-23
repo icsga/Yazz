@@ -8,10 +8,7 @@ use cpal::traits::{DeviceTrait, EventLoopTrait, HostTrait};
 use crossbeam_channel::Sender;
 
 use std::sync::{Arc, Mutex};
-use std::thread::JoinHandle;
-use std::time::{SystemTime, Duration};
-
-use log::{info, trace, warn};
+use std::time::SystemTime;
 
 pub struct Engine {
     sample_rate: u32,
@@ -37,7 +34,6 @@ impl Engine {
     pub fn run(&mut self, synth: Arc<Mutex<Synth>>, to_ui_sender: Sender<UiMessage>) {
         let host = cpal::default_host();
         let device = host.default_output_device().expect("failed to find a default output device");
-        let format = device.default_output_format().unwrap();
         let mut sample_clock = 0i64;
         let num_channels = 2;
 
@@ -47,11 +43,10 @@ impl Engine {
             format.channels = num_channels as u16;
         }
         let stream_id = event_loop.build_output_stream(&device, &format).unwrap();
-        let my_synth = synth.clone();
         let mut time = SystemTime::now();
         event_loop.play_stream(stream_id.clone()).unwrap();
 
-        let handle = std::thread::spawn(move || {
+        let _handle = std::thread::spawn(move || {
             event_loop.run(move |id, result| {
                 let data = match result {
                     Ok(data) => data,
@@ -86,6 +81,7 @@ impl Engine {
         });
     }
 
+    /*
     fn enumerate() {
         println!("\rSupported hosts:\n\r  {:?}", cpal::ALL_HOSTS);
         let available_hosts = cpal::available_hosts();
@@ -98,7 +94,7 @@ impl Engine {
             let default_out = match host.default_output_device().map(|e| e.name()) {
                 Some(n) => match n {
                     Ok(s) => s,
-                    Err(e) => "<unknown>".to_string(),
+                    Err(_) => "<unknown>".to_string(),
                 }
                 None => "<unknown>".to_string(),
             };
@@ -110,7 +106,7 @@ impl Engine {
             for (device_index, device) in devices.enumerate() {
                 let name = match device.name() {
                     Ok(n) => n,
-                    Err(e) => "Unknown".to_string(),
+                    Err(_) => "Unknown".to_string(),
                 };
                 println!("\r  {}. \"{}\"", device_index + 1, name);
 
@@ -152,5 +148,6 @@ impl Engine {
             }
         }
     }
+    */
 }
 

@@ -1,11 +1,10 @@
 use super::Float;
 use super::{Parameter, MenuItem, ValueRange};
-use super::{SynthParam, ParamId, FunctionId};
-use super::Voice;
+use super::{ParamId, FunctionId};
 use super::voice::{NUM_OSCILLATORS, NUM_ENVELOPES, NUM_LFOS};
 use super::synth::NUM_GLOBAL_LFOS;
 
-use log::{info, trace, warn};
+use log::info;
 use serde::{Serialize, Deserialize};
 
 /*
@@ -114,7 +113,7 @@ impl ModData {
     }
 
     fn get_mod_source(function: Parameter) -> &'static ModSource {
-        for (i, s) in MOD_SOURCE.iter().enumerate() {
+        for s in &MOD_SOURCE {
             if s.function == function {
                 return &s;
             }

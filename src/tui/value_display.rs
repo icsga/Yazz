@@ -5,7 +5,7 @@ use std::rc::Rc;
 use termion::{color, cursor};
 
 use super::Observer;
-use super::{Value, get_int, get_float};
+use super::{Value, get_int};
 use super::{Widget, WidgetProperties};
 
 pub type ValueDisplayRef<Key> = Rc<RefCell<ValueDisplay<Key>>>;

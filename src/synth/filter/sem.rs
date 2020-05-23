@@ -1,5 +1,5 @@
 use crate::Float;
-use super::{Filter, FilterData, FilterType};
+use super::{FilterData, FilterType};
 
 // One pole filter used to construct Oberheim Moog ladder filter
 pub struct SEM {
@@ -59,7 +59,7 @@ impl SEM {
             bpf = (bpf + data.gain).tanh();
         }
         let lpf = self.alpha * bpf + self.z12;
-        let sem_bsf = data.aux * hpf + (1.0 - data.aux) * lpf;
+        let _sem_bsf = data.aux * hpf + (1.0 - data.aux) * lpf; // TODO: Lost something here when translating
         self.z11 = self.alpha * hpf + bpf;
         self.z12 = self.alpha * bpf + lpf;
         match self.filter_type {

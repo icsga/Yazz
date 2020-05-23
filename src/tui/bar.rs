@@ -80,7 +80,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Bar<Key> {
         let index = self.get_length(&self.value);
         // TODO: Optimize by using array
         print!("{}{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_light), color::Fg(self.props.colors.fg_dark2));
-        for i in 0..index {
+        for _ in 0..index {
             print!("‾");
         }
     }

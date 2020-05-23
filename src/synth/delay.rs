@@ -1,7 +1,6 @@
 use super::Float;
 use super::filter::OnePole;
 
-use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};
 
 const BUFF_LEN: usize = 44100;
@@ -59,7 +58,8 @@ impl Delay {
         self.quant_pos = 0;
     }
 
-    pub fn process(&mut self, sample: Float, sample_clock: i64, data: &DelayData) -> (Float, Float) {
+    pub fn process(&mut self, sample: Float, _sample_clock: i64, data: &DelayData) -> (Float, Float) {
+        // TODO: Calculate the passed time using sample_clock
         let step = (self.bb_l.len() as Float / data.time) / self.sample_rate; // The amount of samples we step forward, as float
         let step = Delay::addf(step, 0.0);
         self.position = Delay::addf(self.position, step);
@@ -72,7 +72,7 @@ impl Delay {
         let mut sample_sum_l = 0.0;
         let mut sample_sum_r = 0.0;
         let mut pos = self.quant_pos;
-        for i in 0..num_samples {
+        for _ in 0..num_samples {
             pos = Delay::add(pos, 1);
             sample_sum_l += self.bb_l[pos];
         }
@@ -86,7 +86,7 @@ impl Delay {
 
             // Right side
             // ----------
-            for i in 0..num_samples {
+            for _ in 0..num_samples {
                 pos = Delay::add(pos, 1);
                 sample_sum_r += self.bb_r[pos];
             }
@@ -96,7 +96,7 @@ impl Delay {
             // the samples between left and right.
             // (steps through all positions that we jumped over when averaging)
             pos = self.quant_pos;
-            for i in 0..num_samples as usize {
+            for _ in 0..num_samples as usize {
                 pos = Delay::add(pos, 1);
                 filtered_value_l = self.filter_l.process(sample + self.bb_l[pos] * data.feedback);
                 filtered_value_r = self.filter_r.process(         self.bb_r[pos] * data.feedback);
@@ -108,7 +108,7 @@ impl Delay {
 
             // Mix delay signal to input and update memory
             // (steps through all positions that we jumped over when averaging)
-            for i in 0..num_samples as usize {
+            for _ in 0..num_samples as usize {
                 pos = Delay::add(pos, 1);
                 filtered_value_l = self.filter_l.process(sample + self.bb_l[pos] * data.feedback);
                 self.bb_l[pos] = filtered_value_l;

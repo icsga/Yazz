@@ -1,7 +1,7 @@
 use midir::{MidiInput, MidiInputConnection, Ignore};
 
-use crossbeam_channel::{Sender, Receiver};
-use log::{info, trace, warn};
+use crossbeam_channel::Sender;
+use log::info;
 
 use super::{SynthMessage, UiMessage};
 
@@ -29,12 +29,11 @@ impl MidiHandler {
                m2u_sender: Sender<UiMessage>,
                midi_port: usize,
                midi_channel: u8) -> MidiInputConnection<()> {
-        let input = String::new();
         let mut midi_in = MidiInput::new("midir reading input").unwrap();
         midi_in.ignore(Ignore::None);
         let in_port_name = midi_in.port_name(midi_port).unwrap();
         println!("  Connecting to MIDI port {}", in_port_name);
-        let conn_in = midi_in.connect(midi_port, "midir-read-input", move |stamp, message, _| {
+        let conn_in = midi_in.connect(midi_port, "midir-read-input", move |_, message, _| {
             if message.len() >= 2 {
                 if midi_channel < 16 && (message[0] & 0x0F) != midi_channel {
                     return;
@@ -57,7 +56,6 @@ impl MidiHandler {
     }
 
     pub fn get_midi_message(message: &[u8]) -> MidiMessage {
-        let mtype = message[0] & 0xF0;
         let channel = message[0] & 0x0F;
         let param = message[1];
         let mut value = 0;
