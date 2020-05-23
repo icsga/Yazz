@@ -1,5 +1,4 @@
 use super::Index;
-use super::{Label}; // Needed for tests. TODO: There's got to be a better way
 use super::Scheme;
 use super::{Widget, WidgetProperties, WidgetRef};
 
@@ -93,11 +92,11 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         }
 
         // Draw upper line and title
-        for x in  (x_start + 1)..(x_middle_left) {
+        for _ in  (x_start + 1)..(x_middle_left) {
             print!("─");
         }
         print!("{}", self.title);
-        for x in  (x_middle_right)..(x_end) {
+        for _ in  (x_middle_right)..(x_end) {
             print!("─");
         }
 
@@ -106,7 +105,7 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
             print!("{}│{}│", cursor::Goto(x_start, y), cursor::Goto(x_end, y));
         }
         print!("{}└", cursor::Goto(x_start, y_end));
-        for x in  (x_start + 1)..(x_end) {
+        for _ in  (x_start + 1)..(x_end) {
             print!("─");
         }
         print!("┘");
@@ -117,7 +116,7 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         if self.is_inside(x, y) {
             for c in self.children.iter() {
                 let result = c.borrow().get_at_pos(x, y);
-                if let Some(key) = result { return result; };
+                if let Some(_) = result { return result; };
             }
         }
         return None;
@@ -189,6 +188,10 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Container<Key> {
 // ----------
 // Unit tests
 // ----------
+
+#[cfg(test)]
+
+use super::{Label}; // Needed for tests. TODO: There's got to be a better way
 
 fn validate_properties<T: Copy + Eq + Hash>(c: &Container<T>, pos_x: u16, pos_y: u16, width: u16, height: u16) -> bool {
     if c.props.pos_x == pos_x

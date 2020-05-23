@@ -2,7 +2,8 @@ use std::cell::RefCell;
 use std::hash::Hash;
 use std::rc::Rc;
 
-use super::{MouseMessage, Scheme};
+//use super::MouseMessage;
+use super::Scheme;
 
 pub type Index = u16;
 pub type WidgetRef<T> = Rc<RefCell<dyn Widget<T>>>;

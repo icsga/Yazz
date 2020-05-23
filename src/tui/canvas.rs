@@ -9,8 +9,6 @@ use termion::color::{Black, Rgb};
 use super::Float;
 use super::{Index, Widget, WidgetProperties};
 
-use log::{info, trace, warn};
-
 pub type CanvasRef<Key> = Rc<RefCell<Canvas<Key>>>;
 
 pub struct Canvas<Key: Copy + Eq + Hash> {
@@ -116,7 +114,7 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
             start_y_pos = prev_y_pos;
             end_y_pos = y_pos + 1;
         };
-        let (x1, from, x2, to) = Self::sort(x_pos as Index, start_y_pos, x_pos as Index, end_y_pos);
+        let (x1, from, _x2, to) = Self::sort(x_pos as Index, start_y_pos, x_pos as Index, end_y_pos);
         for i in from..to {
             self.set(x1, i, '⋅');
         }

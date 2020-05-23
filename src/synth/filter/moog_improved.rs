@@ -26,7 +26,7 @@ Original Implementation: D'Angelo, Valimaki
 */
 
 use crate::Float;
-use super::{Filter, FilterData};
+use super::FilterData;
 
 pub struct MoogImproved {
     sample_rate: Float,

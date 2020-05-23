@@ -1,13 +1,11 @@
 // Implements the control surface of the synth
 use std::collections::HashMap;
 use std::cell::RefCell;
-use std::hash::Hash;
 use std::rc::Rc;
 
-use log::{info, trace, warn};
-use termion::{color, cursor};
+use termion::color;
 
-use super::{Parameter, ParamId, ParameterValue, SynthParam, SoundData, UiMessage};
+use super::{Parameter, ParamId, ParameterValue, SoundData, UiMessage};
 use super::{Bar, Button, Canvas, CanvasRef, Container, ContainerRef, Controller,
             Dial, Index, Label, MouseHandler, ObserverRef, Scheme, Slider,
             Value, ValueDisplay, Widget};
@@ -43,7 +41,7 @@ impl Surface {
         this.add_multi_osc(&mut osc.borrow_mut(), 1, 0, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 2, 31, 0);
         this.add_multi_osc(&mut osc.borrow_mut(), 3, 63, 0);
-        let (osc_width, mut osc_height) = osc.borrow().get_size();
+        let (_, mut osc_height) = osc.borrow().get_size();
         this.add_child(osc, 1, 1);
         osc_height = osc_height + 1; // Leave a little space
 
@@ -62,7 +60,7 @@ impl Surface {
         this.add_lfo(&mut lfo.borrow_mut(), 1, 1, 0);
         let x = lfo.borrow().get_width();
         this.add_lfo(&mut lfo.borrow_mut(), 2, x + 2, 0);
-        let (lfo_width, lfo_height) = lfo.borrow().get_size();
+        let (_, lfo_height) = lfo.borrow().get_size();
         this.add_child(lfo, env_width + 2, osc_height);
 
         this.add_child(canvas_clone, 2, osc_height + env_height + 1);
@@ -72,7 +70,7 @@ impl Surface {
         this.add_glfo(&mut glfo.borrow_mut(), 1, 1, 0);
         let (x, _) = glfo.borrow().get_size();
         this.add_glfo(&mut glfo.borrow_mut(), 2, x + 2, 0);
-        let (glfo_width, glfo_height) = glfo.borrow().get_size();
+        let (_, glfo_height) = glfo.borrow().get_size();
         this.add_child(glfo, env_width + 2, osc_height + lfo_height);
 
         let filter: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
@@ -119,7 +117,7 @@ impl Surface {
         self.controller.update(key, value);
     }
 
-    pub fn handle_event(&mut self, msg: &UiMessage) {
+    pub fn handle_event(&mut self, _msg: &UiMessage) {
         //self.mouse_handler.handle_event(msg, &self.window, &self.controller);
     }
 
@@ -250,7 +248,7 @@ impl Surface {
         let osc_wave_id = self.new_mod_dial_float("Waveindex", 0.0, 1.0, 0.0, false, &key);
         target.add_child(osc_wave_id, x_offset, 7 + y_offset);
 
-        key.set(Parameter::Oscillator, func_id, Parameter::Frequency);
+        key.set(Parameter::Oscillator, func_id, Parameter::Tune);
         let osc_freq = self.new_mod_dial_int("Pitch", -24, 24, 0, false, &key);
         target.add_child(osc_freq, x_offset, 4 + y_offset);
 
@@ -318,8 +316,8 @@ impl Surface {
         let osc_wave = self.new_mod_dial_int("Waveform", 0, 5, 0, false, &key);
         target.add_child(osc_wave, x_offset, 1 + y_offset);
 
-        key.set(Parameter::Oscillator, func_id, Parameter::Frequency);
-        let osc_freq = self.new_mod_dial_int("Speed", -24, 24, 0, false, &key);
+        key.set(Parameter::Lfo, func_id, Parameter::Frequency);
+        let osc_freq = self.new_mod_dial_float("Speed", 0.0, 44.1, 0.01, false, &key);
         target.add_child(osc_freq, x_offset, 4 + y_offset);
     }
 
@@ -338,8 +336,8 @@ impl Surface {
         let osc_wave = self.new_mod_dial_int("Waveform", 0, 5, 0, false, &key);
         target.add_child(osc_wave, x_offset, 1 + y_offset);
 
-        key.set(Parameter::Oscillator, func_id, Parameter::Frequency);
-        let osc_freq = self.new_mod_dial_int("Speed", -24, 24, 0, false, &key);
+        key.set(Parameter::GlobalLfo, func_id, Parameter::Frequency);
+        let osc_freq = self.new_mod_dial_float("Speed", 0.0, 44.1, 0.01, false, &key);
         target.add_child(osc_freq, x_offset, 4 + y_offset);
     }
 

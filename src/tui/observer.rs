@@ -1,9 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
-use std::cmp::Eq;
-use std::hash::Hash;
 
-use super::{Value, Widget};
+use super::Value;
 
 pub type ObserverRef = Rc<RefCell<dyn Observer>>;
 

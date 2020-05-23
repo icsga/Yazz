@@ -4,10 +4,6 @@ use super::ober_moog::OberMoog;
 use super::sem::SEM;
 
 use serde::{Serialize, Deserialize};
-use log::{info, trace, warn};
-
-use std::f32;
-use std::f64;
 
 #[derive(Debug)]
 pub enum FilterType {
@@ -34,10 +30,10 @@ pub struct FilterData {
 
 impl FilterData {
     pub fn init(&mut self) {
-        self.filter_type = 1; // RLPF as default
+        self.filter_type = 1;
         self.cutoff = 3000.0;
         self.resonance = 0.0;
-        self.gain = 1.0;
+        self.gain = 0.0;
         self.aux = 0.0;
         self.key_follow = 0;
     }
@@ -134,6 +130,9 @@ impl Filter {
     // Utilities
     // ---------
 
+    /*
+     * These functions were used in the old filter models.
+
     // TODO: Switch to faster version
     pub fn max(a: Float, b: Float) -> Float {
         if a >= b { a } else { b }
@@ -155,4 +154,5 @@ impl Filter {
             }
         }
     }
+    */
 }

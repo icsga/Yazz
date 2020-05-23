@@ -4,12 +4,11 @@ use super::FilterData;
 use super::Float;
 use super::LfoData;
 use super::ModData;
-use super::WtOscData;
+use super::{OscData, OscType};
 use super::synth::*;
 use super::voice::*;
 use super::{Parameter, ParameterValue, ParamId, SynthParam};
 
-use log::{info, trace, warn};
 use serde::{Serialize, Deserialize};
 
 /** Sound data
@@ -19,7 +18,7 @@ use serde::{Serialize, Deserialize};
  */
 #[derive(Serialize, Deserialize, Copy, Clone, Debug)]
 pub struct SoundData {
-    pub osc: [WtOscData; NUM_OSCILLATORS],
+    pub osc: [OscData; NUM_OSCILLATORS],
     pub env: [EnvelopeData; NUM_ENVELOPES],
     pub filter: [FilterData; NUM_FILTERS],
     pub lfo: [LfoData; NUM_LFOS],
@@ -38,9 +37,9 @@ impl Default for SoundData {
 impl SoundData {
     pub fn new() -> SoundData {
         let osc = [
-            WtOscData{..Default::default()},
-            WtOscData{..Default::default()},
-            WtOscData{..Default::default()},
+            OscData{..Default::default()},
+            OscData{..Default::default()},
+            OscData{..Default::default()},
         ];
         let env = [
             EnvelopeData{..Default::default()},
@@ -92,7 +91,7 @@ impl SoundData {
         self.patch.init();
     }
 
-    pub fn get_osc_data<'a>(&'a self, id: usize) -> &'a WtOscData {
+    pub fn get_osc_data<'a>(&'a self, id: usize) -> &'a OscData {
         &self.osc[id]
     }
 
@@ -114,16 +113,19 @@ impl SoundData {
         let id = msg.function_id - 1;
         match msg.function {
             Parameter::Oscillator => {
+                let osc = &mut self.osc[id];
                 match msg.parameter {
-                    Parameter::Level =>     { self.osc[id].level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
-                    Parameter::Wavetable => { self.osc[id].wavetable = if let ParameterValue::Dynamic(_, x) = msg.value { x } else { panic!() }; }
-                    Parameter::WaveIndex => { self.osc[id].wave_index = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Frequency => { self.osc[id].set_halfsteps(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Finetune =>  { self.osc[id].set_cents(if let ParameterValue::Float(x) = msg.value { x / 100.0 } else { panic!() }); }
-                    Parameter::Sync =>      { self.osc[id].sync = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
-                    Parameter::KeyFollow => { self.osc[id].key_follow = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Voices =>    { self.osc[id].set_voice_num(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Spread =>    { self.osc[id].set_voice_spread(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Level =>     { osc.level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() } / 100.0; }
+                    Parameter::Tune =>      { osc.set_halfsteps(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Finetune =>  { osc.set_cents(if let ParameterValue::Float(x) = msg.value { x / 100.0 } else { panic!() }); }
+                    Parameter::Sync =>      { osc.sync = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
+                    Parameter::KeyFollow => { osc.key_follow = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Type =>      { osc.osc_type = if let ParameterValue::Choice(x) = msg.value { OscType::from_int(x) } else { panic!() }; }
+                    // WtOsc
+                    Parameter::Wavetable => { osc.wt_osc_data.wavetable = if let ParameterValue::Dynamic(_, x) = msg.value { x } else { panic!() }; }
+                    Parameter::WaveIndex => { osc.wt_osc_data.wave_index = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Voices =>    { osc.wt_osc_data.set_voice_num(if let ParameterValue::Int(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Spread =>    { osc.wt_osc_data.set_voice_spread(if let ParameterValue::Float(x) = msg.value { x } else { panic!() }); }
                     _ => {}
                 }
             }
@@ -201,52 +203,59 @@ impl SoundData {
         let id = param.function_id - 1;
         match param.function {
             Parameter::Oscillator => {
+                let osc = &self.osc[id];
                 match param.parameter {
-                    Parameter::Level => ParameterValue::Float(self.osc[id].level * 100.0),
-                    Parameter::Wavetable => ParameterValue::Dynamic(Parameter::Wavetable, self.osc[id].wavetable),
-                    Parameter::WaveIndex => ParameterValue::Float(self.osc[id].wave_index),
-                    Parameter::Frequency => ParameterValue::Int(self.osc[id].tune_halfsteps),
-                    Parameter::Finetune => ParameterValue::Float(self.osc[id].tune_cents * 100.0),
-                    Parameter::Sync => ParameterValue::Int(self.osc[id].sync),
-                    Parameter::KeyFollow => ParameterValue::Int(self.osc[id].key_follow),
-                    Parameter::Voices => ParameterValue::Int(self.osc[id].num_voices),
-                    Parameter::Spread => ParameterValue::Float(self.osc[id].voice_spread),
+                    Parameter::Level => ParameterValue::Float(osc.level * 100.0),
+                    Parameter::Tune => ParameterValue::Int(osc.tune_halfsteps),
+                    Parameter::Finetune => ParameterValue::Float(osc.tune_cents * 100.0),
+                    Parameter::Sync => ParameterValue::Int(osc.sync),
+                    Parameter::KeyFollow => ParameterValue::Int(osc.key_follow),
+                    Parameter::Type => ParameterValue::Choice(osc.osc_type.to_int()),
+                    // WtOsc
+                    Parameter::Wavetable => ParameterValue::Dynamic(Parameter::Wavetable, osc.wt_osc_data.wavetable),
+                    Parameter::WaveIndex => ParameterValue::Float(osc.wt_osc_data.wave_index),
+                    Parameter::Voices => ParameterValue::Int(osc.wt_osc_data.num_voices),
+                    Parameter::Spread => ParameterValue::Float(osc.wt_osc_data.voice_spread),
                     _ => {panic!("Got ParamId {:?}", param);}
                 }
             }
             Parameter::Filter => {
+                let filter = &self.filter[id];
                 match param.parameter {
-                    Parameter::Type => ParameterValue::Choice(self.filter[id].filter_type),
-                    Parameter::Cutoff => ParameterValue::Float(self.filter[id].cutoff),
-                    Parameter::Resonance => ParameterValue::Float(self.filter[id].resonance),
-                    Parameter::Gain => ParameterValue::Float(self.filter[id].gain),
-                    Parameter::Aux => ParameterValue::Float(self.filter[id].aux),
-                    Parameter::KeyFollow => ParameterValue::Int(self.filter[id].key_follow),
+                    Parameter::Type => ParameterValue::Choice(filter.filter_type),
+                    Parameter::Cutoff => ParameterValue::Float(filter.cutoff),
+                    Parameter::Resonance => ParameterValue::Float(filter.resonance),
+                    Parameter::Gain => ParameterValue::Float(filter.gain),
+                    Parameter::Aux => ParameterValue::Float(filter.aux),
+                    Parameter::KeyFollow => ParameterValue::Int(filter.key_follow),
                     _ => {panic!();}
                 }
             }
             Parameter::Amp => {panic!();}
             Parameter::Lfo => {
+                let lfo = &self.lfo[id];
                 match param.parameter {
-                    Parameter::Waveform =>  ParameterValue::Choice(self.lfo[id].get_waveform() as usize),
-                    Parameter::Frequency => ParameterValue::Float(self.lfo[id].frequency),
+                    Parameter::Waveform =>  ParameterValue::Choice(lfo.get_waveform() as usize),
+                    Parameter::Frequency => ParameterValue::Float(lfo.frequency),
                     _ => {panic!();}
                 }
             }
             Parameter::GlobalLfo => {
+                let glfo = &self.glfo[id];
                 match param.parameter {
-                    Parameter::Waveform =>  ParameterValue::Choice(self.glfo[id].get_waveform() as usize),
-                    Parameter::Frequency => ParameterValue::Float(self.glfo[id].frequency),
+                    Parameter::Waveform =>  ParameterValue::Choice(glfo.get_waveform() as usize),
+                    Parameter::Frequency => ParameterValue::Float(glfo.frequency),
                     _ => {panic!();}
                 }
             }
             Parameter::Envelope => {
+                let env = &self.env[id];
                 match param.parameter {
-                    Parameter::Attack => ParameterValue::Float(self.env[id].attack),
-                    Parameter::Decay => ParameterValue::Float(self.env[id].decay),
-                    Parameter::Sustain => ParameterValue::Float(self.env[id].sustain),
-                    Parameter::Release => ParameterValue::Float(self.env[id].release),
-                    Parameter::Factor => ParameterValue::Int(self.env[id].factor as i64),
+                    Parameter::Attack => ParameterValue::Float(env.attack),
+                    Parameter::Decay => ParameterValue::Float(env.decay),
+                    Parameter::Sustain => ParameterValue::Float(env.sustain),
+                    Parameter::Release => ParameterValue::Float(env.release),
+                    Parameter::Factor => ParameterValue::Int(env.factor as i64),
                     _ => {panic!();}
                 }
             }
@@ -261,11 +270,12 @@ impl SoundData {
                 }
             }
             Parameter::Modulation => {
+                let modul = &self.modul[id];
                 match param.parameter {
-                    Parameter::Source => ParameterValue::Function(self.modul[id].get_source()),
-                    Parameter::Target => ParameterValue::Param(self.modul[id].get_target()),
-                    Parameter::Amount => ParameterValue::Float(self.modul[id].amount),
-                    Parameter::Active => ParameterValue::Int(if self.modul[id].active { 1 } else { 0 }),
+                    Parameter::Source => ParameterValue::Function(modul.get_source()),
+                    Parameter::Target => ParameterValue::Param(modul.get_target()),
+                    Parameter::Amount => ParameterValue::Float(modul.amount),
+                    Parameter::Active => ParameterValue::Int(if modul.active { 1 } else { 0 }),
                     _ => {panic!();}
                 }
             }
@@ -302,11 +312,11 @@ impl SoundData {
     }
     */
 
-    pub fn write(&self, filename: &str) {
+    pub fn write(&self, _filename: &str) {
         let serialized = serde_json::to_string(&self).unwrap();
         println!("serialized = {}", serialized);
         // TODO: Write to file
-        let deserialized: SoundData = serde_json::from_str(&serialized).unwrap();
+        //let deserialized: SoundData = serde_json::from_str(&serialized).unwrap();
     }
 }
 

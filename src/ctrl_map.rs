@@ -1,19 +1,14 @@
 //! Maps MIDI controllers to synth parameters.
 
-use super::Float;
-use super::{Parameter, ParamId, ParameterValue, MenuItem};
+use super::{ParamId, MenuItem};
 use super::SoundData;
-use super::SoundPatch;
 use super::SynthParam;
 use super::ValueRange;
 
-use log::{info, trace, warn};
+use log::{info, trace};
 use serde::{Serialize, Deserialize};
 
-use std::cell::RefCell;
 use std::collections::HashMap;
-use std::rc::Rc;
-use std::fs;
 use std::fs::File;
 use std::io::BufReader;
 use std::io::prelude::*;
@@ -193,6 +188,18 @@ impl CtrlMap {
 //                  Unit tests
 // ----------------------------------------------
 
+#[cfg(test)]
+mod tests {
+
+use super::{CtrlMap, MappingType};
+use super::super::Float;
+use super::super::{Parameter, ParamId, ParameterValue, MenuItem};
+use super::super::{SoundData, SoundPatch};
+use super::super::SynthParam;
+
+use std::cell::RefCell;
+use std::rc::Rc;
+
 struct TestContext {
     map: CtrlMap,
     sound: SoundPatch,
@@ -265,7 +272,7 @@ fn absolute_controller_can_be_added() {
 #[test]
 fn value_can_be_changed_absolute() {
     let mut context = TestContext::new();
-    assert_eq!(context.has_value(92.0), true);
+    assert_eq!(context.has_value(50.0), true);
     context.add_controller(1, MappingType::Absolute);
     assert_eq!(context.handle_controller(1, 0), true);
     assert_eq!(context.has_value(0.0), true);
@@ -281,16 +288,16 @@ fn relative_controller_can_be_added() {
 #[test]
 fn value_can_be_changed_relative() {
     let mut context = TestContext::new();
-    assert_eq!(context.has_value(92.0), true);
+    assert_eq!(context.has_value(50.0), true);
     context.add_controller(1, MappingType::Relative);
 
     // Increase value
     assert_eq!(context.handle_controller(1, 0), true);
-    assert_eq!(context.has_value(93.0), true);
+    assert_eq!(context.has_value(51.0), true);
 
     // Decrease value
     assert_eq!(context.handle_controller(1, 127), true);
-    assert_eq!(context.has_value(92.0), true);
+    assert_eq!(context.has_value(50.0), true);
 }
 
 #[test]
@@ -308,3 +315,4 @@ fn nonexisting_mapping_isnt_deleted() {
     assert_eq!(context.delete_controller(), false);
 }
 
+} // mod tests

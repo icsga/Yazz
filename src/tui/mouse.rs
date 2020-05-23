@@ -1,6 +1,6 @@
-use super::{Container, ContainerRef, Controller, Index, Widget};
+use super::{Container, Controller, Index};
 
-use log::{info, trace, warn};
+use log::info;
 
 use std::cmp::Eq;
 use std::hash::Hash;
@@ -36,7 +36,7 @@ impl<Key: Copy + Eq + Hash> MouseHandler<Key> {
         }
     }
 
-    fn idle_state(&mut self, msg: &MouseMessage, window: &Container<Key>, controller: &Controller<Key>) {
+    fn idle_state(&mut self, msg: &MouseMessage, window: &Container<Key>, _controller: &Controller<Key>) {
         match msg {
             MouseMessage::Press{x, y} => {
                 // Select widget to be updated
@@ -44,17 +44,17 @@ impl<Key: Copy + Eq + Hash> MouseHandler<Key> {
                 self.current_key = window.get_at_pos(*x, *y);
                 //controller.handle_mouse_event(&self.current_key.unwrap(), msg);
             },
-            MouseMessage::Hold{x, y} | MouseMessage::Release{x, y} => {},
+            MouseMessage::Hold{x: _, y: _} | MouseMessage::Release{x: _, y: _} => {},
         }
     }
 
-    fn clicked_state(&mut self, msg: &MouseMessage, window: &Container<Key>, controller: &Controller<Key>) {
+    fn clicked_state(&mut self, msg: &MouseMessage, _window: &Container<Key>, _controller: &Controller<Key>) {
         match msg {
-            MouseMessage::Press{x, y} => {},
-            MouseMessage::Hold{x, y} => {
+            MouseMessage::Press{x: _, y: _} => {},
+            MouseMessage::Hold{x: _, y: _} => {
                 // Update selected widget
             },
-            MouseMessage::Release{x, y} => {
+            MouseMessage::Release{x: _, y: _} => {
                 // Finished with widget value change
                 self.change_state(MhState::Idle);
             },

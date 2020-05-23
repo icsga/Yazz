@@ -1,16 +1,13 @@
 
-use termion::clear;
 use termion::cursor;
-use termion::cursor::{DetectCursorPos, Goto, Hide};
 use termion::event::*;
 use termion::input::{TermRead, MouseTerminal};
 use termion::raw::{IntoRawMode, RawTerminal};
 
-use super::SynthParam;
-use super::{UiMessage, SynthMessage};
+use super::UiMessage;
 
 use crossbeam_channel::{Sender};
-use log::{info, trace, warn};
+use log::info;
 
 use std::io::{Write, stdout, stdin};
 use std::thread::spawn;

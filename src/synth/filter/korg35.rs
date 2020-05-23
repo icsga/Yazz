@@ -2,7 +2,7 @@
 //! "Designing Software Synthesizer Plug-Ins in C++" by Will Pirkle.
 
 use crate::Float;
-use super::{Filter, FilterData, FilterType, VAOnePole};
+use super::{FilterData, FilterType, VAOnePole};
 
 /// Sallen-Key filter as used in the Korg35
 pub struct K35 {

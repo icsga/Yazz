@@ -1,5 +1,5 @@
 use super::MappingType;
-use log::{info, trace, warn};
+use log::info;
 
 #[derive(Debug)]
 pub struct MidiLearn {

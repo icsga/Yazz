@@ -1,10 +1,9 @@
 use super::SoundData;
 use super::WtInfo;
 
-use log::{info, trace, warn};
+use log::info;
 use serde::{Serialize, Deserialize};
 
-use std::fs;
 use std::fs::File;
 use std::io::BufReader;
 use std::io::prelude::*;
@@ -64,7 +63,7 @@ impl SoundBank {
                     *self = data;
                 }
             }
-            Err(err) => info!("Error reading default sound file, using empty bank."),
+            Err(err) => info!("Error reading default sound file: {}, using empty bank.", err),
         }
         Ok(())
     }
