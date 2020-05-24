@@ -155,7 +155,9 @@ impl Voice {
         if !self.is_running() {
             return 0.0;
         }
-        let mut result = 0.0;
+        let mut result_f1 = 0.0;
+        let mut result_f2 = 0.0;
+        let mut result_direct = 0.0;
         self.last_update = sample_clock;
         let mut reset = false;
         let input_freq = self.input_freq * global_state.freq_factor;
@@ -168,20 +170,25 @@ impl Voice {
         for (i, osc) in self.osc.iter_mut().enumerate() {
             freq = Voice::get_frequency(&sound_local.osc[i], input_freq);
             let (sample, wave_complete) = osc.get_sample(freq, sample_clock, &sound_local.osc[i], reset);
-            result += sample * sound_local.osc[i].level * self.scaled_vel;
-            if i == 0 && wave_complete && sound_local.osc[1].sync == 1 {
-                reset = true; // Sync next oscillator in list (osc 1)
-            } else {
-                reset = false;
-            }
+            let sample_amped = sample * sound_local.osc[i].level * self.scaled_vel;
+            result_f1 += sample_amped * osc.filter1_out;
+            result_f2 += sample_amped * osc.filter2_out;
+            result_direct += sample_amped * osc.direct_out;
+            // Sync oscillator 1 to 0
+            reset = i == 0 && wave_complete && sound_local.osc[1].sync == 1;
         }
 
-        // Feed it into the filter
-        // TODO: Use both filters, use different filter routings
-        result = self.filter[0].process(result, &mut sound_local.filter[0], input_freq);
+        // Feed it into the filters
+        let mut result: Float;
+        result  = self.filter[0].process(result_f1, &mut sound_local.filter[0], input_freq);
+        result += self.filter[1].process(result_f2, &mut sound_local.filter[1], input_freq);
+        result += result_direct;
 
         // Apply the volume envelope
-        result *= self.env[0].get_sample(sample_clock, &sound_local.env[0]);
+        let env_amp = self.env[0].get_sample(sample_clock, &sound_local.env[0]);
+        if sound_local.patch.env_depth > 0.0 {
+            result *= env_amp * sound_local.patch.env_depth;
+        }
         if result > 1.0 {
             //panic!("Voice: {}", result);
             result = 1.0;
@@ -209,6 +216,10 @@ impl Voice {
 
     pub fn set_wavetable(&mut self, osc_id: usize, wt: WavetableRef) {
         self.osc[osc_id].set_wavetable(wt);
+    }
+
+    pub fn update_routing(&mut self, osc_id: usize, osc_data: &OscData) {
+        self.osc[osc_id].update_routing(osc_data);
     }
 
     pub fn trigger(&mut self, trigger_seq: u64, trigger_time: i64, sound: &SoundData) {

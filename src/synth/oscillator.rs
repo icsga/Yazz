@@ -33,6 +33,38 @@ impl Default for OscType {
     }
 }
 
+#[derive(Serialize, Deserialize, Clone, Copy, Debug)]
+pub enum OscRouting {
+    Filter1,
+    Filter2,
+    Direct
+}
+
+impl OscRouting {
+    pub fn from_int(param: usize) -> OscRouting {
+        match param {
+            0 => OscRouting::Filter1,
+            1 => OscRouting::Filter2,
+            2 => OscRouting::Direct,
+            _ => panic!(),
+        }
+    }
+
+    pub fn to_int(&self) -> usize {
+        match self {
+            OscRouting::Filter1 => 0,
+            OscRouting::Filter2 => 1,
+            OscRouting::Direct  => 2,
+        }
+    }
+}
+
+impl Default for OscRouting {
+    fn default() -> Self {
+        OscRouting::Filter1
+    }
+}
+
 #[derive(Serialize, Deserialize, Clone, Copy, Debug, Default)]
 pub struct OscData {
     pub level: Float,
@@ -41,6 +73,7 @@ pub struct OscData {
     pub freq_offset: Float, // Value derived from tune_halfsteps and tune_cents
     pub sync: i64,
     pub key_follow: i64,
+    pub routing: OscRouting,
     pub osc_type: OscType,
 
     // Oscillator-specific data
@@ -81,6 +114,11 @@ pub struct Oscillator {
     last_sample: Float,
     last_complete: bool,
 
+    // Values to control the signal routing
+    pub filter1_out: Float,
+    pub filter2_out: Float,
+    pub direct_out: Float,
+
     wt_osc: WtOsc,
 }
 
@@ -90,6 +128,9 @@ impl Oscillator {
             last_update: 0,
             last_sample: 0.0,
             last_complete: false,
+            filter1_out: 1.0,
+            filter2_out: 0.0,
+            direct_out: 0.0,
             wt_osc: WtOsc::new(sample_rate, default_wt)
         }
     }
@@ -128,6 +169,14 @@ impl Oscillator {
 
     pub fn set_wavetable(&mut self, wavetable: WavetableRef) {
         self.wt_osc.set_wavetable(wavetable);
+    }
+
+    pub fn update_routing(&mut self, data: &OscData) {
+        match data.routing {
+            OscRouting::Filter1 => { self.filter1_out = 1.0; self.filter2_out = 0.0; self.direct_out = 0.0; }
+            OscRouting::Filter2 => { self.filter1_out = 0.0; self.filter2_out = 1.0; self.direct_out = 0.0; }
+            OscRouting::Direct => { self.filter1_out = 0.0; self.filter2_out = 0.0; self.direct_out = 1.0; }
+        }
     }
 }
 
