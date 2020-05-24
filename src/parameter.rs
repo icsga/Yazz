@@ -34,9 +34,16 @@ pub enum Parameter {
     Finetune,
     Sync,
     KeyFollow,
+    Routing,
     Voices,
     Spread,
     VelSens,
+    EnvDepth,
+
+    // Oscillator routing
+    Filter1,
+    Filter2,
+    Direct,
 
     // Filter
     Type,
@@ -290,18 +297,25 @@ pub static FUNCTIONS: [MenuItem; 8] = [
     MenuItem{item: Parameter::Patch,      key: 'p', val_range: ValueRange::Int(1, 1),                       next: &PATCH_PARAMS},
 ];
 
-pub static OSC_PARAMS: [MenuItem; 10] = [
+pub static OSC_PARAMS: [MenuItem; 11] = [
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0),       next: &[]},
     MenuItem{item: Parameter::Tune,      key: 't', val_range: ValueRange::Int(-24, 24),                 next: &[]},
     MenuItem{item: Parameter::Finetune,  key: 'f', val_range: ValueRange::Float(-100.0, 100.0, 1.0),    next: &[]},
     MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::Int(0, 1),                    next: &[]},
     MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::Int(0, 1),                    next: &[]},
+    MenuItem{item: Parameter::Routing,   key: 'r', val_range: ValueRange::Choice(&OSC_ROUTING),         next: &[]},
     MenuItem{item: Parameter::Type,      key: 'y', val_range: ValueRange::Choice(&OSC_TYPES),           next: &[]},
 
     MenuItem{item: Parameter::Wavetable, key: 'w', val_range: ValueRange::Dynamic(Parameter::Wavetable),next: &[]},
     MenuItem{item: Parameter::WaveIndex, key: 'i', val_range: ValueRange::Float(0.0, 1.0, 0.01),        next: &[]},
     MenuItem{item: Parameter::Voices,    key: 'v', val_range: ValueRange::Int(1, 7),                    next: &[]},
     MenuItem{item: Parameter::Spread,    key: 'e', val_range: ValueRange::Float(0.0, 2.0, 0.1),         next: &[]},
+];
+
+pub static OSC_ROUTING: [MenuItem; 3] = [
+    MenuItem{item: Parameter::Filter1, key: '1', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Filter2, key: '2', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Direct,  key: 'd', val_range: ValueRange::NoRange, next: &[]},
 ];
 
 pub static OSC_TYPES: [MenuItem; 2] = [
@@ -337,10 +351,10 @@ pub static FILTER_TYPE: [MenuItem; 10] = [
 ];
 
 pub static ENV_PARAMS: [MenuItem; 5] = [
-    MenuItem{item: Parameter::Attack,  key: 'a', val_range: ValueRange::Float(0.0, 4000.0, 1.0), next: &[]}, // Value = Duration in ms
-    MenuItem{item: Parameter::Decay,   key: 'd', val_range: ValueRange::Float(0.0, 4000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Attack,  key: 'a', val_range: ValueRange::Float(1.0, 4000.0, 1.0), next: &[]}, // Value = Duration in ms
+    MenuItem{item: Parameter::Decay,   key: 'd', val_range: ValueRange::Float(1.0, 4000.0, 1.0), next: &[]},
     MenuItem{item: Parameter::Sustain, key: 's', val_range: ValueRange::Float(0.0, 1.0, 0.001),  next: &[]},
-    MenuItem{item: Parameter::Release, key: 'r', val_range: ValueRange::Float(0.0, 8000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Release, key: 'r', val_range: ValueRange::Float(1.0, 8000.0, 1.0), next: &[]},
     MenuItem{item: Parameter::Factor,  key: 'f', val_range: ValueRange::Int(1, 5),               next: &[]},
 ];
 
@@ -374,12 +388,13 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 
-pub static PATCH_PARAMS: [MenuItem; 5] = [
+pub static PATCH_PARAMS: [MenuItem; 6] = [
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
     MenuItem{item: Parameter::Drive,     key: 'd', val_range: ValueRange::Float(0.0, 10.0, 1.0),  next: &[]},
     MenuItem{item: Parameter::Pitchbend ,key: 'p', val_range: ValueRange::Int(0, 12),             next: &[]},
     MenuItem{item: Parameter::VelSens,   key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
-    MenuItem{item: Parameter::PlayMode,   key: 'p', val_range: ValueRange::Choice(&PLAY_MODES),  next: &[]},
+    MenuItem{item: Parameter::EnvDepth,  key: 'e', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
+    MenuItem{item: Parameter::PlayMode,  key: 'm', val_range: ValueRange::Choice(&PLAY_MODES),  next: &[]},
 ];
 
 pub static MOD_SOURCES: [MenuItem; 9] = [

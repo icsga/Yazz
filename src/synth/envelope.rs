@@ -1,5 +1,6 @@
 use super::Float;
 
+//use log::info;
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Copy, Clone, Default, Debug)]
@@ -61,7 +62,7 @@ impl Envelope {
                  rate_mul: sample_rate / 1000.0, // 1 ms
                  increment: 0.0,
                  end_time: 0,
-                 last_update:0,
+                 last_update: 0,
                  last_value: 0.0,
                  is_held: false,
                  state: State::Idle,
@@ -86,6 +87,9 @@ impl Envelope {
     }
 
     pub fn get_sample(&mut self, sample_time: i64, data: &EnvelopeData) -> Float {
+        if sample_time == self.last_update {
+            return self.last_value;
+        }
         match self.state {
             State::Idle => return 0.0,
             State::Attack | State::Decay | State::Release => {
@@ -100,6 +104,7 @@ impl Envelope {
         if self.last_value > 1.0 {
             self.last_value = 1.0;
         }
+        self.last_update = sample_time;
         self.last_value.powf(data.factor)
     }
 
@@ -129,6 +134,7 @@ impl Envelope {
                 self.is_held = false;
             },
         }
+        //info!("Change to {:?}, last_value = {}, inc = {}, end = {}", new_state, self.last_value, self.increment, self.end_time);
         self.state = new_state;
     }
 

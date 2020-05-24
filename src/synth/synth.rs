@@ -41,6 +41,7 @@ pub struct PatchData {
     pub drive: Float,
     pub pitchbend: Float, // Range of the pitchwheel
     pub vel_sens: Float,  // Velocity sensitivity
+    pub env_depth: Float, // Mod depth of env1 to volume. TODO: Move to Env1 menu
     pub play_mode: PlayMode,
 }
 
@@ -50,6 +51,7 @@ impl PatchData {
         self.drive = 0.0;
         self.pitchbend = 2.0;
         self.vel_sens = 1.0;
+        self.env_depth = 1.0;
         self.play_mode = PlayMode::Poly;
     }
 }
@@ -294,10 +296,18 @@ impl Synth {
         // parameter.
         match msg.function {
             Parameter::Oscillator => {
-                if msg.parameter == Parameter::Wavetable {
-                    // New wavetable has been selected, update all oscillators
-                    let osc_id = msg.function_id - 1;
-                    self.update_wavetable(osc_id);
+                match msg.parameter {
+                    Parameter::Wavetable => {
+                        // New wavetable has been selected, update all oscillators
+                        let osc_id = msg.function_id - 1;
+                        self.update_wavetable(osc_id);
+                    }
+                    Parameter::Routing => {
+                        // Oscillator routing has changed
+                        let osc_id = msg.function_id - 1;
+                        self.update_routing(osc_id);
+                    }
+                    _ => ()
                 }
             }
             Parameter::Delay => self.delay.update(&self.sound.delay),
@@ -314,6 +324,12 @@ impl Synth {
             v.set_wavetable(osc_id, wt.clone());
         }
         self.osc_wave[osc_id] = wt.clone();
+    }
+
+    fn update_routing(&mut self, osc_id: usize) {
+        for v in self.voice.iter_mut() {
+            v.update_routing(osc_id, &self.sound.osc[osc_id]);
+        }
     }
 
     fn handle_midi_message(&mut self, msg: MidiMessage) {
@@ -336,6 +352,9 @@ impl Synth {
         self.update_wavetable(0);
         self.update_wavetable(1);
         self.update_wavetable(2);
+        self.update_routing(0);
+        self.update_routing(1);
+        self.update_routing(2);
     }
 
     fn handle_wavetable_info(&mut self, mut wt_info: WtInfo) {

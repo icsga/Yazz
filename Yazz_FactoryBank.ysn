@@ -15,6 +15,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 3,
@@ -30,6 +31,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -45,6 +47,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -305,6 +308,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -320,6 +324,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 3,
@@ -335,6 +340,7 @@
             "freq_offset": 1.9999985,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -350,6 +356,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -610,6 +617,7 @@
           "drive": 0.0,
           "pitchbend": 1.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -625,6 +633,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -640,6 +649,7 @@
             "freq_offset": 1.3427552,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -655,6 +665,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -915,6 +926,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -930,6 +942,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -945,6 +958,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -960,6 +974,7 @@
             "freq_offset": 1.9999985,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -1220,6 +1235,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -1235,6 +1251,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 3,
@@ -1250,6 +1267,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -1265,6 +1283,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -1525,6 +1544,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -1540,6 +1560,7 @@
             "freq_offset": 0.9986364696034682,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -1555,6 +1576,7 @@
             "freq_offset": 1.0022766891465087,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -1570,6 +1592,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -1830,6 +1853,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -1845,6 +1869,7 @@
             "freq_offset": 0.2500005343804845,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -1860,6 +1885,7 @@
             "freq_offset": 0.8764304896924524,
             "sync": 1,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -1875,6 +1901,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -2135,6 +2162,7 @@
           "drive": 3.385826771653543,
           "pitchbend": 2.0,
           "vel_sens": 0.0,
+          "env_depth": 1.0,
           "play_mode": "Mono"
         }
       }
@@ -2150,6 +2178,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -2165,6 +2194,7 @@
             "freq_offset": 1.498306142767566,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -2180,6 +2210,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -2440,6 +2471,7 @@
           "drive": 0.0,
           "pitchbend": 12.0,
           "vel_sens": 0.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -2455,6 +2487,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -2470,6 +2503,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -2485,6 +2519,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -2745,6 +2780,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -2760,6 +2796,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -2775,6 +2812,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -2790,6 +2828,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3050,6 +3089,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -3065,6 +3105,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3080,6 +3121,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3095,6 +3137,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3355,6 +3398,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -3370,6 +3414,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3385,6 +3430,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3400,6 +3446,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3660,6 +3707,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -3675,6 +3723,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3690,6 +3739,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3705,6 +3755,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3965,6 +4016,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -3980,6 +4032,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -3995,6 +4048,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -4010,6 +4064,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -4270,6 +4325,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -4285,6 +4341,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -4300,6 +4357,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -4315,6 +4373,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -4575,6 +4634,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -4590,6 +4650,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -4605,6 +4666,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -4620,6 +4682,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -4880,6 +4943,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -4895,6 +4959,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -4910,6 +4975,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -4925,6 +4991,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -5185,6 +5252,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -5200,6 +5268,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -5215,6 +5284,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -5230,6 +5300,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -5490,6 +5561,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -5505,6 +5577,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -5520,6 +5593,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -5535,6 +5609,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -5795,6 +5870,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -5810,6 +5886,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -5825,6 +5902,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -5840,6 +5918,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -6100,6 +6179,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -6115,6 +6195,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -6130,6 +6211,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -6145,6 +6227,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -6405,6 +6488,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -6420,6 +6504,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -6435,6 +6520,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -6450,6 +6536,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -6710,6 +6797,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -6725,6 +6813,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -6740,6 +6829,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -6755,6 +6845,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7015,6 +7106,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -7030,6 +7122,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7045,6 +7138,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7060,6 +7154,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7320,6 +7415,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -7335,6 +7431,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7350,6 +7447,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7365,6 +7463,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7625,6 +7724,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -7640,6 +7740,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7655,6 +7756,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7670,6 +7772,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7930,6 +8033,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -7945,6 +8049,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7960,6 +8065,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -7975,6 +8081,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -8235,6 +8342,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -8250,6 +8358,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -8265,6 +8374,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -8280,6 +8390,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -8540,6 +8651,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -8555,6 +8667,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -8570,6 +8683,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -8585,6 +8699,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -8845,6 +8960,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -8860,6 +8976,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -8875,6 +8992,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -8890,6 +9008,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -9150,6 +9269,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -9165,6 +9285,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -9180,6 +9301,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -9195,6 +9317,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -9455,6 +9578,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -9470,6 +9594,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -9485,6 +9610,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -9500,6 +9626,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -9760,6 +9887,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -9775,6 +9903,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -9790,6 +9919,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -9805,6 +9935,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -10065,6 +10196,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -10080,6 +10212,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -10095,6 +10228,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -10110,6 +10244,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -10370,6 +10505,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -10385,6 +10521,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -10400,6 +10537,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -10415,6 +10553,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -10675,6 +10814,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -10690,6 +10830,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -10705,6 +10846,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -10720,6 +10862,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -10980,6 +11123,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -10995,6 +11139,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11010,6 +11155,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11025,6 +11171,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11285,6 +11432,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -11300,6 +11448,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11315,6 +11464,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11330,6 +11480,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11590,6 +11741,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -11605,6 +11757,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11620,6 +11773,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11635,6 +11789,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11895,6 +12050,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -11910,6 +12066,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11925,6 +12082,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -11940,6 +12098,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -12200,6 +12359,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -12215,6 +12375,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -12230,6 +12391,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -12245,6 +12407,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -12505,6 +12668,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -12520,6 +12684,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -12535,6 +12700,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -12550,6 +12716,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -12810,6 +12977,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -12825,6 +12993,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -12840,6 +13009,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -12855,6 +13025,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -13115,6 +13286,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -13130,6 +13302,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -13145,6 +13318,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -13160,6 +13334,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -13420,6 +13595,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -13435,6 +13611,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -13450,6 +13627,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -13465,6 +13643,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -13725,6 +13904,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -13740,6 +13920,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -13755,6 +13936,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -13770,6 +13952,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14030,6 +14213,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -14045,6 +14229,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14060,6 +14245,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14075,6 +14261,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14335,6 +14522,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -14350,6 +14538,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14365,6 +14554,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14380,6 +14570,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14640,6 +14831,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -14655,6 +14847,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14670,6 +14863,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14685,6 +14879,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14945,6 +15140,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -14960,6 +15156,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14975,6 +15172,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -14990,6 +15188,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -15250,6 +15449,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -15265,6 +15465,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -15280,6 +15481,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -15295,6 +15497,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -15555,6 +15758,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -15570,6 +15774,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -15585,6 +15790,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -15600,6 +15806,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -15860,6 +16067,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -15875,6 +16083,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -15890,6 +16099,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -15905,6 +16115,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -16165,6 +16376,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -16180,6 +16392,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -16195,6 +16408,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -16210,6 +16424,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -16470,6 +16685,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -16485,6 +16701,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -16500,6 +16717,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -16515,6 +16733,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -16775,6 +16994,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -16790,6 +17010,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -16805,6 +17026,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -16820,6 +17042,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -17080,6 +17303,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -17095,6 +17319,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -17110,6 +17335,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -17125,6 +17351,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -17385,6 +17612,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -17400,6 +17628,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -17415,6 +17644,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -17430,6 +17660,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -17690,6 +17921,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -17705,6 +17937,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -17720,6 +17953,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -17735,6 +17969,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -17995,6 +18230,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -18010,6 +18246,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18025,6 +18262,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18040,6 +18278,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18300,6 +18539,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -18315,6 +18555,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18330,6 +18571,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18345,6 +18587,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18605,6 +18848,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -18620,6 +18864,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18635,6 +18880,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18650,6 +18896,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18910,6 +19157,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -18925,6 +19173,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18940,6 +19189,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -18955,6 +19205,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -19215,6 +19466,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -19230,6 +19482,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -19245,6 +19498,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -19260,6 +19514,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -19520,6 +19775,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -19535,6 +19791,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -19550,6 +19807,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -19565,6 +19823,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -19825,6 +20084,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -19840,6 +20100,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -19855,6 +20116,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -19870,6 +20132,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -20130,6 +20393,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -20145,6 +20409,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -20160,6 +20425,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -20175,6 +20441,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -20435,6 +20702,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -20450,6 +20718,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -20465,6 +20734,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -20480,6 +20750,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -20740,6 +21011,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -20755,6 +21027,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -20770,6 +21043,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -20785,6 +21059,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21045,6 +21320,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -21060,6 +21336,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21075,6 +21352,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21090,6 +21368,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21350,6 +21629,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -21365,6 +21645,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21380,6 +21661,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21395,6 +21677,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21655,6 +21938,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -21670,6 +21954,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21685,6 +21970,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21700,6 +21986,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21960,6 +22247,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -21975,6 +22263,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -21990,6 +22279,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -22005,6 +22295,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -22265,6 +22556,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -22280,6 +22572,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -22295,6 +22588,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -22310,6 +22604,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -22570,6 +22865,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -22585,6 +22881,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -22600,6 +22897,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -22615,6 +22913,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -22875,6 +23174,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -22890,6 +23190,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -22905,6 +23206,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -22920,6 +23222,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -23180,6 +23483,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -23195,6 +23499,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -23210,6 +23515,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -23225,6 +23531,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -23485,6 +23792,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -23500,6 +23808,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -23515,6 +23824,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -23530,6 +23840,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -23790,6 +24101,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -23805,6 +24117,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -23820,6 +24133,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -23835,6 +24149,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -24095,6 +24410,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -24110,6 +24426,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -24125,6 +24442,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -24140,6 +24458,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -24400,6 +24719,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -24415,6 +24735,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -24430,6 +24751,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -24445,6 +24767,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -24705,6 +25028,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -24720,6 +25044,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -24735,6 +25060,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -24750,6 +25076,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25010,6 +25337,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -25025,6 +25353,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25040,6 +25369,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25055,6 +25385,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25315,6 +25646,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -25330,6 +25662,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25345,6 +25678,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25360,6 +25694,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25620,6 +25955,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -25635,6 +25971,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25650,6 +25987,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25665,6 +26003,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25925,6 +26264,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -25940,6 +26280,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25955,6 +26296,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -25970,6 +26312,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -26230,6 +26573,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -26245,6 +26589,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -26260,6 +26605,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -26275,6 +26621,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -26535,6 +26882,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -26550,6 +26898,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -26565,6 +26914,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -26580,6 +26930,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -26840,6 +27191,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -26855,6 +27207,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -26870,6 +27223,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -26885,6 +27239,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -27145,6 +27500,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -27160,6 +27516,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -27175,6 +27532,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -27190,6 +27548,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -27450,6 +27809,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -27465,6 +27825,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -27480,6 +27841,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -27495,6 +27857,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -27755,6 +28118,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -27770,6 +28134,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -27785,6 +28150,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -27800,6 +28166,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -28060,6 +28427,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -28075,6 +28443,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -28090,6 +28459,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -28105,6 +28475,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -28365,6 +28736,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -28380,6 +28752,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -28395,6 +28768,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -28410,6 +28784,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -28670,6 +29045,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -28685,6 +29061,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -28700,6 +29077,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -28715,6 +29093,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -28975,6 +29354,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -28990,6 +29370,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29005,6 +29386,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29020,6 +29402,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29280,6 +29663,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -29295,6 +29679,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29310,6 +29695,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29325,6 +29711,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29585,6 +29972,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -29600,6 +29988,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29615,6 +30004,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29630,6 +30020,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29890,6 +30281,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -29905,6 +30297,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29920,6 +30313,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -29935,6 +30329,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -30195,6 +30590,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -30210,6 +30606,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -30225,6 +30622,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -30240,6 +30638,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -30500,6 +30899,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -30515,6 +30915,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -30530,6 +30931,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -30545,6 +30947,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -30805,6 +31208,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -30820,6 +31224,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -30835,6 +31240,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -30850,6 +31256,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -31110,6 +31517,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -31125,6 +31533,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -31140,6 +31549,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -31155,6 +31565,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -31415,6 +31826,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -31430,6 +31842,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -31445,6 +31858,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -31460,6 +31874,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -31720,6 +32135,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -31735,6 +32151,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -31750,6 +32167,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -31765,6 +32183,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32025,6 +32444,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -32040,6 +32460,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32055,6 +32476,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32070,6 +32492,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32330,6 +32753,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -32345,6 +32769,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32360,6 +32785,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32375,6 +32801,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32635,6 +33062,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -32650,6 +33078,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32665,6 +33094,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32680,6 +33110,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32940,6 +33371,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -32955,6 +33387,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32970,6 +33403,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -32985,6 +33419,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -33245,6 +33680,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -33260,6 +33696,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -33275,6 +33712,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -33290,6 +33728,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -33550,6 +33989,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -33565,6 +34005,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -33580,6 +34021,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -33595,6 +34037,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -33855,6 +34298,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -33870,6 +34314,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -33885,6 +34330,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -33900,6 +34346,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -34160,6 +34607,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -34175,6 +34623,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -34190,6 +34639,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -34205,6 +34655,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -34465,6 +34916,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -34480,6 +34932,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -34495,6 +34948,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -34510,6 +34964,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -34770,6 +35225,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -34785,6 +35241,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -34800,6 +35257,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -34815,6 +35273,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -35075,6 +35534,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -35090,6 +35550,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -35105,6 +35566,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -35120,6 +35582,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -35380,6 +35843,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -35395,6 +35859,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -35410,6 +35875,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -35425,6 +35891,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -35685,6 +36152,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -35700,6 +36168,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -35715,6 +36184,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -35730,6 +36200,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -35990,6 +36461,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -36005,6 +36477,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36020,6 +36493,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36035,6 +36509,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36295,6 +36770,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -36310,6 +36786,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36325,6 +36802,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36340,6 +36818,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36600,6 +37079,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -36615,6 +37095,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36630,6 +37111,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36645,6 +37127,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36905,6 +37388,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -36920,6 +37404,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36935,6 +37420,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -36950,6 +37436,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -37210,6 +37697,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -37225,6 +37713,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -37240,6 +37729,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -37255,6 +37745,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -37515,6 +38006,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -37530,6 +38022,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -37545,6 +38038,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -37560,6 +38054,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -37820,6 +38315,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -37835,6 +38331,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -37850,6 +38347,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -37865,6 +38363,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -38125,6 +38624,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -38140,6 +38640,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -38155,6 +38656,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -38170,6 +38672,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -38430,6 +38933,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -38445,6 +38949,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -38460,6 +38965,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -38475,6 +38981,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -38735,6 +39242,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }
@@ -38750,6 +39258,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -38765,6 +39274,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -38780,6 +39290,7 @@
             "freq_offset": 1.0,
             "sync": 0,
             "key_follow": 1,
+            "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
@@ -39040,6 +39551,7 @@
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
+          "env_depth": 1.0,
           "play_mode": "Poly"
         }
       }

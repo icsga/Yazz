@@ -4,7 +4,7 @@ use super::FilterData;
 use super::Float;
 use super::LfoData;
 use super::ModData;
-use super::{OscData, OscType};
+use super::{OscData, OscType, OscRouting};
 use super::synth::*;
 use super::voice::*;
 use super::{Parameter, ParameterValue, ParamId, SynthParam};
@@ -120,6 +120,7 @@ impl SoundData {
                     Parameter::Finetune =>  { osc.set_cents(if let ParameterValue::Float(x) = msg.value { x / 100.0 } else { panic!() }); }
                     Parameter::Sync =>      { osc.sync = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
                     Parameter::KeyFollow => { osc.key_follow = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Routing =>   { osc.routing = if let ParameterValue::Choice(x) = msg.value { OscRouting::from_int(x) } else { panic!() }; }
                     Parameter::Type =>      { osc.osc_type = if let ParameterValue::Choice(x) = msg.value { OscType::from_int(x) } else { panic!() }; }
                     // WtOsc
                     Parameter::Wavetable => { osc.wt_osc_data.wavetable = if let ParameterValue::Dynamic(_, x) = msg.value { x } else { panic!() }; }
@@ -190,6 +191,7 @@ impl SoundData {
                     Parameter::Drive => { self.patch.drive = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Pitchbend => { self.patch.pitchbend = if let ParameterValue::Int(x) = msg.value { x as Float } else { panic!() }; }
                     Parameter::VelSens => { self.patch.vel_sens = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::EnvDepth => { self.patch.env_depth = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::PlayMode => { self.patch.play_mode = if let ParameterValue::Choice(x) = msg.value { SoundData::int_to_playmode(x) } else { panic!() }; }
                     _ => {}
                 }
@@ -210,6 +212,7 @@ impl SoundData {
                     Parameter::Finetune => ParameterValue::Float(osc.tune_cents * 100.0),
                     Parameter::Sync => ParameterValue::Int(osc.sync),
                     Parameter::KeyFollow => ParameterValue::Int(osc.key_follow),
+                    Parameter::Routing => ParameterValue::Choice(osc.routing.to_int()),
                     Parameter::Type => ParameterValue::Choice(osc.osc_type.to_int()),
                     // WtOsc
                     Parameter::Wavetable => ParameterValue::Dynamic(Parameter::Wavetable, osc.wt_osc_data.wavetable),
@@ -285,6 +288,7 @@ impl SoundData {
                     Parameter::Drive => ParameterValue::Float(self.patch.drive),
                     Parameter::Pitchbend => ParameterValue::Int(self.patch.pitchbend as i64),
                     Parameter::VelSens => ParameterValue::Float(self.patch.vel_sens),
+                    Parameter::EnvDepth => ParameterValue::Float(self.patch.env_depth),
                     Parameter::PlayMode => ParameterValue::Choice(self.patch.play_mode as usize),
                     _ => {panic!();}
                 }
