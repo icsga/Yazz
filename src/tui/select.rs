@@ -1084,11 +1084,11 @@ use super::{ParamSelector, SelectorEvent, SelectorState};
 
 use super::super::FunctionId;
 use super::super::Float;
-use super::super::{Parameter, ParameterValue, ParamId, FUNCTIONS, MOD_TARGETS};
+use super::super::{Parameter, ParameterValue, ParamId, FUNCTIONS, MOD_SOURCES};
 use super::super::SoundPatch;
 use super::super::StateMachine;
 
-use log::{info};
+use log::info;
 use termion::event::Key;
 
 use std::cell::RefCell;
@@ -1126,7 +1126,7 @@ impl TestContext {
             }
         }
 
-        let ps = ParamSelector::new(&FUNCTIONS, &MOD_TARGETS);
+        let ps = ParamSelector::new(&FUNCTIONS, &MOD_SOURCES);
         let sound = Rc::new(RefCell::new(SoundPatch::new()));
         let sm = StateMachine::new(ParamSelector::state_function);
         TestContext{ps, sound, sm}
