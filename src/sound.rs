@@ -99,16 +99,6 @@ impl SoundData {
         &self.env[id]
     }
 
-    // TODO: Find a more elegant way, at least move to definition of PlayMode
-    fn int_to_playmode(param: usize) -> PlayMode {
-        match param {
-            0 => PlayMode::Poly,
-            1 => PlayMode::Mono,
-            2 => PlayMode::Legato,
-            _ => panic!(),
-        }
-    }
-
     pub fn set_parameter(&mut self, msg: &SynthParam) {
         let id = msg.function_id - 1;
         match msg.function {
@@ -192,7 +182,8 @@ impl SoundData {
                     Parameter::Pitchbend => { self.patch.pitchbend = if let ParameterValue::Int(x) = msg.value { x as Float } else { panic!() }; }
                     Parameter::VelSens => { self.patch.vel_sens = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::EnvDepth => { self.patch.env_depth = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::PlayMode => { self.patch.play_mode = if let ParameterValue::Choice(x) = msg.value { SoundData::int_to_playmode(x) } else { panic!() }; }
+                    Parameter::PlayMode => { self.patch.play_mode = if let ParameterValue::Choice(x) = msg.value { PlayMode::from_int(x) } else { panic!() }; }
+                    Parameter::FilterRouting => { self.patch.filter_routing = if let ParameterValue::Choice(x) = msg.value { FilterRouting::from_int(x) } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -290,6 +281,7 @@ impl SoundData {
                     Parameter::VelSens => ParameterValue::Float(self.patch.vel_sens),
                     Parameter::EnvDepth => ParameterValue::Float(self.patch.env_depth),
                     Parameter::PlayMode => ParameterValue::Choice(self.patch.play_mode as usize),
+                    Parameter::FilterRouting => ParameterValue::Choice(self.patch.filter_routing as usize),
                     _ => {panic!();}
                 }
             }

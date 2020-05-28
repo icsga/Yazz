@@ -16,7 +16,7 @@ pub use filter::{Filter, FilterData, OnePole};
 pub use lfo::{Lfo, LfoData};
 pub use oscillator::{Oscillator, OscData, OscType, OscRouting};
 pub use sample_generator::SampleGenerator;
-pub use synth::{Synth, PatchData, SynthState, PlayMode, NUM_GLOBAL_LFOS, NUM_MODULATORS};
+pub use synth::{Synth, PatchData, SynthState, PlayMode, FilterRouting, NUM_GLOBAL_LFOS, NUM_MODULATORS};
 pub use wt_oscillator::{WtOsc, WtOscData};
 
 use super::Float;

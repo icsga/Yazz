@@ -5,18 +5,13 @@
 Thanks for trying out Yazz. This project is still in development, so not
 everything works as expected, or at all. I'm happy about any feedback.
 
-**IMPORTANT: The filter is currently unstable, so certain settings will create
-noise at maximum volume. Please be careful when making filter changes. Don't
-damage your ears.**
-
 ## Architecture
 
 Yazz has a fixed signal flow with the following components:
 
 * 32 voices
 * 3 wavetable-based oscillators per voice
-* 2 (well, currently only one) filters with LP-/ HP- and BP-Modes (well, currently
-  only LP and HP) per voice
+* 2 filters (parallel or serial routing) with LP-/ HP- and BP-Modes per voice
 * 3 ADSR envelopes per voice
 * 2 LFOs per voice
 * 2 global LFOs
@@ -202,4 +197,21 @@ controlling level, tune, spread and wave index of oscillator 1, and attack,
 decay, sustain, release of envelope 1. Set '2' could control the same
 parameters for oscillator and envelope 2 and so on. Set 'd' can be used for
 delay values, while 'p' controlls the patch parameters like patch level.
+
+## Sound editing notes
+
+### Envelopes
+
+By default, the level of the mix of all oscillators is modulated by envelope 1.
+This can be disabled by setting the patch parameter "EnvDepth" to 0. Then you
+can assign the envelopes to the oscillators individually by using them as
+modulation source and modulating the oscillator level. The oscillator level
+parameter itself should be set to 0 in this case.
+
+### Filters
+
+There are two independent filters. You can choose which filter an oscillator
+should be routed to with the "Routing" option in the oscillator parameters.
+You can also choose to route the output of filter one through filter two by
+setting the patch parameter "filter_routing" to Serial instead of Parallel.
 

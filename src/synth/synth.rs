@@ -34,6 +34,52 @@ impl Default for PlayMode {
     fn default() -> Self { PlayMode::Poly }
 }
 
+impl PlayMode {
+    pub fn from_int(param: usize) -> PlayMode {
+        match param {
+            0 => PlayMode::Poly,
+            1 => PlayMode::Mono,
+            2 => PlayMode::Legato,
+            _ => panic!(),
+        }
+    }
+
+    pub fn to_int(&self) -> usize {
+        match self {
+            PlayMode::Poly   => 0,
+            PlayMode::Mono   => 1,
+            PlayMode::Legato => 2,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Copy, Clone, Debug)]
+pub enum FilterRouting {
+    Parallel, // both filters get summed as output
+    Serial    // filter1 goes into filter2, filter2 goes to out
+}
+
+impl Default for FilterRouting {
+    fn default() -> Self { FilterRouting::Parallel }
+}
+
+impl FilterRouting {
+    pub fn from_int(param: usize) -> FilterRouting {
+        match param {
+            0 => FilterRouting::Parallel,
+            1 => FilterRouting::Serial,
+            _ => panic!(),
+        }
+    }
+
+    pub fn to_int(&self) -> usize {
+        match self {
+            FilterRouting::Parallel => 0,
+            FilterRouting::Serial => 1,
+        }
+    }
+}
+
 // Data of the currently selected sound patch
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
 pub struct PatchData {
@@ -43,6 +89,7 @@ pub struct PatchData {
     pub vel_sens: Float,  // Velocity sensitivity
     pub env_depth: Float, // Mod depth of env1 to volume. TODO: Move to Env1 menu
     pub play_mode: PlayMode,
+    pub filter_routing: FilterRouting,
 }
 
 impl PatchData {
@@ -126,15 +173,15 @@ impl Synth {
         Synth::calculate_keymap(&mut keymap, REF_FREQUENCY);
         let osc_wave = [default_table.clone(), default_table.clone(), default_table.clone()];
         Synth{
-            sample_rate: sample_rate,
-            sound: sound,
-            sound_global: sound_global,
-            sound_local: sound_local,
-            keymap: keymap,
-            wt_manager: wt_manager,
-            voice: voice,
+            sample_rate,
+            sound,
+            sound_global,
+            sound_local,
+            keymap,
+            wt_manager,
+            voice,
             delay: Delay::new(sample_rate),
-            glfo:glfo,
+            glfo,
             num_voices_triggered: 0,
             voices_playing: 0,
             trigger_seq: 0,
@@ -143,12 +190,12 @@ impl Synth {
             mod_wheel: 0.0,
             aftertouch: 0.0,
             sustain_pedal: 0.0,
-            sender: sender,
+            sender,
             global_state: SynthState{freq_factor: 1.0},
             samplebuff_osc: Oscillator::new(sample_rate, default_table.clone()),
             samplebuff_env: Envelope::new(sample_rate as Float),
             samplebuff_lfo: Lfo::new(sample_rate),
-            osc_wave: osc_wave,
+            osc_wave,
         }
     }
 
@@ -181,9 +228,7 @@ impl Synth {
     }
 
     fn reset(&mut self) {
-        for v in &mut self.voice {
-            v.reset();
-        }
+        self.voice.iter_mut().for_each(|v| v.reset());
         self.delay.reset();
     }
 
@@ -320,9 +365,7 @@ impl Synth {
         let id = self.sound.osc[osc_id].wt_osc_data.wavetable;
         info!("Updating oscillator {} to wavetable {}", osc_id, id);
         let wt = self.wt_manager.get_table(id).unwrap();
-        for v in self.voice.iter_mut() {
-            v.set_wavetable(osc_id, wt.clone());
-        }
+        self.voice.iter_mut().for_each(|v| v.set_wavetable(osc_id, wt.clone()));
         self.osc_wave[osc_id] = wt.clone();
     }
 

@@ -3,7 +3,7 @@ use super::Filter;
 use super::Float;
 use super::Lfo;
 use super::{Parameter, ParamId, SynthParam, MenuItem};
-use super::PlayMode;
+use super::{PlayMode, FilterRouting};
 use super::SynthState;
 use super::{Oscillator, OscData};
 use super::SoundData;
@@ -55,10 +55,10 @@ impl Voice {
             Lfo::new(sample_rate),
         ];
         let voice = Voice{
-                osc: osc,
-                env: env,
-                filter: filter,
-                lfo: lfo,
+                osc,
+                env,
+                filter,
+                lfo,
                 triggered: false,
                 trigger_seq: 0,
                 key: 0,
@@ -155,8 +155,8 @@ impl Voice {
         if !self.is_running() {
             return 0.0;
         }
-        let mut result_f1 = 0.0;
-        let mut result_f2 = 0.0;
+        let mut input_f1 = 0.0;
+        let mut input_f2 = 0.0;
         let mut result_direct = 0.0;
         self.last_update = sample_clock;
         let mut reset = false;
@@ -171,8 +171,8 @@ impl Voice {
             freq = Voice::get_frequency(&sound_local.osc[i], input_freq);
             let (sample, wave_complete) = osc.get_sample(freq, sample_clock, &sound_local.osc[i], reset);
             let sample_amped = sample * sound_local.osc[i].level * self.scaled_vel;
-            result_f1 += sample_amped * osc.filter1_out;
-            result_f2 += sample_amped * osc.filter2_out;
+            input_f1 += sample_amped * osc.filter1_out;
+            input_f2 += sample_amped * osc.filter2_out;
             result_direct += sample_amped * osc.direct_out;
             // Sync oscillator 1 to 0
             reset = i == 0 && wave_complete && sound_local.osc[1].sync == 1;
@@ -180,8 +180,17 @@ impl Voice {
 
         // Feed it into the filters
         let mut result: Float;
-        result  = self.filter[0].process(result_f1, &mut sound_local.filter[0], input_freq);
-        result += self.filter[1].process(result_f2, &mut sound_local.filter[1], input_freq);
+        let output_f1  = self.filter[0].process(input_f1, &mut sound_local.filter[0], input_freq);
+        match sound_global.patch.filter_routing {
+            FilterRouting::Parallel => {
+                result = output_f1;
+            }
+            FilterRouting::Serial => {
+                result = 0.0;
+                input_f2 += output_f1;
+            }
+        }
+        result += self.filter[1].process(input_f2, &mut sound_local.filter[1], input_freq);
         result += result_direct;
 
         // Apply the volume envelope

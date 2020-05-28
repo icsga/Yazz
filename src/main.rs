@@ -60,6 +60,7 @@ use crossbeam_channel::unbounded;
 use crossbeam_channel::{Sender, Receiver};
 
 use flexi_logger::{Logger, opt_format};
+use log::error;
 
 extern crate clap;
 use clap::{Arg, App};
@@ -117,7 +118,7 @@ fn setup_messaging() -> (Sender<UiMessage>, Receiver<UiMessage>, Sender<SynthMes
     (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver)
 }
 
-fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>, midi_port: usize, mut midi_channel: u8) -> MidiInputConnection<()> {
+fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>, midi_port: usize, mut midi_channel: u8) -> Result<MidiInputConnection<()>, ()> {
     println!("Setting up MIDI... ");
     if midi_channel < 1 || midi_channel > 16 {
         midi_channel = 16; // Omni
@@ -129,13 +130,20 @@ fn setup_midi(m2s_sender: Sender<SynthMessage>, m2u_sender: Sender<UiMessage>, m
     conn_in
 }
 
-fn setup_ui(to_synth_sender: Sender<SynthMessage>, to_ui_sender: Sender<UiMessage>, ui_receiver: Receiver<UiMessage>) -> (JoinHandle<()>, JoinHandle<()>) {
+fn setup_ui(to_synth_sender: Sender<SynthMessage>, to_ui_sender: Sender<UiMessage>, ui_receiver: Receiver<UiMessage>, show_tui: bool) -> Result<(JoinHandle<()>, JoinHandle<()>), ()> {
     println!("Setting up UI...");
-    let termion = TermionWrapper::new();
+    let termion_result = TermionWrapper::new();
+    let termion = match termion_result {
+        Ok(t) => t,
+        Err(e) => {
+            println!("\nError setting terminal into raw mode: {}", e);
+            return Err(());
+        }
+    };
     let term_handle = TermionWrapper::run(termion, to_ui_sender);
-    let tui_handle = Tui::run(to_synth_sender, ui_receiver);
+    let tui_handle = Tui::run(to_synth_sender, ui_receiver, show_tui);
     println!("\r... finished");
-    (term_handle, tui_handle)
+    Ok((term_handle, tui_handle))
 }
 
 fn setup_synth(sample_rate: u32, s2u_sender: Sender<UiMessage>, synth_receiver: Receiver<SynthMessage>) -> (Arc<Mutex<Synth>>, std::thread::JoinHandle<()>) { 
@@ -147,13 +155,21 @@ fn setup_synth(sample_rate: u32, s2u_sender: Sender<UiMessage>, synth_receiver: 
     (synth, synth_handle)
 }
 
-fn setup_audio() -> (Engine, u32) {
+fn setup_audio() -> Result<(Engine, u32), ()> {
     println!("\rSetting up audio engine...");
-    let engine = Engine::new();
+    let result = Engine::new();
+    let engine = match result {
+        Ok(e) => e,
+        Err(()) => {
+            error!("Failed to start audio engine");
+            println!("Failed to start audio engine");
+            return Err(());
+        }
+    };
     let sample_rate = engine.get_sample_rate();
     println!("\r  sample_rate: {}", sample_rate);
     println!("\r... finished");
-    (engine, sample_rate)
+    Ok((engine, sample_rate))
 }
 
 // Save one table of a wavetable set as a CSV file.
@@ -210,13 +226,21 @@ fn main() {
     let matches = App::new("Yazz")
                         .version(SYNTH_ENGINE_VERSION)
                         .about("Yet Another Subtractive Synth")
+                        .arg(Arg::with_name("version")
+                            .short("v")
+                            .long("version")
+                            .help("Shows the version of the sound engine and the sound file format"))
+                        .arg(Arg::with_name("notui")
+                            .short("n")
+                            .long("no-tui")
+                            .help("Disable drawing of text user interface"))
                         .arg(Arg::with_name("savewave")
                             .short("s")
                             .long("save")
                             .help("Saves selected wave to file")
                             .takes_value(true))
                         .arg(Arg::with_name("savevoice")
-                            .short("v")
+                            .short("o")
                             .long("voice")
                             .help("Saves output of single voice to file"))
                         .arg(Arg::with_name("midiport")
@@ -234,6 +258,13 @@ fn main() {
     let midi_port: usize = midi_port.parse().unwrap_or(1);
     let midi_channel = matches.value_of("midichannel").unwrap_or("0");
     let midi_channel: u8 = midi_channel.parse().unwrap_or(0);
+    let show_tui = !matches.is_present("notui");
+
+    // Show version
+    if matches.is_present("version") {
+        println!("Yazz v{}, sound file v{}", SYNTH_ENGINE_VERSION, SOUND_DATA_VERSION);
+        return;
+    }
 
     // For debugging: Save selected wavetable as file
     let wave_index = matches.value_of("savewave").unwrap_or("");
@@ -250,14 +281,29 @@ fn main() {
 
     // Do setup
     let (to_ui_sender, ui_receiver, to_synth_sender, synth_receiver) = setup_messaging();
-    let midi_connection = setup_midi(to_synth_sender.clone(), to_ui_sender.clone(), midi_port, midi_channel);
-    let (term_handle, tui_handle) = setup_ui(to_synth_sender, to_ui_sender.clone(), ui_receiver);
-    let (mut engine, sample_rate) = setup_audio();
+    let result = setup_midi(to_synth_sender.clone(), to_ui_sender.clone(), midi_port, midi_channel);
+    let midi_connection = match result {
+        Ok(c) => c,
+        Err(()) => return,
+    };
+
+    let result = setup_audio();
+    let (mut engine, sample_rate) = match result {
+        Ok((e, s)) => (e, s),
+        Err(()) => return,
+    };
+
+    let result = setup_ui(to_synth_sender, to_ui_sender.clone(), ui_receiver, show_tui);
+    let (term_handle, tui_handle) = match result {
+        Ok((term, tui)) => (term, tui),
+        Err(_) => return, // TODO: Reset terminal to non-raw state
+    };
+
     let (synth, synth_handle) = setup_synth(sample_rate, to_ui_sender.clone(), synth_receiver);
 
     // Run
     println!("\r... finished, starting processing");
-    engine.run(synth, to_ui_sender);
+    engine.run(synth, to_ui_sender).unwrap();
 
     // Cleanup
     term_handle.join().unwrap();

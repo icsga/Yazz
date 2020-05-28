@@ -117,7 +117,10 @@ pub enum Parameter {
     PlayMode,
     Poly,
     Mono,
-    Legato
+    Legato,
+    FilterRouting,
+    Parallel,
+    Serial
 }
 #[warn(non_camel_case_types)]
 
@@ -388,13 +391,14 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 
-pub static PATCH_PARAMS: [MenuItem; 6] = [
-    MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Drive,     key: 'd', val_range: ValueRange::Float(0.0, 10.0, 1.0),  next: &[]},
-    MenuItem{item: Parameter::Pitchbend ,key: 'p', val_range: ValueRange::Int(0, 12),             next: &[]},
-    MenuItem{item: Parameter::VelSens,   key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
-    MenuItem{item: Parameter::EnvDepth,  key: 'e', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
-    MenuItem{item: Parameter::PlayMode,  key: 'm', val_range: ValueRange::Choice(&PLAY_MODES),  next: &[]},
+pub static PATCH_PARAMS: [MenuItem; 7] = [
+    MenuItem{item: Parameter::Level,        key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Drive,        key: 'd', val_range: ValueRange::Float(0.0, 10.0, 1.0),  next: &[]},
+    MenuItem{item: Parameter::Pitchbend ,   key: 'p', val_range: ValueRange::Int(0, 12),             next: &[]},
+    MenuItem{item: Parameter::VelSens,      key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
+    MenuItem{item: Parameter::EnvDepth,     key: 'e', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
+    MenuItem{item: Parameter::PlayMode,     key: 'm', val_range: ValueRange::Choice(&PLAY_MODES),    next: &[]},
+    MenuItem{item: Parameter::FilterRouting,key: 'f', val_range: ValueRange::Choice(&FILTER_ROUTING),next: &[]},
 ];
 
 pub static MOD_SOURCES: [MenuItem; 9] = [
@@ -428,5 +432,10 @@ pub static PLAY_MODES: [MenuItem; 3] = [
     MenuItem{item: Parameter::Poly,      key: 'p', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::Mono,      key: 'm', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::Legato,    key: 'l', val_range: ValueRange::NoRange, next: &[]},
+];
+
+pub static FILTER_ROUTING: [MenuItem; 2] = [
+    MenuItem{item: Parameter::Parallel, key: 'p', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Serial,   key: 's', val_range: ValueRange::NoRange, next: &[]},
 ];
 

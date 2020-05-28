@@ -3,9 +3,10 @@ extern crate failure;
 
 use super::UiMessage;
 use super::synth::Synth;
-use cpal::traits::{DeviceTrait, EventLoopTrait, HostTrait};
 
+use cpal::traits::{DeviceTrait, EventLoopTrait, HostTrait};
 use crossbeam_channel::Sender;
+use log::error;
 
 use std::sync::{Arc, Mutex};
 use std::time::SystemTime;
@@ -15,30 +16,45 @@ pub struct Engine {
 }
 
 impl Engine {
-    pub fn new() -> Engine {
+    pub fn new() -> Result<Engine, ()> {
         //Engine::enumerate();
         let host = cpal::default_host();
         println!("\r  Chose host {:?}", host.id());
-        let device = host.default_output_device().expect("failed to find a default output device");
+        let device = host.default_output_device().expect("Failed to find a default output device");
         println!("\r  Chose device {:?}", device.name());
-        let format = device.default_output_format().unwrap();
+        let result = device.default_output_format();
+        let format = match result {
+            Ok(f) => f,
+            Err(e) => {
+                error!("Failed to query audio output format: {:?}", e);
+                println!("Failed to query audio output format: {:?}", e);
+                return Err(());
+            }
+        };
         let sample_rate = format.sample_rate.0;
-
-        Engine{sample_rate}
+        Ok(Engine{sample_rate})
     }
 
     pub fn get_sample_rate(&self) -> u32 {
         self.sample_rate
     }
 
-    pub fn run(&mut self, synth: Arc<Mutex<Synth>>, to_ui_sender: Sender<UiMessage>) {
+    pub fn run(&mut self, synth: Arc<Mutex<Synth>>, to_ui_sender: Sender<UiMessage>) -> Result<(), ()> {
         let host = cpal::default_host();
         let device = host.default_output_device().expect("failed to find a default output device");
         let mut sample_clock = 0i64;
         let num_channels = 2;
 
         let event_loop = host.event_loop();
-        let mut format = device.default_output_format().unwrap();
+        let result = device.default_output_format();
+        let mut format = match result {
+            Ok(f) => f,
+            Err(e) => {
+                error!("Failed to query audio output format: {:?}", e);
+                println!("Failed to query audio output format: {:?}", e);
+                return Err(());
+            }
+        };
         if format.channels > num_channels as u16 {
             format.channels = num_channels as u16;
         }
@@ -79,6 +95,7 @@ impl Engine {
                 }
             });
         });
+        Ok(())
     }
 
     /*

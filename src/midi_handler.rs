@@ -1,7 +1,7 @@
 use midir::{MidiInput, MidiInputConnection, Ignore};
 
 use crossbeam_channel::Sender;
-use log::info;
+use log::{info, error};
 
 use super::{SynthMessage, UiMessage};
 
@@ -28,12 +28,29 @@ impl MidiHandler {
     pub fn run(m2s_sender: Sender<SynthMessage>,
                m2u_sender: Sender<UiMessage>,
                midi_port: usize,
-               midi_channel: u8) -> MidiInputConnection<()> {
-        let mut midi_in = MidiInput::new("midir reading input").unwrap();
+               midi_channel: u8) -> Result<MidiInputConnection<()>, ()> {
+        let result = MidiInput::new("Yazz MIDI input");
+        let mut midi_in = match result {
+            Ok(m) => m,
+            Err(e) => {
+                error!("Can't open MIDI input connection: {:?}", e);
+                println!("Can't open MIDI input connection: {:?}", e);
+                return Err(());
+            }
+        };
         midi_in.ignore(Ignore::None);
-        let in_port_name = midi_in.port_name(midi_port).unwrap();
+        let result = midi_in.port_name(midi_port);
+        let in_port_name = match result {
+            Ok(n) => n,
+            Err(e) => {
+                error!("Can't get MIDI port name: {:?}", e);
+                println!("Can't get MIDI port name: {:?}", e);
+                return Err(());
+            }
+        };
+        info!("  Connecting to MIDI port {}", in_port_name);
         println!("  Connecting to MIDI port {}", in_port_name);
-        let conn_in = midi_in.connect(midi_port, "midir-read-input", move |_, message, _| {
+        let conn_result = midi_in.connect(midi_port, "midir-read-input", move |_, message, _| {
             if message.len() >= 2 {
                 if midi_channel < 16 && (message[0] & 0x0F) != midi_channel {
                     return;
@@ -51,8 +68,14 @@ impl MidiHandler {
             } else {
                 info!("Got MIDI message with len {}", message.len());
             }
-        }, ()).unwrap();
-        conn_in
+        }, ());
+        match conn_result {
+            Ok(c) => Ok(c),
+            Err(e) => {
+                error!("Failed to connect to MIDI port: {:?}", e);
+                Err(())
+            }
+        }
     }
 
     pub fn get_midi_message(message: &[u8]) -> MidiMessage {
@@ -63,12 +86,12 @@ impl MidiHandler {
             value = message[2];
         }
         match message[0] & 0xF0 {
-            0x90 => MidiMessage::NoteOn{channel: channel, key: param, velocity: value},
-            0x80 => MidiMessage::NoteOff{channel: channel, key: param, velocity: value},
-            0xA0 => MidiMessage::KeyAT{channel: channel, key: param, pressure: value},
-            0xB0 => MidiMessage::ControlChg{channel: channel, controller: param, value: value},
-            0xC0 => MidiMessage::ProgramChg{channel: channel, program: param},
-            0xD0 => MidiMessage::ChannelAT{channel: channel, pressure: param},
+            0x90 => MidiMessage::NoteOn{channel, key: param, velocity: value},
+            0x80 => MidiMessage::NoteOff{channel, key: param, velocity: value},
+            0xA0 => MidiMessage::KeyAT{channel, key: param, pressure: value},
+            0xB0 => MidiMessage::ControlChg{channel, controller: param, value},
+            0xC0 => MidiMessage::ProgramChg{channel, program: param},
+            0xD0 => MidiMessage::ChannelAT{channel, pressure: param},
             0xE0 => {
                 let mut pitch: i16 = param as i16;
                 pitch |= (value as i16) << 7;

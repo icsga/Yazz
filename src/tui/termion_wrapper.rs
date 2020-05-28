@@ -17,11 +17,12 @@ pub struct TermionWrapper {
 }
 
 impl TermionWrapper {
-    pub fn new() -> TermionWrapper {
+    pub fn new() -> Result<TermionWrapper, std::io::Error> {
         println!("{}", cursor::Hide);
-        TermionWrapper{
-            stdout: MouseTerminal::from(stdout().into_raw_mode().unwrap())
-        }
+        let t = TermionWrapper{
+            stdout: MouseTerminal::from(stdout().into_raw_mode()?)
+        };
+        Ok(t)
     }
 
     pub fn run(mut termion: TermionWrapper, to_ui_sender: Sender<UiMessage>) -> std::thread::JoinHandle<()> {

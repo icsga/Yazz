@@ -228,6 +228,7 @@ impl ParamSelector {
                                     if *num_instances == 1 {
                                         // Single instance, skip function_index state
                                         self.func_selection.value = ParameterValue::Int(1);
+                                        self.query_current_value();
                                         SmResult::ChangeState(ParamSelector::state_parameter)
                                     } else {
                                         SmResult::ChangeState(ParamSelector::state_function_index)
@@ -254,8 +255,6 @@ impl ParamSelector {
             SmEvent::EnterState => {
                 info!("state_function_index Enter");
                 self.state = SelectorState::FunctionIndex;
-
-
                 SmResult::EventHandled
             }
             SmEvent::ExitState => {

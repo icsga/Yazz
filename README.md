@@ -17,12 +17,13 @@ missing, and the parameter ranges are not perfectly balanced yet.
 - 3 wavetable oscillators per voice, 32 voice polyphony
 - Up to 7 instances per oscillator with frequency spreading
 - Oscillator sync
+- 2 independent filters with individual oscillator routing
 - Wavetable scanning
 - User wavetables
 - Up to 16 modulation assignments
 - 2 LFOs per voice plus 2 global LFOs
 - 3 ADSR envelopes per voice, with adjustable slope
-- Delay
+- Delay (mono or ping pong)
 - 36 sets of MIDI controller assignments
 
 For a detailed description, have a look at the [manual in the doc folder](doc/manual.md).

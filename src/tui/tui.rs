@@ -58,6 +58,7 @@ pub struct Tui {
     busy: Duration, // Accumulated busy times of the engine
     min_idle: Duration,
     max_busy: Duration,
+    show_tui: bool,
 
     bank: SoundBank,   // Bank with sound patches
     sound: Rc<RefCell<SoundPatch>>, // Current sound patch as loaded from disk
@@ -72,25 +73,26 @@ pub struct Tui {
 }
 
 impl Tui {
-    pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>) -> Tui {
+    pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>, show_tui: bool) -> Tui {
         let mut window = Surface::new();
         let sound = Rc::new(RefCell::new(SoundPatch::new()));
         window.set_position(1, 3);
         window.update_all(&sound.borrow().data);
 
         let mut tui = Tui{
-            sender: sender,
-            ui_receiver: ui_receiver,
+            sender,
+            ui_receiver,
             selector: ParamSelector::new(&FUNCTIONS, &MOD_SOURCES),
             selection_changed: true,
-            window: window,
+            window,
             sync_counter: 0,
             idle: Duration::new(0, 0),
             busy: Duration::new(0, 0),
             min_idle: Duration::new(10, 0),
             max_busy: Duration::new(0, 0),
+            show_tui,
             bank: SoundBank::new(SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION),
-            sound: sound,
+            sound,
             selected_sound: 0,
             ctrl_map: CtrlMap::new(),
             active_ctrl_set: 0,
@@ -147,9 +149,10 @@ impl Tui {
      * synth engine and the audio engine.
      */
     pub fn run(to_synth_sender: Sender<SynthMessage>,
-               ui_receiver: Receiver<UiMessage>) -> std::thread::JoinHandle<()> {
+               ui_receiver: Receiver<UiMessage>,
+               show_tui: bool) -> std::thread::JoinHandle<()> {
         let handler = spawn(move || {
-            let mut tui = Tui::new(to_synth_sender, ui_receiver);
+            let mut tui = Tui::new(to_synth_sender, ui_receiver, show_tui);
             loop {
                 let msg = tui.ui_receiver.recv().unwrap();
                 if !tui.handle_ui_message(msg) {
@@ -523,14 +526,18 @@ impl Tui {
             self.window.set_dirty(true);
         }
 
-        self.window.draw();
+        if self.show_tui {
+            self.window.draw();
+        }
 
         if let Mode::Edit = self.mode {
             print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
             Tui::display_selector(&self.selector);
         }
-        self.display_idle_time();
-        self.display_status_line();
+        if self.show_tui {
+            self.display_idle_time();
+            self.display_status_line();
+        }
 
         stdout().flush().ok();
     }
@@ -660,7 +667,7 @@ impl Tui {
             ParameterValue::Choice(x) => {
                 let item = &param.item_list[param.item_index];
                 let range = &item.val_range;
-                let selection = if let ValueRange::Choice(list) = range { list } else { panic!() };
+                let selection = if let ValueRange::Choice(list) = range { list } else { panic!("item: {:?}, range: {:?}", item, range) };
                 let item = selection[x].item;
                 print!(" {}", item);
             },

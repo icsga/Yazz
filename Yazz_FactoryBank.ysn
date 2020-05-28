@@ -309,7 +309,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -618,7 +619,8 @@
           "pitchbend": 1.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -927,7 +929,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -1236,7 +1239,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -1545,7 +1549,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -1854,7 +1859,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -2163,7 +2169,8 @@
           "pitchbend": 2.0,
           "vel_sens": 0.0,
           "env_depth": 1.0,
-          "play_mode": "Mono"
+          "play_mode": "Mono",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -2472,7 +2479,8 @@
           "pitchbend": 12.0,
           "vel_sens": 0.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -2781,7 +2789,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -3090,7 +3099,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -3399,7 +3409,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -3708,7 +3719,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -4017,7 +4029,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -4326,7 +4339,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -4635,7 +4649,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -4944,7 +4959,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -5253,7 +5269,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -5562,7 +5579,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -5871,7 +5889,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -6180,7 +6199,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -6489,7 +6509,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -6798,7 +6819,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -7107,7 +7129,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -7416,7 +7439,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -7725,7 +7749,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -8034,7 +8059,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -8343,7 +8369,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -8652,7 +8679,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -8961,7 +8989,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -9270,7 +9299,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -9579,7 +9609,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -9888,7 +9919,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -10197,7 +10229,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -10506,7 +10539,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -10815,7 +10849,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -11124,7 +11159,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -11433,7 +11469,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -11742,7 +11779,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -12051,7 +12089,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -12360,7 +12399,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -12669,7 +12709,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -12978,7 +13019,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -13287,7 +13329,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -13596,7 +13639,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -13905,7 +13949,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -14214,7 +14259,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -14523,7 +14569,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -14832,7 +14879,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -15141,7 +15189,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -15450,7 +15499,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -15759,7 +15809,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -16068,7 +16119,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -16377,7 +16429,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -16686,7 +16739,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -16995,7 +17049,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -17304,7 +17359,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -17613,7 +17669,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -17922,7 +17979,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -18231,7 +18289,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -18540,7 +18599,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -18849,7 +18909,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -19158,7 +19219,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -19467,7 +19529,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -19776,7 +19839,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -20085,7 +20149,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -20394,7 +20459,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -20703,7 +20769,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -21012,7 +21079,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -21321,7 +21389,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -21630,7 +21699,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -21939,7 +22009,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -22248,7 +22319,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -22557,7 +22629,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -22866,7 +22939,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -23175,7 +23249,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -23484,7 +23559,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -23793,7 +23869,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -24102,7 +24179,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -24411,7 +24489,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -24720,7 +24799,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -25029,7 +25109,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -25338,7 +25419,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -25647,7 +25729,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -25956,7 +26039,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -26265,7 +26349,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -26574,7 +26659,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -26883,7 +26969,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -27192,7 +27279,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -27501,7 +27589,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -27810,7 +27899,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -28119,7 +28209,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -28428,7 +28519,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -28737,7 +28829,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -29046,7 +29139,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -29355,7 +29449,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -29664,7 +29759,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -29973,7 +30069,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -30282,7 +30379,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -30591,7 +30689,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -30900,7 +30999,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -31209,7 +31309,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -31518,7 +31619,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -31827,7 +31929,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -32136,7 +32239,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -32445,7 +32549,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -32754,7 +32859,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -33063,7 +33169,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -33372,7 +33479,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -33681,7 +33789,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -33990,7 +34099,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -34299,7 +34409,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -34608,7 +34719,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -34917,7 +35029,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -35226,7 +35339,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -35535,7 +35649,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -35844,7 +35959,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -36153,7 +36269,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -36462,7 +36579,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -36771,7 +36889,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -37080,7 +37199,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -37389,7 +37509,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -37698,7 +37819,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -38007,7 +38129,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -38316,7 +38439,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -38625,7 +38749,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -38934,7 +39059,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -39243,7 +39369,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     },
@@ -39552,7 +39679,8 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly"
+          "play_mode": "Poly",
+"filter_routing": "Parallel"
         }
       }
     }
