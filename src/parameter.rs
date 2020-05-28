@@ -326,9 +326,10 @@ pub static OSC_TYPES: [MenuItem; 2] = [
     MenuItem{item: Parameter::Noise,     key: 'n', val_range: ValueRange::NoRange, next: &[]},
 ];
 
-pub static LFO_PARAMS: [MenuItem; 2] = [
-    MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::Choice(&LFO_WAVEFORM),    next: &[]},
+pub static LFO_PARAMS: [MenuItem; 3] = [
+    MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::Choice(&LFO_WAVEFORM), next: &[]},
     MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Float(0.0, 44.1, 0.1), next: &[]},
+    MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::Float(0.0, 1.0, 0.01), next: &[]},
 ];
 
 pub static FILTER_PARAMS: [MenuItem; 6] = [

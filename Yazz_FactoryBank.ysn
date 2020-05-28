@@ -101,21 +101,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 0.5
+            "frequency": 0.5,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 0.2
+            "frequency": 0.2,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -310,7 +314,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -411,21 +415,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -620,7 +628,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -721,21 +729,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -930,7 +942,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -1031,21 +1043,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -1240,7 +1256,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -1341,21 +1357,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 0.3
+            "frequency": 0.3,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -1550,7 +1570,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -1651,21 +1671,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 4.166929133858268
+            "frequency": 4.166929133858268,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 4.861417322834646
+            "frequency": 4.861417322834646,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Tri",
-            "frequency": 2.777952755905512
+            "frequency": 2.777952755905512,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -1860,7 +1884,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -1961,21 +1985,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Square",
-            "frequency": 0.8
+            "frequency": 0.8,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -2170,7 +2198,7 @@
           "vel_sens": 0.0,
           "env_depth": 1.0,
           "play_mode": "Mono",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -2271,21 +2299,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 6.94488188976378
+            "frequency": 6.94488188976378,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -2480,7 +2512,7 @@
           "vel_sens": 0.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -2581,21 +2613,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -2790,7 +2826,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -2891,21 +2927,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -3100,7 +3140,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -3201,21 +3241,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -3410,7 +3454,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -3511,21 +3555,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -3720,7 +3768,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -3821,21 +3869,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -4030,7 +4082,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -4131,21 +4183,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -4340,7 +4396,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -4441,21 +4497,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -4650,7 +4710,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -4751,21 +4811,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -4960,7 +5024,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -5061,21 +5125,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -5270,7 +5338,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -5371,21 +5439,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -5580,7 +5652,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -5681,21 +5753,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -5890,7 +5966,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -5991,21 +6067,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -6200,7 +6280,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -6301,21 +6381,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -6510,7 +6594,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -6611,21 +6695,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -6820,7 +6908,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -6921,21 +7009,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -7130,7 +7222,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -7231,21 +7323,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -7440,7 +7536,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -7541,21 +7637,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -7750,7 +7850,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -7851,21 +7951,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -8060,7 +8164,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -8161,21 +8265,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -8370,7 +8478,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -8471,21 +8579,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -8680,7 +8792,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -8781,21 +8893,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -8990,7 +9106,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -9091,21 +9207,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -9300,7 +9420,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -9401,21 +9521,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -9610,7 +9734,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -9711,21 +9835,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -9920,7 +10048,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -10021,21 +10149,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -10230,7 +10362,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -10331,21 +10463,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -10540,7 +10676,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -10641,21 +10777,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -10850,7 +10990,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -10951,21 +11091,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -11160,7 +11304,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -11261,21 +11405,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -11470,7 +11618,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -11571,21 +11719,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -11780,7 +11932,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -11881,21 +12033,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -12090,7 +12246,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -12191,21 +12347,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -12400,7 +12560,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -12501,21 +12661,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -12710,7 +12874,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -12811,21 +12975,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -13020,7 +13188,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -13121,21 +13289,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -13330,7 +13502,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -13431,21 +13603,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -13640,7 +13816,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -13741,21 +13917,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -13950,7 +14130,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -14051,21 +14231,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -14260,7 +14444,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -14361,21 +14545,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -14570,7 +14758,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -14671,21 +14859,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -14880,7 +15072,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -14981,21 +15173,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -15190,7 +15386,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -15291,21 +15487,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -15500,7 +15700,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -15601,21 +15801,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -15810,7 +16014,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -15911,21 +16115,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -16120,7 +16328,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -16221,21 +16429,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -16430,7 +16642,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -16531,21 +16743,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -16740,7 +16956,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -16841,21 +17057,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -17050,7 +17270,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -17151,21 +17371,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -17360,7 +17584,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -17461,21 +17685,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -17670,7 +17898,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -17771,21 +17999,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -17980,7 +18212,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -18081,21 +18313,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -18290,7 +18526,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -18391,21 +18627,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -18600,7 +18840,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -18701,21 +18941,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -18910,7 +19154,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -19011,21 +19255,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -19220,7 +19468,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -19321,21 +19569,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -19530,7 +19782,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -19631,21 +19883,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -19840,7 +20096,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -19941,21 +20197,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -20150,7 +20410,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -20251,21 +20511,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -20460,7 +20724,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -20561,21 +20825,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -20770,7 +21038,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -20871,21 +21139,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -21080,7 +21352,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -21181,21 +21453,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -21390,7 +21666,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -21491,21 +21767,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -21700,7 +21980,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -21801,21 +22081,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -22010,7 +22294,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -22111,21 +22395,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -22320,7 +22608,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -22421,21 +22709,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -22630,7 +22922,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -22731,21 +23023,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -22940,7 +23236,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -23041,21 +23337,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -23250,7 +23550,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -23351,21 +23651,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -23560,7 +23864,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -23661,21 +23965,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -23870,7 +24178,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -23971,21 +24279,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -24180,7 +24492,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -24281,21 +24593,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -24490,7 +24806,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -24591,21 +24907,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -24800,7 +25120,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -24901,21 +25221,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -25110,7 +25434,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -25211,21 +25535,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -25420,7 +25748,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -25521,21 +25849,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -25730,7 +26062,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -25831,21 +26163,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -26040,7 +26376,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -26141,21 +26477,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -26350,7 +26690,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -26451,21 +26791,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -26660,7 +27004,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -26761,21 +27105,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -26970,7 +27318,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -27071,21 +27419,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -27280,7 +27632,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -27381,21 +27733,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -27590,7 +27946,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -27691,21 +28047,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -27900,7 +28260,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -28001,21 +28361,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -28210,7 +28574,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -28311,21 +28675,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -28520,7 +28888,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -28621,21 +28989,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -28830,7 +29202,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -28931,21 +29303,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -29140,7 +29516,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -29241,21 +29617,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -29450,7 +29830,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -29551,21 +29931,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -29760,7 +30144,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -29861,21 +30245,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -30070,7 +30458,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -30171,21 +30559,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -30380,7 +30772,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -30481,21 +30873,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -30690,7 +31086,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -30791,21 +31187,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -31000,7 +31400,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -31101,21 +31501,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -31310,7 +31714,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -31411,21 +31815,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -31620,7 +32028,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -31721,21 +32129,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -31930,7 +32342,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -32031,21 +32443,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -32240,7 +32656,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -32341,21 +32757,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -32550,7 +32970,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -32651,21 +33071,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -32860,7 +33284,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -32961,21 +33385,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -33170,7 +33598,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -33271,21 +33699,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -33480,7 +33912,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -33581,21 +34013,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -33790,7 +34226,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -33891,21 +34327,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -34100,7 +34540,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -34201,21 +34641,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -34410,7 +34854,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -34511,21 +34955,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -34720,7 +35168,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -34821,21 +35269,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -35030,7 +35482,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -35131,21 +35583,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -35340,7 +35796,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -35441,21 +35897,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -35650,7 +36110,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -35751,21 +36211,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -35960,7 +36424,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -36061,21 +36525,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -36270,7 +36738,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -36371,21 +36839,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -36580,7 +37052,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -36681,21 +37153,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -36890,7 +37366,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -36991,21 +37467,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -37200,7 +37680,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -37301,21 +37781,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -37510,7 +37994,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -37611,21 +38095,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -37820,7 +38308,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -37921,21 +38409,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -38130,7 +38622,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -38231,21 +38723,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -38440,7 +38936,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -38541,21 +39037,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -38750,7 +39250,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -38851,21 +39351,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -39060,7 +39564,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -39161,21 +39665,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -39370,7 +39878,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     },
@@ -39471,21 +39979,25 @@
         "lfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "glfo": [
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0
+            "frequency": 1.0,
+            "amount": 1.0
           }
         ],
         "modul": [
@@ -39680,7 +40192,7 @@
           "vel_sens": 1.0,
           "env_depth": 1.0,
           "play_mode": "Poly",
-"filter_routing": "Parallel"
+          "filter_routing": "Parallel"
         }
       }
     }

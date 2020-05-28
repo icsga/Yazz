@@ -23,11 +23,14 @@ impl Default for LfoWaveform {
 pub struct LfoData {
     pub waveform: LfoWaveform,
     pub frequency: Float,
+    pub amount: Float,
 }
 
 impl LfoData {
     pub fn init(&mut self) {
+        self.select_wave(0);
         self.frequency = 1.0;
+        self.amount = 1.0;
     }
 
     pub fn select_wave(&mut self, value: usize) {
@@ -147,7 +150,7 @@ impl Lfo {
             LfoWaveform::Square => self.get_sample_square(0.5),
             LfoWaveform::Noise => self.get_sample_noise(),
             LfoWaveform::SnH => self.get_sample_snh(complete),
-        };
+        } * data.amount;
 
         self.last_update += dt;
         if result > 1.0 {
