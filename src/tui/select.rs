@@ -1727,7 +1727,15 @@ fn right_bracket_in_state_param_selects_nextparameter() {
 
     context.handle_input(TestInput::Chars("]".to_string()));
     assert_eq!(context.ps.state, SelectorState::Param);
-    assert!(context.verify_parameter(Parameter::Factor));
+    assert!(context.verify_parameter(Parameter::Delay));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Loop));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert_eq!(context.ps.state, SelectorState::Param);
+    assert!(context.verify_parameter(Parameter::Loop));
 }
 
 #[test]
@@ -1779,7 +1787,13 @@ fn right_bracket_in_state_value_selects_nextparameter() {
     assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
 
     context.handle_input(TestInput::Chars("]".to_string()));
-    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Factor, ParameterValue::Int(DEFAULT_FACTOR)));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Delay, ParameterValue::Float(0.0)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Loop, ParameterValue::Int(0)));
+
+    context.handle_input(TestInput::Chars("]".to_string()));
+    assert!(context.verify_selection(Parameter::Envelope, 3, Parameter::Loop, ParameterValue::Int(0)));
 }
 
 #[test]

@@ -1,7 +1,7 @@
 {
   "info": {
-    "sound_data_version": "0.0.6",
-    "synth_engine_version": "0.0.6"
+    "sound_data_version": "0.0.7",
+    "synth_engine_version": "0.0.7"
   },
   "sounds": [
     {
@@ -59,25 +59,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 503.937,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 32.496063,
             "decay": 62.992126,
             "sustain": 0.0,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 32.496063,
             "decay": 62.992126,
             "sustain": 0.0,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -373,25 +379,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 10.496063,
             "decay": 1480.315,
             "sustain": 0.0,
             "release": 503.937,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -687,25 +699,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 440.9448818897638,
             "decay": 377.9527559055118,
             "sustain": 0.7,
             "release": 1070.8661417322835,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -1001,25 +1019,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 1543.3071,
             "sustain": 0.0,
             "release": 944.8819,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -1315,25 +1339,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 0.7,
             "release": 30.0,
-            "factor": 2.0
+            "factor": 2.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -1629,25 +1659,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 180.0,
             "decay": 100.0,
             "sustain": 0.9212598425196852,
             "release": 503.93700787401576,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -1943,25 +1979,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 5.0,
             "sustain": 1.0,
             "release": 188.9763779527559,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -2257,25 +2299,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 94.48818897637796,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 2.0
+            "factor": 2.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 30.0,
             "decay": 50.0,
             "sustain": 0.7,
             "release": 100.0,
-            "factor": 3.0
+            "factor": 3.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -2571,25 +2619,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -2885,25 +2939,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -3199,25 +3259,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -3513,25 +3579,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -3827,25 +3899,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -4141,25 +4219,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -4455,25 +4539,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -4769,25 +4859,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -5083,25 +5179,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -5397,25 +5499,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -5711,25 +5819,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -6025,25 +6139,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -6339,25 +6459,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -6653,25 +6779,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -6967,25 +7099,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -7281,25 +7419,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -7595,25 +7739,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -7909,25 +8059,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -8223,25 +8379,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -8537,25 +8699,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -8851,25 +9019,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -9165,25 +9339,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -9479,25 +9659,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -9793,25 +9979,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -10107,25 +10299,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -10421,25 +10619,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -10735,25 +10939,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -11049,25 +11259,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -11363,25 +11579,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -11677,25 +11899,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -11991,25 +12219,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -12305,25 +12539,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -12619,25 +12859,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -12933,25 +13179,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -13247,25 +13499,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -13561,25 +13819,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -13875,25 +14139,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -14189,25 +14459,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -14503,25 +14779,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -14817,25 +15099,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -15131,25 +15419,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -15445,25 +15739,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -15759,25 +16059,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -16073,25 +16379,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -16387,25 +16699,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -16701,25 +17019,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -17015,25 +17339,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -17329,25 +17659,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -17643,25 +17979,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -17957,25 +18299,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -18271,25 +18619,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -18585,25 +18939,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -18899,25 +19259,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -19213,25 +19579,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -19527,25 +19899,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -19841,25 +20219,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -20155,25 +20539,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -20469,25 +20859,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -20783,25 +21179,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -21097,25 +21499,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -21411,25 +21819,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -21725,25 +22139,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -22039,25 +22459,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -22353,25 +22779,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -22667,25 +23099,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -22981,25 +23419,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -23295,25 +23739,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -23609,25 +24059,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -23923,25 +24379,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -24237,25 +24699,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -24551,25 +25019,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -24865,25 +25339,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -25179,25 +25659,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -25493,25 +25979,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -25807,25 +26299,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -26121,25 +26619,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -26435,25 +26939,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -26749,25 +27259,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -27063,25 +27579,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -27377,25 +27899,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -27691,25 +28219,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -28005,25 +28539,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -28319,25 +28859,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -28633,25 +29179,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -28947,25 +29499,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -29261,25 +29819,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -29575,25 +30139,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -29889,25 +30459,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -30203,25 +30779,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -30517,25 +31099,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -30831,25 +31419,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -31145,25 +31739,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -31459,25 +32059,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -31773,25 +32379,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -32087,25 +32699,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -32401,25 +33019,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -32715,25 +33339,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -33029,25 +33659,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -33343,25 +33979,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -33657,25 +34299,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -33971,25 +34619,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -34285,25 +34939,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -34599,25 +35259,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -34913,25 +35579,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -35227,25 +35899,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -35541,25 +36219,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -35855,25 +36539,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -36169,25 +36859,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -36483,25 +37179,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -36797,25 +37499,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -37111,25 +37819,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -37425,25 +38139,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -37739,25 +38459,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -38053,25 +38779,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -38367,25 +39099,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -38681,25 +39419,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -38995,25 +39739,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -39309,25 +40059,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -39623,25 +40379,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [
@@ -39937,25 +40699,31 @@
         ],
         "env": [
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           },
           {
+            "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
             "sustain": 1.0,
             "release": 15.0,
-            "factor": 1.0
+            "factor": 1.0,
+            "looping": false
           }
         ],
         "filter": [

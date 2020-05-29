@@ -17,6 +17,12 @@ Yazz has a fixed signal flow with the following components:
 * 2 global LFOs
 * Delay
 
+## Help and exit
+
+At any time, press F1 to show a help page. Press any key to exit the help page.
+
+Press F12 to exit Yazz.
+
 ## Loading and saving sounds
 
 This functionality is still under construction.
@@ -35,6 +41,15 @@ supported. Copying a sound, saving single sounds etc. are still on the TODO
 list. There is also no safety dialog yet to prevent accidentally overwriting
 sounds. Making manual backups might be a good idea if you made a cool sound and
 want to keep it.
+
+## Copying and renaming sounds
+
+Press <Ctrl-C> to copy the current sound to an internal sound buffer.
+
+Press <Ctrl-V> to paste the contents of the internal sound buffer into the
+current sound.
+
+Press <Ctrl-N> to rename the current sound.
 
 ## Operating modes
 

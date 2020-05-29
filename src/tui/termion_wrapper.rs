@@ -36,12 +36,12 @@ impl TermionWrapper {
                     Event::Key(c) => {
                         match c {
                             // Exit.
-                            Key::Ctrl('c') => {
+                            Key::F(12) => {
                                 info!("Stopping terminal handler");
                                 exit = true;
                                 to_ui_sender.send(UiMessage::Exit).unwrap();
                                 break;
-                            },
+                            }
                             _ => to_ui_sender.send(UiMessage::Key(c)).unwrap(),
                         };
                         termion.stdout.flush().unwrap();

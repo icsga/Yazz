@@ -75,8 +75,8 @@ use std::thread::JoinHandle;
 use std::time::Duration;
 use std::vec::Vec;
 
-pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.6";
-pub const SOUND_DATA_VERSION: &'static str = "0.0.6";
+pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.7";
+pub const SOUND_DATA_VERSION: &'static str = "0.0.7";
 
 type Float = f64;
 

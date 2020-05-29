@@ -38,6 +38,7 @@ enum Mode {
 enum TuiState {
     Play,
     Help,
+    Name, // Enter sound patch name
 }
 
 //type TuiEvent = termion::event::Key;
@@ -60,11 +61,13 @@ pub struct Tui {
     max_busy: Duration,
     show_tui: bool,
 
-    bank: SoundBank,   // Bank with sound patches
+    bank: SoundBank,                // Bank with sound patches
     sound: Rc<RefCell<SoundPatch>>, // Current sound patch as loaded from disk
+    sound_copy: SoundPatch,         // For copying sounds
     selected_sound: usize,
-    ctrl_map: CtrlMap, // Mapping of MIDI controller to parameter
+    ctrl_map: CtrlMap,              // Mapping of MIDI controller to parameter
     active_ctrl_set: usize,
+    temp_name: String,
 
     // State machine for ParamSelector
     selector_sm: StateMachine<ParamSelector, SelectorEvent>,
@@ -93,9 +96,11 @@ impl Tui {
             show_tui,
             bank: SoundBank::new(SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION),
             sound,
+            sound_copy: SoundPatch::new(),
             selected_sound: 0,
             ctrl_map: CtrlMap::new(),
             active_ctrl_set: 0,
+            temp_name: "".to_string(),
             selector_sm: StateMachine::new(ParamSelector::state_function),
             mode: Mode::Edit,
             state: TuiState::Play,
@@ -188,6 +193,7 @@ impl Tui {
         // Top-level keys that work in both modes
         if !match key {
             Key::F(1) => {
+                self.state = TuiState::Help;
                 self.display_help();
                 true
             }
@@ -218,11 +224,51 @@ impl Tui {
                     _ => false // Key not handled yet
                 }
             },
+            Key::Ctrl(c) => {
+                match c {
+                    'c' => { // Copy sound
+                        self.sound_copy = self.sound.borrow().clone();
+                        true
+                    }
+                    'v' => { // Paste sound
+                        self.bank.set_sound(self.selected_sound, &self.sound_copy);
+                        self.select_sound(self.selected_sound);
+                        true
+                    }
+                    'n' => { // Rename sound
+                        self.state = TuiState::Name;
+                        self.temp_name.clear();
+                        self.temp_name.push_str(&self.sound.borrow().name);
+                        self.display_name_prompt();
+                        true
+                    }
+                    _ => false
+                }
+            }
             _ => false
         } {
             // Mode-specific key handling
             if let Mode::Edit = self.mode {
-                self.state = TuiState::Play; // Exit help state (no need to check, just overwrite it)
+                self.handle_edit_mode_input(key);
+            } else {
+                self.handle_play_mode_input(key);
+            }
+        }
+        self.selection_changed = true; // Trigger full UI redraw
+    }
+
+    fn toggle_mode(&mut self) {
+        match self.mode {
+            Mode::Play => self.mode = Mode::Edit,
+            Mode::Edit => self.mode = Mode::Play,
+        }
+    }
+
+    fn handle_edit_mode_input(&mut self, key: Key) {
+        match self.state {
+            TuiState::Help => self.state = TuiState::Play,
+            TuiState::Name => self.state = self.state_name(key),
+            TuiState::Play => {
                 let last_selector_state = self.selector.state;
                 if self.selector.handle_user_input(&mut self.selector_sm, key, self.sound.clone()) {
                     loop {
@@ -239,17 +285,7 @@ impl Tui {
                     // Check if user has aborted MIDI learn state
                     self.check_midi_learn_status();
                 }
-            } else {
-                self.handle_play_mode_input(key);
             }
-        }
-        self.selection_changed = true; // Trigger full UI redraw
-    }
-
-    fn toggle_mode(&mut self) {
-        match self.mode {
-            Mode::Play => self.mode = Mode::Edit,
-            Mode::Edit => self.mode = Mode::Play,
         }
     }
 
@@ -257,6 +293,7 @@ impl Tui {
         self.state = match self.state {
             TuiState::Play => self.state_play(key),
             TuiState::Help => self.state_help(key),
+            TuiState::Name => self.state_name(key),
         }
     }
 
@@ -278,6 +315,39 @@ impl Tui {
 
     fn state_help(&mut self, _key: Key) -> TuiState {
         TuiState::Play
+    }
+
+    fn state_name(&mut self, key: Key) -> TuiState {
+        let next_state = match key {
+            Key::Char(c) => {
+                match c {
+                    '0'..='9' | 'a'..='z' | 'A'..='Z' | ' ' => {
+                        self.temp_name.push(c);
+                        TuiState::Name
+                    }
+                    '\n' => {
+                        self.sound.borrow_mut().name = self.temp_name.clone();
+                        //self.bank.set_sound(self.selected_sound, &self.sound.borrow());
+                        //self.select_sound(self.selected_sound);
+                        self.window.set_sound_info(self.selected_sound, &self.sound.borrow().name);
+                        TuiState::Play
+                    }
+                    _ => TuiState::Name,
+                }
+            }
+            Key::Backspace => {
+                if self.temp_name.len() > 0 {
+                    self.temp_name.pop();
+                }
+                TuiState::Name
+            }
+            Key::Esc => TuiState::Play,
+            _ => TuiState::Name,
+        };
+        if let TuiState::Name = next_state {
+            self.display_name_prompt();
+        }
+        next_state
     }
 
     fn scan_wavetables(&mut self) {
@@ -308,7 +378,7 @@ impl Tui {
                     info!("Adding new table {}.", table_name);
                     let id = self.bank.wt_list.len() + 2; // Default wavetables are not in this list, so add 2
                     let new_entry = WtInfo{
-                        id: id,
+                        id,
                         valid: true,
                         name: table_name.to_string(),
                         filename: filename.to_str().unwrap().to_string()};
@@ -516,8 +586,9 @@ impl Tui {
 
     /** Display the UI. */
     fn display(&mut self) {
-        if let TuiState::Help = self.state {
-            return;
+        match self.state {
+            TuiState::Help | TuiState::Name => return,
+            _ => ()
         }
 
         if self.selection_changed {
@@ -763,36 +834,44 @@ impl Tui {
     fn display_status_line(&mut self) {
         let ctrl_set = self.active_ctrl_set as u8;
         let ctrl_set = (ctrl_set + if ctrl_set <= 9 { '0' as u8 } else { 'a' as u8 - 10 }) as char;
-        print!("{}| Mode: {:?} | Active controller set: {} |                               Press <F1> for help ",
+        print!("{}| Mode: {:?} | Active controller set: {} |                Press <F1> for help, <F12> to exit ",
             cursor::Goto(1, 50),
             self.mode,
             ctrl_set);
     }
 
     fn display_help(&mut self) {
-        self.state = TuiState::Help;
         print!("{}{}", clear::All, cursor::Goto(1, 1));
         println!("Global keys:\r");
         println!("------------\r");
-        println!("<TAB> : Switch between Edit and Play mode\r");
-        println!("<F1>  : Show this help text\r");
-        println!("<F2>  : Save current sound bank\r");
-        println!("<F3>  : Load current sound bank\r");
+        println!("<TAB>    : Switch between Edit and Play mode\r");
+        println!("<F1>     : Show this help text\r");
+        println!("<F2>     : Save default sound bank\r");
+        println!("<F3>     : Load default sound bank\r");
+        println!("<Ctrl-c> : Copy current sound\r");
+        println!("<Ctrl-v> : Paste copied sound to current patch\r");
+        println!("<Ctrl-n> : Rename the current patch\r");
+        println!("<F12>    : Quit Yazz\r");
         println!("\r");
         println!("Keys in Edit mode:\r");
         println!("------------------\r");
         println!("</ >         : Move backwards/ forwards in the parameter history\r");
         println!("PgUp/ PgDown : Increase/ decrease function ID of current parameter\r");
-        println!("[/ ]         : Move down/ up through the parameters of the current function\r");
+        println!("[/ ]         : Move backwards/ forwards through the parameter list of the current function\r");
         println!("\"<MarkerID>  : Set a marker with the MarkerID at the current parameter\r");
         println!("\'<MarkerID>  : Recall the parameter with the given MarkerID\r");
         println!("\r");
         println!("Keys in Play mode:\r");
         println!("------------------\r");
-        println!("+/ -         : Select next/ previous patch\r");
+        println!("+/ -         : Select next/ previous patch (discards changes if not saved)\r");
         println!("0 - 9, a - z : Select MIDI controller assignment set\r");
         println!("\r");
         println!("Press any key to continue.\r");
+        stdout().flush().ok();
+    }
+
+    fn display_name_prompt(&mut self) {
+        print!("{}{} Patch name: {}", cursor::Goto(1, 1), clear::CurrentLine, self.temp_name);
         stdout().flush().ok();
     }
 }
