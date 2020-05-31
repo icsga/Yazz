@@ -59,30 +59,39 @@ impl Surface {
         lfo.borrow_mut().enable_border(true);
         this.add_lfo(&mut lfo.borrow_mut(), 1, 1, 0);
         let x = lfo.borrow().get_width();
-        this.add_lfo(&mut lfo.borrow_mut(), 2, x + 2, 0);
+        this.add_lfo(&mut lfo.borrow_mut(), 2, x, 0);
+
+        this.add_glfo(&mut lfo.borrow_mut(), 1, x * 2 - 1, 0);
+        this.add_glfo(&mut lfo.borrow_mut(), 2, x * 3 - 2, 0);
+
         let (_, lfo_height) = lfo.borrow().get_size();
         this.add_child(lfo, env_width + 2, osc_height);
 
-        this.add_child(canvas_clone, 2, osc_height + env_height + 1);
+        this.add_child(canvas_clone, 2, osc_height + env_height);
 
+        /*
         let glfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         glfo.borrow_mut().enable_border(true);
         this.add_glfo(&mut glfo.borrow_mut(), 1, 1, 0);
         let (x, _) = glfo.borrow().get_size();
         this.add_glfo(&mut glfo.borrow_mut(), 2, x + 2, 0);
         let (_, glfo_height) = glfo.borrow().get_size();
-        this.add_child(glfo, env_width + 2, osc_height + lfo_height);
+        this.add_child(glfo, env_width + lfo_width + 2, osc_height);
+        */
 
         let filter: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         filter.borrow_mut().enable_border(true);
         this.add_filter(&mut filter.borrow_mut(), 1, 1, 0);
-        let (_, filter_height) = filter.borrow().get_size();
-        this.add_child(filter, env_width + 2, osc_height + lfo_height + glfo_height);
+        let (filter_width, filter_height) = filter.borrow().get_size();
+        this.add_filter(&mut filter.borrow_mut(), 2, filter_width, 0);
+        //this.add_child(filter, env_width + 2, osc_height + lfo_height + glfo_height);
+        this.add_child(filter, env_width + 2, osc_height + lfo_height);
 
         let sysinfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         sysinfo.borrow_mut().enable_border(true);
         this.add_sysinfo(&mut sysinfo.borrow_mut(), 1, 0);
-        this.add_child(sysinfo, env_width + 2, osc_height + lfo_height + glfo_height + filter_height);
+        //this.add_child(sysinfo, env_width + 2, osc_height + lfo_height + glfo_height + filter_height);
+        this.add_child(sysinfo, env_width + 2, osc_height + lfo_height + filter_height);
 
         this.window.set_position(1, 1);
         this.window.set_color_scheme(this.colors.clone());
@@ -284,21 +293,29 @@ impl Surface {
         let title = Label::new(title, len as Index);
         target.add_child(title, x_offset, y_offset);
 
-        let mut key = ParamId::new(Parameter::Envelope, func_id, Parameter::Attack);
+        let mut key = ParamId::new(Parameter::Envelope, func_id, Parameter::Delay);
+        let env_delay = self.new_mod_slider_float("D", 0.0, 4000.0, 0.0, true, &key);
+        target.add_child(env_delay, x_offset, 1 + y_offset);
+
+        key = ParamId::new(Parameter::Envelope, func_id, Parameter::Attack);
         let env_attack = self.new_mod_slider_float("A", 0.0, 4000.0, 0.0, true, &key);
-        target.add_child(env_attack, x_offset, 1 + y_offset);
+        target.add_child(env_attack, 3 + x_offset, 1 + y_offset);
 
         key.set(Parameter::Envelope, func_id, Parameter::Decay);
         let env_decay = self.new_mod_slider_float("D", 0.0, 4000.0, 0.0, true, &key);
-        target.add_child(env_decay, 4 + x_offset, 1 + y_offset);
+        target.add_child(env_decay, 6 + x_offset, 1 + y_offset);
 
         key.set(Parameter::Envelope, func_id, Parameter::Sustain);
         let env_sustain = self.new_mod_slider_float("S", 0.0, 1.0, 0.0, false, &key);
-        target.add_child(env_sustain, 8 + x_offset, 1 + y_offset);
+        target.add_child(env_sustain, 9 + x_offset, 1 + y_offset);
 
         key.set(Parameter::Envelope, func_id, Parameter::Release);
         let env_release = self.new_mod_slider_float("R", 0.0, 8000.0, 0.0, true, &key);
         target.add_child(env_release, 12 + x_offset, 1 + y_offset);
+
+        key.set(Parameter::Envelope, func_id, Parameter::Loop);
+        let env_loop = self.new_option("Loop", 0, &key);
+        target.add_child(env_loop, x_offset, 9 + y_offset);
     }
 
     fn add_lfo(&mut self,
@@ -313,12 +330,16 @@ impl Surface {
         target.add_child(title, x_offset, y_offset);
 
         let mut key = ParamId::new(Parameter::Lfo, func_id, Parameter::Waveform);
-        let osc_wave = self.new_mod_dial_int("Waveform", 0, 5, 0, false, &key);
-        target.add_child(osc_wave, x_offset, 1 + y_offset);
+        let lfo_wave = self.new_mod_dial_int("Waveform", 0, 5, 0, false, &key);
+        target.add_child(lfo_wave, x_offset, 1 + y_offset);
 
         key.set(Parameter::Lfo, func_id, Parameter::Frequency);
-        let osc_freq = self.new_mod_dial_float("Speed", 0.0, 44.1, 0.01, false, &key);
-        target.add_child(osc_freq, x_offset, 4 + y_offset);
+        let lfo_freq = self.new_mod_dial_float("Speed", 0.0, 44.1, 0.01, false, &key);
+        target.add_child(lfo_freq, x_offset, 4 + y_offset);
+
+        key.set(Parameter::Lfo, func_id, Parameter::Amount);
+        let lfo_amount = self.new_mod_dial_float("Amount", 0.0, 1.0, 0.01, false, &key);
+        target.add_child(lfo_amount, x_offset, 7 + y_offset);
     }
 
     fn add_glfo(&mut self,
@@ -333,12 +354,16 @@ impl Surface {
         target.add_child(title, x_offset, y_offset);
 
         let mut key = ParamId::new(Parameter::GlobalLfo, func_id, Parameter::Waveform);
-        let osc_wave = self.new_mod_dial_int("Waveform", 0, 5, 0, false, &key);
-        target.add_child(osc_wave, x_offset, 1 + y_offset);
+        let glfo_wave = self.new_mod_dial_int("Waveform", 0, 5, 0, false, &key);
+        target.add_child(glfo_wave, x_offset, 1 + y_offset);
 
         key.set(Parameter::GlobalLfo, func_id, Parameter::Frequency);
-        let osc_freq = self.new_mod_dial_float("Speed", 0.0, 44.1, 0.01, false, &key);
-        target.add_child(osc_freq, x_offset, 4 + y_offset);
+        let glfo_freq = self.new_mod_dial_float("Speed", 0.0, 44.1, 0.01, false, &key);
+        target.add_child(glfo_freq, x_offset, 4 + y_offset);
+
+        key.set(Parameter::GlobalLfo, func_id, Parameter::Amount);
+        let glfo_amount = self.new_mod_dial_float("Amount", 0.0, 1.0, 0.01, false, &key);
+        target.add_child(glfo_amount, x_offset, 7 + y_offset);
     }
 
     fn add_filter(&mut self,
@@ -358,7 +383,7 @@ impl Surface {
 
         key.set(Parameter::Filter, func_id, Parameter::Resonance);
         let filter_reso = self.new_mod_dial_float("Resonance", 0.0, 1.0, 0.5, false, &key);
-        target.add_child(filter_reso, 16 + x_offset, 1 + y_offset);
+        target.add_child(filter_reso, 14 + x_offset, 1 + y_offset);
 
         key.set(Parameter::Filter, func_id, Parameter::Gain);
         let filter_gain = self.new_mod_dial_float("Gain", 0.0, 2.0, 1.0, false, &key);
@@ -366,7 +391,7 @@ impl Surface {
 
         key.set(Parameter::Filter, func_id, Parameter::KeyFollow);
         let filter_follow = self.new_option("KeyFollow", 0, &key);
-        target.add_child(filter_follow, 16 + x_offset, 5 + y_offset);
+        target.add_child(filter_follow, 14 + x_offset, 5 + y_offset);
     }
 
     fn add_sysinfo(&mut self,

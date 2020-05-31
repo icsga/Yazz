@@ -89,10 +89,10 @@ impl ItemSelection {
      * - Direct ascii input of the number
      * - Adjusting current value with Up/ Down, +/ - keys
      *
-     * \todo Passing the wavetable list as parameter is an ugly hack, need to
-     *       find something better.
+     * \todo Passing the wavetable list length as parameter is an ugly hack,
+     *       need to find something better.
      */
-    pub fn handle_input(&mut self, c: termion::event::Key, wt_list: &Vec<(usize, String)>) -> RetCode {
+    pub fn handle_input(&mut self, c: termion::event::Key, dyn_list_len: usize) -> RetCode {
         info!("handle_input {:?}", self.item_list[self.item_index].item);
 
         match c {
@@ -105,7 +105,7 @@ impl ItemSelection {
                     ValueRange::Int(min, max) => self.handle_input_for_int(min, max, c),
                     ValueRange::Float(_min, _max, _step) => self.handle_input_for_float(c),
                     ValueRange::Choice(_choice_list) => self.handle_input_for_choice(c),
-                    ValueRange::Dynamic(_param) => self.handle_input_for_dynamic(wt_list.len() - 1, c), // TODO: Use a closure as parameter instead
+                    ValueRange::Dynamic(_param) => self.handle_input_for_dynamic(dyn_list_len, c), // TODO: Use a closure as parameter instead
                     _ => panic!(),
                 }
             }

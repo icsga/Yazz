@@ -21,7 +21,7 @@ pub struct Slider<Key: Copy + Eq + Hash> {
 impl<Key: Copy + Eq + Hash> Slider<Key> {
     pub fn new(min: Value, max: Value, value: Value) -> SliderRef<Key> {
         let width = 1;
-        let height = 4;
+        let height = 5;
         let props = WidgetProperties::new(width, height);
         let logarithmic = false;
         Rc::new(RefCell::new(Slider{props, min, max, value, logarithmic}))
@@ -90,7 +90,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Slider<Key> {
                 }
             };
             index = if index > 8 { index - 8 } else { 0 };
-            print!("{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y + (3 - i)), chars);
+            print!("{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y + (4 - i)), chars);
         }
     }
 }

@@ -6,7 +6,7 @@ use super::MidiLearn;
 use super::SoundPatch;
 use super::{StateMachine, SmEvent, SmResult};
 
-use log::{info};
+use log::info;
 use termion::event::Key;
 
 use std::cell::RefCell;
@@ -264,7 +264,7 @@ impl ParamSelector {
             SmEvent::Event(selector_event) => {
                 match selector_event {
                     SelectorEvent::Key(c) => {
-                        match self.func_selection.handle_input(*c, &self.wavetable_list) {
+                        match self.func_selection.handle_input(*c, self.wavetable_list.len() - 1) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Key has been used, but value hasn't changed
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore unmatched keys
                             RetCode::ValueUpdated  => SmResult::EventHandled, // Selection not complete yet
@@ -359,7 +359,7 @@ impl ParamSelector {
                         if let Key::Ctrl('l') = c {
                             return SmResult::ChangeState(ParamSelector::state_midi_learn);
                         }
-                        match self.param_selection.handle_input(*c, &self.wavetable_list) {
+                        match self.param_selection.handle_input(*c, self.wavetable_list.len() - 1) {
                             RetCode::KeyConsumed   => SmResult::EventHandled,
                             RetCode::KeyMissmatch  => {
                                 // Key can't be used for value, so it probably is the short cut for a
@@ -509,7 +509,7 @@ impl ParamSelector {
                             SmResult::Error => (), // Continue processing the key
                             _ => return result     // Key was handled
                         }
-                        match self.value_func_selection.handle_input(*c, &self.wavetable_list) {
+                        match self.value_func_selection.handle_input(*c, self.wavetable_list.len() - 1) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Key has been used, but value hasn't changed
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore unmatched keys
                             RetCode::ValueUpdated  => SmResult::EventHandled, // Selection not complete yet
@@ -792,13 +792,13 @@ impl ParamSelector {
     }
 
     fn increase_function_id(&mut self) {
-        self.func_selection.handle_input(Key::Up, &self.wavetable_list);
+        self.func_selection.handle_input(Key::Up, self.wavetable_list.len() - 1);
         self.query_current_value();
         self.history_add(self.get_param_id());
     }
 
     fn decrease_function_id(&mut self) {
-        self.func_selection.handle_input(Key::Down, &self.wavetable_list);
+        self.func_selection.handle_input(Key::Down, self.wavetable_list.len() - 1);
         self.query_current_value();
         self.history_add(self.get_param_id());
     }

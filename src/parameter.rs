@@ -361,7 +361,7 @@ pub static ENV_PARAMS: [MenuItem; 7] = [
     MenuItem{item: Parameter::Sustain, key: 's', val_range: ValueRange::Float(0.0, 1.0, 0.001),  next: &[]},
     MenuItem{item: Parameter::Release, key: 'r', val_range: ValueRange::Float(1.0, 8000.0, 1.0), next: &[]},
     MenuItem{item: Parameter::Factor,  key: 'f', val_range: ValueRange::Int(1, 5),               next: &[]},
-    MenuItem{item: Parameter::Delay,   key: 'e', val_range: ValueRange::Float(1.0, 4000.0, 1.0), next: &[]}, // Value = Duration in ms
+    MenuItem{item: Parameter::Delay,   key: 'e', val_range: ValueRange::Float(0.0, 4000.0, 1.0), next: &[]}, // Value = Duration in ms
     MenuItem{item: Parameter::Loop,    key: 'l', val_range: ValueRange::Int(0, 1),               next: &[]},
 ];
 
@@ -407,7 +407,7 @@ pub static PATCH_PARAMS: [MenuItem; 7] = [
 
 pub static MOD_SOURCES: [MenuItem; 9] = [
     MenuItem{item: Parameter::Oscillator,  key: 'o', val_range: ValueRange::Int(1, 3), next: &OSC_PARAMS},
-    MenuItem{item: Parameter::Envelope,    key: 'e', val_range: ValueRange::Int(1, 2), next: &ENV_PARAMS},
+    MenuItem{item: Parameter::Envelope,    key: 'e', val_range: ValueRange::Int(1, 3), next: &ENV_PARAMS},
     MenuItem{item: Parameter::Lfo,         key: 'l', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},
     MenuItem{item: Parameter::Velocity,    key: 'v', val_range: ValueRange::Int(1, 1), next: &LFO_PARAMS},
     MenuItem{item: Parameter::GlobalLfo,   key: 'g', val_range: ValueRange::Int(1, 2), next: &LFO_PARAMS},

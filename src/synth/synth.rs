@@ -13,7 +13,7 @@ use std::sync::{Arc, Mutex};
 use std::thread::spawn;
 
 use crossbeam_channel::{Sender, Receiver};
-use log::info;
+use log::{info, error};
 use serde::{Serialize, Deserialize};
 use wavetable::{WtManager, WavetableRef, WtInfo};
 
@@ -364,9 +364,14 @@ impl Synth {
     fn update_wavetable(&mut self, osc_id: usize) {
         let id = self.sound.osc[osc_id].wt_osc_data.wavetable;
         info!("Updating oscillator {} to wavetable {}", osc_id, id);
-        let wt = self.wt_manager.get_table(id).unwrap();
-        self.voice.iter_mut().for_each(|v| v.set_wavetable(osc_id, wt.clone()));
-        self.osc_wave[osc_id] = wt.clone();
+        let result = self.wt_manager.get_table(id);
+        match result {
+            Some(wt) => {
+                self.voice.iter_mut().for_each(|v| v.set_wavetable(osc_id, wt.clone()));
+                self.osc_wave[osc_id] = wt.clone();
+            }
+            None => error!("Unable to find wavetable {}",id),
+        }
     }
 
     fn update_routing(&mut self, osc_id: usize) {
@@ -521,8 +526,10 @@ impl Synth {
             },
             Parameter::Envelope => {
                 let env_data = &mut self.sound.env[param.function_id - 1];
-                let mut len_total = env_data.attack + env_data.decay + env_data.release;
-                len_total += len_total / 3.0; // Add 25% duration for sustain, value is in ms
+                let mut len_total = env_data.delay + env_data.attack + env_data.decay + env_data.release;
+                if !env_data.looping {
+                    len_total += len_total / 3.0; // Add 25% duration for sustain, value is in ms
+                }
                 let mut release_point = len_total - env_data.release;
                 len_total *= 44.1; // Samples per second
                 release_point *= 44.1;
