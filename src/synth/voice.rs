@@ -248,8 +248,8 @@ impl Voice {
             for osc in self.osc.iter_mut() {
                 osc.reset(trigger_time);
             }
-            for lfo in self.lfo.iter_mut() {
-                lfo.reset(trigger_time);
+            for (i, lfo) in self.lfo.iter_mut().enumerate() {
+                lfo.reset(trigger_time, sound.lfo[i].phase);
             }
         }
     }

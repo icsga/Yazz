@@ -23,6 +23,7 @@ impl Default for LfoWaveform {
 pub struct LfoData {
     pub waveform: LfoWaveform,
     pub frequency: Float,
+    pub phase: Float,
     pub amount: Float,
 }
 
@@ -30,6 +31,7 @@ impl LfoData {
     pub fn init(&mut self) {
         self.select_wave(0);
         self.frequency = 1.0;
+        self.phase = 0.0;
         self.amount = 1.0;
     }
 
@@ -129,7 +131,7 @@ impl Lfo {
         let result: Float;
         let mut complete = false;
         if reset {
-            self.reset(sample_clock - 1);
+            self.reset(sample_clock - 1, data.phase);
             complete = true;
         }
 
@@ -159,8 +161,8 @@ impl Lfo {
         (result, complete)
     }
 
-    pub fn reset(&mut self, sample_clock: i64) {
+    pub fn reset(&mut self, sample_clock: i64, phase: Float) {
         self.last_update = sample_clock;
-        self.position = 0.0;
+        self.position = phase;
     }
 }

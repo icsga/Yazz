@@ -133,18 +133,22 @@ impl SoundData {
             }
             Parameter::Amp => {}
             Parameter::Lfo => {
+                let mut lfo = &mut self.lfo[id];
                 match msg.parameter {
-                    Parameter::Waveform =>  { self.lfo[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Frequency => { self.lfo[id].frequency = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Amount =>    { self.lfo[id].amount = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Waveform =>  { lfo.select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Frequency => { lfo.frequency = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Phase =>     { lfo.phase = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Amount =>    { lfo.amount = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
             Parameter::GlobalLfo => {
+                let mut glfo = &mut self.glfo[id];
                 match msg.parameter {
-                    Parameter::Waveform =>  { self.glfo[id].select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
-                    Parameter::Frequency => { self.glfo[id].frequency = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Amount =>    { self.glfo[id].amount = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Waveform =>  { glfo.select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
+                    Parameter::Frequency => { glfo.frequency = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Phase =>     { glfo.phase = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Amount =>    { glfo.amount = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -235,6 +239,7 @@ impl SoundData {
                 match param.parameter {
                     Parameter::Waveform =>  ParameterValue::Choice(lfo.get_waveform() as usize),
                     Parameter::Frequency => ParameterValue::Float(lfo.frequency),
+                    Parameter::Phase => ParameterValue::Float(lfo.phase),
                     Parameter::Amount => ParameterValue::Float(lfo.amount),
                     _ => {panic!();}
                 }
@@ -244,6 +249,7 @@ impl SoundData {
                 match param.parameter {
                     Parameter::Waveform =>  ParameterValue::Choice(glfo.get_waveform() as usize),
                     Parameter::Frequency => ParameterValue::Float(glfo.frequency),
+                    Parameter::Phase => ParameterValue::Float(glfo.phase),
                     Parameter::Amount => ParameterValue::Float(glfo.amount),
                     _ => {panic!();}
                 }

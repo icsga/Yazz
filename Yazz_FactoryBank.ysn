@@ -108,11 +108,13 @@
           {
             "waveform": "Sine",
             "frequency": 0.5,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -120,11 +122,13 @@
           {
             "waveform": "Sine",
             "frequency": 0.2,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -428,11 +432,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -440,11 +446,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -748,11 +756,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -760,11 +770,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -1068,11 +1080,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -1080,11 +1094,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -1388,11 +1404,13 @@
           {
             "waveform": "Sine",
             "frequency": 0.3,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -1400,11 +1418,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -1708,11 +1728,13 @@
           {
             "waveform": "Sine",
             "frequency": 4.166929133858268,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 4.861417322834646,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -1720,11 +1742,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Tri",
             "frequency": 2.777952755905512,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -2028,11 +2052,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -2040,11 +2066,13 @@
           {
             "waveform": "Square",
             "frequency": 0.8,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -2348,11 +2376,13 @@
           {
             "waveform": "Sine",
             "frequency": 6.94488188976378,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -2360,11 +2390,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -2565,14 +2597,14 @@
       }
     },
     {
-      "name": "Init",
+      "name": "Kick 1",
       "data": {
         "osc": [
           {
             "level": 0.5,
-            "tune_halfsteps": 0,
+            "tune_halfsteps": -17,
             "tune_cents": 0.0,
-            "freq_offset": 1.0,
+            "freq_offset": 0.3745773363574539,
             "sync": 0,
             "key_follow": 1,
             "routing": "Filter1",
@@ -2580,7 +2612,7 @@
             "wt_osc_data": {
               "num_voices": 1,
               "voice_spread": 0.0,
-              "wave_index": 0.0,
+              "wave_index": 0.2992125984251969,
               "wavetable": 0
             }
           },
@@ -2596,7 +2628,7 @@
             "wt_osc_data": {
               "num_voices": 1,
               "voice_spread": 0.0,
-              "wave_index": 0.0,
+              "wave_index": 0.41732283464566927,
               "wavetable": 0
             }
           },
@@ -2620,37 +2652,37 @@
         "env": [
           {
             "delay": 0.0,
-            "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
-            "release": 15.0,
-            "factor": 1.0,
+            "attack": 2.0,
+            "decay": 441.8346456692913,
+            "sustain": 0.0,
+            "release": 189.9527559055118,
+            "factor": 5.0,
             "looping": false
           },
           {
             "delay": 0.0,
-            "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
-            "release": 15.0,
-            "factor": 1.0,
+            "attack": 1.0,
+            "decay": 189.9291338582677,
+            "sustain": 0.0,
+            "release": 189.9527559055118,
+            "factor": 4.0,
             "looping": false
           },
           {
             "delay": 0.0,
-            "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
-            "release": 15.0,
-            "factor": 1.0,
+            "attack": 1.0,
+            "decay": 95.46456692913384,
+            "sustain": 0.0,
+            "release": 1.0,
+            "factor": 5.0,
             "looping": false
           }
         ],
         "filter": [
           {
             "filter_type": 1,
-            "cutoff": 3000.0,
-            "resonance": 0.0,
+            "cutoff": 50.98425196850393,
+            "resonance": 0.11811023622047244,
             "gain": 0.0,
             "aux": 0.0,
             "key_follow": 0
@@ -2668,11 +2700,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -2680,36 +2714,38 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
         "modul": [
           {
-            "source_func": "Lfo",
-            "source_func_id": 1,
+            "source_func": "Envelope",
+            "source_func_id": 2,
             "target_func": "Oscillator",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "Tune",
+            "amount": 0.7480314960629921,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 35.90551181102362
           },
           {
-            "source_func": "Lfo",
-            "source_func_id": 1,
-            "target_func": "Oscillator",
+            "source_func": "Envelope",
+            "source_func_id": 3,
+            "target_func": "Filter",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "Cutoff",
+            "amount": 0.25984251968503935,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 2078.4803149606296
           },
           {
             "source_func": "Lfo",
@@ -2874,8 +2910,8 @@
           "delay_type": 0
         },
         "patch": {
-          "level": 0.5,
-          "drive": 0.0,
+          "level": 0.84251968503937,
+          "drive": 1.968503937007874,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
@@ -2885,14 +2921,14 @@
       }
     },
     {
-      "name": "Init",
+      "name": "Kick 2",
       "data": {
         "osc": [
           {
             "level": 0.5,
-            "tune_halfsteps": 0,
+            "tune_halfsteps": -17,
             "tune_cents": 0.0,
-            "freq_offset": 1.0,
+            "freq_offset": 0.3745773363574539,
             "sync": 0,
             "key_follow": 1,
             "routing": "Filter1",
@@ -2900,7 +2936,7 @@
             "wt_osc_data": {
               "num_voices": 1,
               "voice_spread": 0.0,
-              "wave_index": 0.0,
+              "wave_index": 0.2992125984251969,
               "wavetable": 0
             }
           },
@@ -2916,7 +2952,7 @@
             "wt_osc_data": {
               "num_voices": 1,
               "voice_spread": 0.0,
-              "wave_index": 0.0,
+              "wave_index": 0.41732283464566927,
               "wavetable": 0
             }
           },
@@ -2940,37 +2976,37 @@
         "env": [
           {
             "delay": 0.0,
-            "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
-            "release": 15.0,
-            "factor": 1.0,
+            "attack": 2.0,
+            "decay": 536.2992125984251,
+            "sustain": 0.0,
+            "release": 189.9527559055118,
+            "factor": 5.0,
             "looping": false
           },
           {
             "delay": 0.0,
-            "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
-            "release": 15.0,
-            "factor": 1.0,
+            "attack": 1.0,
+            "decay": 189.9291338582677,
+            "sustain": 0.0,
+            "release": 189.9527559055118,
+            "factor": 4.0,
             "looping": false
           },
           {
             "delay": 0.0,
-            "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
-            "release": 15.0,
-            "factor": 1.0,
+            "attack": 1.0,
+            "decay": 63.976377952755904,
+            "sustain": 0.0,
+            "release": 1.0,
+            "factor": 5.0,
             "looping": false
           }
         ],
         "filter": [
           {
-            "filter_type": 1,
-            "cutoff": 3000.0,
-            "resonance": 0.0,
+            "filter_type": 7,
+            "cutoff": 50.98425196850393,
+            "resonance": 0.7716535433070866,
             "gain": 0.0,
             "aux": 0.0,
             "key_follow": 0
@@ -2988,11 +3024,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -3000,36 +3038,38 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
         "modul": [
           {
-            "source_func": "Lfo",
-            "source_func_id": 1,
+            "source_func": "Envelope",
+            "source_func_id": 2,
             "target_func": "Oscillator",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "Tune",
+            "amount": 0.7480314960629921,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 35.90551181102362
           },
           {
-            "source_func": "Lfo",
-            "source_func_id": 1,
-            "target_func": "Oscillator",
+            "source_func": "Envelope",
+            "source_func_id": 3,
+            "target_func": "Filter",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "Cutoff",
+            "amount": 0.25984251968503935,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 2078.4803149606296
           },
           {
             "source_func": "Lfo",
@@ -3194,8 +3234,8 @@
           "delay_type": 0
         },
         "patch": {
-          "level": 0.5,
-          "drive": 0.0,
+          "level": 0.84251968503937,
+          "drive": 1.968503937007874,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
@@ -3209,10 +3249,10 @@
       "data": {
         "osc": [
           {
-            "level": 0.5,
-            "tune_halfsteps": 0,
+            "level": 0.0,
+            "tune_halfsteps": -4,
             "tune_cents": 0.0,
-            "freq_offset": 1.0,
+            "freq_offset": 0.7937008087425623,
             "sync": 0,
             "key_follow": 1,
             "routing": "Filter1",
@@ -3220,8 +3260,8 @@
             "wt_osc_data": {
               "num_voices": 1,
               "voice_spread": 0.0,
-              "wave_index": 0.0,
-              "wavetable": 0
+              "wave_index": 0.5433070866141733,
+              "wavetable": 1
             }
           },
           {
@@ -3261,26 +3301,26 @@
           {
             "delay": 0.0,
             "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
-            "release": 15.0,
+            "decay": 347.37007874015745,
+            "sustain": 0.4015748031496063,
+            "release": 315.92125984251965,
             "factor": 1.0,
-            "looping": false
+            "looping": true
           },
           {
             "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
-            "sustain": 1.0,
+            "sustain": 0.29133858267716534,
             "release": 15.0,
             "factor": 1.0,
             "looping": false
           },
           {
             "delay": 0.0,
-            "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
+            "attack": 4000.0,
+            "decay": 4000.0,
+            "sustain": 0.41732283464566927,
             "release": 15.0,
             "factor": 1.0,
             "looping": false
@@ -3289,7 +3329,7 @@
         "filter": [
           {
             "filter_type": 1,
-            "cutoff": 3000.0,
+            "cutoff": 1701.5748031496062,
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
@@ -3306,105 +3346,109 @@
         ],
         "lfo": [
           {
-            "waveform": "Sine",
+            "waveform": "Square",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
-            "frequency": 1.0,
+            "frequency": 0.694488188976378,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
         "glfo": [
           {
-            "waveform": "Sine",
-            "frequency": 1.0,
+            "waveform": "SnH",
+            "frequency": 3.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
         "modul": [
           {
-            "source_func": "Lfo",
+            "source_func": "GlobalLfo",
             "source_func_id": 1,
-            "target_func": "Oscillator",
+            "target_func": "Lfo",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
-            "is_global": false,
-            "scale": 0.0
+            "target_param": "Frequency",
+            "amount": 0.7637795275590551,
+            "active": true,
+            "is_global": true,
+            "scale": 16.841338582677164
           },
           {
             "source_func": "Lfo",
             "source_func_id": 1,
             "target_func": "Oscillator",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "Tune",
+            "amount": 0.19,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 4.5600000000000005
           },
           {
             "source_func": "Lfo",
-            "source_func_id": 1,
-            "target_func": "Oscillator",
+            "source_func_id": 2,
+            "target_func": "Envelope",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "Delay",
+            "amount": 0.40157480314960625,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 803.1496062992125
           },
           {
             "source_func": "Lfo",
-            "source_func_id": 1,
+            "source_func_id": 2,
             "target_func": "Oscillator",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "WaveIndex",
+            "amount": 0.6377952755905512,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 0.3188976377952756
           },
           {
-            "source_func": "Lfo",
+            "source_func": "Envelope",
             "source_func_id": 1,
             "target_func": "Oscillator",
             "target_func_id": 1,
             "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "amount": 0.4330708661417322,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 43.307086614173215
           },
           {
-            "source_func": "Lfo",
-            "source_func_id": 1,
+            "source_func": "Envelope",
+            "source_func_id": 2,
             "target_func": "Oscillator",
-            "target_func_id": 1,
+            "target_func_id": 2,
             "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "amount": 1.0,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 100.0
           },
           {
-            "source_func": "Lfo",
-            "source_func_id": 1,
-            "target_func": "Oscillator",
+            "source_func": "Envelope",
+            "source_func_id": 3,
+            "target_func": "GlobalLfo",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
+            "target_param": "Frequency",
+            "amount": 1.0,
+            "active": true,
             "is_global": false,
-            "scale": 0.0
+            "scale": 44.1
           },
           {
             "source_func": "Lfo",
@@ -3507,18 +3551,18 @@
           }
         ],
         "delay": {
-          "level": 0.0,
+          "level": 0.1811023622047244,
           "feedback": 0.5,
           "time": 0.5,
           "tone": 1600.0,
-          "delay_type": 0
+          "delay_type": 1
         },
         "patch": {
           "level": 0.5,
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 1.0,
-          "env_depth": 1.0,
+          "env_depth": 0.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel"
         }
@@ -3581,17 +3625,17 @@
           {
             "delay": 0.0,
             "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
-            "release": 15.0,
+            "decay": 200.0,
+            "sustain": 0.0,
+            "release": 400.0,
             "factor": 1.0,
-            "looping": false
+            "looping": true
           },
           {
             "delay": 0.0,
             "attack": 15.0,
             "decay": 15.0,
-            "sustain": 1.0,
+            "sustain": 0.0,
             "release": 15.0,
             "factor": 1.0,
             "looping": false
@@ -3626,50 +3670,54 @@
         ],
         "lfo": [
           {
-            "waveform": "Sine",
-            "frequency": 1.0,
+            "waveform": "SnH",
+            "frequency": 0.347244094488189,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
         "glfo": [
           {
-            "waveform": "Sine",
-            "frequency": 1.0,
+            "waveform": "SawDown",
+            "frequency": 1.388976377952756,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
         "modul": [
           {
-            "source_func": "Lfo",
+            "source_func": "GlobalLfo",
             "source_func_id": 1,
-            "target_func": "Oscillator",
+            "target_func": "Envelope",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
-            "active": false,
-            "is_global": false,
-            "scale": 0.0
+            "target_param": "Decay",
+            "amount": -0.1,
+            "active": true,
+            "is_global": true,
+            "scale": -199.95
           },
           {
-            "source_func": "Lfo",
+            "source_func": "GlobalLfo",
             "source_func_id": 1,
-            "target_func": "Oscillator",
+            "target_func": "Envelope",
             "target_func_id": 1,
-            "target_param": "Level",
-            "amount": 0.0,
+            "target_param": "Release",
+            "amount": 0.1,
             "active": false,
-            "is_global": false,
-            "scale": 0.0
+            "is_global": true,
+            "scale": 399.9500000000001
           },
           {
             "source_func": "Lfo",
@@ -3948,11 +3996,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -3960,11 +4010,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -4268,11 +4320,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -4280,11 +4334,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -4588,11 +4644,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -4600,11 +4658,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -4908,11 +4968,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -4920,11 +4982,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -5228,11 +5292,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -5240,11 +5306,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -5548,11 +5616,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -5560,11 +5630,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -5868,11 +5940,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -5880,11 +5954,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -6188,11 +6264,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -6200,11 +6278,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -6508,11 +6588,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -6520,11 +6602,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -6828,11 +6912,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -6840,11 +6926,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -7148,11 +7236,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -7160,11 +7250,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -7468,11 +7560,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -7480,11 +7574,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -7788,11 +7884,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -7800,11 +7898,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -8108,11 +8208,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -8120,11 +8222,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -8428,11 +8532,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -8440,11 +8546,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -8748,11 +8856,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -8760,11 +8870,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -9068,11 +9180,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -9080,11 +9194,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -9388,11 +9504,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -9400,11 +9518,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -9708,11 +9828,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -9720,11 +9842,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -10028,11 +10152,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -10040,11 +10166,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -10348,11 +10476,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -10360,11 +10490,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -10668,11 +10800,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -10680,11 +10814,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -10988,11 +11124,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -11000,11 +11138,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -11308,11 +11448,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -11320,11 +11462,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -11628,11 +11772,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -11640,11 +11786,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -11948,11 +12096,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -11960,11 +12110,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -12268,11 +12420,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -12280,11 +12434,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -12588,11 +12744,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -12600,11 +12758,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -12908,11 +13068,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -12920,11 +13082,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -13228,11 +13392,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -13240,11 +13406,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -13548,11 +13716,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -13560,11 +13730,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -13868,11 +14040,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -13880,11 +14054,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -14188,11 +14364,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -14200,11 +14378,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -14508,11 +14688,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -14520,11 +14702,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -14828,11 +15012,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -14840,11 +15026,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -15148,11 +15336,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -15160,11 +15350,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -15468,11 +15660,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -15480,11 +15674,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -15788,11 +15984,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -15800,11 +15998,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -16108,11 +16308,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -16120,11 +16322,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -16428,11 +16632,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -16440,11 +16646,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -16748,11 +16956,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -16760,11 +16970,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -17068,11 +17280,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -17080,11 +17294,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -17388,11 +17604,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -17400,11 +17618,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -17708,11 +17928,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -17720,11 +17942,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -18028,11 +18252,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -18040,11 +18266,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -18348,11 +18576,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -18360,11 +18590,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -18668,11 +18900,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -18680,11 +18914,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -18988,11 +19224,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -19000,11 +19238,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -19308,11 +19548,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -19320,11 +19562,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -19628,11 +19872,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -19640,11 +19886,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -19948,11 +20196,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -19960,11 +20210,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -20268,11 +20520,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -20280,11 +20534,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -20588,11 +20844,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -20600,11 +20858,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -20908,11 +21168,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -20920,11 +21182,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -21228,11 +21492,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -21240,11 +21506,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -21548,11 +21816,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -21560,11 +21830,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -21868,11 +22140,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -21880,11 +22154,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -22188,11 +22464,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -22200,11 +22478,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -22508,11 +22788,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -22520,11 +22802,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -22828,11 +23112,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -22840,11 +23126,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -23148,11 +23436,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -23160,11 +23450,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -23468,11 +23760,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -23480,11 +23774,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -23788,11 +24084,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -23800,11 +24098,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -24108,11 +24408,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -24120,11 +24422,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -24428,11 +24732,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -24440,11 +24746,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -24748,11 +25056,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -24760,11 +25070,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -25068,11 +25380,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -25080,11 +25394,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -25388,11 +25704,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -25400,11 +25718,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -25708,11 +26028,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -25720,11 +26042,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -26028,11 +26352,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -26040,11 +26366,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -26348,11 +26676,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -26360,11 +26690,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -26668,11 +27000,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -26680,11 +27014,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -26988,11 +27324,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -27000,11 +27338,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -27308,11 +27648,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -27320,11 +27662,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -27628,11 +27972,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -27640,11 +27986,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -27948,11 +28296,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -27960,11 +28310,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -28268,11 +28620,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -28280,11 +28634,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -28588,11 +28944,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -28600,11 +28958,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -28908,11 +29268,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -28920,11 +29282,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -29228,11 +29592,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -29240,11 +29606,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -29548,11 +29916,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -29560,11 +29930,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -29868,11 +30240,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -29880,11 +30254,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -30188,11 +30564,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -30200,11 +30578,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -30508,11 +30888,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -30520,11 +30902,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -30828,11 +31212,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -30840,11 +31226,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -31148,11 +31536,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -31160,11 +31550,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -31468,11 +31860,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -31480,11 +31874,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -31788,11 +32184,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -31800,11 +32198,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -32108,11 +32508,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -32120,11 +32522,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -32428,11 +32832,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -32440,11 +32846,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -32748,11 +33156,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -32760,11 +33170,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -33068,11 +33480,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -33080,11 +33494,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -33388,11 +33804,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -33400,11 +33818,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -33708,11 +34128,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -33720,11 +34142,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -34028,11 +34452,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -34040,11 +34466,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -34348,11 +34776,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -34360,11 +34790,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -34668,11 +35100,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -34680,11 +35114,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -34988,11 +35424,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -35000,11 +35438,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -35308,11 +35748,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -35320,11 +35762,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -35628,11 +36072,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -35640,11 +36086,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -35948,11 +36396,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -35960,11 +36410,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -36268,11 +36720,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -36280,11 +36734,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -36588,11 +37044,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -36600,11 +37058,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -36908,11 +37368,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -36920,11 +37382,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -37228,11 +37692,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -37240,11 +37706,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -37548,11 +38016,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -37560,11 +38030,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -37868,11 +38340,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -37880,11 +38354,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -38188,11 +38664,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -38200,11 +38678,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -38508,11 +38988,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -38520,11 +39002,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -38828,11 +39312,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -38840,11 +39326,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -39148,11 +39636,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -39160,11 +39650,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -39468,11 +39960,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -39480,11 +39974,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -39788,11 +40284,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -39800,11 +40298,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -40108,11 +40608,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -40120,11 +40622,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -40428,11 +40932,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -40440,11 +40946,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -40748,11 +41256,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],
@@ -40760,11 +41270,13 @@
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           },
           {
             "waveform": "Sine",
             "frequency": 1.0,
+            "phase": 0.0,
             "amount": 1.0
           }
         ],

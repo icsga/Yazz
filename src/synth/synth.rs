@@ -561,12 +561,12 @@ impl Synth {
             },
             Parameter::Lfo | Parameter::GlobalLfo => {
                 let lfo = &mut self.samplebuff_lfo;
-                lfo.reset(0);
                 let mut sound_copy = if let Parameter::Lfo = param.function {
                     self.sound.lfo[param.function_id - 1]
                 } else {
                     self.sound.glfo[param.function_id - 1]
                 };
+                lfo.reset(0, sound_copy.phase);
                 sound_copy.frequency = freq;
                 // Get first sample explicitly to reset LFO (for S&H)
                 let (sample, _) = lfo.get_sample(0, &sound_copy, true);
