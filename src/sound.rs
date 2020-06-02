@@ -154,13 +154,14 @@ impl SoundData {
             }
             Parameter::Envelope => {
                 match msg.parameter {
-                    Parameter::Attack =>  { self.env[id].attack = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Decay =>   { self.env[id].decay = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Sustain => { self.env[id].sustain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Release => { self.env[id].release = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Factor =>  { self.env[id].factor = if let ParameterValue::Int(x) = msg.value { x as Float } else { panic!() }; }
-                    Parameter::Delay =>   { self.env[id].delay = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
-                    Parameter::Loop =>    { self.env[id].looping = if let ParameterValue::Int(x) = msg.value { x > 0 } else { panic!() }; }
+                    Parameter::Attack =>      { self.env[id].attack = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Decay =>       { self.env[id].decay = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Sustain =>     { self.env[id].sustain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Release =>     { self.env[id].release = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Factor =>      { self.env[id].factor = if let ParameterValue::Int(x) = msg.value { x as Float } else { panic!() }; }
+                    Parameter::Delay =>       { self.env[id].delay = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Loop =>        { self.env[id].looping = if let ParameterValue::Int(x) = msg.value { x > 0 } else { panic!() }; }
+                    Parameter::ResetToZero => { self.env[id].reset_to_zero = if let ParameterValue::Int(x) = msg.value { x > 0 } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -264,6 +265,7 @@ impl SoundData {
                     Parameter::Factor => ParameterValue::Int(env.factor as i64),
                     Parameter::Delay => ParameterValue::Float(env.delay),
                     Parameter::Loop => ParameterValue::Int(if env.looping { 1 } else { 0 }),
+                    Parameter::ResetToZero => ParameterValue::Int(if env.reset_to_zero { 1 } else { 0 }),
                     _ => {panic!();}
                 }
             }

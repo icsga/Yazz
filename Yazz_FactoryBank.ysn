@@ -65,7 +65,8 @@
             "sustain": 0.7,
             "release": 503.937,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -74,7 +75,8 @@
             "sustain": 0.0,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -83,7 +85,8 @@
             "sustain": 0.0,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -389,7 +392,8 @@
             "sustain": 0.0,
             "release": 503.937,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -398,7 +402,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -407,7 +412,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -713,7 +719,8 @@
             "sustain": 0.7,
             "release": 1070.8661417322835,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -722,7 +729,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -731,7 +739,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -1037,7 +1046,8 @@
             "sustain": 0.0,
             "release": 944.8819,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -1046,7 +1056,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -1055,7 +1066,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -1361,7 +1373,8 @@
             "sustain": 0.7,
             "release": 30.0,
             "factor": 2.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -1370,7 +1383,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -1379,7 +1393,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -1685,7 +1700,8 @@
             "sustain": 0.9212598425196852,
             "release": 503.93700787401576,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -1694,7 +1710,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -1703,7 +1720,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -2009,7 +2027,8 @@
             "sustain": 1.0,
             "release": 188.9763779527559,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -2018,7 +2037,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -2027,7 +2047,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -2333,7 +2354,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 2.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -2342,7 +2364,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -2351,7 +2374,8 @@
             "sustain": 0.7,
             "release": 100.0,
             "factor": 3.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -2657,7 +2681,8 @@
             "sustain": 0.0,
             "release": 189.9527559055118,
             "factor": 5.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -2666,7 +2691,8 @@
             "sustain": 0.0,
             "release": 189.9527559055118,
             "factor": 4.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -2675,7 +2701,8 @@
             "sustain": 0.0,
             "release": 1.0,
             "factor": 5.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -2981,7 +3008,8 @@
             "sustain": 0.0,
             "release": 189.9527559055118,
             "factor": 5.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -2990,7 +3018,8 @@
             "sustain": 0.0,
             "release": 189.9527559055118,
             "factor": 4.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -2999,7 +3028,8 @@
             "sustain": 0.0,
             "release": 1.0,
             "factor": 5.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -3305,7 +3335,8 @@
             "sustain": 0.4015748031496063,
             "release": 315.92125984251965,
             "factor": 1.0,
-            "looping": true
+            "looping": true,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -3314,7 +3345,8 @@
             "sustain": 0.29133858267716534,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -3323,7 +3355,8 @@
             "sustain": 0.41732283464566927,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -3629,7 +3662,8 @@
             "sustain": 0.0,
             "release": 400.0,
             "factor": 1.0,
-            "looping": true
+            "looping": true,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -3638,7 +3672,8 @@
             "sustain": 0.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -3647,7 +3682,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -3953,7 +3989,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -3962,7 +3999,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -3971,7 +4009,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -4277,7 +4316,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -4286,7 +4326,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -4295,7 +4336,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -4601,7 +4643,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -4610,7 +4653,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -4619,7 +4663,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -4925,7 +4970,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -4934,7 +4980,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -4943,7 +4990,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -5249,7 +5297,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -5258,7 +5307,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -5267,7 +5317,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -5573,7 +5624,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -5582,7 +5634,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -5591,7 +5644,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -5897,7 +5951,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -5906,7 +5961,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -5915,7 +5971,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -6221,7 +6278,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -6230,7 +6288,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -6239,7 +6298,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -6545,7 +6605,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -6554,7 +6615,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -6563,7 +6625,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -6869,7 +6932,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -6878,7 +6942,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -6887,7 +6952,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -7193,7 +7259,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -7202,7 +7269,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -7211,7 +7279,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -7517,7 +7586,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -7526,7 +7596,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -7535,7 +7606,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -7841,7 +7913,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -7850,7 +7923,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -7859,7 +7933,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -8165,7 +8240,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -8174,7 +8250,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -8183,7 +8260,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -8489,7 +8567,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -8498,7 +8577,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -8507,7 +8587,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -8813,7 +8894,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -8822,7 +8904,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -8831,7 +8914,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -9137,7 +9221,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -9146,7 +9231,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -9155,7 +9241,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -9461,7 +9548,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -9470,7 +9558,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -9479,7 +9568,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -9785,7 +9875,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -9794,7 +9885,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -9803,7 +9895,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -10109,7 +10202,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -10118,7 +10212,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -10127,7 +10222,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -10433,7 +10529,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -10442,7 +10539,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -10451,7 +10549,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -10757,7 +10856,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -10766,7 +10866,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -10775,7 +10876,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -11081,7 +11183,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -11090,7 +11193,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -11099,7 +11203,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -11405,7 +11510,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -11414,7 +11520,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -11423,7 +11530,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -11729,7 +11837,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -11738,7 +11847,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -11747,7 +11857,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -12053,7 +12164,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -12062,7 +12174,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -12071,7 +12184,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -12377,7 +12491,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -12386,7 +12501,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -12395,7 +12511,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -12701,7 +12818,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -12710,7 +12828,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -12719,7 +12838,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -13025,7 +13145,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -13034,7 +13155,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -13043,7 +13165,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -13349,7 +13472,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -13358,7 +13482,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -13367,7 +13492,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -13673,7 +13799,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -13682,7 +13809,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -13691,7 +13819,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -13997,7 +14126,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -14006,7 +14136,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -14015,7 +14146,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -14321,7 +14453,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -14330,7 +14463,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -14339,7 +14473,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -14645,7 +14780,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -14654,7 +14790,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -14663,7 +14800,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -14969,7 +15107,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -14978,7 +15117,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -14987,7 +15127,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -15293,7 +15434,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -15302,7 +15444,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -15311,7 +15454,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -15617,7 +15761,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -15626,7 +15771,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -15635,7 +15781,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -15941,7 +16088,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -15950,7 +16098,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -15959,7 +16108,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -16265,7 +16415,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -16274,7 +16425,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -16283,7 +16435,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -16589,7 +16742,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -16598,7 +16752,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -16607,7 +16762,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -16913,7 +17069,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -16922,7 +17079,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -16931,7 +17089,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -17237,7 +17396,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -17246,7 +17406,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -17255,7 +17416,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -17561,7 +17723,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -17570,7 +17733,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -17579,7 +17743,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -17885,7 +18050,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -17894,7 +18060,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -17903,7 +18070,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -18209,7 +18377,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -18218,7 +18387,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -18227,7 +18397,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -18533,7 +18704,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -18542,7 +18714,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -18551,7 +18724,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -18857,7 +19031,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -18866,7 +19041,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -18875,7 +19051,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -19181,7 +19358,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -19190,7 +19368,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -19199,7 +19378,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -19505,7 +19685,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -19514,7 +19695,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -19523,7 +19705,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -19829,7 +20012,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -19838,7 +20022,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -19847,7 +20032,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -20153,7 +20339,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -20162,7 +20349,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -20171,7 +20359,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -20477,7 +20666,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -20486,7 +20676,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -20495,7 +20686,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -20801,7 +20993,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -20810,7 +21003,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -20819,7 +21013,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -21125,7 +21320,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -21134,7 +21330,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -21143,7 +21340,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -21449,7 +21647,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -21458,7 +21657,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -21467,7 +21667,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -21773,7 +21974,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -21782,7 +21984,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -21791,7 +21994,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -22097,7 +22301,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -22106,7 +22311,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -22115,7 +22321,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -22421,7 +22628,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -22430,7 +22638,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -22439,7 +22648,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -22745,7 +22955,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -22754,7 +22965,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -22763,7 +22975,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -23069,7 +23282,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -23078,7 +23292,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -23087,7 +23302,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -23393,7 +23609,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -23402,7 +23619,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -23411,7 +23629,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -23717,7 +23936,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -23726,7 +23946,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -23735,7 +23956,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -24041,7 +24263,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -24050,7 +24273,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -24059,7 +24283,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -24365,7 +24590,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -24374,7 +24600,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -24383,7 +24610,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -24689,7 +24917,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -24698,7 +24927,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -24707,7 +24937,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -25013,7 +25244,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -25022,7 +25254,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -25031,7 +25264,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -25337,7 +25571,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -25346,7 +25581,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -25355,7 +25591,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -25661,7 +25898,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -25670,7 +25908,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -25679,7 +25918,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -25985,7 +26225,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -25994,7 +26235,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -26003,7 +26245,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -26309,7 +26552,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -26318,7 +26562,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -26327,7 +26572,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -26633,7 +26879,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -26642,7 +26889,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -26651,7 +26899,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -26957,7 +27206,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -26966,7 +27216,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -26975,7 +27226,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -27281,7 +27533,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -27290,7 +27543,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -27299,7 +27553,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -27605,7 +27860,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -27614,7 +27870,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -27623,7 +27880,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -27929,7 +28187,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -27938,7 +28197,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -27947,7 +28207,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -28253,7 +28514,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -28262,7 +28524,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -28271,7 +28534,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -28577,7 +28841,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -28586,7 +28851,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -28595,7 +28861,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -28901,7 +29168,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -28910,7 +29178,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -28919,7 +29188,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -29225,7 +29495,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -29234,7 +29505,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -29243,7 +29515,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -29549,7 +29822,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -29558,7 +29832,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -29567,7 +29842,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -29873,7 +30149,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -29882,7 +30159,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -29891,7 +30169,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -30197,7 +30476,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -30206,7 +30486,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -30215,7 +30496,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -30521,7 +30803,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -30530,7 +30813,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -30539,7 +30823,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -30845,7 +31130,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -30854,7 +31140,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -30863,7 +31150,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -31169,7 +31457,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -31178,7 +31467,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -31187,7 +31477,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -31493,7 +31784,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -31502,7 +31794,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -31511,7 +31804,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -31817,7 +32111,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -31826,7 +32121,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -31835,7 +32131,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -32141,7 +32438,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -32150,7 +32448,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -32159,7 +32458,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -32465,7 +32765,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -32474,7 +32775,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -32483,7 +32785,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -32789,7 +33092,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -32798,7 +33102,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -32807,7 +33112,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -33113,7 +33419,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -33122,7 +33429,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -33131,7 +33439,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -33437,7 +33746,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -33446,7 +33756,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -33455,7 +33766,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -33761,7 +34073,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -33770,7 +34083,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -33779,7 +34093,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -34085,7 +34400,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -34094,7 +34410,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -34103,7 +34420,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -34409,7 +34727,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -34418,7 +34737,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -34427,7 +34747,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -34733,7 +35054,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -34742,7 +35064,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -34751,7 +35074,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -35057,7 +35381,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -35066,7 +35391,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -35075,7 +35401,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -35381,7 +35708,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -35390,7 +35718,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -35399,7 +35728,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -35705,7 +36035,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -35714,7 +36045,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -35723,7 +36055,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -36029,7 +36362,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -36038,7 +36372,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -36047,7 +36382,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -36353,7 +36689,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -36362,7 +36699,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -36371,7 +36709,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -36677,7 +37016,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -36686,7 +37026,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -36695,7 +37036,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -37001,7 +37343,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -37010,7 +37353,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -37019,7 +37363,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -37325,7 +37670,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -37334,7 +37680,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -37343,7 +37690,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -37649,7 +37997,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -37658,7 +38007,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -37667,7 +38017,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -37973,7 +38324,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -37982,7 +38334,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -37991,7 +38344,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -38297,7 +38651,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -38306,7 +38661,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -38315,7 +38671,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -38621,7 +38978,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -38630,7 +38988,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -38639,7 +38998,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -38945,7 +39305,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -38954,7 +39315,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -38963,7 +39325,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -39269,7 +39632,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -39278,7 +39642,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -39287,7 +39652,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -39593,7 +39959,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -39602,7 +39969,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -39611,7 +39979,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -39917,7 +40286,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -39926,7 +40296,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -39935,7 +40306,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -40241,7 +40613,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -40250,7 +40623,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -40259,7 +40633,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -40565,7 +40940,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -40574,7 +40950,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -40583,7 +40960,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -40889,7 +41267,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -40898,7 +41277,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -40907,7 +41287,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [
@@ -41213,7 +41594,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -41222,7 +41604,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           },
           {
             "delay": 0.0,
@@ -41231,7 +41614,8 @@
             "sustain": 1.0,
             "release": 15.0,
             "factor": 1.0,
-            "looping": false
+            "looping": false,
+"reset_to_zero": false
           }
         ],
         "filter": [

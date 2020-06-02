@@ -239,19 +239,21 @@ impl Voice {
                 !self.triggered
             }
         };
-        self.triggered = true;
         self.trigger_seq = trigger_seq;
         if trigger {
+            if !self.is_running() {
+                for osc in self.osc.iter_mut() {
+                    osc.reset(trigger_time);
+                }
+            }
             for i in 0..NUM_ENVELOPES {
                 self.env[i].trigger(trigger_time, &sound.env[i]);
-            }
-            for osc in self.osc.iter_mut() {
-                osc.reset(trigger_time);
             }
             for (i, lfo) in self.lfo.iter_mut().enumerate() {
                 lfo.reset(trigger_time, sound.lfo[i].phase);
             }
         }
+        self.triggered = true;
     }
 
     // TODO: Release velocity

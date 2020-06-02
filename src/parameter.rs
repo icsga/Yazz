@@ -81,6 +81,7 @@ pub enum Parameter {
     Release,
     Factor,
     Loop,
+    ResetToZero,
 
     // Mod
     Source,
@@ -357,14 +358,15 @@ pub static FILTER_TYPE: [MenuItem; 10] = [
     MenuItem{item: Parameter::OM_HPF,    key: 'f', val_range: ValueRange::NoRange, next: &[]},
 ];
 
-pub static ENV_PARAMS: [MenuItem; 7] = [
-    MenuItem{item: Parameter::Attack,  key: 'a', val_range: ValueRange::Float(1.0, 4000.0, 1.0), next: &[]}, // Value = Duration in ms
-    MenuItem{item: Parameter::Decay,   key: 'd', val_range: ValueRange::Float(1.0, 4000.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Sustain, key: 's', val_range: ValueRange::Float(0.0, 1.0, 0.001),  next: &[]},
-    MenuItem{item: Parameter::Release, key: 'r', val_range: ValueRange::Float(1.0, 8000.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Factor,  key: 'f', val_range: ValueRange::Int(1, 5),               next: &[]},
-    MenuItem{item: Parameter::Delay,   key: 'e', val_range: ValueRange::Float(0.0, 4000.0, 1.0), next: &[]}, // Value = Duration in ms
-    MenuItem{item: Parameter::Loop,    key: 'l', val_range: ValueRange::Int(0, 1),               next: &[]},
+pub static ENV_PARAMS: [MenuItem; 8] = [
+    MenuItem{item: Parameter::Attack,     key: 'a', val_range: ValueRange::Float(1.0, 4000.0, 1.0), next: &[]}, // Value = Duration in ms
+    MenuItem{item: Parameter::Decay,      key: 'd', val_range: ValueRange::Float(1.0, 4000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Sustain,    key: 's', val_range: ValueRange::Float(0.0, 1.0, 0.001),  next: &[]},
+    MenuItem{item: Parameter::Release,    key: 'r', val_range: ValueRange::Float(1.0, 8000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Factor,     key: 'f', val_range: ValueRange::Int(1, 5),               next: &[]},
+    MenuItem{item: Parameter::Delay,      key: 'e', val_range: ValueRange::Float(0.0, 4000.0, 1.0), next: &[]},
+    MenuItem{item: Parameter::Loop,       key: 'l', val_range: ValueRange::Int(0, 1),               next: &[]},
+    MenuItem{item: Parameter::ResetToZero,key: 'z', val_range: ValueRange::Int(0, 1),               next: &[]},
 ];
 
 pub static LFO_WAVEFORM: [MenuItem; 7] = [
