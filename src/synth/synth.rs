@@ -389,6 +389,13 @@ impl Synth {
             MidiMessage::Pitchbend{channel: _, pitch} => self.handle_pitch_bend(pitch),
             MidiMessage::ControlChg{channel: _, controller, value} => self.handle_controller(controller, value),
             MidiMessage::ProgramChg{channel: _, program: _} => (), // This shouldn't get here, it's a UI event
+            MidiMessage::SongPos{position: _} => (),
+            MidiMessage::TimingClock => (),
+            MidiMessage::Start => (),
+            MidiMessage::Continue => (),
+            MidiMessage::Stop => (),
+            MidiMessage::ActiveSensing => (),
+            MidiMessage::Reset => (),
         }
     }
 

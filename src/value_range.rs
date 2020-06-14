@@ -53,9 +53,13 @@ impl ValueRange {
                     panic!()
                 };
                 let result = value + addsub;
-                if result >= *min && result <= *max {
-                    value = result;
-                }
+                value = if result >= *max {
+                    *max
+                } else if result <= *min {
+                    *min
+                } else {
+                    result
+                };
                 ParameterValue::Int(value)
             }
             ValueRange::Float(min, max, step) => {
@@ -65,9 +69,13 @@ impl ValueRange {
                     panic!()
                 };
                 let result = value + (addsub as Float * step);
-                if result >= *min && result <= *max {
-                    value = result;
-                }
+                value = if result >= *max {
+                    *max
+                } else if result <= *min {
+                    *min
+                } else {
+                    result
+                };
                 ParameterValue::Float(value)
             }
             ValueRange::Choice(choice_list) => {
