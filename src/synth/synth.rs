@@ -23,7 +23,7 @@ pub const NUM_MODULATORS: usize = 16;
 pub const NUM_GLOBAL_LFOS: usize = 2;
 const REF_FREQUENCY: Float = 440.0;
 
-#[derive(Serialize, Deserialize, Copy, Clone, Debug)]
+#[derive(Serialize, Deserialize, Copy, Clone, Debug, PartialEq)]
 pub enum PlayMode {
     Poly,   // Polyphonic
     Mono,   // Monophonic, retrigger on key-on-event
@@ -136,6 +136,7 @@ pub struct Synth {
     sustain_pedal: Float, // Use a float, so that we can use it as mod source
     sender: Sender<UiMessage>,
     global_state: SynthState,
+    key_stack: Vec<u16>, // List of currently pressed keys (for Mono/ Legato modes)
 
     // Extra oscillators to display the waveshape
     samplebuff_osc: Oscillator,
@@ -192,6 +193,7 @@ impl Synth {
             sustain_pedal: 0.0,
             sender,
             global_state: SynthState{freq_factor: 1.0},
+            key_stack: vec!(0; 128),
             samplebuff_osc: Oscillator::new(sample_rate, default_table.clone()),
             samplebuff_env: Envelope::new(sample_rate as Float),
             samplebuff_lfo: Lfo::new(sample_rate),
@@ -230,6 +232,7 @@ impl Synth {
     fn reset(&mut self) {
         self.voice.iter_mut().for_each(|v| v.reset());
         self.delay.reset();
+        self.key_stack.clear();
     }
 
     // Get global modulation values.
@@ -425,16 +428,30 @@ impl Synth {
         voice.set_freq(freq);
         voice.set_velocity(velocity, self.sound.patch.vel_sens);
         voice.trigger(self.trigger_seq, self.last_clock, &self.sound);
+        self.key_stack.push((velocity as u16) << 8 | (key as u16));
         self.num_voices_triggered += 1;
         self.trigger_seq += 1;
         self.voices_playing |= 1 << voice_id;
     }
 
     fn handle_note_off(&mut self, key: u8, velocity: u8) {
+        self.key_stack.remove(self.key_stack.iter().position(|x| *x as u8 == key).expect("Key not found on stack"));
         for v in &mut self.voice {
             if v.is_triggered() && v.key == key {
-                self.num_voices_triggered -= 1;
-                v.key_release(velocity, self.sustain_pedal > 0.0, &self.sound);
+                if self.sound.patch.play_mode == PlayMode::Poly || self.key_stack.len() == 0 {
+                    // In poly mode, or if no other notes are held, we release
+                    // the voice.
+                    self.num_voices_triggered -= 1;
+                    v.key_release(velocity, self.sustain_pedal > 0.0, &self.sound);
+                } else {
+                    // For Mono and Legato play modes, we continue playing an
+                    // older note still on the stack (still triggered).
+                    if let Some(new_key) = self.key_stack.pop() {
+                        self.handle_note_on(new_key as u8, (new_key >> 8) as u8);
+                    } else {
+                        panic!("Retrieving note from stack failed.");
+                    }
+                }
                 break;
             }
         }
