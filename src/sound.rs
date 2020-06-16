@@ -11,6 +11,41 @@ use super::{Parameter, ParameterValue, ParamId, SynthParam};
 
 use serde::{Serialize, Deserialize};
 
+// TODO: These are used in two places. Find a better place for them.
+#[derive(Serialize, Deserialize, Clone, Copy, Debug, PartialEq)]
+pub enum SyncValue {
+    Off,
+    Whole,
+    DottedHalf,
+    Half,
+    DottedQuarter,
+    Quarter,
+    DottedEigth,
+    Eigth,
+    Sixteenth,
+}
+
+impl SyncValue {
+    pub fn from_int(param: usize) -> SyncValue {
+        match param {
+            0 => SyncValue::Off,
+            1 => SyncValue::Whole,
+            2 => SyncValue::DottedHalf,
+            3 => SyncValue::Half,
+            4 => SyncValue::DottedQuarter,
+            5 => SyncValue::Quarter,
+            6 => SyncValue::DottedEigth,
+            7 => SyncValue::Eigth,
+            8 => SyncValue::Sixteenth,
+            _ => panic!(),
+        }
+    }
+}
+
+impl Default for SyncValue {
+    fn default() -> Self { SyncValue::Off }
+}
+
 /** Sound data
  *
  * \todo Separate voice and global sound data, pack voice data in it's own
@@ -137,6 +172,7 @@ impl SoundData {
                 match msg.parameter {
                     Parameter::Waveform =>  { lfo.select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
                     Parameter::Frequency => { lfo.frequency = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Sync =>      { lfo.sync = if let ParameterValue::Choice(x) = msg.value { SyncValue::from_int(x) } else { panic!() }; }
                     Parameter::Phase =>     { lfo.phase = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Amount =>    { lfo.amount = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
@@ -147,6 +183,7 @@ impl SoundData {
                 match msg.parameter {
                     Parameter::Waveform =>  { glfo.select_wave(if let ParameterValue::Choice(x) = msg.value { x } else { panic!() }); }
                     Parameter::Frequency => { glfo.frequency = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Sync =>      { glfo.sync = if let ParameterValue::Choice(x) = msg.value { SyncValue::from_int(x) } else { panic!() }; }
                     Parameter::Phase =>     { glfo.phase = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Amount =>    { glfo.amount = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
@@ -168,6 +205,7 @@ impl SoundData {
             Parameter::Delay => {
                 match msg.parameter {
                     Parameter::Time =>     { self.delay.time = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Sync =>     { self.delay.sync = if let ParameterValue::Choice(x) = msg.value { SyncValue::from_int(x) } else { panic!() }; }
                     Parameter::Level =>    { self.delay.level = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Feedback => { self.delay.feedback = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Tone =>     { self.delay.tone = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
@@ -193,6 +231,7 @@ impl SoundData {
                     Parameter::EnvDepth => { self.patch.env_depth = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::PlayMode => { self.patch.play_mode = if let ParameterValue::Choice(x) = msg.value { PlayMode::from_int(x) } else { panic!() }; }
                     Parameter::FilterRouting => { self.patch.filter_routing = if let ParameterValue::Choice(x) = msg.value { FilterRouting::from_int(x) } else { panic!() }; }
+                    Parameter::Bpm => { self.patch.bpm = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -240,6 +279,7 @@ impl SoundData {
                 match param.parameter {
                     Parameter::Waveform =>  ParameterValue::Choice(lfo.get_waveform() as usize),
                     Parameter::Frequency => ParameterValue::Float(lfo.frequency),
+                    Parameter::Sync => ParameterValue::Choice(lfo.sync as usize),
                     Parameter::Phase => ParameterValue::Float(lfo.phase),
                     Parameter::Amount => ParameterValue::Float(lfo.amount),
                     _ => {panic!();}
@@ -250,6 +290,7 @@ impl SoundData {
                 match param.parameter {
                     Parameter::Waveform =>  ParameterValue::Choice(glfo.get_waveform() as usize),
                     Parameter::Frequency => ParameterValue::Float(glfo.frequency),
+                    Parameter::Sync => ParameterValue::Choice(glfo.sync as usize),
                     Parameter::Phase => ParameterValue::Float(glfo.phase),
                     Parameter::Amount => ParameterValue::Float(glfo.amount),
                     _ => {panic!();}
@@ -272,6 +313,7 @@ impl SoundData {
             Parameter::Delay => {
                 match param.parameter {
                     Parameter::Time => ParameterValue::Float(self.delay.time),
+                    Parameter::Sync => ParameterValue::Choice(self.delay.sync as usize),
                     Parameter::Level => ParameterValue::Float(self.delay.level),
                     Parameter::Feedback => ParameterValue::Float(self.delay.feedback),
                     Parameter::Tone => ParameterValue::Float(self.delay.tone),
@@ -298,6 +340,7 @@ impl SoundData {
                     Parameter::EnvDepth => ParameterValue::Float(self.patch.env_depth),
                     Parameter::PlayMode => ParameterValue::Choice(self.patch.play_mode as usize),
                     Parameter::FilterRouting => ParameterValue::Choice(self.patch.filter_routing as usize),
+                    Parameter::Bpm => ParameterValue::Float(self.patch.bpm),
                     _ => {panic!();}
                 }
             }

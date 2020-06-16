@@ -138,7 +138,7 @@ impl CtrlMap {
             MappingType::Relative => {
                 // For relative: Increase/ decrease value
                 let sound_value = sound.get_value(&mapping.id);
-                let delta = if value >= 126 { -1 } else { 1 };
+                let delta = if value >= 64 { -1 } else { 1 };
                 result.value = mapping.val_range.add_value(sound_value, delta);
             }
             MappingType::None => panic!(),

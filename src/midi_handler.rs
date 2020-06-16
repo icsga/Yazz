@@ -4,6 +4,7 @@ use crossbeam_channel::Sender;
 use log::{info, error};
 
 use super::{SynthMessage, UiMessage};
+use super::Float;
 
 #[derive(Clone, Copy, Debug)]
 pub enum MidiMessage {
@@ -24,9 +25,15 @@ pub enum MidiMessage {
 }
 
 pub struct MidiHandler {
+    last_timestamp: u64,
+    bpm: Float
 }
 
 impl MidiHandler {
+    fn new() -> Self {
+        MidiHandler{last_timestamp: 0, bpm: 0.0}
+    }
+
     /** Starts the thread for receiving MIDI events.
      *
      * If the midi_channel argument is 0, all events are forwarded. If it is
@@ -55,25 +62,32 @@ impl MidiHandler {
                 return Err(());
             }
         };
+        let mut mh = MidiHandler::new();
         info!("  Connecting to MIDI port {}", in_port_name);
         println!("  Connecting to MIDI port {}", in_port_name);
-        let conn_result = midi_in.connect(midi_port, "midir-read-input", move |_, message, _| {
-            if message.len() >= 2 {
-                if midi_channel < 16 && (message[0] & 0x0F) != midi_channel {
-                    return;
-                }
-                let m = MidiHandler::get_midi_message(message);
-                info!("MidiMessage: {:?}", m);
-                let command = message[0] & 0xF0;
-                if command == 0xB0 || command == 0xC0 {
+        let conn_result = midi_in.connect(midi_port, "midir-read-input", move |timestamp, message, _| {
+            if midi_channel < 16 && (message[0] & 0x0F) != midi_channel {
+                return;
+            }
+            let m = MidiHandler::get_midi_message(message);
+            info!("MidiMessage: {:?}", m);
+            match m {
+                MidiMessage::ControlChg{channel: _, controller: _, value: _} |
+                MidiMessage::ProgramChg{channel: _, program: _} => {
                     // Send control change and program change to UI
                     m2u_sender.send(UiMessage::Midi(m)).unwrap();
-                } else {
+                }
+                MidiMessage::TimingClock => {
+                    // Calculate BPM
+                    let bpm_changed = mh.calc_bpm(timestamp);
+                    if bpm_changed {
+                        m2s_sender.send(SynthMessage::Bpm(mh.bpm)).unwrap();
+                    }
+                }
+                _ => {
                     // Send everything else directly to the synth engine
                     m2s_sender.send(SynthMessage::Midi(m)).unwrap();
                 }
-            } else {
-                info!("Got MIDI message with len {}", message.len());
             }
         }, ());
         match conn_result {
@@ -121,4 +135,23 @@ impl MidiHandler {
             }
         }
     }
+
+    fn calc_bpm(&mut self, timestamp: u64) -> bool {
+        let mut bpm_changed = false;
+        if self.last_timestamp != 0 {
+            // We have a previous TS, so we can calculate the current BPM
+            let diff = (timestamp - self.last_timestamp) * 24; // Diff is in usec
+            let bpm = 60000000.0 / diff as f64;
+            //let bpm = self.avg.add_value(bpm);
+            // Calculate up to 1 decimal of BPM
+            let bpm = (bpm * 10.0).round() / 10.0;
+            if bpm != self.bpm {
+                self.bpm = bpm;
+                bpm_changed = true;
+            }
+        }
+        self.last_timestamp = timestamp;
+        bpm_changed
+    }
+
 }

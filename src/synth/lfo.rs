@@ -1,6 +1,6 @@
 extern crate num;
 
-use super::Float;
+use super::{Float, SyncValue};
 
 use serde::{Serialize, Deserialize};
 
@@ -23,6 +23,7 @@ impl Default for LfoWaveform {
 pub struct LfoData {
     pub waveform: LfoWaveform,
     pub frequency: Float,
+    pub sync: SyncValue,
     pub phase: Float,
     pub amount: Float,
 }

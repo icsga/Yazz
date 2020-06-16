@@ -16,9 +16,6 @@
 //!
 
 #![allow(dead_code)]
-//#![allow(unused_imports)]
-//#![allow(unused_variables)]
-//#![allow(unreachable_code)]
 
 mod ctrl_map;
 use ctrl_map::{CtrlMap, MappingType};
@@ -33,7 +30,7 @@ mod parameter;
 use parameter::*;
 
 mod sound;
-use sound::SoundData;
+use sound::{SoundData, SyncValue};
 
 mod storage;
 use storage::{SoundBank, SoundPatch};
@@ -87,6 +84,7 @@ pub enum SynthMessage {
     Sound(SoundData),
     Wavetable(WtInfo),
     SampleBuffer(Vec<Float>, SynthParam),
+    Bpm(Float),
     Exit
 }
 

@@ -420,10 +420,13 @@ impl Tui {
     /* MIDI message received */
     fn handle_midi_event(&mut self, m: &MidiMessage) {
         match *m {
-            MidiMessage::ControlChg{channel: _, controller, value} => {
+            MidiMessage::ControlChg{channel, controller, value} => {
+                let ctrl: u64 = ((channel as u64) << 8) | controller as u64; // Encode channel and CC number
+
                 if self.selector.state == SelectorState::MidiLearn {
                     // MIDI learn: Send all controller events to the selector
-                    self.selector.handle_control_input(&mut self.selector_sm, controller.into(), value.into(), self.sound.clone());
+                    // TODO: Directly handle MIDI learn in TUI
+                    self.selector.handle_control_input(&mut self.selector_sm, ctrl, value.into(), self.sound.clone());
                     self.check_midi_learn_status();
                     return;
                 }
@@ -458,7 +461,7 @@ impl Tui {
 
                 // All controllers (including ModWheel and sustain pedal) might
                 // be mapped to control a parameter directly
-                self.handle_ctrl_change(controller.into(), value.into());
+                self.handle_ctrl_change(ctrl, value.into());
 
             },
             MidiMessage::ProgramChg{channel: _, program} => self.select_sound(program as usize - 1),

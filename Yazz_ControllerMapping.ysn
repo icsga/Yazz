@@ -1,12 +1,980 @@
 [
   {
-    "7": {
+    "534": {
+      "id": {
+        "function": "Filter",
+        "function_id": 2,
+        "parameter": "Aux"
+      },
+      "map_type": "Relative"
+    },
+    "256": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 1,
+        "parameter": "Level"
+      },
+      "map_type": "Relative"
+    },
+    "277": {
+      "id": {
+        "function": "Filter",
+        "function_id": 1,
+        "parameter": "KeyFollow"
+      },
+      "map_type": "Relative"
+    },
+    "537": {
+      "id": {
+        "function": "Lfo",
+        "function_id": 2,
+        "parameter": "Waveform"
+      },
+      "map_type": "Relative"
+    },
+    "298": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 5,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "530": {
+      "id": {
+        "function": "Filter",
+        "function_id": 2,
+        "parameter": "Cutoff"
+      },
+      "map_type": "Relative"
+    },
+    "276": {
+      "id": {
+        "function": "Filter",
+        "function_id": 1,
+        "parameter": "Type"
+      },
+      "map_type": "Relative"
+    },
+    "323": {
+      "id": {
+        "function": "Patch",
+        "function_id": 1,
+        "parameter": "Level"
+      },
+      "map_type": "Relative"
+    },
+    "776": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 3,
+        "parameter": "KeyFollow"
+      },
+      "map_type": "Relative"
+    },
+    "539": {
+      "id": {
+        "function": "Lfo",
+        "function_id": 2,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "263": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 1,
+        "parameter": "Spread"
+      },
+      "map_type": "Relative"
+    },
+    "541": {
+      "id": {
+        "function": "GlobalLfo",
+        "function_id": 2,
+        "parameter": "Frequency"
+      },
+      "map_type": "Relative"
+    },
+    "289": {
+      "id": {
+        "function": "GlobalLfo",
+        "function_id": 1,
+        "parameter": "Sync"
+      },
+      "map_type": "Relative"
+    },
+    "324": {
+      "id": {
+        "function": "Patch",
+        "function_id": 1,
+        "parameter": "EnvDepth"
+      },
+      "map_type": "Relative"
+    },
+    "785": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 3,
+        "parameter": "ResetToZero"
+      },
+      "map_type": "Relative"
+    },
+    "774": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 3,
+        "parameter": "Voices"
+      },
+      "map_type": "Relative"
+    },
+    "271": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 1,
+        "parameter": "Factor"
+      },
+      "map_type": "Relative"
+    },
+    "315": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 13,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "538": {
+      "id": {
+        "function": "Lfo",
+        "function_id": 2,
+        "parameter": "Phase"
+      },
+      "map_type": "Relative"
+    },
+    "535": {
+      "id": {
+        "function": "Filter",
+        "function_id": 2,
+        "parameter": "Gain"
+      },
+      "map_type": "Relative"
+    },
+    "522": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 2,
+        "parameter": "Attack"
+      },
+      "map_type": "Relative"
+    },
+    "300": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 6,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "308": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 10,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "527": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 2,
+        "parameter": "Factor"
+      },
+      "map_type": "Relative"
+    },
+    "265": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 1,
+        "parameter": "Type"
+      },
+      "map_type": "Relative"
+    },
+    "531": {
+      "id": {
+        "function": "Filter",
+        "function_id": 2,
+        "parameter": "Resonance"
+      },
+      "map_type": "Relative"
+    },
+    "516": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 2,
+        "parameter": "Wavetable"
+      },
+      "map_type": "Relative"
+    },
+    "272": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 1,
+        "parameter": "Loop"
+      },
+      "map_type": "Relative"
+    },
+    "262": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 1,
+        "parameter": "Voices"
+      },
+      "map_type": "Relative"
+    },
+    "524": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 2,
+        "parameter": "Sustain"
+      },
+      "map_type": "Relative"
+    },
+    "281": {
+      "id": {
+        "function": "Lfo",
+        "function_id": 1,
+        "parameter": "Waveform"
+      },
+      "map_type": "Relative"
+    },
+    "299": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 5,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "295": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 3,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "318": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 15,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "267": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 1,
+        "parameter": "Decay"
+      },
+      "map_type": "Relative"
+    },
+    "284": {
+      "id": {
+        "function": "Lfo",
+        "function_id": 1,
+        "parameter": "Sync"
+      },
+      "map_type": "Relative"
+    },
+    "536": {
+      "id": {
+        "function": "Lfo",
+        "function_id": 2,
+        "parameter": "Frequency"
+      },
+      "map_type": "Relative"
+    },
+    "275": {
+      "id": {
+        "function": "Filter",
+        "function_id": 1,
+        "parameter": "Resonance"
+      },
+      "map_type": "Relative"
+    },
+    "293": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 2,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "781": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 3,
+        "parameter": "Release"
+      },
+      "map_type": "Relative"
+    },
+    "264": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 1,
+        "parameter": "KeyFollow"
+      },
+      "map_type": "Relative"
+    },
+    "543": {
+      "id": {
+        "function": "GlobalLfo",
+        "function_id": 2,
+        "parameter": "Phase"
+      },
+      "map_type": "Relative"
+    },
+    "305": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 8,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "314": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 13,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "521": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 2,
+        "parameter": "Type"
+      },
+      "map_type": "Relative"
+    },
+    "291": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 1,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "327": {
+      "id": {
+        "function": "Patch",
+        "function_id": 1,
+        "parameter": "Pitchbend"
+      },
+      "map_type": "Relative"
+    },
+    "773": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 3,
+        "parameter": "WaveIndex"
+      },
+      "map_type": "Relative"
+    },
+    "274": {
+      "id": {
+        "function": "Filter",
+        "function_id": 1,
+        "parameter": "Cutoff"
+      },
+      "map_type": "Relative"
+    },
+    "517": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 2,
+        "parameter": "WaveIndex"
+      },
+      "map_type": "Relative"
+    },
+    "780": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 3,
+        "parameter": "Sustain"
+      },
+      "map_type": "Relative"
+    },
+    "290": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 1,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "772": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 3,
+        "parameter": "Wavetable"
+      },
+      "map_type": "Relative"
+    },
+    "304": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 8,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "779": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 3,
+        "parameter": "Decay"
+      },
+      "map_type": "Relative"
+    },
+    "313": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 12,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "322": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 16,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "278": {
+      "id": {
+        "function": "Filter",
+        "function_id": 1,
+        "parameter": "Aux"
+      },
+      "map_type": "Relative"
+    },
+    "282": {
+      "id": {
+        "function": "Lfo",
+        "function_id": 1,
+        "parameter": "Phase"
+      },
+      "map_type": "Relative"
+    },
+    "768": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 3,
+        "parameter": "Level"
+      },
+      "map_type": "Relative"
+    },
+    "525": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 2,
+        "parameter": "Release"
+      },
+      "map_type": "Relative"
+    },
+    "3914": {
+      "id": {
+        "function": "Patch",
+        "function_id": 1,
+        "parameter": "Bpm"
+      },
+      "map_type": "Relative"
+    },
+    "545": {
+      "id": {
+        "function": "GlobalLfo",
+        "function_id": 2,
+        "parameter": "Sync"
+      },
+      "map_type": "Relative"
+    },
+    "286": {
+      "id": {
+        "function": "GlobalLfo",
+        "function_id": 1,
+        "parameter": "Waveform"
+      },
+      "map_type": "Relative"
+    },
+    "523": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 2,
+        "parameter": "Decay"
+      },
+      "map_type": "Relative"
+    },
+    "260": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 1,
+        "parameter": "Wavetable"
+      },
+      "map_type": "Relative"
+    },
+    "784": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 3,
+        "parameter": "Loop"
+      },
+      "map_type": "Relative"
+    },
+    "533": {
+      "id": {
+        "function": "Filter",
+        "function_id": 2,
+        "parameter": "KeyFollow"
+      },
+      "map_type": "Relative"
+    },
+    "519": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 2,
+        "parameter": "Spread"
+      },
+      "map_type": "Relative"
+    },
+    "261": {
       "id": {
         "function": "Oscillator",
         "function_id": 1,
         "parameter": "WaveIndex"
       },
-      "map_type": "Absolute"
+      "map_type": "Relative"
+    },
+    "297": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 4,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "306": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 9,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "326": {
+      "id": {
+        "function": "Patch",
+        "function_id": 1,
+        "parameter": "PlayMode"
+      },
+      "map_type": "Relative"
+    },
+    "512": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 2,
+        "parameter": "Level"
+      },
+      "map_type": "Relative"
+    },
+    "296": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 4,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "269": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 1,
+        "parameter": "Release"
+      },
+      "map_type": "Relative"
+    },
+    "777": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 3,
+        "parameter": "Type"
+      },
+      "map_type": "Relative"
+    },
+    "311": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 11,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "520": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 2,
+        "parameter": "KeyFollow"
+      },
+      "map_type": "Relative"
+    },
+    "307": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 9,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "325": {
+      "id": {
+        "function": "Patch",
+        "function_id": 1,
+        "parameter": "Drive"
+      },
+      "map_type": "Relative"
+    },
+    "317": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 14,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "544": {
+      "id": {
+        "function": "GlobalLfo",
+        "function_id": 2,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "319": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 15,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "529": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 2,
+        "parameter": "ResetToZero"
+      },
+      "map_type": "Relative"
+    },
+    "542": {
+      "id": {
+        "function": "GlobalLfo",
+        "function_id": 2,
+        "parameter": "Waveform"
+      },
+      "map_type": "Relative"
+    },
+    "595": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 2,
+        "parameter": "Tune"
+      },
+      "map_type": "Relative"
+    },
+    "778": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 3,
+        "parameter": "Attack"
+      },
+      "map_type": "Relative"
+    },
+    "309": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 10,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "258": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 1,
+        "parameter": "Finetune"
+      },
+      "map_type": "Relative"
+    },
+    "851": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 3,
+        "parameter": "Tune"
+      },
+      "map_type": "Relative"
+    },
+    "783": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 3,
+        "parameter": "Factor"
+      },
+      "map_type": "Relative"
+    },
+    "312": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 12,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "301": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 6,
+        "parameter": "Active"
+      },
+      "map_type": "Relative"
+    },
+    "518": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 2,
+        "parameter": "Voices"
+      },
+      "map_type": "Relative"
+    },
+    "514": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 2,
+        "parameter": "Finetune"
+      },
+      "map_type": "Relative"
+    },
+    "294": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 3,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "268": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 1,
+        "parameter": "Sustain"
+      },
+      "map_type": "Relative"
+    },
+    "770": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 3,
+        "parameter": "Finetune"
+      },
+      "map_type": "Relative"
+    },
+    "540": {
+      "id": {
+        "function": "Lfo",
+        "function_id": 2,
+        "parameter": "Sync"
+      },
+      "map_type": "Relative"
+    },
+    "329": {
+      "id": {
+        "function": "Patch",
+        "function_id": 1,
+        "parameter": "VelSens"
+      },
+      "map_type": "Relative"
+    },
+    "288": {
+      "id": {
+        "function": "GlobalLfo",
+        "function_id": 1,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "266": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 1,
+        "parameter": "Attack"
+      },
+      "map_type": "Relative"
+    },
+    "273": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 1,
+        "parameter": "ResetToZero"
+      },
+      "map_type": "Relative"
+    },
+    "526": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 2,
+        "parameter": "Delay"
+      },
+      "map_type": "Relative"
+    },
+    "775": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 3,
+        "parameter": "Spread"
+      },
+      "map_type": "Relative"
+    },
+    "532": {
+      "id": {
+        "function": "Filter",
+        "function_id": 2,
+        "parameter": "Type"
+      },
+      "map_type": "Relative"
+    },
+    "270": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 1,
+        "parameter": "Delay"
+      },
+      "map_type": "Relative"
+    },
+    "285": {
+      "id": {
+        "function": "GlobalLfo",
+        "function_id": 1,
+        "parameter": "Frequency"
+      },
+      "map_type": "Relative"
+    },
+    "328": {
+      "id": {
+        "function": "Patch",
+        "function_id": 1,
+        "parameter": "FilterRouting"
+      },
+      "map_type": "Relative"
+    },
+    "279": {
+      "id": {
+        "function": "Filter",
+        "function_id": 1,
+        "parameter": "Gain"
+      },
+      "map_type": "Relative"
+    },
+    "528": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 2,
+        "parameter": "Loop"
+      },
+      "map_type": "Relative"
+    },
+    "316": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 14,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "321": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 16,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "782": {
+      "id": {
+        "function": "Envelope",
+        "function_id": 3,
+        "parameter": "Delay"
+      },
+      "map_type": "Relative"
+    },
+    "283": {
+      "id": {
+        "function": "Lfo",
+        "function_id": 1,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "287": {
+      "id": {
+        "function": "GlobalLfo",
+        "function_id": 1,
+        "parameter": "Phase"
+      },
+      "map_type": "Relative"
+    },
+    "339": {
+      "id": {
+        "function": "Oscillator",
+        "function_id": 1,
+        "parameter": "Tune"
+      },
+      "map_type": "Relative"
+    },
+    "310": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 11,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "292": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 2,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "302": {
+      "id": {
+        "function": "Modulation",
+        "function_id": 7,
+        "parameter": "Amount"
+      },
+      "map_type": "Relative"
+    },
+    "280": {
+      "id": {
+        "function": "Lfo",
+        "function_id": 1,
+        "parameter": "Frequency"
+      },
+      "map_type": "Relative"
     }
   },
   {},

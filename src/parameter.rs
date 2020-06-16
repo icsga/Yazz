@@ -123,7 +123,19 @@ pub enum Parameter {
     Legato,
     FilterRouting,
     Parallel,
-    Serial
+    Serial,
+    Bpm,
+
+    // Sync values
+    Off,
+    Whole,
+    DottedHalf,
+    Half,
+    DottedQuarter,
+    Quarter,
+    DottedEigth,
+    Eigth,
+    Sixteenth,
 }
 #[warn(non_camel_case_types)]
 
@@ -329,9 +341,10 @@ pub static OSC_TYPES: [MenuItem; 2] = [
     MenuItem{item: Parameter::Noise,     key: 'n', val_range: ValueRange::NoRange, next: &[]},
 ];
 
-pub static LFO_PARAMS: [MenuItem; 4] = [
+pub static LFO_PARAMS: [MenuItem; 5] = [
     MenuItem{item: Parameter::Waveform,  key: 'w', val_range: ValueRange::Choice(&LFO_WAVEFORM), next: &[]},
     MenuItem{item: Parameter::Frequency, key: 'f', val_range: ValueRange::Float(0.0, 44.1, 0.1), next: &[]},
+    MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::Choice(&SYNC_OPTIONS), next: &[]},
     MenuItem{item: Parameter::Phase,     key: 'p', val_range: ValueRange::Float(0.0, 1.0, 0.01), next: &[]},
     MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::Float(0.0, 1.0, 0.01), next: &[]},
 ];
@@ -379,8 +392,21 @@ pub static LFO_WAVEFORM: [MenuItem; 7] = [
     MenuItem{item: Parameter::Noise ,    key: 'n', val_range: ValueRange::NoRange, next: &[]},
 ];
 
-pub static DELAY_PARAMS: [MenuItem; 5] = [
+pub static SYNC_OPTIONS: [MenuItem; 9] = [
+    MenuItem{item: Parameter::Off,          key: 'o', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Whole,        key: 'w', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::DottedHalf,   key: 't', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Half,         key: 'h', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::DottedQuarter,key: 'u', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Quarter,      key: 'q', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::DottedEigth,  key: 'd', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Eigth,        key: 'e', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Sixteenth,    key: 's', val_range: ValueRange::NoRange, next: &[]},
+];
+
+pub static DELAY_PARAMS: [MenuItem; 6] = [
     MenuItem{item: Parameter::Time,      key: 't', val_range: ValueRange::Float(0.01, 1.0, 0.01),    next: &[]},
+    MenuItem{item: Parameter::Sync,      key: 's', val_range: ValueRange::Choice(&SYNC_OPTIONS),     next: &[]},
     MenuItem{item: Parameter::Level,     key: 'l', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
     MenuItem{item: Parameter::Feedback,  key: 'f', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
     MenuItem{item: Parameter::Tone,      key: 'o', val_range: ValueRange::Float(100.0, 5000.0, 1.0), next: &[]},
@@ -399,7 +425,7 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 
-pub static PATCH_PARAMS: [MenuItem; 7] = [
+pub static PATCH_PARAMS: [MenuItem; 8] = [
     MenuItem{item: Parameter::Level,        key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
     MenuItem{item: Parameter::Drive,        key: 'd', val_range: ValueRange::Float(0.0, 10.0, 1.0),  next: &[]},
     MenuItem{item: Parameter::Pitchbend ,   key: 'p', val_range: ValueRange::Int(0, 12),             next: &[]},
@@ -407,6 +433,7 @@ pub static PATCH_PARAMS: [MenuItem; 7] = [
     MenuItem{item: Parameter::EnvDepth,     key: 'e', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
     MenuItem{item: Parameter::PlayMode,     key: 'm', val_range: ValueRange::Choice(&PLAY_MODES),    next: &[]},
     MenuItem{item: Parameter::FilterRouting,key: 'f', val_range: ValueRange::Choice(&FILTER_ROUTING),next: &[]},
+    MenuItem{item: Parameter::Bpm,          key: 'b', val_range: ValueRange::Float(1.0, 240.0, 1.0), next: &[]},
 ];
 
 pub static MOD_SOURCES: [MenuItem; 9] = [

@@ -22,6 +22,6 @@ pub use wt_oscillator::{WtOsc, WtOscData};
 use super::Float;
 use super::MidiMessage;
 use super::{Parameter, SynthParam, ParamId, MenuItem};
-use super::SoundData;
+use super::{SoundData, SyncValue};
 use super::SynthMessage;
 use super::UiMessage;

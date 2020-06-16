@@ -1,4 +1,5 @@
 use super::Float;
+use super::SyncValue;
 use super::filter::OnePole;
 
 use serde::{Serialize, Deserialize};
@@ -10,6 +11,7 @@ pub struct DelayData {
     pub level: Float,
     pub feedback: Float,
     pub time: Float,
+    pub sync: SyncValue,
     pub tone: Float,
     pub delay_type: usize,
 }
@@ -19,6 +21,7 @@ impl DelayData {
         self.level = 0.0;
         self.feedback = 0.5;
         self.time = 0.5;
+        self.sync = SyncValue::Off;
         self.tone = 1600.0;
     }
 }
@@ -124,6 +127,31 @@ impl Delay {
     pub fn update(&mut self, data: &DelayData) {
         self.filter_l.update(data.tone);
         self.filter_r.update(data.tone);
+    }
+
+    pub fn update_bpm(&mut self, data: &mut DelayData, bpm: Float) {
+        if data.sync == SyncValue::Off {
+            return;
+        }
+        let num_sixteenths = match data.sync {
+            SyncValue::Whole => 16.0,
+            SyncValue::DottedHalf => 12.0,
+            SyncValue::Half => 8.0,
+            SyncValue::DottedQuarter => 6.0,
+            SyncValue::Quarter => 4.0,
+            SyncValue::DottedEigth => 3.0,
+            SyncValue::Eigth => 2.0,
+            SyncValue::Sixteenth => 1.0,
+            SyncValue::Off => panic!(),
+        };
+        let time = num_sixteenths / ((bpm * 4.0) / 60.0);
+        data.time = if time < 0.01 {
+            0.01
+        } else if time > 1.0 {
+            1.0
+        } else {
+            time
+        }
     }
 
     fn add(mut value: usize, add: usize) -> usize {

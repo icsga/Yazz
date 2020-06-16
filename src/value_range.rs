@@ -90,6 +90,19 @@ impl ValueRange {
                 }
                 ParameterValue::Choice(value)
             }
+            ValueRange::Dynamic(param) => {
+                let value = if let ParameterValue::Dynamic(_p, x) = val {
+                    x
+                } else {
+                    panic!()
+                };
+                let result = if addsub > 0 || value > 0 {
+                    value + addsub as usize
+                } else {
+                    value
+                };
+                ParameterValue::Dynamic(*param, result)
+            }
             _ => ParameterValue::NoValue
         }
     }

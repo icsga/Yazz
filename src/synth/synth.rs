@@ -90,6 +90,7 @@ pub struct PatchData {
     pub env_depth: Float, // Mod depth of env1 to volume. TODO: Move to Env1 menu
     pub play_mode: PlayMode,
     pub filter_routing: FilterRouting,
+    pub bpm: Float,       // Patch tempo for synced settings (LFO, delay)
 }
 
 impl PatchData {
@@ -214,6 +215,7 @@ impl Synth {
                     SynthMessage::Sound(s) => locked_synth.handle_sound_update(&s),
                     SynthMessage::Wavetable(i) => locked_synth.handle_wavetable_info(i),
                     SynthMessage::SampleBuffer(m, p) => locked_synth.handle_sample_buffer(m, p),
+                    SynthMessage::Bpm(b) => locked_synth.handle_bpm(b),
                     SynthMessage::Exit     => {
                         keep_running = false;
                         locked_synth.exit();
@@ -358,9 +360,26 @@ impl Synth {
                     _ => ()
                 }
             }
-            Parameter::Delay => self.delay.update(&self.sound.delay),
+            Parameter::Delay => {
+                match msg.parameter {
+                    Parameter::Tone => self.delay.update(&self.sound.delay),
+                    Parameter::Sync => self.delay.update_bpm(&mut self.sound.delay, self.sound.patch.bpm),
+                    _ => ()
+                }
+            }
+            Parameter::Patch => {
+                match msg.parameter {
+                    Parameter::Bpm => {
+                        self.delay.update_bpm(&mut self.sound.delay, self.sound.patch.bpm);
+                    }
+                    _ => ()
+                }
+            }
             _ => ()
         }
+    }
+
+    fn update_delay_speed(&mut self) {
     }
 
     // The assigned wavetable of an oscillator has changed.
@@ -417,6 +436,12 @@ impl Synth {
 
     fn handle_wavetable_info(&mut self, mut wt_info: WtInfo) {
         self.wt_manager.load_table(&mut wt_info, self.wt_manager.get_table(0).unwrap(), false);
+    }
+
+    /// Received updated BPM by TimingClock MIDI message
+    fn handle_bpm(&mut self, bpm: Float) {
+        self.sound.patch.bpm = bpm;
+        self.delay.update_bpm(&mut self.sound.delay, bpm);
     }
 
     fn handle_note_on(&mut self, key: u8, velocity: u8) {

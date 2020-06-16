@@ -45,7 +45,7 @@ impl MidiLearn {
             1 => {
                 if controller == self.ctrl {
                     let diff = (self.val1 as i64 - value as i64).abs();
-                    if diff >= 2 {
+                    if diff >= 5 {
                         self.val2 = value;
                         self.num_events_received = 2;
                         self.complete = true;
@@ -82,7 +82,7 @@ fn full_absolute_value_can_be_set() {
     let mut ml = MidiLearn::new();
     assert_eq!(ml.complete, false);
 
-    ml.handle_controller(7, 5);
+    ml.handle_controller(7, 10);
     assert_eq!(ml.complete, false);
 
     ml.handle_controller(7, 1);
@@ -117,7 +117,7 @@ fn same_values_are_not_counted() {
 #[test]
 fn reset_works_after_full_value() {
     let mut ml = MidiLearn::new();
-    ml.handle_controller(7, 5);
+    ml.handle_controller(7, 10);
     ml.handle_controller(7, 1);
     assert_eq!(ml.complete, true);
     ml.reset();
