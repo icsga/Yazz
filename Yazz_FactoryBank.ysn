@@ -333,7 +333,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -666,7 +666,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -999,7 +999,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -1332,7 +1332,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -1665,7 +1665,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -1998,7 +1998,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -2331,7 +2331,7 @@
           "env_depth": 1.0,
           "play_mode": "Mono",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -2664,7 +2664,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -2997,7 +2997,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -3330,7 +3330,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -3663,7 +3663,7 @@
           "env_depth": 0.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -3996,35 +3996,35 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
     {
-      "name": "Init",
+      "name": "Reso",
       "data": {
         "osc": [
           {
-            "level": 0.5,
-            "tune_halfsteps": 0,
+            "level": 0.3700000000000002,
+            "tune_halfsteps": -24,
             "tune_cents": 0.0,
-            "freq_offset": 1.0,
+            "freq_offset": 0.2500005343804845,
             "sync": 0,
             "key_follow": 1,
             "routing": "Filter1",
             "osc_type": "Wavetable",
             "wt_osc_data": {
               "num_voices": 1,
-              "voice_spread": 0.0,
-              "wave_index": 0.0,
-              "wavetable": 0
+              "voice_spread": 0.4,
+              "wave_index": 0.6400000000000003,
+              "wavetable": 1
             }
           },
           {
-            "level": 0.0,
-            "tune_halfsteps": 0,
+            "level": 0.09,
+            "tune_halfsteps": -5,
             "tune_cents": 0.0,
-            "freq_offset": 1.0,
+            "freq_offset": 0.7491538720489175,
             "sync": 0,
             "key_follow": 1,
             "routing": "Filter1",
@@ -4032,8 +4032,8 @@
             "wt_osc_data": {
               "num_voices": 1,
               "voice_spread": 0.0,
-              "wave_index": 0.0,
-              "wavetable": 0
+              "wave_index": 0.4800000000000002,
+              "wavetable": 1
             }
           },
           {
@@ -4056,10 +4056,10 @@
         "env": [
           {
             "delay": 0.0,
-            "attack": 15.0,
+            "attack": 6.0,
             "decay": 15.0,
             "sustain": 1.0,
-            "release": 15.0,
+            "release": 46.0,
             "factor": 1.0,
             "looping": false,
             "reset_to_zero": false
@@ -4088,11 +4088,11 @@
         "filter": [
           {
             "filter_type": 1,
-            "cutoff": 3000.0,
-            "resonance": 0.0,
-            "gain": 0.0,
+            "cutoff": 2761.0,
+            "resonance": 0.03,
+            "gain": 0.11999999999999998,
             "aux": 0.0,
-            "key_follow": 0
+            "key_follow": 1
           },
           {
             "filter_type": 1,
@@ -4322,14 +4322,14 @@
           "delay_type": 0
         },
         "patch": {
-          "level": 0.5,
+          "level": 0.43000000000000005,
           "drive": 0.0,
           "pitchbend": 2.0,
-          "vel_sens": 1.0,
+          "vel_sens": 0.8299999999999998,
           "env_depth": 1.0,
-          "play_mode": "Poly",
+          "play_mode": "Legato",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -4662,7 +4662,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -4995,7 +4995,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -5328,7 +5328,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -5661,7 +5661,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -5994,7 +5994,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -6327,7 +6327,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -6660,7 +6660,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -6993,7 +6993,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -7326,7 +7326,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -7659,7 +7659,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -7992,7 +7992,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -8325,7 +8325,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -8658,7 +8658,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -8991,7 +8991,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -9324,7 +9324,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -9657,7 +9657,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -9990,7 +9990,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -10323,7 +10323,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -10656,7 +10656,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -10989,7 +10989,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -11322,7 +11322,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -11655,7 +11655,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -11988,7 +11988,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -12321,7 +12321,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -12654,7 +12654,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -12987,7 +12987,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -13320,7 +13320,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -13653,7 +13653,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -13986,7 +13986,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -14319,7 +14319,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -14652,7 +14652,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -14985,7 +14985,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -15318,7 +15318,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -15651,7 +15651,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -15984,7 +15984,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -16317,7 +16317,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -16650,7 +16650,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -16983,7 +16983,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -17316,7 +17316,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -17649,7 +17649,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -17982,7 +17982,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -18315,7 +18315,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -18648,7 +18648,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -18981,7 +18981,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -19314,7 +19314,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -19647,7 +19647,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -19980,7 +19980,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -20313,7 +20313,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -20646,7 +20646,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -20979,7 +20979,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -21312,7 +21312,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -21645,7 +21645,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -21978,7 +21978,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -22311,7 +22311,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -22644,7 +22644,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -22977,7 +22977,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -23310,7 +23310,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -23643,7 +23643,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -23976,7 +23976,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -24309,7 +24309,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -24642,7 +24642,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -24975,7 +24975,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -25308,7 +25308,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -25641,7 +25641,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -25974,7 +25974,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -26307,7 +26307,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -26640,7 +26640,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -26973,7 +26973,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -27306,7 +27306,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -27639,7 +27639,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -27972,7 +27972,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -28305,7 +28305,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -28638,7 +28638,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -28971,7 +28971,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -29304,7 +29304,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -29637,7 +29637,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -29970,7 +29970,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -30303,7 +30303,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -30636,7 +30636,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -30969,7 +30969,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -31302,7 +31302,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -31635,7 +31635,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -31968,7 +31968,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -32301,7 +32301,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -32634,7 +32634,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -32967,7 +32967,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -33300,7 +33300,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -33633,7 +33633,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -33966,7 +33966,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -34299,7 +34299,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -34632,7 +34632,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -34965,7 +34965,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -35298,7 +35298,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -35631,7 +35631,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -35964,7 +35964,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -36297,7 +36297,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -36630,7 +36630,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -36963,7 +36963,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -37296,7 +37296,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -37629,7 +37629,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -37962,7 +37962,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -38295,7 +38295,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -38628,7 +38628,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -38961,7 +38961,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -39294,7 +39294,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -39627,7 +39627,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -39960,7 +39960,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -40293,7 +40293,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -40626,7 +40626,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -40959,7 +40959,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -41292,7 +41292,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -41625,7 +41625,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -41958,7 +41958,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -42291,7 +42291,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     },
@@ -42624,7 +42624,7 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-"bpm": 120.0
+          "bpm": 120.0
         }
       }
     }

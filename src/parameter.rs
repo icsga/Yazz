@@ -327,7 +327,7 @@ pub static OSC_PARAMS: [MenuItem; 11] = [
     MenuItem{item: Parameter::Wavetable, key: 'w', val_range: ValueRange::Dynamic(Parameter::Wavetable),next: &[]},
     MenuItem{item: Parameter::WaveIndex, key: 'i', val_range: ValueRange::Float(0.0, 1.0, 0.01),        next: &[]},
     MenuItem{item: Parameter::Voices,    key: 'v', val_range: ValueRange::Int(1, 7),                    next: &[]},
-    MenuItem{item: Parameter::Spread,    key: 'e', val_range: ValueRange::Float(0.0, 2.0, 0.1),         next: &[]},
+    MenuItem{item: Parameter::Spread,    key: 'e', val_range: ValueRange::Float(0.0, 2.0, 0.01),        next: &[]},
 ];
 
 pub static OSC_ROUTING: [MenuItem; 3] = [
@@ -427,7 +427,7 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
 
 pub static PATCH_PARAMS: [MenuItem; 8] = [
     MenuItem{item: Parameter::Level,        key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Drive,        key: 'd', val_range: ValueRange::Float(0.0, 10.0, 1.0),  next: &[]},
+    MenuItem{item: Parameter::Drive,        key: 'd', val_range: ValueRange::Float(0.0, 10.0, 0.1),  next: &[]},
     MenuItem{item: Parameter::Pitchbend ,   key: 'p', val_range: ValueRange::Int(0, 12),             next: &[]},
     MenuItem{item: Parameter::VelSens,      key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
     MenuItem{item: Parameter::EnvDepth,     key: 'e', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},

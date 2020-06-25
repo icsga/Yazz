@@ -68,6 +68,7 @@ pub struct Tui {
     ctrl_map: CtrlMap,              // Mapping of MIDI controller to parameter
     active_ctrl_set: usize,
     temp_name: String,
+    last_value: SynthParam,         // Copy of the last value set via controller
 
     // State machine for ParamSelector
     selector_sm: StateMachine<ParamSelector, SelectorEvent>,
@@ -101,6 +102,7 @@ impl Tui {
             ctrl_map: CtrlMap::new(),
             active_ctrl_set: 0,
             temp_name: "".to_string(),
+            last_value: SynthParam{..Default::default()},
             selector_sm: StateMachine::new(ParamSelector::state_function),
             mode: Mode::Edit,
             state: TuiState::Play,
@@ -500,6 +502,7 @@ impl Tui {
         let result = self.ctrl_map.get_value(self.active_ctrl_set, controller, value, &self.sound.borrow().data);
         if let Ok(synth_param) = result {
             self.send_parameter(&synth_param);
+            self.last_value = synth_param;
         }
     }
 
@@ -606,7 +609,10 @@ impl Tui {
 
         if let Mode::Edit = self.mode {
             print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
-            Tui::display_selector(&self.selector);
+            Tui::display_selector(&self.selector, true);
+        } else {
+            print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
+            Tui::display_last_parameter(&self.last_value);
         }
         if self.show_tui {
             self.display_idle_time();
@@ -616,7 +622,31 @@ impl Tui {
         stdout().flush().ok();
     }
 
-    fn display_selector(s: &ParamSelector) {
+    fn display_last_parameter(v: &SynthParam) {
+        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+
+        print!("{} {} {}", v.function, v.function_id, v.parameter);
+        match v.value {
+            ParameterValue::Int(x) => print!(" {}", x),
+            ParameterValue::Float(x) => print!(" {}", x),
+            ParameterValue::Choice(x) => print!(" {}", x),
+            ParameterValue::Dynamic(_, _) => {
+                /*
+                for (k, v) in wt_list {
+                    if *k == x {
+                        print!(" {}", v);
+                        break;
+                    }
+                }
+                */
+            },
+            _ => ()
+        }
+
+        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+    }
+
+    fn display_selector(s: &ParamSelector, show_options: bool) {
         let selector_state = s.state;
         let mut display_state = SelectorState::Function;
         let mut x_pos: u16 = 1;
@@ -624,14 +654,14 @@ impl Tui {
         loop {
             match display_state {
                 SelectorState::Function => {
-                    Tui::display_function(&s.func_selection, selector_state == SelectorState::Function);
+                    Tui::display_function(&s.func_selection, selector_state == SelectorState::Function && show_options);
                 }
                 SelectorState::FunctionIndex => {
-                    Tui::display_function_index(&s.func_selection, selector_state == SelectorState::FunctionIndex);
+                    Tui::display_function_index(&s.func_selection, selector_state == SelectorState::FunctionIndex && show_options);
                     x_pos = 12;
                 }
                 SelectorState::Param => {
-                    Tui::display_param(&s.param_selection, selector_state == SelectorState::Param);
+                    Tui::display_param(&s.param_selection, selector_state == SelectorState::Param && show_options);
                     selection = &s.param_selection;
                     x_pos = 14;
                     if selector_state == SelectorState::Param {
@@ -657,7 +687,7 @@ impl Tui {
                     }
                 }
                 SelectorState::Value => {
-                    Tui::display_value(&s.param_selection, selector_state == SelectorState::Value, &s.wavetable_list);
+                    Tui::display_value(&s.param_selection, selector_state == SelectorState::Value && show_options, &s.wavetable_list);
                     x_pos = 23;
                 }
                 SelectorState::MidiLearn => {
@@ -676,16 +706,16 @@ impl Tui {
                     }
                 }
                 SelectorState::ValueFunction => {
-                    Tui::display_function(&s.value_func_selection, selector_state == SelectorState::ValueFunction);
+                    Tui::display_function(&s.value_func_selection, selector_state == SelectorState::ValueFunction && show_options);
                     selection = &s.value_func_selection;
                     x_pos = 30;
                 }
                 SelectorState::ValueFunctionIndex => {
-                    Tui::display_function_index(&s.value_func_selection, selector_state == SelectorState::ValueFunctionIndex);
+                    Tui::display_function_index(&s.value_func_selection, selector_state == SelectorState::ValueFunctionIndex && show_options);
                     x_pos = 38;
                 }
                 SelectorState::ValueParam => {
-                    Tui::display_param(&s.value_param_selection, selector_state == SelectorState::ValueParam);
+                    Tui::display_param(&s.value_param_selection, selector_state == SelectorState::ValueParam && show_options);
                     selection = &s.value_param_selection;
                     x_pos = 46;
                 }

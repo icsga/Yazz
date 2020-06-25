@@ -159,7 +159,7 @@ impl CtrlMap {
         for i in 0..storage_map.len() {
             for (key, value) in &storage_map[i] {
                 let val_range = MenuItem::get_val_range(value.id.function, value.id.parameter);
-                self.map[i].insert(*key, CtrlMapEntry{id: value.id, map_type: value.map_type, val_range: val_range});
+                self.map[i].insert(*key, CtrlMapEntry{id: value.id, map_type: value.map_type, val_range});
             }
         }
         Ok(())
