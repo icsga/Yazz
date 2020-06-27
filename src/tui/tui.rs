@@ -1,6 +1,7 @@
 use super::{CtrlMap, MappingType};
 use super::{Parameter, ParameterValue, ParamId, SynthParam, ValueRange, FUNCTIONS, MOD_SOURCES};
 use super::Float;
+use super::MenuItem;
 use super::MidiMessage;
 use super::{SelectorEvent, SelectorState, ParamSelector, next, ItemSelection};
 use super::{SoundBank, SoundPatch};
@@ -612,7 +613,7 @@ impl Tui {
             Tui::display_selector(&self.selector, true);
         } else {
             print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
-            Tui::display_last_parameter(&self.last_value);
+            Tui::display_last_parameter(&self.last_value, &self.selector.wavetable_list);
         }
         if self.show_tui {
             self.display_idle_time();
@@ -622,23 +623,28 @@ impl Tui {
         stdout().flush().ok();
     }
 
-    fn display_last_parameter(v: &SynthParam) {
+    fn display_last_parameter(v: &SynthParam, wt_list: &Vec<(usize, String)>) {
         print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
 
         print!("{} {} {}", v.function, v.function_id, v.parameter);
         match v.value {
             ParameterValue::Int(x) => print!(" {}", x),
             ParameterValue::Float(x) => print!(" {}", x),
-            ParameterValue::Choice(x) => print!(" {}", x),
-            ParameterValue::Dynamic(_, _) => {
-                /*
+            ParameterValue::Choice(x) => {
+                let val_range = MenuItem::get_val_range(v.function, v.parameter);
+                if let ValueRange::Choice(list) = val_range {
+                    print!(" {:?}", list[x].item);
+                } else {
+                    print!(" Unknown");
+                }
+            }
+            ParameterValue::Dynamic(_, x) => {
                 for (k, v) in wt_list {
                     if *k == x {
                         print!(" {}", v);
                         break;
                     }
                 }
-                */
             },
             _ => ()
         }

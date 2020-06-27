@@ -1,6 +1,6 @@
 use super::Float;
 
-use log::info;
+//use log::info;
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Copy, Clone, Default, Debug)]
@@ -127,7 +127,6 @@ impl Envelope {
         } else if self.last_value < 0.0 {
             self.last_value = 0.0;
         }
-        info!("time {}, value {}", sample_time, self.last_value);
         self.last_update = sample_time;
         self.last_value.powf(data.factor)
     }
@@ -179,8 +178,8 @@ impl Envelope {
             }
         }
 
-        info!("Change to {:?} at {}, last_value = {}, inc = {}, end = {}",
-            new_state, sample_time, self.last_value, self.increment, self.end_time);
+        //info!("Change to {:?} at {}, last_value = {}, inc = {}, end = {}",
+            //new_state, sample_time, self.last_value, self.increment, self.end_time);
 
         self.state = new_state;
     }
@@ -291,7 +290,6 @@ impl TestContext {
 fn close(a: Float, b: Float) -> bool {
     let result = (a - b).abs();
     if result > 0.00001 {
-        info!("a = {}, b = {}", a, b);
         false
     } else {
         true

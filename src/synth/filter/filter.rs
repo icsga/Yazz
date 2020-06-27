@@ -86,7 +86,12 @@ impl Filter {
     pub fn process(&mut self, sample: Float, data: &mut FilterData, freq: Float) -> Float {
         let mut cutoff = data.cutoff;
         if data.key_follow == 1 {
-            cutoff += freq;
+            cutoff = freq * (cutoff / 440.0);
+            if cutoff > 8000.0 {
+                cutoff = 8000.0;
+            } else if cutoff < 1.0 {
+                cutoff = 1.0;
+            }
         }
         if cutoff != self.last_cutoff || data.resonance != self.last_resonance {
             self.update(data, cutoff);
@@ -108,22 +113,22 @@ impl Filter {
     }
 
     // Called if cutoff or resonance have changed
-    pub fn update(&mut self, data: &FilterData, freq: Float) {
+    pub fn update(&mut self, data: &FilterData, cutoff: Float) {
         match data.filter_type {
             0 => (),
-            1 => self.sem_lpf.update(data, freq),
-            2 => self.sem_bpf.update(data, freq),
-            3 => self.sem_hpf.update(data, freq),
-            4 => self.sem_bsf.update(data, freq),
-            5 => self.k35_lpf.update(data, freq),
-            6 => self.k35_hpf.update(data, freq),
-            7 => self.om_lpf.update(data, freq),
-            8 => self.om_bpf.update(data, freq),
-            9 => self.om_hpf.update(data, freq),
+            1 => self.sem_lpf.update(data, cutoff),
+            2 => self.sem_bpf.update(data, cutoff),
+            3 => self.sem_hpf.update(data, cutoff),
+            4 => self.sem_bsf.update(data, cutoff),
+            5 => self.k35_lpf.update(data, cutoff),
+            6 => self.k35_hpf.update(data, cutoff),
+            7 => self.om_lpf.update(data, cutoff),
+            8 => self.om_bpf.update(data, cutoff),
+            9 => self.om_hpf.update(data, cutoff),
             _ => panic!(),
         }
         self.last_resonance = data.resonance;
-        self.last_cutoff = data.cutoff;
+        self.last_cutoff = cutoff;
     }
 
     // ---------

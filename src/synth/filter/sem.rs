@@ -17,8 +17,8 @@ pub struct SEM {
 impl SEM {
     pub fn new(sample_rate: Float, filter_type: FilterType) -> Self {
         SEM{
-            sample_rate: sample_rate,
-            filter_type: filter_type,
+            sample_rate,
+            filter_type,
             resonance: 0.5,
             alpha: 1.0,
             alpha0: 1.0,

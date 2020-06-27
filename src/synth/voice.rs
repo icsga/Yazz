@@ -80,7 +80,7 @@ impl Voice {
     }
 
     fn get_frequency(data: &OscData, input_freq: Float) -> Float {
-        let mut freq: Float = if data.key_follow == 0 {
+        let mut freq = if data.key_follow == 0 {
             440.0
         } else {
             input_freq
