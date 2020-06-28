@@ -4360,14 +4360,14 @@
       }
     },
     {
-      "name": "Init",
+      "name": "Analog Bass",
       "data": {
         "osc": [
           {
-            "level": 0.5,
-            "tune_halfsteps": 0,
+            "level": 0.44,
+            "tune_halfsteps": -12,
             "tune_cents": 0.0,
-            "freq_offset": 1.0,
+            "freq_offset": 0.5000005343801989,
             "sync": 0,
             "key_follow": 1,
             "routing": "Filter1",
@@ -4375,12 +4375,12 @@
             "wt_osc_data": {
               "num_voices": 1,
               "voice_spread": 0.0,
-              "wave_index": 0.0,
+              "wave_index": 0.35000000000000014,
               "wavetable": 0
             }
           },
           {
-            "level": 0.0,
+            "level": 0.12,
             "tune_halfsteps": 0,
             "tune_cents": 0.0,
             "freq_offset": 1.0,
@@ -4391,7 +4391,7 @@
             "wt_osc_data": {
               "num_voices": 1,
               "voice_spread": 0.0,
-              "wave_index": 0.0,
+              "wave_index": 0.6900000000000004,
               "wavetable": 0
             }
           },
@@ -4415,20 +4415,20 @@
         "env": [
           {
             "delay": 0.0,
-            "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
-            "release": 15.0,
+            "attack": 6.0,
+            "decay": 59.0,
+            "sustain": 0.5509999999999996,
+            "release": 224.0,
             "factor": 1.0,
             "looping": false,
             "reset_to_zero": false
           },
           {
             "delay": 0.0,
-            "attack": 15.0,
-            "decay": 15.0,
-            "sustain": 1.0,
-            "release": 15.0,
+            "attack": 10.0,
+            "decay": 256.0,
+            "sustain": 0.4589999999999995,
+            "release": 184.0,
             "factor": 1.0,
             "looping": false,
             "reset_to_zero": false
@@ -4446,13 +4446,13 @@
         ],
         "filter": [
           {
-            "filter_type": 1,
-            "cutoff": 3000.0,
-            "resonance": 0.0,
+            "filter_type": 5,
+            "cutoff": 8000.0,
+            "resonance": 0.7999999999999998,
             "gain": 0.0,
             "aux": 0.0,
-            "env_depth": 0.0,
-            "key_follow": 0
+            "env_depth": 0.44000000000000017,
+            "key_follow": 1
           },
           {
             "filter_type": 1,
@@ -4688,7 +4688,7 @@
           "pitchbend": 2.0,
           "vel_sens": 1.0,
           "env_depth": 1.0,
-          "play_mode": "Poly",
+          "play_mode": "Legato",
           "filter_routing": "Parallel",
           "bpm": 120.0
         }
