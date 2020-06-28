@@ -8,7 +8,6 @@ use super::SynthState;
 use super::{Oscillator, OscData};
 use super::SoundData;
 
-use log::info;
 use wavetable::{Wavetable, WavetableRef};
 
 use std::sync::Arc;

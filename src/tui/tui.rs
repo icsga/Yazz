@@ -899,6 +899,8 @@ impl Tui {
         println!("[/ ]         : Move backwards/ forwards through the parameter list of the current function\r");
         println!("\"<MarkerID>  : Set a marker with the MarkerID at the current parameter\r");
         println!("\'<MarkerID>  : Recall the parameter with the given MarkerID\r");
+        println!("/            : Create a new modulator for currently edited parameter\r");
+        println!("<Ctrl-l>     : MIDI learn, assigns a MIDI controller to the currently edited parameter\r");
         println!("\r");
         println!("Keys in Play mode:\r");
         println!("------------------\r");
