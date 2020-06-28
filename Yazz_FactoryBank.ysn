@@ -96,6 +96,7 @@
             "resonance": 0.047244094488188976,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           },
           {
@@ -104,6 +105,7 @@
             "resonance": 1.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           }
         ],
@@ -429,6 +431,7 @@
             "resonance": 0.023622047244094488,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           },
           {
@@ -437,6 +440,7 @@
             "resonance": 1.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           }
         ],
@@ -762,6 +766,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           },
           {
@@ -770,6 +775,7 @@
             "resonance": 1.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           }
         ],
@@ -1095,6 +1101,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           },
           {
@@ -1103,6 +1110,7 @@
             "resonance": 1.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           }
         ],
@@ -1428,6 +1436,7 @@
             "resonance": 0.09448818897637797,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           },
           {
@@ -1436,6 +1445,7 @@
             "resonance": 1.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           }
         ],
@@ -1761,6 +1771,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           },
           {
@@ -1769,6 +1780,7 @@
             "resonance": 1.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           }
         ],
@@ -2094,6 +2106,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           },
           {
@@ -2102,6 +2115,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           }
         ],
@@ -2427,6 +2441,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           },
           {
@@ -2435,6 +2450,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           }
         ],
@@ -2760,6 +2776,7 @@
             "resonance": 0.11811023622047244,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -2768,6 +2785,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -3093,6 +3111,7 @@
             "resonance": 0.7716535433070866,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -3101,6 +3120,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -3335,7 +3355,7 @@
       }
     },
     {
-      "name": "Init",
+      "name": "Gen1",
       "data": {
         "osc": [
           {
@@ -3426,6 +3446,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -3434,6 +3455,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -3668,7 +3690,7 @@
       }
     },
     {
-      "name": "Init",
+      "name": "Gen2",
       "data": {
         "osc": [
           {
@@ -3759,6 +3781,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -3767,6 +3790,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -4092,6 +4116,7 @@
             "resonance": 0.03,
             "gain": 0.11999999999999998,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 1
           },
           {
@@ -4100,6 +4125,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -4322,7 +4348,7 @@
           "delay_type": 0
         },
         "patch": {
-          "level": 0.43000000000000005,
+          "level": 0.4300000000000001,
           "drive": 0.0,
           "pitchbend": 2.0,
           "vel_sens": 0.8299999999999998,
@@ -4425,6 +4451,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -4433,6 +4460,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -4758,6 +4786,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -4766,6 +4795,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -5091,6 +5121,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -5099,6 +5130,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -5424,6 +5456,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -5432,6 +5465,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -5757,6 +5791,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -5765,6 +5800,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -6090,6 +6126,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -6098,6 +6135,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -6423,6 +6461,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -6431,6 +6470,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -6756,6 +6796,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -6764,6 +6805,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -7089,6 +7131,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -7097,6 +7140,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -7422,6 +7466,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -7430,6 +7475,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -7755,6 +7801,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -7763,6 +7810,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -8088,6 +8136,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -8096,6 +8145,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -8421,6 +8471,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -8429,6 +8480,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -8754,6 +8806,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -8762,6 +8815,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -9087,6 +9141,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -9095,6 +9150,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -9420,6 +9476,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -9428,6 +9485,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -9753,6 +9811,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -9761,6 +9820,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -10086,6 +10146,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -10094,6 +10155,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -10419,6 +10481,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -10427,6 +10490,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -10752,6 +10816,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -10760,6 +10825,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -11085,6 +11151,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -11093,6 +11160,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -11418,6 +11486,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -11426,6 +11495,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -11751,6 +11821,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -11759,6 +11830,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -12084,6 +12156,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -12092,6 +12165,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -12417,6 +12491,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -12425,6 +12500,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -12750,6 +12826,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -12758,6 +12835,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -13083,6 +13161,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -13091,6 +13170,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -13416,6 +13496,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -13424,6 +13505,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -13749,6 +13831,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -13757,6 +13840,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -14082,6 +14166,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -14090,6 +14175,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -14415,6 +14501,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -14423,6 +14510,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -14748,6 +14836,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -14756,6 +14845,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -15081,6 +15171,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -15089,6 +15180,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -15414,6 +15506,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -15422,6 +15515,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -15747,6 +15841,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -15755,6 +15850,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -16080,6 +16176,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -16088,6 +16185,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -16413,6 +16511,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -16421,6 +16520,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -16746,6 +16846,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -16754,6 +16855,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -17079,6 +17181,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -17087,6 +17190,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -17412,6 +17516,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -17420,6 +17525,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -17745,6 +17851,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -17753,6 +17860,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -18078,6 +18186,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -18086,6 +18195,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -18411,6 +18521,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -18419,6 +18530,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -18744,6 +18856,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -18752,6 +18865,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -19077,6 +19191,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -19085,6 +19200,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -19410,6 +19526,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -19418,6 +19535,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -19743,6 +19861,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -19751,6 +19870,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -20076,6 +20196,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -20084,6 +20205,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -20409,6 +20531,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -20417,6 +20540,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -20742,6 +20866,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -20750,6 +20875,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -21075,6 +21201,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -21083,6 +21210,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -21408,6 +21536,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -21416,6 +21545,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -21741,6 +21871,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -21749,6 +21880,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -22074,6 +22206,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -22082,6 +22215,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -22407,6 +22541,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -22415,6 +22550,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -22740,6 +22876,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -22748,6 +22885,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -23073,6 +23211,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -23081,6 +23220,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -23406,6 +23546,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -23414,6 +23555,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -23739,6 +23881,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -23747,6 +23890,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -24072,6 +24216,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -24080,6 +24225,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -24405,6 +24551,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -24413,6 +24560,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -24738,6 +24886,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -24746,6 +24895,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -25071,6 +25221,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -25079,6 +25230,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -25404,6 +25556,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -25412,6 +25565,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -25737,6 +25891,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -25745,6 +25900,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -26070,6 +26226,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -26078,6 +26235,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -26403,6 +26561,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -26411,6 +26570,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -26736,6 +26896,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -26744,6 +26905,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -27069,6 +27231,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -27077,6 +27240,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -27402,6 +27566,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -27410,6 +27575,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -27735,6 +27901,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -27743,6 +27910,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -28068,6 +28236,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -28076,6 +28245,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -28401,6 +28571,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -28409,6 +28580,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -28734,6 +28906,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -28742,6 +28915,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -29067,6 +29241,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -29075,6 +29250,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -29400,6 +29576,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -29408,6 +29585,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -29733,6 +29911,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -29741,6 +29920,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -30066,6 +30246,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -30074,6 +30255,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -30399,6 +30581,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -30407,6 +30590,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -30732,6 +30916,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -30740,6 +30925,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -31065,6 +31251,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -31073,6 +31260,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -31398,6 +31586,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -31406,6 +31595,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -31731,6 +31921,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -31739,6 +31930,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -32064,6 +32256,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -32072,6 +32265,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -32397,6 +32591,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -32405,6 +32600,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -32730,6 +32926,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -32738,6 +32935,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -33063,6 +33261,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -33071,6 +33270,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -33396,6 +33596,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -33404,6 +33605,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -33729,6 +33931,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -33737,6 +33940,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -34062,6 +34266,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -34070,6 +34275,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -34395,6 +34601,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -34403,6 +34610,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -34728,6 +34936,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -34736,6 +34945,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -35061,6 +35271,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -35069,6 +35280,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -35394,6 +35606,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -35402,6 +35615,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -35727,6 +35941,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -35735,6 +35950,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -36060,6 +36276,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -36068,6 +36285,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -36393,6 +36611,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -36401,6 +36620,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -36726,6 +36946,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -36734,6 +36955,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -37059,6 +37281,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -37067,6 +37290,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -37392,6 +37616,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -37400,6 +37625,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -37725,6 +37951,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -37733,6 +37960,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -38058,6 +38286,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -38066,6 +38295,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -38391,6 +38621,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -38399,6 +38630,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -38724,6 +38956,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -38732,6 +38965,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -39057,6 +39291,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -39065,6 +39300,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -39390,6 +39626,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -39398,6 +39635,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -39723,6 +39961,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -39731,6 +39970,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -40056,6 +40296,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -40064,6 +40305,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -40389,6 +40631,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -40397,6 +40640,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -40722,6 +40966,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -40730,6 +40975,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -41055,6 +41301,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -41063,6 +41310,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -41388,6 +41636,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -41396,6 +41645,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -41721,6 +41971,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -41729,6 +41980,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -42054,6 +42306,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -42062,6 +42315,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],
@@ -42387,6 +42641,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           },
           {
@@ -42395,6 +42650,7 @@
             "resonance": 0.0,
             "gain": 0.0,
             "aux": 0.0,
+            "env_depth": 0.0,
             "key_follow": 0
           }
         ],

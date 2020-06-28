@@ -25,6 +25,7 @@ pub struct FilterData {
     pub resonance: Float,
     pub gain: Float,
     pub aux: Float, // General purpose control, usage is filter dependent
+    pub env_depth: Float, // Depth of Envevlope 2 cutoff modulation
     pub key_follow: i64,
 } 
 
@@ -35,6 +36,7 @@ impl FilterData {
         self.resonance = 0.0;
         self.gain = 0.0;
         self.aux = 0.0;
+        self.env_depth = 0.0;
         self.key_follow = 0;
     }
 }
@@ -83,7 +85,9 @@ impl Filter {
         self.om_hpf.reset();
     }
 
-    pub fn process(&mut self, sample: Float, data: &mut FilterData, freq: Float) -> Float {
+    pub fn process(&mut self, sample: Float, data: &mut FilterData, freq: Float, fmod: Float) -> Float {
+
+        // Calculate effective cutoff frequency
         let mut cutoff = data.cutoff;
         if data.key_follow == 1 {
             cutoff = freq * (cutoff / 440.0);
@@ -93,10 +97,18 @@ impl Filter {
                 cutoff = 1.0;
             }
         }
+
+        // Apply filter envelope
+        if data.env_depth > 0.0 {
+            cutoff *= fmod * data.env_depth;
+        }
+
+        // If a parameter changed, update coefficients
         if cutoff != self.last_cutoff || data.resonance != self.last_resonance {
             self.update(data, cutoff);
         }
 
+        // Run the sample through the filter
         match data.filter_type {
             0 => sample, // Bypass
             1 => self.sem_lpf.process(sample, data),

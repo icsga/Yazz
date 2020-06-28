@@ -460,7 +460,13 @@ impl Synth {
     }
 
     fn handle_note_off(&mut self, key: u8, velocity: u8) {
-        self.key_stack.remove(self.key_stack.iter().position(|x| *x as u8 == key).expect("Key not found on stack"));
+        // If key is on the key stack, remove it. It might not be on the stack
+        // if the sound was switched while holding the key.
+        let position = self.key_stack.iter().position(|x| *x as u8 == key);
+        if let Some(pos) = position {
+            self.key_stack.remove(pos);
+        }
+        // Find the voice playing this key and trigger the release phase.
         for v in &mut self.voice {
             if v.is_triggered() && v.key == key {
                 if self.sound.patch.play_mode == PlayMode::Poly || self.key_stack.len() == 0 {

@@ -349,12 +349,13 @@ pub static LFO_PARAMS: [MenuItem; 5] = [
     MenuItem{item: Parameter::Amount,    key: 'a', val_range: ValueRange::Float(0.0, 1.0, 0.01), next: &[]},
 ];
 
-pub static FILTER_PARAMS: [MenuItem; 6] = [
+pub static FILTER_PARAMS: [MenuItem; 7] = [
     MenuItem{item: Parameter::Type,      key: 't', val_range: ValueRange::Choice(&FILTER_TYPE),    next: &[]},
     MenuItem{item: Parameter::Cutoff,    key: 'c', val_range: ValueRange::Float(1.0, 8000.0, 20.0), next: &[]},
     MenuItem{item: Parameter::Resonance, key: 'r', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
     MenuItem{item: Parameter::Gain,      key: 'g', val_range: ValueRange::Float(0.0, 2.0, 0.01),   next: &[]},
     MenuItem{item: Parameter::Aux,       key: 'a', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
+    MenuItem{item: Parameter::EnvDepth,  key: 'e', val_range: ValueRange::Float(0.0, 1.0, 0.01),   next: &[]},
     MenuItem{item: Parameter::KeyFollow, key: 'k', val_range: ValueRange::Int(0, 1),               next: &[]},
 ];
 

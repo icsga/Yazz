@@ -162,6 +162,7 @@ impl SoundData {
                     Parameter::Resonance => { self.filter[id].resonance = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Gain =>      { self.filter[id].gain = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::Aux =>       { self.filter[id].aux = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::EnvDepth =>  { self.filter[id].env_depth = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
                     Parameter::KeyFollow => { self.filter[id].key_follow = if let ParameterValue::Int(x) = msg.value { x } else { panic!() }; }
                     _ => {}
                 }
@@ -269,6 +270,7 @@ impl SoundData {
                     Parameter::Resonance => ParameterValue::Float(filter.resonance),
                     Parameter::Gain => ParameterValue::Float(filter.gain),
                     Parameter::Aux => ParameterValue::Float(filter.aux),
+                    Parameter::EnvDepth => ParameterValue::Float(filter.env_depth),
                     Parameter::KeyFollow => ParameterValue::Int(filter.key_follow),
                     _ => {panic!();}
                 }

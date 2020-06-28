@@ -8,6 +8,7 @@ use super::SynthState;
 use super::{Oscillator, OscData};
 use super::SoundData;
 
+use log::info;
 use wavetable::{Wavetable, WavetableRef};
 
 use std::sync::Arc;
@@ -179,18 +180,11 @@ impl Voice {
         }
 
         // Feed it into the filters
-        let mut result: Float;
-        let output_f1  = self.filter[0].process(input_f1, &mut sound_local.filter[0], input_freq);
-        match sound_global.patch.filter_routing {
-            FilterRouting::Parallel => {
-                result = output_f1;
-            }
-            FilterRouting::Serial => {
-                result = 0.0;
-                input_f2 += output_f1;
-            }
-        }
-        result += self.filter[1].process(input_f2, &mut sound_local.filter[1], input_freq);
+        let mut result: Float = self.apply_filter(sample_clock,
+                                                  sound_local,
+                                                  input_f1,
+                                                  input_f2,
+                                                  input_freq);
         result += result_direct;
 
         // Apply the volume envelope
@@ -205,6 +199,27 @@ impl Voice {
             result = -1.0;
         }
 
+        result
+    }
+
+    pub fn apply_filter(&mut self,
+                        sample_clock: i64,
+                        sound_local: &mut SoundData,
+                        input_f1: Float,
+                        mut input_f2: Float,
+                        input_freq: Float) -> Float {
+        let filter_env = self.env[1].get_sample(sample_clock, &sound_local.env[1]); // Env2 is normaled to filter cutoff
+        let output_f1  = self.filter[0].process(input_f1, &mut sound_local.filter[0], input_freq, filter_env);
+        let mut result = match sound_local.patch.filter_routing {
+            FilterRouting::Parallel => {
+                output_f1
+            }
+            FilterRouting::Serial => {
+                input_f2 += output_f1;
+                0.0
+            }
+        };
+        result += self.filter[1].process(input_f2, &mut sound_local.filter[1], input_freq, filter_env);
         result
     }
 

@@ -389,9 +389,13 @@ impl Surface {
         let filter_gain = self.new_mod_dial_float("Gain", 0.0, 2.0, 1.0, false, &key);
         target.add_child(filter_gain, x_offset, 4 + y_offset);
 
+        key.set(Parameter::Filter, func_id, Parameter::EnvDepth);
+        let filter_edepth = self.new_mod_dial_float("EnvDepth", 0.0, 1.0, 0.0, false, &key);
+        target.add_child(filter_edepth, 14 + x_offset, 4 + y_offset);
+
         key.set(Parameter::Filter, func_id, Parameter::KeyFollow);
         let filter_follow = self.new_option("KeyFollow", 0, &key);
-        target.add_child(filter_follow, 14 + x_offset, 5 + y_offset);
+        target.add_child(filter_follow, x_offset, 8 + y_offset);
     }
 
     fn add_sysinfo(&mut self,
