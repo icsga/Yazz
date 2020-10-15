@@ -24,6 +24,10 @@ pub struct Voice {
     pub filter: [Filter; NUM_FILTERS],
     lfo: [Lfo; NUM_LFOS],
 
+    // Static config
+    pan_l: Float,         // Panning of this voice in the stereo field
+    pan_r: Float,         // Panning of this voice in the stereo field
+
     // Current state
     triggered: bool,
     pub trigger_seq: u64, // Sequence number for keeping track of trigger order
@@ -59,6 +63,8 @@ impl Voice {
                 env,
                 filter,
                 lfo,
+                pan_l: 0.5,
+                pan_r: 0.5,
                 triggered: false,
                 trigger_seq: 0,
                 key: 0,
@@ -151,9 +157,9 @@ impl Voice {
                       sample_clock: i64,
                       sound_global: &SoundData,
                       sound_local: &mut SoundData,
-                      global_state: &SynthState) -> Float {
+                      global_state: &SynthState) -> (Float, Float) {
         if !self.is_running() {
-            return 0.0;
+            return (0.0, 0.0);
         }
         let mut input_f1 = 0.0;
         let mut input_f2 = 0.0;
@@ -170,9 +176,10 @@ impl Voice {
         for (i, osc) in self.osc.iter_mut().enumerate() {
             freq = Voice::get_frequency(&sound_local.osc[i], input_freq);
             let (sample, wave_complete) = osc.get_sample(freq, sample_clock, &sound_local.osc[i], reset);
+            // TODO: Add panning here
             let sample_amped = sample * sound_local.osc[i].level * self.scaled_vel;
-            input_f1 += sample_amped * osc.filter1_out;
-            input_f2 += sample_amped * osc.filter2_out;
+            input_f1      += sample_amped * osc.filter1_out;
+            input_f2      += sample_amped * osc.filter2_out;
             result_direct += sample_amped * osc.direct_out;
             // Sync oscillator 1 to 0
             reset = i == 0 && wave_complete && sound_local.osc[1].sync == 1;
@@ -192,13 +199,17 @@ impl Voice {
             result *= env_amp * sound_local.patch.env_depth;
         }
         if result > 1.0 {
-            //panic!("Voice: {}", result);
             result = 1.0;
         } else if result < -1.0 {
             result = -1.0;
         }
 
-        result
+        // Pan result
+        // TODO: Use actual panning algorithm
+        let result_l = result * self.pan_l;
+        let result_r = result * self.pan_r;
+
+        (result_l, result_r)
     }
 
     pub fn apply_filter(&mut self,
@@ -239,6 +250,12 @@ impl Voice {
 
     pub fn set_wavetable(&mut self, osc_id: usize, wt: WavetableRef) {
         self.osc[osc_id].set_wavetable(wt);
+    }
+
+    // Set panning. 0.0 = left, 1.0 = right
+    pub fn set_pan(&mut self, pan: Float) {
+        self.pan_l = 1.0 - pan;
+        self.pan_r = pan;
     }
 
     pub fn update_routing(&mut self, osc_id: usize, osc_data: &OscData) {

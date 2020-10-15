@@ -61,7 +61,7 @@ impl Delay {
         self.quant_pos = 0;
     }
 
-    pub fn process(&mut self, sample: Float, _sample_clock: i64, data: &DelayData) -> (Float, Float) {
+    pub fn process(&mut self, sample_l: Float, sample_r: Float, _sample_clock: i64, data: &DelayData) -> (Float, Float) {
         // TODO: Calculate the passed time using sample_clock
         let step = (self.bb_l.len() as Float / data.time) / self.sample_rate; // The amount of samples we step forward, as float
         let step = Delay::addf(step, 0.0);
@@ -78,8 +78,10 @@ impl Delay {
         for _ in 0..num_samples {
             pos = Delay::add(pos, 1);
             sample_sum_l += self.bb_l[pos];
+            sample_sum_r += self.bb_r[pos];
         }
         sample_sum_l /= num_samples as Float;
+        sample_sum_r /= num_samples as Float;
 
         let mut filtered_value_l: Float;
         let mut filtered_value_r: Float;
@@ -87,39 +89,32 @@ impl Delay {
         if data.delay_type == 1 {
             // PingPong
 
-            // Right side
-            // ----------
-            for _ in 0..num_samples {
-                pos = Delay::add(pos, 1);
-                sample_sum_r += self.bb_r[pos];
-            }
-            sample_sum_r /= num_samples as Float;
-
             // Mix delay signal to input and update memory. This step exchanges
             // the samples between left and right.
             // (steps through all positions that we jumped over when averaging)
             pos = self.quant_pos;
             for _ in 0..num_samples as usize {
                 pos = Delay::add(pos, 1);
-                filtered_value_l = self.filter_l.process(sample + self.bb_l[pos] * data.feedback);
-                filtered_value_r = self.filter_r.process(         self.bb_r[pos] * data.feedback);
+                filtered_value_l = self.filter_l.process(sample_l + self.bb_l[pos] * data.feedback);
+                filtered_value_r = self.filter_r.process(           self.bb_r[pos] * data.feedback);
                 self.bb_l[pos] = filtered_value_r;
                 self.bb_r[pos] = filtered_value_l;
             }
         } else {
-            sample_sum_r = sample_sum_l;
-
+            // Stereo
             // Mix delay signal to input and update memory
             // (steps through all positions that we jumped over when averaging)
             for _ in 0..num_samples as usize {
                 pos = Delay::add(pos, 1);
-                filtered_value_l = self.filter_l.process(sample + self.bb_l[pos] * data.feedback);
+                filtered_value_l = self.filter_l.process(sample_l + self.bb_l[pos] * data.feedback);
                 self.bb_l[pos] = filtered_value_l;
+                filtered_value_r = self.filter_r.process(sample_r + self.bb_r[pos] * data.feedback);
+                self.bb_r[pos] = filtered_value_r;
             }
         }
 
-        let mixed_sample_l = sample + sample_sum_l * data.level;
-        let mixed_sample_r = sample + sample_sum_r * data.level;
+        let mixed_sample_l = sample_l + sample_sum_l * data.level;
+        let mixed_sample_r = sample_r + sample_sum_r * data.level;
         self.quant_pos = new_quant_pos;
         (mixed_sample_l, mixed_sample_r)
     }

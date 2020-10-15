@@ -1,6 +1,5 @@
 use super::Float;
 
-//use log::info;
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Copy, Clone, Default, Debug)]
@@ -177,10 +176,6 @@ impl Envelope {
                 self.end_time = self.calc_end_time(sample_time, data.release);
             }
         }
-
-        //info!("Change to {:?} at {}, last_value = {}, inc = {}, end = {}",
-            //new_state, sample_time, self.last_value, self.increment, self.end_time);
-
         self.state = new_state;
     }
 

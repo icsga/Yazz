@@ -103,6 +103,7 @@ pub enum Parameter {
     Feedback,
     Tone,
     // Delay types
+    Stereo,
     PingPong,
 
     // MIDI parameters
@@ -125,6 +126,18 @@ pub enum Parameter {
     Parallel,
     Serial,
     Bpm,
+    Allocation,
+    PanOrigin,
+
+    // Voice allocation types
+    Ascending,
+    RoundRobin,
+    Random,
+
+    // Pan origin
+    Center,
+    Left,
+    Right,
 
     // Sync values
     Off,
@@ -415,7 +428,7 @@ pub static DELAY_PARAMS: [MenuItem; 6] = [
 ];
 
 pub static DELAY_TYPE: [MenuItem; 2] = [
-    MenuItem{item: Parameter::Mono,      key: 'm', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Stereo,    key: 's', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::PingPong,  key: 'p', val_range: ValueRange::NoRange, next: &[]},
 ];
 
@@ -426,15 +439,19 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
     MenuItem{item: Parameter::Active,    key: 'v', val_range: ValueRange::Int(0, 1),             next: &[]},
 ];
 
-pub static PATCH_PARAMS: [MenuItem; 8] = [
-    MenuItem{item: Parameter::Level,        key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0), next: &[]},
-    MenuItem{item: Parameter::Drive,        key: 'd', val_range: ValueRange::Float(0.0, 10.0, 0.1),  next: &[]},
-    MenuItem{item: Parameter::Pitchbend ,   key: 'p', val_range: ValueRange::Int(0, 12),             next: &[]},
-    MenuItem{item: Parameter::VelSens,      key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
-    MenuItem{item: Parameter::EnvDepth,     key: 'e', val_range: ValueRange::Float(0.0, 1.0, 0.01),  next: &[]},
-    MenuItem{item: Parameter::PlayMode,     key: 'm', val_range: ValueRange::Choice(&PLAY_MODES),    next: &[]},
-    MenuItem{item: Parameter::FilterRouting,key: 'f', val_range: ValueRange::Choice(&FILTER_ROUTING),next: &[]},
-    MenuItem{item: Parameter::Bpm,          key: 'b', val_range: ValueRange::Float(1.0, 240.0, 1.0), next: &[]},
+pub static PATCH_PARAMS: [MenuItem; 12] = [
+    MenuItem{item: Parameter::Level,        key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0),    next: &[]},
+    MenuItem{item: Parameter::Drive,        key: 'd', val_range: ValueRange::Float(0.0, 10.0, 1.0),     next: &[]},
+    MenuItem{item: Parameter::Pitchbend ,   key: 'p', val_range: ValueRange::Int(0, 12),                next: &[]},
+    MenuItem{item: Parameter::VelSens,      key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
+    MenuItem{item: Parameter::EnvDepth,     key: 'e', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
+    MenuItem{item: Parameter::PlayMode,     key: 'm', val_range: ValueRange::Choice(&PLAY_MODES),       next: &[]},
+    MenuItem{item: Parameter::FilterRouting,key: 'f', val_range: ValueRange::Choice(&FILTER_ROUTING),   next: &[]},
+    MenuItem{item: Parameter::Bpm,          key: 'b', val_range: ValueRange::Float(1.0, 240.0, 1.0),    next: &[]},
+    MenuItem{item: Parameter::Voices,       key: 'n', val_range: ValueRange::Int(1, NUM_VOICES as i64), next: &[]},
+    MenuItem{item: Parameter::Spread,       key: 's', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
+    MenuItem{item: Parameter::Allocation,   key: 'a', val_range: ValueRange::Choice(&VOICE_ALLOCATION), next: &[]},
+    MenuItem{item: Parameter::PanOrigin,    key: 'o', val_range: ValueRange::Choice(&PAN_ORIGIN),       next: &[]},
 ];
 
 pub static MOD_SOURCES: [MenuItem; 9] = [
@@ -473,5 +490,17 @@ pub static PLAY_MODES: [MenuItem; 3] = [
 pub static FILTER_ROUTING: [MenuItem; 2] = [
     MenuItem{item: Parameter::Parallel, key: 'p', val_range: ValueRange::NoRange, next: &[]},
     MenuItem{item: Parameter::Serial,   key: 's', val_range: ValueRange::NoRange, next: &[]},
+];
+
+pub static VOICE_ALLOCATION: [MenuItem; 3] = [
+    MenuItem{item: Parameter::RoundRobin, key: 'r', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Ascending,  key: 'a', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Random,     key: 'o', val_range: ValueRange::NoRange, next: &[]},
+];
+
+pub static PAN_ORIGIN: [MenuItem; 3] = [
+    MenuItem{item: Parameter::Center, key: 'c', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Left,   key: 'l', val_range: ValueRange::NoRange, next: &[]},
+    MenuItem{item: Parameter::Right,  key: 'r', val_range: ValueRange::NoRange, next: &[]},
 ];
 

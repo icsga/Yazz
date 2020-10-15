@@ -14,10 +14,11 @@ use std::thread::spawn;
 
 use crossbeam_channel::{Sender, Receiver};
 use log::{info, error};
+use rand::{Rng, thread_rng};
 use serde::{Serialize, Deserialize};
 use wavetable::{WtManager, WavetableRef, WtInfo};
 
-const NUM_VOICES: usize = 32;
+pub const NUM_VOICES: usize = 32;
 const NUM_KEYS: usize = 128;
 pub const NUM_MODULATORS: usize = 16;
 pub const NUM_GLOBAL_LFOS: usize = 2;
@@ -80,17 +81,81 @@ impl FilterRouting {
     }
 }
 
+#[derive(Serialize, Deserialize, Copy, Clone, Debug)]
+pub enum VoiceAllocation {
+    RoundRobin,
+    FirstToLast,
+    Random
+}
+
+impl Default for VoiceAllocation {
+    fn default() -> Self { VoiceAllocation::RoundRobin }
+}
+
+impl VoiceAllocation {
+    pub fn from_int(param: usize) -> VoiceAllocation {
+        match param {
+            0 => VoiceAllocation::RoundRobin,
+            1 => VoiceAllocation::FirstToLast,
+            2 => VoiceAllocation::Random,
+            _ => panic!(),
+        }
+    }
+
+    pub fn to_int(&self) -> usize {
+        match self {
+            VoiceAllocation::RoundRobin => 0,
+            VoiceAllocation::FirstToLast => 1,
+            VoiceAllocation::Random => 2,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Copy, Clone, Debug)]
+pub enum PanOrigin {
+    Center,
+    Left,
+    Right
+}
+
+impl Default for PanOrigin {
+    fn default() -> Self { PanOrigin::Center }
+}
+
+impl PanOrigin {
+    pub fn from_int(param: usize) -> PanOrigin {
+        match param {
+            0 => PanOrigin::Center,
+            1 => PanOrigin::Left,
+            2 => PanOrigin::Right,
+            _ => panic!(),
+        }
+    }
+
+    pub fn to_int(&self) -> usize {
+        match self {
+            PanOrigin::Center => 0,
+            PanOrigin::Left => 1,
+            PanOrigin::Right => 2,
+        }
+    }
+}
+
 // Data of the currently selected sound patch
 #[derive(Serialize, Deserialize, Copy, Clone, Debug, Default)]
 pub struct PatchData {
     pub level: Float,
     pub drive: Float,
-    pub pitchbend: Float, // Range of the pitchwheel
-    pub vel_sens: Float,  // Velocity sensitivity
-    pub env_depth: Float, // Mod depth of env1 to volume. TODO: Move to Env1 menu
+    pub pitchbend: Float,    // Range of the pitchwheel
+    pub vel_sens: Float,     // Velocity sensitivity
+    pub env_depth: Float,    // Mod depth of env1 to volume. TODO: Move to Env1 menu
     pub play_mode: PlayMode,
     pub filter_routing: FilterRouting,
-    pub bpm: Float,       // Patch tempo for synced settings (LFO, delay)
+    pub bpm: Float,          // Patch tempo for synced settings (LFO, delay)
+    pub num_voices: usize,   // Number of usable voices
+    pub voice_spread: Float, // Degree of voice spreading in stereo field
+    pub voice_allocation: VoiceAllocation,
+    pub pan_origin: PanOrigin,
 }
 
 impl PatchData {
@@ -101,6 +166,10 @@ impl PatchData {
         self.vel_sens = 1.0;
         self.env_depth = 1.0;
         self.play_mode = PlayMode::Poly;
+        self.num_voices = NUM_VOICES;
+        self.voice_spread = 0.0;
+        self.voice_allocation = VoiceAllocation::RoundRobin;
+        self.pan_origin = PanOrigin::Center;
     }
 }
 
@@ -138,6 +207,7 @@ pub struct Synth {
     sender: Sender<UiMessage>,
     global_state: SynthState,
     key_stack: Vec<u16>, // List of currently pressed keys (for Mono/ Legato modes)
+    last_voice: usize, // Last voice selected with RoundRobin voice allocation
 
     // Extra oscillators to display the waveshape
     samplebuff_osc: Oscillator,
@@ -158,7 +228,7 @@ impl Synth {
         wt_manager.add_basic_tables(0);
         wt_manager.add_pwm_tables(1, 64);
         let default_table = wt_manager.get_table(0).unwrap(); // Table 0
-        let voice = [
+        let mut voice = [
             Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
             Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
             Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
@@ -168,6 +238,9 @@ impl Synth {
             Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
             Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
         ];
+        for i in 0..NUM_VOICES {
+            voice[i].set_pan((i % 8) as Float / 7.0);
+        }
         let glfo = [
             Lfo::new(sample_rate), Lfo::new(sample_rate)
         ];
@@ -195,6 +268,7 @@ impl Synth {
             sender,
             global_state: SynthState{freq_factor: 1.0},
             key_stack: vec!(0; 128),
+            last_voice: NUM_VOICES,
             samplebuff_osc: Oscillator::new(sample_rate, default_table.clone()),
             samplebuff_env: Envelope::new(sample_rate as Float),
             samplebuff_lfo: Lfo::new(sample_rate),
@@ -288,7 +362,8 @@ impl Synth {
 
     /// Called by the audio engine to get the next sample to be output.
     pub fn get_sample(&mut self, sample_clock: i64) -> (Float, Float) {
-        let mut value: Float = 0.0;
+        let mut value_l: Float = 0.0;
+        let mut value_r: Float = 0.0;
 
         self.get_mod_values(sample_clock);
 
@@ -296,18 +371,21 @@ impl Synth {
         if self.voices_playing > 0 {
             for i in 0..32 {
                 if self.voices_playing & (1 << i) > 0 {
-                    value += self.voice[i].get_sample(sample_clock, &self.sound_global, &mut self.sound_local, &self.global_state);
+                    let (sample_l, sample_r) = self.voice[i].get_sample(sample_clock, &self.sound_global, &mut self.sound_local, &self.global_state);
+                    value_l += sample_l;
+                    value_r += sample_r;
                 }
             }
         }
 
         // Apply clipping
         if self.sound_global.patch.drive > 0.0 {
-            value = (value * self.sound_global.patch.drive).tanh();
+            value_l = (value_l * self.sound_global.patch.drive).tanh();
+            value_r = (value_r * self.sound_global.patch.drive).tanh();
         }
 
         // Pass sample into global effects
-        let (mut value_l, mut value_r) = self.delay.process(value, sample_clock, &self.sound_global.delay);
+        let (mut value_l, mut value_r) = self.delay.process(value_l, value_r, sample_clock, &self.sound_global.delay);
 
         value_l *= self.sound_global.patch.level;
         value_r *= self.sound_global.patch.level;
@@ -369,9 +447,9 @@ impl Synth {
             }
             Parameter::Patch => {
                 match msg.parameter {
-                    Parameter::Bpm => {
-                        self.delay.update_bpm(&mut self.sound.delay, self.sound.patch.bpm);
-                    }
+                    Parameter::Bpm => self.delay.update_bpm(&mut self.sound.delay, self.sound.patch.bpm),
+                    Parameter::Voices | Parameter::Spread
+                    | Parameter::Allocation | Parameter::PanOrigin => self.update_voice_allocation(),
                     _ => ()
                 }
             }
@@ -402,6 +480,45 @@ impl Synth {
         }
     }
 
+    fn update_voice_allocation(&mut self) {
+        let num_voices = self.sound.patch.num_voices;
+        let spread = self.sound.patch.voice_spread;
+        match self.sound.patch.pan_origin {
+            PanOrigin::Center => self.set_voice_alloc_center(num_voices, spread),
+            PanOrigin::Left   => self.set_voice_alloc_left(num_voices, spread),
+            PanOrigin::Right  => self.set_voice_alloc_right(num_voices, spread),
+        }
+    }
+
+    fn set_voice_alloc_center(&mut self, num_voices: usize, spread: Float) {
+        let offset = 0.5;
+        for i in 0..num_voices {
+            let voice_amount = (i % num_voices) as Float / (num_voices - 1) as Float;
+            let voice_amount = voice_amount * ((i % 2) as Float * -1.0);
+            let value = (voice_amount * spread) + offset;
+            info!("Voice {} pan {}", i, value); 
+            self.voice[i].set_pan(value);
+        }
+    }
+
+    fn set_voice_alloc_left(&mut self, num_voices: usize, spread: Float) {
+        for i in 0..num_voices {
+            let voice_amount = (i % num_voices) as Float / (num_voices - 1) as Float;
+            let value = voice_amount * spread;
+            info!("Voice {} pan {}", i, value); 
+            self.voice[i].set_pan(value);
+        }
+    }
+
+    fn set_voice_alloc_right(&mut self, num_voices: usize, spread: Float) {
+        for i in 0..num_voices {
+            let voice_amount = (i % num_voices) as Float / (num_voices - 1) as Float;
+            let value = 1.0 - (voice_amount * spread);
+            info!("Voice {} pan {}", i, value); 
+            self.voice[i].set_pan(value);
+        }
+    }
+
     fn handle_midi_message(&mut self, msg: MidiMessage) {
         match msg {
             MidiMessage::NoteOn{channel: _, key, velocity} => self.handle_note_on(key, velocity),
@@ -421,6 +538,7 @@ impl Synth {
         }
     }
 
+    // UI has sent a new sound patch.
     fn handle_sound_update(&mut self, sound: &SoundData) {
         self.reset();
         self.sound = *sound;
@@ -432,6 +550,7 @@ impl Synth {
         self.update_routing(0);
         self.update_routing(1);
         self.update_routing(2);
+        self.update_voice_allocation();
     }
 
     fn handle_wavetable_info(&mut self, mut wt_info: WtInfo) {
@@ -540,18 +659,71 @@ impl Synth {
     }
 
     fn select_voice_poly(&mut self) -> usize {
+        match self.sound.patch.voice_allocation {
+            VoiceAllocation::RoundRobin => self.select_voice_round_robin(),
+            VoiceAllocation::FirstToLast => self.select_voice_start_to_end(),
+            VoiceAllocation::Random => self.select_voice_random(),
+        }
+    }
+
+    // The voices are selected sequentially, wrapping back to the beginning
+    // when the end of the range is reached. If no free voice is available,
+    // the oldest voice is stolen.
+    fn select_voice_round_robin(&mut self) -> usize {
         let mut min_trigger_seq = std::u64::MAX;
         let mut min_id = 0;
-        for (i, v) in self.voice.iter().enumerate() {
-            if !v.is_running() {
+        let mut i: usize = self.last_voice + 1;
+        if i >= self.sound.patch.num_voices {
+            i = 0;
+        }
+        while i != self.last_voice {
+            if !self.voice[i].is_running() { // TODO: Optimize array access
+                self.last_voice = i;
                 return i;
             }
-            if v.trigger_seq < min_trigger_seq {
-                min_trigger_seq = v.trigger_seq;
+            // min_id will contain the ID of the voice with the lowest
+            // trigger sequence number, which is the "oldest" voice in the
+            // current context.
+            if self.voice[i].trigger_seq < min_trigger_seq {
+                min_trigger_seq = self.voice[i].trigger_seq;
+                min_id = i;
+            }
+            i += 1;
+            if i >= self.sound.patch.num_voices {
+                i = 0;
+            }
+        }
+        // No free voice found, so steal the oldest running voice
+        self.last_voice = min_id;
+        min_id
+    }
+
+    // First free voice with the lowest ID is selected. If no free voice is
+    // available, the oldest voice is stolen.
+    fn select_voice_start_to_end(&mut self) -> usize {
+        let mut min_trigger_seq = std::u64::MAX;
+        let mut min_id = 0;
+        for i in 0..self.sound.patch.num_voices {
+            if !self.voice[i].is_running() { // TODO: Optimize array access
+                return i;
+            }
+            // min_id will contain the ID of the voice with the lowest
+            // trigger sequence number, which is the "oldest" voice in the
+            // current context.
+            if self.voice[i].trigger_seq < min_trigger_seq {
+                min_trigger_seq = self.voice[i].trigger_seq;
                 min_id = i;
             }
         }
+        // No free voice found, so steal the oldest running voice
         min_id
+    }
+
+    // Select random index, then do search for free voice from there.
+    fn select_voice_random(&mut self) -> usize {
+        let mut rand = thread_rng();
+        self.last_voice = rand.gen_range(0, self.sound.patch.num_voices);
+        self.select_voice_round_robin()
     }
 
     // Fill a received buffer with samples from the model oscillator/ envelope.

@@ -233,6 +233,10 @@ impl SoundData {
                     Parameter::PlayMode => { self.patch.play_mode = if let ParameterValue::Choice(x) = msg.value { PlayMode::from_int(x) } else { panic!() }; }
                     Parameter::FilterRouting => { self.patch.filter_routing = if let ParameterValue::Choice(x) = msg.value { FilterRouting::from_int(x) } else { panic!() }; }
                     Parameter::Bpm => { self.patch.bpm = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Voices => { self.patch.num_voices = if let ParameterValue::Int(x) = msg.value { x as usize } else { panic!() }; }
+                    Parameter::Spread => { self.patch.voice_spread = if let ParameterValue::Float(x) = msg.value { x } else { panic!() }; }
+                    Parameter::Allocation => { self.patch.voice_allocation = if let ParameterValue::Choice(x) = msg.value { VoiceAllocation::from_int(x) } else { panic!() }; }
+                    Parameter::PanOrigin => { self.patch.pan_origin = if let ParameterValue::Choice(x) = msg.value { PanOrigin::from_int(x) } else { panic!() }; }
                     _ => {}
                 }
             }
@@ -343,6 +347,10 @@ impl SoundData {
                     Parameter::PlayMode => ParameterValue::Choice(self.patch.play_mode as usize),
                     Parameter::FilterRouting => ParameterValue::Choice(self.patch.filter_routing as usize),
                     Parameter::Bpm => ParameterValue::Float(self.patch.bpm),
+                    Parameter::Voices => ParameterValue::Int(self.patch.num_voices as i64),
+                    Parameter::Spread => ParameterValue::Float(self.patch.voice_spread),
+                    Parameter::Allocation => ParameterValue::Choice(self.patch.voice_allocation as usize),
+                    Parameter::PanOrigin => ParameterValue::Choice(self.patch.pan_origin as usize),
                     _ => {panic!();}
                 }
             }

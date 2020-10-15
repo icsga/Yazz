@@ -335,7 +335,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -670,7 +674,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 10,
+          "voice_spread": 1.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -1005,7 +1013,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 1.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Left"
         }
       }
     },
@@ -1340,7 +1352,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -1675,7 +1691,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -2010,7 +2030,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -2345,7 +2369,11 @@
           "env_depth": 1.0,
           "play_mode": "Mono",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -2680,7 +2708,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -3015,7 +3047,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -3350,7 +3386,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -3685,7 +3725,11 @@
           "env_depth": 0.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -4020,7 +4064,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -4355,7 +4403,11 @@
           "env_depth": 1.0,
           "play_mode": "Legato",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -4690,7 +4742,11 @@
           "env_depth": 1.0,
           "play_mode": "Legato",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -5025,7 +5081,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -5360,7 +5420,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -5695,7 +5759,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -6030,7 +6098,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -6365,7 +6437,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -6700,7 +6776,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -7035,7 +7115,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -7370,7 +7454,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -7705,7 +7793,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -8040,7 +8132,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -8375,7 +8471,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -8710,7 +8810,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -9045,7 +9149,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -9380,7 +9488,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -9715,7 +9827,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -10050,7 +10166,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -10385,7 +10505,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -10720,7 +10844,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -11055,7 +11183,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -11390,7 +11522,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -11725,7 +11861,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -12060,7 +12200,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -12395,7 +12539,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -12730,7 +12878,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -13065,7 +13217,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -13400,7 +13556,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -13735,7 +13895,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -14070,7 +14234,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -14405,7 +14573,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -14740,7 +14912,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -15075,7 +15251,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -15410,7 +15590,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -15745,7 +15929,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -16080,7 +16268,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -16415,7 +16607,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -16750,7 +16946,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -17085,7 +17285,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -17420,7 +17624,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -17755,7 +17963,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -18090,7 +18302,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -18425,7 +18641,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -18760,7 +18980,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -19095,7 +19319,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -19430,7 +19658,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -19765,7 +19997,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -20100,7 +20336,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -20435,7 +20675,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -20770,7 +21014,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -21105,7 +21353,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -21440,7 +21692,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -21775,7 +22031,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -22110,7 +22370,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -22445,7 +22709,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -22780,7 +23048,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -23115,7 +23387,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -23450,7 +23726,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -23785,7 +24065,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -24120,7 +24404,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -24455,7 +24743,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -24790,7 +25082,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -25125,7 +25421,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -25460,7 +25760,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -25795,7 +26099,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -26130,7 +26438,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -26465,7 +26777,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -26800,7 +27116,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -27135,7 +27455,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -27470,7 +27794,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -27805,7 +28133,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -28140,7 +28472,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -28475,7 +28811,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -28810,7 +29150,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -29145,7 +29489,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -29480,7 +29828,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -29815,7 +30167,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -30150,7 +30506,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -30485,7 +30845,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -30820,7 +31184,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -31155,7 +31523,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -31490,7 +31862,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -31825,7 +32201,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -32160,7 +32540,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -32495,7 +32879,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -32830,7 +33218,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -33165,7 +33557,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -33500,7 +33896,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -33835,7 +34235,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -34170,7 +34574,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -34505,7 +34913,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -34840,7 +35252,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -35175,7 +35591,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -35510,7 +35930,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -35845,7 +36269,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -36180,7 +36608,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -36515,7 +36947,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -36850,7 +37286,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -37185,7 +37625,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -37520,7 +37964,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -37855,7 +38303,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -38190,7 +38642,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -38525,7 +38981,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -38860,7 +39320,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -39195,7 +39659,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -39530,7 +39998,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -39865,7 +40337,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -40200,7 +40676,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -40535,7 +41015,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -40870,7 +41354,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -41205,7 +41693,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -41540,7 +42032,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -41875,7 +42371,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -42210,7 +42710,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -42545,7 +43049,11 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     },
@@ -42880,17 +43388,15 @@
           "env_depth": 1.0,
           "play_mode": "Poly",
           "filter_routing": "Parallel",
-          "bpm": 120.0
+          "bpm": 120.0,
+          "num_voices": 32,
+          "voice_spread": 0.0,
+          "voice_allocation": "RoundRobin",
+          "pan_origin": "Center"
         }
       }
     }
   ],
   "wt_list": [
-    {
-      "id": 2,
-      "valid": true,
-      "name": "ESW FM - Brutal",
-      "filename": "ESW FM - Brutal.wav"
-    }
   ]
 }
