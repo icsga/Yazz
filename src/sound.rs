@@ -126,11 +126,11 @@ impl SoundData {
         self.patch.init();
     }
 
-    pub fn get_osc_data<'a>(&'a self, id: usize) -> &'a OscData {
+    pub fn get_osc_data(&self, id: usize) -> &OscData {
         &self.osc[id]
     }
 
-    pub fn get_env_data<'a>(&'a self, id: usize) -> &'a EnvelopeData {
+    pub fn get_env_data(&self, id: usize) -> &EnvelopeData {
         &self.env[id]
     }
 

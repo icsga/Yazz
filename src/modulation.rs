@@ -105,7 +105,7 @@ impl ModData {
     }
 
     pub fn get_source(&self) -> FunctionId {
-        FunctionId{function: self.source_func, function_id: self.source_func_id, ..Default::default()}
+        FunctionId{function: self.source_func, function_id: self.source_func_id}
     }
 
     pub fn get_target(&self) -> ParamId {

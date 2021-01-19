@@ -123,7 +123,7 @@ impl ItemSelection {
                 match x {
                     '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.' => {
                         let y = x as i64 - '0' as i64;
-                        if self.temp_string.len() > 0 {
+                        if !self.temp_string.is_empty() {
                             // Something already in temp string, append to end if possible.
                             let current_temp: Result<i64, ParseIntError> = self.temp_string.parse();
                             let current_temp = if let Ok(x) = current_temp {
@@ -148,17 +148,15 @@ impl ItemSelection {
                                     RetCode::ValueUpdated
                                 }
                             }
+                        } else if y * 10 < max {
+                            // More digits could come, start temp_string
+                            self.temp_string.push(x);
+                            let value: Result<i64, ParseIntError> = self.temp_string.parse();
+                            current = if let Ok(x) = value { x } else { current };
+                            RetCode::ValueUpdated
                         } else {
-                            if y * 10 < max {
-                                // More digits could come, start temp_string
-                                self.temp_string.push(x);
-                                let value: Result<i64, ParseIntError> = self.temp_string.parse();
-                                current = if let Ok(x) = value { x } else { current };
-                                RetCode::ValueUpdated
-                            } else {
-                                current = y;
-                                RetCode::ValueComplete
-                            }
+                            current = y;
+                            RetCode::ValueComplete
                         }
                     },
                     '+' => { current += 1; RetCode::ValueUpdated },
@@ -209,7 +207,7 @@ impl ItemSelection {
                 let len = self.temp_string.len();
                 if len > 0 {
                     self.temp_string.pop();
-                    if self.temp_string.len() >= 1 {
+                    if !self.temp_string.is_empty() {
                         let value = self.temp_string.parse();
                         current = if let Ok(x) = value { x } else { current };
                     } else {
@@ -292,7 +290,7 @@ impl ItemSelection {
             }
             ValueRange::Float(min, max, _) => {
                 let mut value = if let ParameterValue::Float(x) = val { x } else { panic!(); };
-                let has_period =  self.temp_string.contains(".");
+                let has_period =  self.temp_string.contains('.');
                 if value > *max {
                     value = *max;
                 }
@@ -301,7 +299,7 @@ impl ItemSelection {
                 }
                 self.temp_string.clear();
                 self.temp_string.push_str(value.to_string().as_str());
-                if !self.temp_string.contains(".") && has_period {
+                if !self.temp_string.contains('.') && has_period {
                     self.temp_string.push('.');
                 }
                 self.value = ParameterValue::Float(value);

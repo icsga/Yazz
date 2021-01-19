@@ -75,8 +75,8 @@ impl CtrlMap {
             set, controller, map_type, parameter, val_range);
         self.map[set].insert(controller,
                              CtrlMapEntry{id: parameter,
-                                          map_type: map_type,
-                                          val_range: val_range});
+                                          map_type,
+                                          val_range});
     }
 
     /// Delete all mappings for a parameter.
@@ -156,8 +156,8 @@ impl CtrlMap {
         reader.read_to_string(&mut serialized)?;
         let storage_map: Vec<CtrlHashMapStorage> = serde_json::from_str(&serialized).unwrap();
 
-        for i in 0..storage_map.len() {
-            for (key, value) in &storage_map[i] {
+        for (i, item) in storage_map.iter().enumerate() {
+            for (key, value) in item {
                 let val_range = MenuItem::get_val_range(value.id.function, value.id.parameter);
                 self.map[i].insert(*key, CtrlMapEntry{id: value.id, map_type: value.map_type, val_range});
             }
@@ -171,8 +171,8 @@ impl CtrlMap {
 
         // Transfer data into serializable format
         let mut storage_map = vec!(CtrlHashMapStorage::new(); 36);
-        for i in 0..self.map.len() {
-            for (key, value) in &self.map[i] {
+        for (i, item) in self.map.iter().enumerate() {
+            for (key, value) in item {
                 storage_map[i].insert(*key, CtrlMapStorageEntry{id: value.id, map_type: value.map_type});
             }
         }

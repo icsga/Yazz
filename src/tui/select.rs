@@ -124,13 +124,13 @@ impl ParamSelector {
         wavetable_list.push((1, "PWM Square".to_string()));
         ParamSelector{value_changed: false,
                       state: SelectorState::Function,
-                      func_selection: func_selection,
-                      param_selection: param_selection,
-                      value_func_selection: value_func_selection,
-                      value_param_selection: value_param_selection,
+                      func_selection,
+                      param_selection,
+                      value_func_selection,
+                      value_param_selection,
                       value: ParameterValue::Int(0),
                       ml: MidiLearn::new(),
-                      wavetable_list: wavetable_list,
+                      wavetable_list,
                       sound: Option::None,
                       pending_key: Option::None,
                       history: vec!{},
@@ -298,14 +298,14 @@ impl ParamSelector {
                 SmResult::EventHandled
             }
             SmEvent::Event(selector_event) => {
-                match selector_event {
+                match *selector_event {
                     SelectorEvent::Key(c) => {
                         let result = self.handle_navigation_keys(c);
                         match result {
                             SmResult::Error => (), // Continue processing the key
                             _ => return result     // Key was handled
                         }
-                        match self.param_selection.select_item(*c) {
+                        match self.param_selection.select_item(c) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Value has changed, but not complete yet
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore invalid key
                             RetCode::ValueUpdated  => {                       // Pararmeter selection updated
@@ -344,7 +344,7 @@ impl ParamSelector {
                 SmResult::EventHandled
             }
             SmEvent::Event(selector_event) => {
-                match selector_event {
+                match *selector_event {
                     SelectorEvent::Key(c) => {
                         let result = self.handle_navigation_keys(c);
                         match result {
@@ -359,12 +359,12 @@ impl ParamSelector {
                         if let Key::Ctrl('l') = c {
                             return SmResult::ChangeState(ParamSelector::state_midi_learn);
                         }
-                        match self.param_selection.handle_input(*c, self.wavetable_list.len() - 1) {
+                        match self.param_selection.handle_input(c, self.wavetable_list.len() - 1) {
                             RetCode::KeyConsumed   => SmResult::EventHandled,
                             RetCode::KeyMissmatch  => {
                                 // Key can't be used for value, so it probably is the short cut for a
                                 // different parameter. Switch to parameter state and try again.
-                                self.pending_key = Option::Some(*c);
+                                self.pending_key = Option::Some(c);
                                 SmResult::ChangeState(ParamSelector::state_parameter)
                             },
                             RetCode::ValueUpdated  => {
@@ -382,7 +382,7 @@ impl ParamSelector {
                         }
                     }
                     SelectorEvent::ControlChange(_, value) => {
-                        self.param_selection.set_control_value(*value);
+                        self.param_selection.set_control_value(value);
                         self.value_changed = true;
                         SmResult::EventHandled
                     }
@@ -425,14 +425,14 @@ impl ParamSelector {
                 SmResult::EventHandled
             }
             SmEvent::Event(selector_event) => {
-                match selector_event {
+                match *selector_event {
                     SelectorEvent::Key(c) => {
                         let result = self.handle_navigation_keys(c);
                         match result {
                             SmResult::Error => (), // Continue processing the key
                             _ => return result     // Key was handled
                         }
-                        match self.value_func_selection.select_item(*c) {
+                        match self.value_func_selection.select_item(c) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Selection updated
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore key that doesn't match a selection
                             RetCode::ValueUpdated  => SmResult::EventHandled, // Selection updated
@@ -502,14 +502,14 @@ impl ParamSelector {
                 SmResult::EventHandled
             }
             SmEvent::Event(selector_event) => {
-                match selector_event {
+                match *selector_event {
                     SelectorEvent::Key(c) => {
                         let result = self.handle_navigation_keys(c);
                         match result {
                             SmResult::Error => (), // Continue processing the key
                             _ => return result     // Key was handled
                         }
-                        match self.value_func_selection.handle_input(*c, self.wavetable_list.len() - 1) {
+                        match self.value_func_selection.handle_input(c, self.wavetable_list.len() - 1) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Key has been used, but value hasn't changed
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore unmatched keys
                             RetCode::ValueUpdated  => SmResult::EventHandled, // Selection not complete yet
@@ -540,7 +540,7 @@ impl ParamSelector {
                         }
                     }
                     SelectorEvent::ControlChange(_, value) => {
-                        self.value_func_selection.set_control_value(*value);
+                        self.value_func_selection.set_control_value(value);
                         SmResult::EventHandled
                     }
                     _ => SmResult::EventHandled,
@@ -574,14 +574,14 @@ impl ParamSelector {
                 SmResult::EventHandled
             }
             SmEvent::Event(selector_event) => {
-                match selector_event {
+                match *selector_event {
                     SelectorEvent::Key(c) => {
                         let result = self.handle_navigation_keys(c);
                         match result {
                             SmResult::Error => (), // Continue processing the key
                             _ => return result     // Key was handled
                         }
-                        match self.value_param_selection.select_item(*c) {
+                        match self.value_param_selection.select_item(c) {
                             RetCode::KeyConsumed   => SmResult::EventHandled, // Value has changed, but not complete yet
                             RetCode::KeyMissmatch  => SmResult::EventHandled, // Ignore invalid key
                             RetCode::ValueUpdated  => {                       // Pararmeter selection updated
@@ -696,10 +696,9 @@ impl ParamSelector {
                     SelectorEvent::Key(c) => {
                         match c {
                             Key::Char(c) => {
-                                match self.marker_manager.get(*c) {
-                                    Some(param_id) => self.apply_param_id(&param_id),
-                                    None => ()
-                                };
+                                if let Some(param_id) = self.marker_manager.get(*c) {
+                                    self.apply_param_id(&param_id);
+                                }
                                 self.change_to_value_state()
                             }
                             Key::Esc => self.change_to_value_state(),
@@ -729,9 +728,9 @@ impl ParamSelector {
      * - '<'/ '>' go back/ forwards in the edit history
      * - '\"'/ '\'' set and recall markers for parameters
      */
-    fn handle_navigation_keys(&mut self, c: &termion::event::Key)
+    fn handle_navigation_keys(&mut self, c: termion::event::Key)
             -> SmResult<ParamSelector, SelectorEvent> {
-        match *c {
+        match c {
             Key::PageUp => {
                 self.increase_function_id();
                 return SmResult::EventHandled;
@@ -836,7 +835,7 @@ impl ParamSelector {
     }
 
     fn history_forwards(&mut self) {
-        if self.rev_history.len() < 1 {
+        if self.rev_history.is_empty() {
             return; // Nothing to go forward to
         }
         let current_param_id = self.rev_history.pop();
@@ -856,36 +855,33 @@ impl ParamSelector {
      * - '/' creates a new modulator for the current parameter
      * - '?' searches active modulators for the current parameter
      */
-    fn handle_state_value_keys(&mut self, c: &termion::event::Key)
+    fn handle_state_value_keys(&mut self, c: termion::event::Key)
             -> SmResult<ParamSelector, SelectorEvent> {
-        match *c {
-            Key::Char(c) => {
-                let param_changed = match c {
-                    '/' => self.create_modulator(),
-                    '?' => self.search_modulator(),
-                    _ => false
-                };
-                if param_changed {
-                    // The input state needs to match the value type of the new
-                    // parameter.
-                    match self.param_selection.value {
-                        ParameterValue::Function(_) |
-                        ParameterValue::Param(_) => {
-                            if self.state == SelectorState::Value {
-                                return SmResult::ChangeState(ParamSelector::state_value_function);
-                            }
-                        }
-                        _ => {
-                            if self.state != SelectorState::Value
-                            && self.state != SelectorState::Param {
-                                return SmResult::ChangeState(ParamSelector::state_value);
-                            }
+        if let Key::Char(c) = c {
+            let param_changed = match c {
+                '/' => self.create_modulator(),
+                '?' => self.search_modulator(),
+                _ => false
+            };
+            if param_changed {
+                // The input state needs to match the value type of the new
+                // parameter.
+                match self.param_selection.value {
+                    ParameterValue::Function(_) |
+                    ParameterValue::Param(_) => {
+                        if self.state == SelectorState::Value {
+                            return SmResult::ChangeState(ParamSelector::state_value_function);
                         }
                     }
-                    return SmResult::EventHandled;
+                    _ => {
+                        if self.state != SelectorState::Value
+                        && self.state != SelectorState::Param {
+                            return SmResult::ChangeState(ParamSelector::state_value);
+                        }
+                    }
                 }
+                return SmResult::EventHandled;
             }
-            _ => ()
         }
         SmResult::Error // Not really an error, but event not handled
     }
@@ -898,9 +894,8 @@ impl ParamSelector {
         let mut index: usize = 0;
         {
             let modulators = &sound.borrow().data.modul;
-            let len = modulators.len();
-            for i in 0..len {
-                if modulators[i].active == false {
+            for (i, m) in modulators.iter().enumerate() {
+                if !m.active {
                     index = i;
                     found = true;
                     break;
@@ -1029,20 +1024,17 @@ impl ParamSelector {
         let value = sound.borrow().data.get_value(&param);
         info!("Sound has value {:?}", value);
 
-        match value {
-            ParameterValue::Param(id) => {
-                let fs = &self.value_func_selection;
-                let ps = &mut self.value_param_selection;
-                let function = &fs.item_list[fs.item_index];
-                if function.item == id.function {
-                    info!("Same function, keep parameter index");
-                    ps.item_index = MenuItem::get_item_index(id.parameter, ps.item_list);
-                } else {
-                    info!("Function differs, set parameter index to safe value");
-                    ps.item_index = 1;
-                }
+        if let ParameterValue::Param(id) = value {
+            let fs = &self.value_func_selection;
+            let ps = &mut self.value_param_selection;
+            let function = &fs.item_list[fs.item_index];
+            if function.item == id.function {
+                info!("Same function, keep parameter index");
+                ps.item_index = MenuItem::get_item_index(id.parameter, ps.item_list);
+            } else {
+                info!("Function differs, set parameter index to safe value");
+                ps.item_index = 1;
             }
-            _ => ()
         }
     }
 
@@ -1057,17 +1049,17 @@ impl ParamSelector {
      * function is responsible for returning a matching list to the caller.
      * Example: The wavetable list can change after scanning a directory.
      */
-    pub fn get_dynamic_list<'a>(&'a mut self, param: Parameter) -> &'a mut Vec<(usize, String)> {
+    pub fn get_dynamic_list(&mut self, param: Parameter) -> &mut Vec<(usize, String)> {
         match param {
-            Parameter::Wavetable => return &mut self.wavetable_list,
+            Parameter::Wavetable => &mut self.wavetable_list,
             _ => panic!()
         }
     }
 
     /** Same as get_dynamic_list, but unmutable reference. */
-    pub fn get_dynamic_list_no_mut<'a>(&'a self, param: Parameter) -> &'a Vec<(usize, String)> {
+    pub fn get_dynamic_list_no_mut(&self, param: Parameter) -> &Vec<(usize, String)> {
         match param {
-            Parameter::Wavetable => return &self.wavetable_list,
+            Parameter::Wavetable => &self.wavetable_list,
             _ => panic!()
         }
     }

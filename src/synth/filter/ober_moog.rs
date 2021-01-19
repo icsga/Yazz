@@ -24,8 +24,8 @@ impl OberMoog {
 
     pub fn new(sample_rate: Float, filter_type: FilterType) -> Self {
         OberMoog{
-            sample_rate: sample_rate,
-            filter_type: filter_type,
+            sample_rate,
+            filter_type,
             lpf1: VAOnePole::new(sample_rate, FilterType::LPF1),
             lpf2: VAOnePole::new(sample_rate, FilterType::LPF1),
             lpf3: VAOnePole::new(sample_rate, FilterType::LPF1),

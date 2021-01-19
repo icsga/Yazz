@@ -60,7 +60,7 @@ impl Engine {
         }
         let stream_id = event_loop.build_output_stream(&device, &format).unwrap();
         let mut time = SystemTime::now();
-        event_loop.play_stream(stream_id.clone()).unwrap();
+        event_loop.play_stream(stream_id).unwrap();
 
         let _handle = std::thread::spawn(move || {
             event_loop.run(move |id, result| {
@@ -71,27 +71,24 @@ impl Engine {
                         return;
                     }
                 };
-                match data {
-                    cpal::StreamData::Output { buffer: cpal::UnknownTypeOutputBuffer::F32(mut buffer) } => {
-                        let locked_synth = &mut synth.lock().unwrap();
+                if let cpal::StreamData::Output { buffer: cpal::UnknownTypeOutputBuffer::F32(mut buffer) } = data {
+                    let locked_synth = &mut synth.lock().unwrap();
 
-                        let idle = time.elapsed().expect("Went back in time");
-                        time = SystemTime::now();
+                    let idle = time.elapsed().expect("Went back in time");
+                    time = SystemTime::now();
 
-                        for sample in buffer.chunks_mut(num_channels) {
-                            sample_clock = sample_clock + 1;
-                            let (left, right) = locked_synth.get_sample(sample_clock);
-                            sample[0] = left as f32;
-                            sample[1] = right as f32;
-                        }
+                    for sample in buffer.chunks_mut(num_channels) {
+                        sample_clock += 1;
+                        let (left, right) = locked_synth.get_sample(sample_clock);
+                        sample[0] = left as f32;
+                        sample[1] = right as f32;
+                    }
 
-                        let busy = time.elapsed().expect("Went back in time");
-                        time = SystemTime::now();
-                        to_ui_sender.send(UiMessage::EngineSync(idle, busy)).unwrap();
+                    let busy = time.elapsed().expect("Went back in time");
+                    time = SystemTime::now();
+                    to_ui_sender.send(UiMessage::EngineSync(idle, busy)).unwrap();
 
-                        locked_synth.update(); // Update the state of the synth voices
-                    },
-                    _ => (),
+                    locked_synth.update(); // Update the state of the synth voices
                 }
             });
         });

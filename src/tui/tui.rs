@@ -113,9 +113,7 @@ impl Tui {
         tui.scan_wavetables();
         tui.select_sound(0);
         tui.selector_sm.init(&mut tui.selector);
-        match tui.ctrl_map.load("Yazz_ControllerMapping.ysn") {
-            _ => ()
-        }
+        tui.ctrl_map.load("Yazz_ControllerMapping.ysn").unwrap();
         tui
     }
 
@@ -159,7 +157,7 @@ impl Tui {
     pub fn run(to_synth_sender: Sender<SynthMessage>,
                ui_receiver: Receiver<UiMessage>,
                show_tui: bool) -> std::thread::JoinHandle<()> {
-        let handler = spawn(move || {
+        spawn(move || {
             let mut tui = Tui::new(to_synth_sender, ui_receiver, show_tui);
             loop {
                 let msg = tui.ui_receiver.recv().unwrap();
@@ -167,8 +165,7 @@ impl Tui {
                     break;
                 }
             }
-        });
-        handler
+        })
     }
 
     fn handle_ui_message(&mut self, msg: UiMessage) -> bool {
@@ -301,17 +298,14 @@ impl Tui {
     }
 
     fn state_play(&mut self, key: Key) -> TuiState {
-        match key {
-            Key::Char(c) => {
-                match c {
-                    '0' ..= '9' => self.active_ctrl_set = c as usize - '0' as usize,
-                    'a' ..= 'z' => self.active_ctrl_set = c as usize - 'a' as usize + 10,
-                    '+' => self.select_sound(self.selected_sound + 1),
-                    '-' => self.select_sound(self.selected_sound - 1),
-                    _ => ()
-                }
+        if let Key::Char(c) = key {
+            match c {
+                '0' ..= '9' => self.active_ctrl_set = c as usize - '0' as usize,
+                'a' ..= 'z' => self.active_ctrl_set = c as usize - 'a' as usize + 10,
+                '+' => self.select_sound(self.selected_sound + 1),
+                '-' => self.select_sound(self.selected_sound - 1),
+                _ => ()
             }
-            _ => ()
         }
         TuiState::Play
     }
@@ -339,7 +333,7 @@ impl Tui {
                 }
             }
             Key::Backspace => {
-                if self.temp_name.len() > 0 {
+                if !self.temp_name.is_empty() {
                     self.temp_name.pop();
                 }
                 TuiState::Name
@@ -412,7 +406,7 @@ impl Tui {
         sound.data = sound_ref.data;
 
         // Send new sound to synth engine
-        let sound_copy = sound.data;
+        let sound_copy = Box::new(sound.data);
         self.sender.send(SynthMessage::Sound(sound_copy)).unwrap();
 
         // Update display
@@ -438,8 +432,7 @@ impl Tui {
                 match controller {
                     0x01  => {
                         // ModWheel
-                        let edit_mode = if let Mode::Edit = self.mode { true } else { false };
-                        if edit_mode {
+                        if matches!(self.mode, Mode::Edit) {
                             // ModWheel is used as general data entry for Selector in Edit mode.
                             if self.selector.handle_control_input(&mut self.selector_sm,
                                                                   controller.into(),
@@ -561,16 +554,16 @@ impl Tui {
         self.sound.borrow_mut().data.set_parameter(&param);
 
         // Send new value to synth engine
-        self.sender.send(SynthMessage::Param(param.clone())).unwrap();
+        self.sender.send(SynthMessage::Param(*param)).unwrap();
 
         // If the changed value is currently selected in the command line,
         // send it the updated value too.
-        self.selector.value_has_changed(&mut self.selector_sm, param.clone());
+        self.selector.value_has_changed(&mut self.selector_sm, *param);
 
         // Update UI
         let param_id = ParamId::new_from(param);
         let value = match param.value {
-            ParameterValue::Float(v) => Value::Float(v.into()),
+            ParameterValue::Float(v) => Value::Float(v),
             ParameterValue::Int(v) => Value::Int(v),
             ParameterValue::Choice(v) => Value::Int(v.try_into().unwrap()),
             ParameterValue::Dynamic(_, v) => Value::Int(v.try_into().unwrap()), // TODO: Display string, not int
@@ -623,7 +616,7 @@ impl Tui {
         stdout().flush().ok();
     }
 
-    fn display_last_parameter(v: &SynthParam, wt_list: &Vec<(usize, String)>) {
+    fn display_last_parameter(v: &SynthParam, wt_list: &[(usize, String)]) {
         print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
 
         print!("{} {} {}", v.function, v.function_id, v.parameter);
@@ -767,7 +760,7 @@ impl Tui {
         }
     }
 
-    fn display_value(param: &ItemSelection, selected: bool, wt_list: &Vec<(usize, String)>) {
+    fn display_value(param: &ItemSelection, selected: bool, wt_list: &[(usize, String)]) {
         if selected {
             print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
         }
@@ -872,7 +865,7 @@ impl Tui {
 
     fn display_status_line(&mut self) {
         let ctrl_set = self.active_ctrl_set as u8;
-        let ctrl_set = (ctrl_set + if ctrl_set <= 9 { '0' as u8 } else { 'a' as u8 - 10 }) as char;
+        let ctrl_set = (ctrl_set + if ctrl_set <= 9 { b'0' } else { b'a' - 10 }) as char;
         print!("{}| Mode: {:?} | Active controller set: {} |                Press <F1> for help, <F12> to exit ",
             cursor::Goto(1, 50),
             self.mode,

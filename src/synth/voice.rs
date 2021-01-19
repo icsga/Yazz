@@ -58,7 +58,7 @@ impl Voice {
             Lfo::new(sample_rate),
             Lfo::new(sample_rate),
         ];
-        let voice = Voice{
+        Voice{
                 osc,
                 env,
                 filter,
@@ -71,8 +71,7 @@ impl Voice {
                 velocity: 0.0,
                 scaled_vel: 0.0,
                 input_freq: 440.0,
-                last_update: 0i64};
-        voice
+                last_update: 0i64}
     }
 
     pub fn reset(&mut self) {

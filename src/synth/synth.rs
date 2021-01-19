@@ -238,8 +238,8 @@ impl Synth {
             Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
             Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()), Voice::new(sample_rate, default_table.clone()),
         ];
-        for i in 0..NUM_VOICES {
-            voice[i].set_pan((i % 8) as Float / 7.0);
+        for (i, v) in voice.iter_mut().enumerate().take(NUM_VOICES) {
+            v.set_pan((i % 8) as Float / 7.0);
         }
         let glfo = [
             Lfo::new(sample_rate), Lfo::new(sample_rate)
@@ -269,7 +269,7 @@ impl Synth {
             global_state: SynthState{freq_factor: 1.0},
             key_stack: vec!(0; 128),
             last_voice: NUM_VOICES,
-            samplebuff_osc: Oscillator::new(sample_rate, default_table.clone()),
+            samplebuff_osc: Oscillator::new(sample_rate, default_table),
             samplebuff_env: Envelope::new(sample_rate as Float),
             samplebuff_lfo: Lfo::new(sample_rate),
             osc_wave,
@@ -278,7 +278,7 @@ impl Synth {
 
     /// Starts a thread for receiving UI and MIDI messages.
     pub fn run(synth: Arc<Mutex<Synth>>, synth_receiver: Receiver<SynthMessage>) -> std::thread::JoinHandle<()> {
-        let handler = spawn(move || {
+        spawn(move || {
             let mut keep_running = true;
             while keep_running {
                 let msg = synth_receiver.recv().unwrap();
@@ -296,8 +296,7 @@ impl Synth {
                     }
                 }
             }
-        });
-        handler
+        })
     }
 
     fn exit(&mut self) {
@@ -406,8 +405,8 @@ impl Synth {
 
     // Calculates the frequencies for the default keymap with equal temperament.
     fn calculate_keymap(map: &mut[Float; 128], reference_pitch: Float) {
-        for i in 0..128 {
-            map[i] = Synth::calculate_frequency(i as Float, reference_pitch);
+        for (i, entry) in map.iter_mut().enumerate() {
+            *entry = Synth::calculate_frequency(i as Float, reference_pitch);
         }
     }
 
@@ -468,7 +467,7 @@ impl Synth {
         match result {
             Some(wt) => {
                 self.voice.iter_mut().for_each(|v| v.set_wavetable(osc_id, wt.clone()));
-                self.osc_wave[osc_id] = wt.clone();
+                self.osc_wave[osc_id] = wt;
             }
             None => error!("Unable to find wavetable {}",id),
         }
@@ -588,7 +587,7 @@ impl Synth {
         // Find the voice playing this key and trigger the release phase.
         for v in &mut self.voice {
             if v.is_triggered() && v.key == key {
-                if self.sound.patch.play_mode == PlayMode::Poly || self.key_stack.len() == 0 {
+                if self.sound.patch.play_mode == PlayMode::Poly || self.key_stack.is_empty() {
                     // In poly mode, or if no other notes are held, we release
                     // the voice.
                     self.num_voices_triggered -= 1;
@@ -740,7 +739,7 @@ impl Synth {
                 osc.reset(0);
                 let osc_id = param.function_id - 1;
                 osc.set_wavetable(self.osc_wave[osc_id].clone());
-                for i in 0..len {
+                for (i, s_buf) in buffer.iter_mut().enumerate() {
                     let (mut sample, _) = osc.get_sample(freq, i as i64, &self.sound.osc[osc_id], false);
 
                     // Apply clipping
@@ -748,7 +747,8 @@ impl Synth {
                         sample = (sample * self.sound_global.patch.drive).tanh();
                     }
 
-                    buffer[i] = sample * self.sound.osc[param.function_id - 1].level;
+                    // TODO: Verify that access via iterator is as fast as direct indexing
+                    *s_buf = sample * self.sound.osc[param.function_id - 1].level;
                 }
             },
             Parameter::Envelope => {
@@ -798,9 +798,9 @@ impl Synth {
                 // Get first sample explicitly to reset LFO (for S&H)
                 let (sample, _) = lfo.get_sample(0, &sound_copy, true);
                 buffer[0] = sample;
-                for i in 1..len {
+                for (i, sample_buf) in buffer.iter_mut().enumerate().skip(1) {
                     let (sample, _) = lfo.get_sample(i as i64, &sound_copy, false);
-                    buffer[i] = sample;
+                    *sample_buf = sample;
                 }
             },
             _ => {},

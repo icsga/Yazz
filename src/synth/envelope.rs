@@ -131,10 +131,7 @@ impl Envelope {
     }
 
     pub fn is_running(&self) -> bool {
-        match self.state {
-            EnvState::Idle => false,
-            _ => true
-        }
+        !matches!(self.state, EnvState::Idle)
     }
 
     fn change_state(&mut self, new_state: EnvState, sample_time: i64, data: &EnvelopeData) {

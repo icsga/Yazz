@@ -27,12 +27,12 @@ impl<Key: Copy + Eq + Hash> Label<Key> {
 }
 
 impl<Key: Copy + Eq + Hash> Widget<Key> for Label<Key> {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
-        return &mut self.props;
+    fn get_widget_properties_mut(&mut self) -> &mut WidgetProperties<Key> {
+        &mut self.props
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
-        return &self.props;
+    fn get_widget_properties(&self) -> &WidgetProperties<Key> {
+        &self.props
     }
 
     fn draw(&self) {

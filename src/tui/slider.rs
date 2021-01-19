@@ -54,8 +54,7 @@ impl<Key: Copy + Eq + Hash> Slider<Key> {
             let factor = percent.sqrt().sqrt(); // TODO: Slow, find a nicer way
             value = factor * range;
         }
-        let index = (value * scale) as usize;
-        index
+        (value * scale) as usize
     }
 
     pub fn set_logarithmic(&mut self, l: bool) {
@@ -64,12 +63,12 @@ impl<Key: Copy + Eq + Hash> Slider<Key> {
 }
 
 impl<Key: Copy + Eq + Hash> Widget<Key> for Slider<Key> {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
-        return &mut self.props;
+    fn get_widget_properties_mut(&mut self) -> &mut WidgetProperties<Key> {
+        &mut self.props
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
-        return &self.props;
+    fn get_widget_properties(&self) -> &WidgetProperties<Key> {
+        &self.props
     }
 
     fn draw(&self) {

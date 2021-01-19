@@ -74,8 +74,7 @@ impl Lfo {
         let last_update = 0;
         let position = 0.0;
         let last_value = 0.0;
-        let lfo = Lfo{sample_rate, last_update, position, last_value};
-        lfo
+        Lfo{sample_rate, last_update, position, last_value}
     }
 
     fn get_sample_sine(&mut self) -> Float {

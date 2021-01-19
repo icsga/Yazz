@@ -20,7 +20,7 @@ impl VAOnePole {
     pub fn new(_sample_rate: Float, filter_type: FilterType) -> Self {
         VAOnePole{
             //sample_rate: sample_rate,
-            filter_type: filter_type,
+            filter_type,
             alpha: 1.0,
             beta: 0.0,
             gamma: 1.0,

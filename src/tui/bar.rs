@@ -62,18 +62,17 @@ impl<Key: Copy + Eq + Hash> Bar<Key> {
             let factor = percent.sqrt().sqrt(); // TODO: Slow, find a nicer way
             value = factor * range;
         }
-        let length = (value * scale) as usize;
-        length
+        (value * scale) as usize
     }
 }
 
 impl<Key: Copy + Eq + Hash> Widget<Key> for Bar<Key> {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
-        return &mut self.props;
+    fn get_widget_properties_mut(&mut self) -> &mut WidgetProperties<Key> {
+        &mut self.props
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
-        return &self.props;
+    fn get_widget_properties(&self) -> &WidgetProperties<Key> {
+        &self.props
     }
 
     fn draw(&self) {

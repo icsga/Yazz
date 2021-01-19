@@ -97,7 +97,7 @@ impl WtOsc {
 
         for i in 0..data.num_voices {
             let mut last_pos = self.last_pos[i as usize];
-            let freq_diff = (frequency / 100.0) * (data.voice_spread * i as Float) * (1 - (i & 0x01 * 2)) as Float;
+            let freq_diff = (frequency / 100.0) * (data.voice_spread * i as Float) * (1 - ((i & 0x01) * 2)) as Float;
             let frequency = frequency + freq_diff;
             let freq_speed = frequency * (NUM_SAMPLES_PER_TABLE as Float / self.sample_rate);
             let diff = freq_speed * dt_f;

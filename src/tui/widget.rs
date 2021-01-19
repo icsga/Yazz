@@ -55,8 +55,8 @@ impl<Key: Copy + Eq + Hash> WidgetProperties<Key> {
         self.colors = colors;
     }
 
-    pub fn set_key(&mut self, key: &Key) {
-        self.key = Some(key.clone());
+    pub fn set_key(&mut self, key: Key) {
+        self.key = Some(key);
     }
 
     pub fn is_dirty(&self) -> bool {
@@ -80,14 +80,10 @@ impl<Key: Copy + Eq + Hash> WidgetProperties<Key> {
     }
 
     pub fn is_inside(&self, x: Index, y: Index) -> bool {
-        if x >= self.pos_x &&
-                x <= self.pos_x + self.width &&
-                y >= self.pos_y &&
-                y <= self.pos_y + self.height {
-            true
-        } else {
-            false
-        }
+        x >= self.pos_x &&
+        x <= self.pos_x + self.width &&
+        y >= self.pos_y &&
+        y <= self.pos_y + self.height
     }
 
     /*
@@ -101,8 +97,8 @@ pub trait Widget<Key: Copy + Eq + Hash> {
     // -------------------------------------------
     // Must be implemented by the deriving Widgets
 
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key>;
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key>;
+    fn get_widget_properties_mut(&mut self) -> &mut WidgetProperties<Key>;
+    fn get_widget_properties(&self) -> &WidgetProperties<Key>;
     fn draw(&self);
 
     // -------------------------------------------
@@ -130,7 +126,7 @@ pub trait Widget<Key: Copy + Eq + Hash> {
         self.get_widget_properties_mut().set_color_scheme(colors);
     }
 
-    fn set_key(&mut self, key: &Key) {
+    fn set_key(&mut self, key: Key) {
         self.get_widget_properties_mut().set_key(key);
     }
 

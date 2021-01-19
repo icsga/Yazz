@@ -43,7 +43,7 @@ impl Surface {
         this.add_multi_osc(&mut osc.borrow_mut(), 3, 63, 0);
         let (_, mut osc_height) = osc.borrow().get_size();
         this.add_child(osc, 1, 1);
-        osc_height = osc_height + 1; // Leave a little space
+        osc_height += 1; // Leave a little space
 
         let env: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         env.borrow_mut().enable_border(true);
@@ -141,7 +141,7 @@ impl Surface {
         let label = Label::new(label.to_string(), 10);
         let dial = Dial::new(Value::Float(min), Value::Float(max), Value::Float(value));
         dial.borrow_mut().set_logarithmic(log);
-        dial.borrow_mut().set_key(key);
+        dial.borrow_mut().set_key(*key);
         let modul = Bar::new(Value::Float(0.0), Value::Float(100.0), Value::Float(0.0));
         self.controller.add_observer(key, dial.clone());
         self.mod_targets.insert(*key, modul.clone());
@@ -162,7 +162,7 @@ impl Surface {
         let label = Label::new(label.to_string(), 10);
         let dial = Dial::new(Value::Int(min), Value::Int(max), Value::Int(value));
         dial.borrow_mut().set_logarithmic(log);
-        dial.borrow_mut().set_key(key);
+        dial.borrow_mut().set_key(*key);
         let modul = Bar::new(Value::Float(0.0), Value::Float(100.0), Value::Float(0.0));
         self.controller.add_observer(key, dial.clone());
         self.mod_targets.insert(*key, modul.clone());
@@ -240,7 +240,7 @@ impl Surface {
                      x_offset: Index,
                      y_offset: Index) {
         let mut title = "Oscillator ".to_string();
-        title.push(((func_id as u8) + '0' as u8) as char);
+        title.push(((func_id as u8) + b'0') as char);
         let len = title.len();
         let title = Label::new(title, len as Index);
         target.add_child(title, 10 + x_offset, y_offset);
@@ -288,7 +288,7 @@ impl Surface {
                x_offset: Index,
                y_offset: Index) {
         let mut title = "Envelope ".to_string();
-        title.push(((func_id as u8) + '0' as u8) as char);
+        title.push(((func_id as u8) + b'0') as char);
         let len = title.len();
         let title = Label::new(title, len as Index);
         target.add_child(title, x_offset, y_offset);
@@ -324,7 +324,7 @@ impl Surface {
                x_offset: Index,
                y_offset: Index) {
         let mut title = "LFO ".to_string();
-        title.push(((func_id as u8) + '0' as u8) as char);
+        title.push(((func_id as u8) + b'0') as char);
         let len = title.len();
         let title = Label::new(title, len as Index);
         target.add_child(title, x_offset, y_offset);
@@ -348,7 +348,7 @@ impl Surface {
                x_offset: Index,
                y_offset: Index) {
         let mut title = "Global LFO ".to_string();
-        title.push(((func_id as u8) + '0' as u8) as char);
+        title.push(((func_id as u8) + b'0') as char);
         let len = title.len();
         let title = Label::new(title, len as Index);
         target.add_child(title, x_offset, y_offset);
@@ -372,7 +372,7 @@ impl Surface {
                   x_offset: Index,
                   y_offset: Index) {
         let mut title = "Filter ".to_string();
-        title.push(((func_id as u8) + '0' as u8) as char);
+        title.push(((func_id as u8) + b'0') as char);
         let len = title.len();
         let title = Label::new(title, len as Index);
         target.add_child(title, x_offset, y_offset);
@@ -416,11 +416,11 @@ impl Surface {
         target.add_child(idle_value, x_offset, 2 + y_offset);
     }
 
-    fn param_to_widget_value(value: &ParameterValue) -> Value {
+    fn param_to_widget_value(value: ParameterValue) -> Value {
         match value {
-            ParameterValue::Int(v) => Value::Int(*v),
-            ParameterValue::Float(v) => Value::Float((*v).into()),
-            ParameterValue::Choice(v) => Value::Int(*v as i64),
+            ParameterValue::Int(v) => Value::Int(v),
+            ParameterValue::Float(v) => Value::Float(v),
+            ParameterValue::Choice(v) => Value::Int(v as i64),
             _ => panic!(),
         }
     }
@@ -432,7 +432,7 @@ impl Surface {
             if let ParameterValue::NoValue = value {
                 continue;
             }
-            let value = Surface::param_to_widget_value(&value);
+            let value = Surface::param_to_widget_value(value);
             item.borrow_mut().update(value);
         }
     }

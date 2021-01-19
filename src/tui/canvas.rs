@@ -24,7 +24,7 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
     }
 
     pub fn clear(&mut self) {
-        self.byte.iter_mut().map(|x| *x = ' ').count();
+        self.byte.iter_mut().for_each(|x| *x = ' ');
     }
 
     // Set the value of a single cell in the canvas
@@ -47,7 +47,7 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
      * To make things look nice, we also fill spaces between points that are in
      * neighboring columns, but more than one row apart.
      */
-    pub fn plot(&mut self, buff: &Vec<Float>, min: Float, max: Float) {
+    pub fn plot(&mut self, buff: &[Float], min: Float, max: Float) {
         let (scale_x, scale_y, offset) = self.calc_scaling(min, max, buff.len());
         if min < 0.0 && max > 0.0 {
             // X axis lies on screen. Calculate its position and print it.
@@ -165,12 +165,12 @@ impl<Key: Copy + Eq + Hash> Canvas<Key> {
 }
 
 impl<Key: Copy + Eq + Hash> Widget<Key> for Canvas<Key> {
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
-        return &mut self.props;
+    fn get_widget_properties_mut(&mut self) -> &mut WidgetProperties<Key> {
+        &mut self.props
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
-        return &self.props;
+    fn get_widget_properties(&self) -> &WidgetProperties<Key> {
+        &self.props
     }
 
     // Print the output buffer to the screen

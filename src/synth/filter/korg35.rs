@@ -19,8 +19,8 @@ pub struct K35 {
 
 impl K35 {
     pub fn new(sample_rate: Float, filter_type: FilterType) -> Self {
-        K35{sample_rate: sample_rate,
-            filter_type: filter_type,
+        K35{sample_rate,
+            filter_type,
             lpf1: VAOnePole::new(sample_rate, FilterType::LPF1),
             lpf2: VAOnePole::new(sample_rate, FilterType::LPF1),
             hpf1: VAOnePole::new(sample_rate, FilterType::HPF1),

@@ -26,7 +26,7 @@ impl TermionWrapper {
     }
 
     pub fn run(mut termion: TermionWrapper, to_ui_sender: Sender<UiMessage>) -> std::thread::JoinHandle<()> {
-        let handler = spawn(move || {
+        spawn(move || {
             let mut exit = false;
             let stdin = stdin();
 
@@ -60,8 +60,7 @@ impl TermionWrapper {
                 println!("{}", termion::cursor::Show);
                 return;
             }
-        });
-        handler
+        })
     }
 }
 

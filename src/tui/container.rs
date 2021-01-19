@@ -116,22 +116,22 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         if self.is_inside(x, y) {
             for c in self.children.iter() {
                 let result = c.borrow().get_at_pos(x, y);
-                if let Some(_) = result { return result; };
+                if result.is_some() { return result; };
             }
         }
-        return None;
+        None
     }
 }
 
 impl<Key: Copy + Eq + Hash> Widget<Key> for Container<Key> {
     // TODO: Implement dynamic resizing of children
 
-    fn get_widget_properties_mut<'a>(&'a mut self) -> &'a mut WidgetProperties<Key> {
-        return &mut self.props;
+    fn get_widget_properties_mut(&mut self) -> &mut WidgetProperties<Key> {
+        &mut self.props
     }
 
-    fn get_widget_properties<'a>(&'a self) -> &'a WidgetProperties<Key> {
-        return &self.props;
+    fn get_widget_properties(&self) -> &WidgetProperties<Key> {
+        &self.props
     }
 
     /** Set the container's and all its children's position.

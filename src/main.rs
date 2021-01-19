@@ -72,8 +72,8 @@ use std::thread::JoinHandle;
 use std::time::Duration;
 use std::vec::Vec;
 
-pub const SYNTH_ENGINE_VERSION: &'static str = "0.0.8";
-pub const SOUND_DATA_VERSION: &'static str = "0.0.8";
+pub const SYNTH_ENGINE_VERSION: &str = "0.0.8";
+pub const SOUND_DATA_VERSION: &str = "0.0.8";
 
 type Float = f64;
 
@@ -81,7 +81,7 @@ type Float = f64;
 pub enum SynthMessage {
     Midi(MidiMessage),
     Param(SynthParam),
-    Sound(SoundData),
+    Sound(Box<SoundData>),
     Wavetable(WtInfo),
     SampleBuffer(Vec<Float>, SynthParam),
     Bpm(Float),
@@ -180,8 +180,8 @@ fn save_wave(id: usize) -> std::io::Result<()> {
     let wt = wt_manager.get_table(0).unwrap();
     let t = &wt.table[id];
     // Write only the first octave table (= first 2048 values)
-    for i in 0..2048 {
-        let s = format!("{}, {:?}\n", i, t[i]);
+    for (i, sample) in t.iter().enumerate().take(2048) {
+        let s = format!("{}, {:?}\n", i, sample);
         file.write_all(s.as_bytes())?;
     }
     Ok(())
@@ -210,7 +210,7 @@ fn save_voice() -> std::io::Result<()> {
     voice.trigger(0, 0, &sound_global);
 
     for i in 0..2048 {
-        let value = voice.get_sample(i, &mut sound_global, &mut sound_local, &global_state);
+        let value = voice.get_sample(i, &sound_global, &mut sound_local, &global_state);
         let s = format!("{}, {:?}\n", i, value);
         file.write_all(s.as_bytes())?;
     }
@@ -266,7 +266,7 @@ fn main() {
 
     // For debugging: Save selected wavetable as file
     let wave_index = matches.value_of("savewave").unwrap_or("");
-    if wave_index.len() > 0 {
+    if !wave_index.is_empty() {
         let wave_index: usize = wave_index.parse().unwrap_or(1);
         save_wave(wave_index).unwrap();
         return;
