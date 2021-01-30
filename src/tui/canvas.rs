@@ -3,24 +3,23 @@ use std::hash::Hash;
 use std::rc::Rc;
 use std::vec::Vec;
 
-use termion::{color, cursor};
-use termion::color::{Black, Rgb};
-
 use super::Float;
-use super::{Index, Widget, WidgetProperties};
+use super::{Index, Printer, Widget, WidgetProperties};
 
 pub type CanvasRef<Key> = Rc<RefCell<Canvas<Key>>>;
 
 pub struct Canvas<Key: Copy + Eq + Hash> {
     props: WidgetProperties<Key>,
     byte: Vec<char>,
+    line_buff: RefCell<String>,
 }
 
 impl<Key: Copy + Eq + Hash> Canvas<Key> {
     pub fn new(width: Index, height: Index) -> CanvasRef<Key> {
         let byte = vec!{' '; (width * height) as usize};
         let props = WidgetProperties::new(width, height);
-        Rc::new(RefCell::new(Canvas{props, byte}))
+        let line_buff = RefCell::new(String::with_capacity(width));
+        Rc::new(RefCell::new(Canvas{props, byte, line_buff}))
     }
 
     pub fn clear(&mut self) {
@@ -174,17 +173,19 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Canvas<Key> {
     }
 
     // Print the output buffer to the screen
-    fn draw(&self) {
+    fn draw(&self, p: &mut dyn Printer) {
         let pos_x = self.props.pos_x;
         let pos_y = self.props.pos_y;
-        print!("{}{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_dark), color::Fg(self.props.colors.fg_light2));
+        let mut buff = self.line_buff.borrow_mut();
+        p.set_color(self.props.colors.fg_base, self.props.colors.bg_base_l);
         for y in 0..self.props.height {
-            print!("{}", cursor::Goto(pos_x, pos_y + ((self.props.height - 1) - y)));
+            buff.clear();
             for x in 0..self.props.width {
-                print!("{}", self.byte[(y * self.props.width + x) as usize]);
+                (*buff).push(self.byte[(y * self.props.width + x) as usize]);
             }
+            let y_coord = pos_y + ((self.props.height - 1) - y);
+            p.print(pos_x, y_coord, &buff);
         }
-        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
     }
 }
 

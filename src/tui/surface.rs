@@ -3,29 +3,26 @@ use std::collections::HashMap;
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use termion::color;
-
 use super::{Parameter, ParamId, ParameterValue, SoundData, UiMessage};
 use super::{Bar, Button, Canvas, CanvasRef, Container, ContainerRef, Controller,
-            Dial, Index, Label, MouseHandler, ObserverRef, Scheme, Slider,
-            Value, ValueDisplay, Widget};
+            Dial, Index, Label, MouseHandler, ObserverRef, Printer ,ColorScheme,
+            Slider, Value, ValueDisplay, Widget};
 
 pub struct Surface {
     window: Container<ParamId>,
     controller: Controller<ParamId>,
     mod_targets: HashMap<ParamId, ObserverRef>, // Maps the modulation indicator to the corresponding parameter key
     mouse_handler: MouseHandler<ParamId>,
-    colors: Rc<Scheme>,
+    colors: Rc<ColorScheme>,
     pub canvas: CanvasRef<ParamId>,
 }
 
 impl Surface {
-    pub fn new() -> Surface {
+    pub fn new(colors: Rc<ColorScheme>) -> Surface {
         let window = Container::new();
         let controller = Controller::new();
         let mod_targets: HashMap<ParamId, ObserverRef> = HashMap::new();
         let mouse_handler = MouseHandler::new();
-        let colors = Rc::new(Scheme::new());
         let canvas: CanvasRef<ParamId> = Canvas::new(50, 21);
         let canvas_clone = canvas.clone();
         let mut this = Surface{window,
@@ -115,10 +112,8 @@ impl Surface {
         self.window.get_size()
     }
 
-    pub fn draw(&mut self) {
-        self.window.draw();
-        print!("{}{}", color::Bg(self.colors.bg_light),
-                       color::Fg(self.colors.fg_dark));
+    pub fn draw(&mut self, p: &mut dyn Printer) {
+        self.window.draw(p);
         self.window.set_dirty(false);
     }
 

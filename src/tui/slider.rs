@@ -2,11 +2,9 @@ use std::cell::RefCell;
 use std::hash::Hash;
 use std::rc::Rc;
 
-use termion::{color, cursor};
-
 use super::Observer;
 use super::{Value, get_int, get_float};
-use super::{Widget, WidgetProperties};
+use super::{Printer, Widget, WidgetProperties};
 
 pub type SliderRef<Key> = Rc<RefCell<Slider<Key>>>;
 
@@ -71,9 +69,9 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Slider<Key> {
         &self.props
     }
 
-    fn draw(&self) {
+    fn draw(&self, p: &mut dyn Printer) {
         let mut index = self.get_index(&self.value);
-        print!("{}{}", color::Bg(self.props.colors.bg_light2), color::Fg(self.props.colors.fg_dark2));
+        p.set_color(self.props.colors.fg_base_l, self.props.colors.bg_base_l);
         for i in 0..self.props.height {
             let chars = if index >= 8 { "█" } else {
                 match index % 8 {
@@ -89,7 +87,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Slider<Key> {
                 }
             };
             index = if index > 8 { index - 8 } else { 0 };
-            print!("{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y + (4 - i)), chars);
+            p.print(self.props.pos_x, self.props.pos_y + (4 - i), chars);
         }
     }
 }

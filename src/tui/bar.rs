@@ -2,11 +2,9 @@ use std::cell::RefCell;
 use std::hash::Hash;
 use std::rc::Rc;
 
-use termion::{color, cursor};
-
 use super::Observer;
 use super::{Value, get_int, get_float};
-use super::{Widget, WidgetProperties};
+use super::{Printer, Widget, WidgetProperties};
 
 type BarRef<Key> = Rc<RefCell<Bar<Key>>>;
 
@@ -75,12 +73,12 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Bar<Key> {
         &self.props
     }
 
-    fn draw(&self) {
+    fn draw(&self, p: &mut dyn Printer) {
         let index = self.get_length(&self.value);
         // TODO: Optimize by using array
-        print!("{}{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_light), color::Fg(self.props.colors.fg_dark2));
-        for _ in 0..index {
-            print!("‾");
+        p.set_color(self.props.colors.fg_compl, self.props.colors.bg_compl);
+        for x in self.props.pos_x..self.props.pos_x + index {
+            p.print(x, self.props.pos_y,"‾");
         }
     }
 }

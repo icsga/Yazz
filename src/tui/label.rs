@@ -2,12 +2,10 @@ use std::cell::RefCell;
 use std::hash::Hash;
 use std::rc::Rc;
 
-use termion::{color, cursor};
-
 use super::Index;
 use super::Observer;
 use super::{Value, get_str};
-use super::{Widget, WidgetProperties};
+use super::{Printer, Widget, WidgetProperties};
 
 type LabelRef<Key> = Rc<RefCell<Label<Key>>>;
 
@@ -35,12 +33,9 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Label<Key> {
         &self.props
     }
 
-    fn draw(&self) {
-        print!("{}{}{}{}",
-            cursor::Goto(self.props.pos_x, self.props.pos_y),
-            color::Bg(self.props.colors.bg_light),
-            color::Fg(self.props.colors.fg_dark),
-            get_str(&self.value));
+    fn draw(&self, p: &mut dyn Printer) {
+        p.set_color(self.props.colors.fg_base, self.props.colors.bg_base);
+        p.print(self.props.pos_x, self.props.pos_y, get_str(&self.value));
     }
 }
 

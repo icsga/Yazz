@@ -3,9 +3,9 @@ use std::hash::Hash;
 use std::rc::Rc;
 
 //use super::MouseMessage;
-use super::Scheme;
+use super::ColorScheme;
+use super::{Index, Printer};
 
-pub type Index = u16;
 pub type WidgetRef<T> = Rc<RefCell<dyn Widget<T>>>;
 
 #[derive(Debug)]
@@ -16,7 +16,7 @@ pub struct WidgetProperties<Key: Copy + Eq + Hash> {
     pub width: Index,
     pub height: Index,
     pub dirty: bool,
-    pub colors: Rc<Scheme>,
+    pub colors: Rc<ColorScheme>,
 }
 
 impl<Key: Copy + Eq + Hash> WidgetProperties<Key> {
@@ -24,7 +24,7 @@ impl<Key: Copy + Eq + Hash> WidgetProperties<Key> {
         let pos_x: Index = 0;
         let pos_y: Index = 0;
         let dirty = false;
-        let colors = Rc::new(Scheme::new());
+        let colors = Rc::new(ColorScheme::new());
         WidgetProperties{key: None, pos_x, pos_y, width, height, dirty, colors}
     }
 
@@ -51,7 +51,7 @@ impl<Key: Copy + Eq + Hash> WidgetProperties<Key> {
         self.dirty = is_dirty;
     }
 
-    pub fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
+    pub fn set_color_scheme(&mut self, colors: Rc<ColorScheme>) {
         self.colors = colors;
     }
 
@@ -99,7 +99,7 @@ pub trait Widget<Key: Copy + Eq + Hash> {
 
     fn get_widget_properties_mut(&mut self) -> &mut WidgetProperties<Key>;
     fn get_widget_properties(&self) -> &WidgetProperties<Key>;
-    fn draw(&self);
+    fn draw(&self, printer: &mut dyn Printer);
 
     // -------------------------------------------
 
@@ -122,7 +122,7 @@ pub trait Widget<Key: Copy + Eq + Hash> {
         self.get_widget_properties_mut().set_dirty(is_dirty);
     }
 
-    fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
+    fn set_color_scheme(&mut self, colors: Rc<ColorScheme>) {
         self.get_widget_properties_mut().set_color_scheme(colors);
     }
 

@@ -2,11 +2,9 @@ use std::cell::RefCell;
 use std::hash::Hash;
 use std::rc::Rc;
 
-use termion::{color, cursor};
-
 use super::Observer;
 use super::{Value, get_int};
-use super::{Widget, WidgetProperties};
+use super::{Printer, Widget, WidgetProperties};
 
 type ButtonRef<Key> = Rc<RefCell<Button<Key>>>;
 
@@ -34,11 +32,12 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Button<Key> {
         &self.props
     }
 
-    fn draw(&self) {
+    fn draw(&self, p: &mut dyn Printer) {
         //let value = if let Value::Int(x) = self.value { x } else { panic!() };
         let value = get_int(&self.value);
         let chars = if value > 0 { "▣" } else { "□" };
-        print!("{}{}{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_light2), color::Fg(self.props.colors.fg_dark2), chars);
+        p.set_color(self.props.colors.fg_compl_l, self.props.colors.bg_compl_l);
+        p.print(self.props.pos_x, self.props.pos_y, chars);
     }
 }
 

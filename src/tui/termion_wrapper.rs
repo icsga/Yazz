@@ -3,8 +3,10 @@ use termion::cursor;
 use termion::event::*;
 use termion::input::{TermRead, MouseTerminal};
 use termion::raw::{IntoRawMode, RawTerminal};
+use termion::color::DetectColors;
 
 use super::UiMessage;
+use super::Index;
 
 use crossbeam_channel::{Sender};
 use log::info;
@@ -19,9 +21,11 @@ pub struct TermionWrapper {
 impl TermionWrapper {
     pub fn new() -> Result<TermionWrapper, std::io::Error> {
         println!("{}", cursor::Hide);
-        let t = TermionWrapper{
+        let mut t = TermionWrapper{
             stdout: MouseTerminal::from(stdout().into_raw_mode()?)
         };
+        let count = t.stdout.available_colors().unwrap();
+        println!("Available colors: {}", count);
         Ok(t)
     }
 
@@ -48,9 +52,9 @@ impl TermionWrapper {
                     }
                     Event::Mouse(m) => {
                         match m {
-                            MouseEvent::Press(_, x, y) => to_ui_sender.send(UiMessage::MousePress{x, y}).unwrap(),
-                            MouseEvent::Hold(x, y) => to_ui_sender.send(UiMessage::MouseHold{x, y}).unwrap(),
-                            MouseEvent::Release(x, y) => to_ui_sender.send(UiMessage::MouseRelease{x, y}).unwrap(),
+                            MouseEvent::Press(_, x, y) => to_ui_sender.send(UiMessage::MousePress{x: x as Index, y: y as Index}).unwrap(),
+                            MouseEvent::Hold(x, y) => to_ui_sender.send(UiMessage::MouseHold{x: x as Index, y: y as Index}).unwrap(),
+                            MouseEvent::Release(x, y) => to_ui_sender.send(UiMessage::MouseRelease{x: x as Index, y: y as Index}).unwrap(),
                         }
                     }
                     _ => {}

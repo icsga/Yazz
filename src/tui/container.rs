@@ -1,8 +1,7 @@
 use super::Index;
-use super::Scheme;
+use super::Printer;
+use super::ColorScheme;
 use super::{Widget, WidgetProperties, WidgetRef};
-
-use termion::{color, cursor};
 
 use std::cell::RefCell;
 use std::hash::Hash;
@@ -74,8 +73,9 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         self.title = format!("┤ {} ├", title);
     }
 
-    fn draw_border(&self) {
-        print!("{}{}{}┌", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_light), color::Fg(self.props.colors.fg_dark));
+    fn draw_border(&self, p: &mut dyn Printer) {
+        p.set_color(self.props.colors.fg_base, self.props.colors.bg_base); 
+        p.print(self.props.pos_x, self.props.pos_y, "┌");
 
         // Overall position of frame
         let x_start = self.props.pos_x;
@@ -92,23 +92,24 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         }
 
         // Draw upper line and title
-        for _ in  (x_start + 1)..(x_middle_left) {
-            print!("─");
+        for x in  (x_start + 1)..(x_middle_left) {
+            p.print(x, self.props.pos_y, "─");
         }
-        print!("{}", self.title);
-        for _ in  (x_middle_right)..(x_end) {
-            print!("─");
+        p.print(x_middle_left, self.props.pos_y, &self.title);
+        for x in  (x_middle_right)..(x_end) {
+            p.print(x, self.props.pos_y, "─");
         }
 
-        print!("┐");
+        p.print(x_end, self.props.pos_y, "┐");
         for y in (y_start + 1)..(y_end) {
-            print!("{}│{}│", cursor::Goto(x_start, y), cursor::Goto(x_end, y));
+            p.print(x_start, y, "│");
+            p.print(x_end, y, "│");
         }
-        print!("{}└", cursor::Goto(x_start, y_end));
-        for _ in  (x_start + 1)..(x_end) {
-            print!("─");
+        p.print(x_start, y_end, "└");
+        for x in  (x_start + 1)..(x_end) {
+            p.print(x, y_end, "─");
         }
-        print!("┘");
+        p.print(x_end, y_end, "┘");
     }
 
     /** Get widget at given position. */
@@ -152,7 +153,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Container<Key> {
         true
     }
 
-    fn set_color_scheme(&mut self, colors: Rc<Scheme>) {
+    fn set_color_scheme(&mut self, colors: Rc<ColorScheme>) {
         for c in self.children.iter_mut() {
             c.borrow_mut().set_color_scheme(colors.clone());
         }
@@ -173,13 +174,13 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Container<Key> {
         false
     }
 
-    fn draw(&self) {
+    fn draw(&self, printer: &mut dyn Printer) {
         if self.draw_border {
-            self.draw_border();
+            self.draw_border(printer);
         }
         for child in self.children.iter() {
             if child.borrow().is_dirty() {
-                child.borrow_mut().draw();
+                child.borrow_mut().draw(printer);
             }
         }
     }
@@ -193,7 +194,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Container<Key> {
 
 use super::{Label}; // Needed for tests. TODO: There's got to be a better way
 
-fn validate_properties<T: Copy + Eq + Hash>(c: &Container<T>, pos_x: u16, pos_y: u16, width: u16, height: u16) -> bool {
+fn validate_properties<T: Copy + Eq + Hash>(c: &Container<T>, pos_x: Index, pos_y: Index, width: Index, height: Index) -> bool {
     if c.props.pos_x == pos_x
     && c.props.pos_y == pos_y
     && c.props.width == width

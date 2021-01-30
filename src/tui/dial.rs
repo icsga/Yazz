@@ -2,11 +2,9 @@ use std::cell::RefCell;
 use std::hash::Hash;
 use std::rc::Rc;
 
-use termion::{color, cursor};
-
 use super::Observer;
 use super::{Value, get_int, get_float};
-use super::{Widget, WidgetProperties};
+use super::{Printer, Widget, WidgetProperties};
 
 type DialRef<Key> = Rc<RefCell<Dial<Key>>>;
 
@@ -75,7 +73,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Dial<Key> {
         &self.props
     }
 
-    fn draw(&self) {
+    fn draw(&self, p: &mut dyn Printer) {
         let index = self.get_index(&self.value);
         // TODO: Optimize by using array
         let chars = match index {
@@ -90,7 +88,8 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Dial<Key> {
             _ => "  ",
             //_ => "  ",
         };
-        print!("{}{}{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_light2), color::Fg(self.props.colors.fg_dark2), chars);
+        p.set_color(self.props.colors.fg_compl, self.props.colors.bg_compl_l);
+        p.print(self.props.pos_x, self.props.pos_y, chars);
         let chars = match index {
             0 => "/ ",
             1 => "▔ ",
@@ -103,7 +102,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Dial<Key> {
             _ => " \\",
             //_ => " ▏",
         };
-        print!("{}{}", cursor::Goto(self.props.pos_x, self.props.pos_y + 1), chars);
+        p.print(self.props.pos_x, self.props.pos_y + 1, chars);
     }
 }
 

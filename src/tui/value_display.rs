@@ -2,11 +2,11 @@ use std::cell::RefCell;
 use std::hash::Hash;
 use std::rc::Rc;
 
-use termion::{color, cursor};
+use termion::cursor;
 
 use super::Observer;
 use super::{Value, get_int};
-use super::{Widget, WidgetProperties};
+use super::{Printer, Widget, WidgetProperties};
 
 pub type ValueDisplayRef<Key> = Rc<RefCell<ValueDisplay<Key>>>;
 
@@ -34,9 +34,10 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for ValueDisplay<Key> {
         &self.props
     }
 
-    fn draw(&self) {
+    fn draw(&self, p: &mut dyn Printer) {
         let v = get_int(&self.value);
-        print!("{}{}{} {} ", cursor::Goto(self.props.pos_x, self.props.pos_y), color::Bg(self.props.colors.bg_dark), color::Fg(self.props.colors.fg_light), v);
+        p.set_color(self.props.colors.fg_compl, self.props.colors.bg_compl);
+        print!("{} {} ", cursor::Goto(self.props.pos_x as u16, self.props.pos_y as u16), v);
     }
 }
 

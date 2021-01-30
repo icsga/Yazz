@@ -10,12 +10,13 @@ use super::surface::Surface;
 use super::Value;
 use super::{SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION};
 use super::StateMachine;
+use super::{ColorScheme, Printer, StdioPrinter};
 use super::WtInfo;
 
 use crossbeam_channel::{Sender, Receiver};
 use log::info;
-use termion::{clear, color, cursor};
-use termion::color::{Black, LightWhite, Rgb};
+use termion::{clear, cursor};
+//use termion::color::{Black, LightWhite, Rgb, AnsiValue};
 use termion::event::Key;
 
 extern crate regex;
@@ -61,6 +62,8 @@ pub struct Tui {
     min_idle: Duration,
     max_busy: Duration,
     show_tui: bool,
+    printer: StdioPrinter,
+    colors: Rc<ColorScheme>,
 
     bank: SoundBank,                // Bank with sound patches
     sound: Rc<RefCell<SoundPatch>>, // Current sound patch as loaded from disk
@@ -79,7 +82,8 @@ pub struct Tui {
 
 impl Tui {
     pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>, show_tui: bool) -> Tui {
-        let mut window = Surface::new();
+        let colors = Rc::new(ColorScheme::new());
+        let mut window = Surface::new(colors.clone());
         let sound = Rc::new(RefCell::new(SoundPatch::new()));
         window.set_position(1, 3);
         window.update_all(&sound.borrow().data);
@@ -96,6 +100,8 @@ impl Tui {
             min_idle: Duration::new(10, 0),
             max_busy: Duration::new(0, 0),
             show_tui,
+            printer: StdioPrinter::new(),
+            colors,
             bank: SoundBank::new(SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION),
             sound,
             sound_copy: SoundPatch::new(),
@@ -533,7 +539,7 @@ impl Tui {
      */
     fn handle_engine_sync(&mut self) {
         self.sync_counter += 1;
-        if self.sync_counter == 20 {
+        if self.sync_counter == 10 {
             self.display();
 
             self.sync_counter = 0;
@@ -592,22 +598,24 @@ impl Tui {
         }
 
         if self.selection_changed {
+            self.printer.set_color(self.colors.fg_base, self.colors.bg_base);
             print!("{}", clear::All);
             self.selection_changed = false;
             self.window.set_dirty(true);
         }
 
         if self.show_tui {
-            self.window.draw();
+            self.window.draw(&mut self.printer);
         }
 
         if let Mode::Edit = self.mode {
             print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
-            Tui::display_selector(&self.selector, true);
+            Tui::display_selector(&mut self.printer, &self.colors, &self.selector, true);
         } else {
             print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
-            Tui::display_last_parameter(&self.last_value, &self.selector.wavetable_list);
+            Tui::display_last_parameter(&mut self.printer, &self.colors, &self.last_value, &self.selector.wavetable_list);
         }
+        //self.printer.set_color(self.colors.fg_base, self.colors.bg_base);
         if self.show_tui {
             self.display_idle_time();
             self.display_status_line();
@@ -616,13 +624,13 @@ impl Tui {
         stdout().flush().ok();
     }
 
-    fn display_last_parameter(v: &SynthParam, wt_list: &[(usize, String)]) {
-        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
-
+    fn display_last_parameter(p: &mut dyn Printer, c: &ColorScheme, v: &SynthParam, wt_list: &[(usize, String)]) {
+        p.set_color(c.fg_compl, c.bg_compl_l);
         print!("{} {} {}", v.function, v.function_id, v.parameter);
+        p.set_color(c.fg_compl, c.bg_compl);
         match v.value {
             ParameterValue::Int(x) => print!(" {}", x),
-            ParameterValue::Float(x) => print!(" {}", x),
+            ParameterValue::Float(x) => print!(" {:.3}", x),
             ParameterValue::Choice(x) => {
                 let val_range = MenuItem::get_val_range(v.function, v.parameter);
                 if let ValueRange::Choice(list) = val_range {
@@ -641,26 +649,26 @@ impl Tui {
             },
             _ => ()
         }
-
-        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+        p.set_color(c.fg_base, c.bg_base);
     }
 
-    fn display_selector(s: &ParamSelector, show_options: bool) {
+    fn display_selector(p: &mut dyn Printer, c: &ColorScheme, s: &ParamSelector, show_options: bool) {
         let selector_state = s.state;
         let mut display_state = SelectorState::Function;
         let mut x_pos: u16 = 1;
         let mut selection = &s.func_selection;
+        p.set_color(c.fg_compl, c.bg_compl_l);
         loop {
             match display_state {
                 SelectorState::Function => {
-                    Tui::display_function(&s.func_selection, selector_state == SelectorState::Function && show_options);
+                    Tui::display_function(p, c, &s.func_selection, selector_state == SelectorState::Function && show_options);
                 }
                 SelectorState::FunctionIndex => {
-                    Tui::display_function_index(&s.func_selection, selector_state == SelectorState::FunctionIndex && show_options);
+                    Tui::display_function_index(p, c, &s.func_selection, selector_state == SelectorState::FunctionIndex && show_options);
                     x_pos = 12;
                 }
                 SelectorState::Param => {
-                    Tui::display_param(&s.param_selection, selector_state == SelectorState::Param && show_options);
+                    Tui::display_param(p, c, &s.param_selection, selector_state == SelectorState::Param && show_options);
                     selection = &s.param_selection;
                     x_pos = 14;
                     if selector_state == SelectorState::Param {
@@ -670,51 +678,51 @@ impl Tui {
                             | ParameterValue::Float(_)
                             | ParameterValue::Choice(_)
                             | ParameterValue::Dynamic(_, _) => {
-                                Tui::display_value(&s.param_selection, false, &s.wavetable_list);
+                                Tui::display_value(p, c, &s.param_selection, false, &s.wavetable_list);
                             },
                             ParameterValue::Function(_) => {
-                                Tui::display_function(&s.value_func_selection, false);
-                                Tui::display_function_index(&s.value_func_selection, false);
+                                Tui::display_function(p, c, &s.value_func_selection, false);
+                                Tui::display_function_index(p, c, &s.value_func_selection, false);
                             },
                             ParameterValue::Param(_) => {
-                                Tui::display_function(&s.value_func_selection, false);
-                                Tui::display_function_index(&s.value_func_selection, false);
-                                Tui::display_param(&s.value_param_selection, false);
+                                Tui::display_function(p, c, &s.value_func_selection, false);
+                                Tui::display_function_index(p, c, &s.value_func_selection, false);
+                                Tui::display_param(p, c, &s.value_param_selection, false);
                             }
                             _ => ()
                         }
                     }
                 }
                 SelectorState::Value => {
-                    Tui::display_value(&s.param_selection, selector_state == SelectorState::Value && show_options, &s.wavetable_list);
+                    Tui::display_value(p, c, &s.param_selection, selector_state == SelectorState::Value && show_options, &s.wavetable_list);
                     x_pos = 23;
                 }
                 SelectorState::MidiLearn => {
                     if selector_state == SelectorState::MidiLearn {
-                        Tui::display_midi_learn();
+                        Tui::display_midi_learn(p, c);
                     }
                 }
                 SelectorState::AddMarker => {
                     if selector_state == SelectorState::AddMarker {
-                        Tui::display_add_marker();
+                        Tui::display_add_marker(p, c);
                     }
                 }
                 SelectorState::GotoMarker => {
                     if selector_state == SelectorState::GotoMarker {
-                        Tui::display_goto_marker();
+                        Tui::display_goto_marker(p, c);
                     }
                 }
                 SelectorState::ValueFunction => {
-                    Tui::display_function(&s.value_func_selection, selector_state == SelectorState::ValueFunction && show_options);
+                    Tui::display_function(p, c, &s.value_func_selection, selector_state == SelectorState::ValueFunction && show_options);
                     selection = &s.value_func_selection;
                     x_pos = 30;
                 }
                 SelectorState::ValueFunctionIndex => {
-                    Tui::display_function_index(&s.value_func_selection, selector_state == SelectorState::ValueFunctionIndex && show_options);
+                    Tui::display_function_index(p, c, &s.value_func_selection, selector_state == SelectorState::ValueFunctionIndex && show_options);
                     x_pos = 38;
                 }
                 SelectorState::ValueParam => {
-                    Tui::display_param(&s.value_param_selection, selector_state == SelectorState::ValueParam && show_options);
+                    Tui::display_param(p, c, &s.value_param_selection, selector_state == SelectorState::ValueParam && show_options);
                     selection = &s.value_param_selection;
                     x_pos = 46;
                 }
@@ -724,49 +732,48 @@ impl Tui {
             }
             display_state = next(display_state);
         }
-        Tui::display_options(s, selection, x_pos);
+        Tui::display_options(p, c, s, selection, x_pos);
+        p.set_color(c.fg_base, c.bg_base);
     }
 
-    fn display_function(func: &ItemSelection, selected: bool) {
+    fn display_function(p: &mut dyn Printer, c: &ColorScheme, func: &ItemSelection, selected: bool) {
         if selected {
-            print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
-        } else {
-            print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+            p.set_color(c.fg_compl, c.bg_compl);
         }
         print!("{}", func.item_list[func.item_index].item);
         if selected {
-            print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+            p.set_color(c.fg_compl, c.bg_compl_l);
         }
     }
 
-    fn display_function_index(func: &ItemSelection, selected: bool) {
+    fn display_function_index(p: &mut dyn Printer, c: &ColorScheme, func: &ItemSelection, selected: bool) {
         if selected {
-            print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+            p.set_color(c.fg_compl, c.bg_compl);
         }
         let function_id = if let ParameterValue::Int(x) = &func.value { *x as usize } else { panic!() };
         print!(" {}", function_id);
         if selected {
-            print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+            p.set_color(c.fg_compl, c.bg_compl_l);
         }
     }
 
-    fn display_param(param: &ItemSelection, selected: bool) {
+    fn display_param(p: &mut dyn Printer, c: &ColorScheme, param: &ItemSelection, selected: bool) {
         if selected {
-            print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+            p.set_color(c.fg_compl, c.bg_compl);
         }
         print!(" {} ", param.item_list[param.item_index].item);
         if selected {
-            print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+            p.set_color(c.fg_compl, c.bg_compl_l);
         }
     }
 
-    fn display_value(param: &ItemSelection, selected: bool, wt_list: &[(usize, String)]) {
+    fn display_value(p: &mut dyn Printer, c: &ColorScheme, param: &ItemSelection, selected: bool, wt_list: &[(usize, String)]) {
         if selected {
-            print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+            p.set_color(c.fg_compl, c.bg_compl);
         }
         match param.value {
             ParameterValue::Int(x) => print!(" {}", x),
-            ParameterValue::Float(x) => print!(" {}", x),
+            ParameterValue::Float(x) => print!(" {:.3}", x),
             ParameterValue::Choice(x) => {
                 let item = &param.item_list[param.item_index];
                 let range = &item.val_range;
@@ -785,30 +792,30 @@ impl Tui {
             _ => ()
         }
         if selected {
-            print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+            p.set_color(c.fg_compl, c.bg_compl_l);
         }
     }
 
-    fn display_midi_learn() {
-        print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+    fn display_midi_learn(p: &mut dyn Printer, c: &ColorScheme) {
+        p.set_color(c.fg_compl, c.bg_compl);
         print!("  MIDI Learn: Send controller data");
-        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+        p.set_color(c.fg_compl, c.bg_compl_l);
     }
 
-    fn display_add_marker() {
-        print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+    fn display_add_marker(p: &mut dyn Printer, c: &ColorScheme) {
+        p.set_color(c.fg_compl, c.bg_compl);
         print!("  Select marker to add");
-        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+        p.set_color(c.fg_compl, c.bg_compl_l);
     }
 
-    fn display_goto_marker() {
-        print!("{}{}", color::Bg(LightWhite), color::Fg(Black));
+    fn display_goto_marker(p: &mut dyn Printer, c: &ColorScheme) {
+        p.set_color(c.fg_compl, c.bg_compl);
         print!("  Select marker to go to");
-        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
+        p.set_color(c.fg_compl, c.bg_compl_l);
     }
 
-    fn display_options(selector: &ParamSelector, s: &ItemSelection, x_pos: u16) {
-        print!("{}{}", color::Bg(Black), color::Fg(LightWhite));
+    fn display_options(p: &mut dyn Printer, c: &ColorScheme, selector: &ParamSelector, s: &ItemSelection, x_pos: u16) {
+        p.set_color(c.fg_compl, c.bg_compl_l);
         let selector_state = selector.state;
         if selector_state == SelectorState::Function || selector_state == SelectorState::ValueFunction
         || selector_state == SelectorState::Param || selector_state == SelectorState::ValueParam {
@@ -836,7 +843,6 @@ impl Tui {
                 ValueRange::NoRange => ()
             }
         }
-        print!("{}{}", color::Bg(Rgb(255, 255, 255)), color::Fg(Black));
     }
 
     fn display_dynamic_options(s: &ParamSelector, param: Parameter, x_pos: u16) {
