@@ -10,10 +10,26 @@ use std::fmt;
 
 pub type ContainerRef<Key> = Rc<RefCell<Container<Key>>>;
 
+pub const JOIN_NONE: u32       = 0x00;
+pub const JOIN_LEFT: u32       = 0x01;
+pub const JOIN_UP: u32         = 0x02;
+pub const JOIN_LEFT_UP: u32    = 0x03;
+pub const JOIN_RIGHT: u32      = 0x04;
+pub const JOIN_RIGHT_UP: u32   = 0x06;
+pub const JOIN_DOWN: u32       = 0x08;
+pub const JOIN_LEFT_DOWN: u32  = 0x09;
+pub const JOIN_RIGHT_DOWN: u32 = 0x0C;
+
+pub const MASK_LEFT_UP: u32    = 0x03;
+pub const MASK_RIGHT_UP: u32   = 0x06;
+pub const MASK_LEFT_DOWN: u32  = 0x09;
+pub const MASK_RIGHT_DOWN: u32 = 0x0C;
+
 pub struct Container<Key: Copy + Eq + Hash> {
     title: String,
     props: WidgetProperties<Key>,
     draw_border: bool,
+    join_border: [u32; 4], // Bitmask with borders to join to neighbor
     children: Vec<WidgetRef<Key>>,
 }
 
@@ -35,8 +51,16 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         let title = "".to_string();
         let props = WidgetProperties::new(0, 0);
         let draw_border = false;
+        let join_border = [0; 4];
         let children = vec!{};
-        Container{title, props, draw_border, children}
+        Container{title, props, draw_border, join_border, children}
+    }
+
+    pub fn join_border(&mut self, upper_left: u32, upper_right: u32, lower_left: u32, lower_right:u32) {
+        self.join_border[0] = upper_left;
+        self.join_border[1] = upper_right;
+        self.join_border[2] = lower_left;
+        self.join_border[3] = lower_right;
     }
 
     pub fn add_child<C: Widget<Key> + 'static>(&mut self, child: Rc<RefCell<C>>, pos_x: Index, pos_y: Index) {
@@ -74,8 +98,17 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
     }
 
     fn draw_border(&self, p: &mut dyn Printer) {
+        let mut buff = String::with_capacity(self.props.width * 4);
         p.set_color(self.props.colors.fg_base, self.props.colors.bg_base); 
-        p.print(self.props.pos_x, self.props.pos_y, "┌");
+
+        //p.print(self.props.pos_x, self.props.pos_y, "┌");
+        match self.join_border[0] {
+            JOIN_NONE => buff.push('┌'),
+            JOIN_LEFT => buff.push('┬'),
+            JOIN_UP => buff.push('├'),
+            JOIN_LEFT_UP => buff.push('┼'),
+            _ => panic!("Unexpected border condition {}", self.join_border[0]),
+        }
 
         // Overall position of frame
         let x_start = self.props.pos_x;
@@ -92,24 +125,54 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         }
 
         // Draw upper line and title
-        for x in  (x_start + 1)..(x_middle_left) {
-            p.print(x, self.props.pos_y, "─");
+        for _x in  (x_start + 1)..(x_middle_left) {
+            //p.print(x, self.props.pos_y, "─");
+            buff.push('─');
         }
-        p.print(x_middle_left, self.props.pos_y, &self.title);
-        for x in  (x_middle_right)..(x_end) {
-            p.print(x, self.props.pos_y, "─");
+        //p.print(x_middle_left, self.props.pos_y, &self.title);
+        buff.push_str(&self.title);
+        for _x in  (x_middle_right)..(x_end) {
+            //p.print(x, self.props.pos_y, "─");
+            buff.push('─');
         }
 
-        p.print(x_end, self.props.pos_y, "┐");
+        //p.print(x_end, self.props.pos_y, "┐");
+        match self.join_border[1] {
+            JOIN_NONE => buff.push('┐'),
+            JOIN_RIGHT => buff.push('┬'),
+            JOIN_UP => buff.push('┤'),
+            JOIN_RIGHT_UP => buff.push('┼'),
+            _ => panic!("Unexpected border condition {}", self.join_border[1]),
+        }
+        p.print(self.props.pos_x, self.props.pos_y, &buff);
+        buff.clear();
+
         for y in (y_start + 1)..(y_end) {
             p.print(x_start, y, "│");
             p.print(x_end, y, "│");
         }
-        p.print(x_start, y_end, "└");
-        for x in  (x_start + 1)..(x_end) {
-            p.print(x, y_end, "─");
+
+        //p.print(x_start, y_end, "└");
+        match self.join_border[2] {
+            JOIN_NONE => buff.push('└'),
+            JOIN_LEFT => buff.push('┴'),
+            JOIN_DOWN => buff.push('├'),
+            JOIN_LEFT_DOWN => buff.push('┼'),
+            _ => panic!("Unexpected border condition {}", self.join_border[2]),
         }
-        p.print(x_end, y_end, "┘");
+        for _x in (x_start + 1)..(x_end) {
+            //p.print(x, y_end, "─");
+            buff.push('─');
+        }
+        //p.print(x_end, y_end, "┘");
+        match self.join_border[3] {
+            JOIN_NONE => buff.push('┘'),
+            JOIN_RIGHT => buff.push('┴'),
+            JOIN_DOWN => buff.push('┤'),
+            JOIN_RIGHT_DOWN => buff.push('┼'),
+            _ => panic!("Unexpected border condition {}", self.join_border[3]),
+        }
+        p.print(self.props.pos_x, y_end, &buff);
     }
 
     /** Get widget at given position. */

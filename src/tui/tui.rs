@@ -891,11 +891,11 @@ impl Tui {
         let ctrl_set = (ctrl_set + if ctrl_set <= 9 { b'0' } else { b'a' - 10 }) as char;
         self.printer.set_color(self.current_color.fg_base_l, self.current_color.bg_base);
         print!("{}| Mode: {:?} | Active controller set: {} |",
-            cursor::Goto(1, 51),
+            cursor::Goto(1, 48), // TODO: Calculate y-position
             self.mode,
             ctrl_set);
         print!("{}Press <F1> for help, <F12> to exit ",
-            cursor::Goto(80, 51));
+            cursor::Goto(80, 48));
     }
 
     fn display_help(&mut self) {

@@ -8,6 +8,12 @@ use super::{Bar, Button, Canvas, CanvasRef, Container, ContainerRef, Controller,
             Dial, Index, Label, MouseHandler, ObserverRef, Printer ,ColorScheme,
             Slider, Value, ValueDisplay, Widget};
 
+use super::container::{
+JOIN_NONE, JOIN_LEFT, JOIN_RIGHT, JOIN_UP, JOIN_DOWN,
+JOIN_LEFT_UP, JOIN_RIGHT_UP, JOIN_LEFT_DOWN, JOIN_RIGHT_DOWN,
+MASK_LEFT_UP, MASK_RIGHT_UP, MASK_LEFT_DOWN, MASK_RIGHT_DOWN,
+};
+
 pub struct Surface {
     window: Container<ParamId>,
     controller: Controller<ParamId>,
@@ -31,17 +37,16 @@ impl Surface {
                                canvas};
 
         let osc: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
-        //osc.borrow_mut().enable_border(true);
         this.window.enable_border(true);
         this.add_multi_osc(&mut osc.borrow_mut(), 1, 0, 0);
-        this.add_multi_osc(&mut osc.borrow_mut(), 2, 31, 0);
-        this.add_multi_osc(&mut osc.borrow_mut(), 3, 63, 0);
-        let (_, mut osc_height) = osc.borrow().get_size();
-        this.add_child(osc, 1, 1);
-        osc_height += 1; // Leave a little space
+        this.add_multi_osc(&mut osc.borrow_mut(), 2, 32, 0);
+        this.add_multi_osc(&mut osc.borrow_mut(), 3, 65, 0);
+        let (_, osc_height) = osc.borrow().get_size();
+        this.add_child(osc, 1, 0);
 
         let env: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         env.borrow_mut().enable_border(true);
+        env.borrow_mut().join_border(JOIN_NONE, JOIN_RIGHT, JOIN_NONE, JOIN_RIGHT | JOIN_DOWN);
         this.add_env(&mut env.borrow_mut(), 1, 1, 0);
         let x = env.borrow().get_width();
         this.add_env(&mut env.borrow_mut(), 2, x + 3, 0);
@@ -52,6 +57,7 @@ impl Surface {
 
         let lfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         lfo.borrow_mut().enable_border(true);
+        lfo.borrow_mut().join_border(JOIN_LEFT, JOIN_NONE, JOIN_LEFT | JOIN_DOWN, JOIN_DOWN);
         this.add_lfo(&mut lfo.borrow_mut(), 1, 1, 0);
         let x = lfo.borrow().get_width();
         this.add_lfo(&mut lfo.borrow_mut(), 2, x, 0);
@@ -60,32 +66,35 @@ impl Surface {
         this.add_glfo(&mut lfo.borrow_mut(), 2, x * 3 - 1, 0);
 
         let (_, lfo_height) = lfo.borrow().get_size();
-        this.add_child(lfo, env_width + 2, osc_height);
+        this.add_child(lfo, env_width + 1, osc_height);
 
         this.add_child(canvas_clone, 2, osc_height + env_height);
 
         let filter: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         filter.borrow_mut().enable_border(true);
+        filter.borrow_mut().join_border(JOIN_LEFT | JOIN_UP, JOIN_UP, JOIN_DOWN, JOIN_DOWN);
         this.add_filter(&mut filter.borrow_mut(), 1, 1, 0);
         let (filter_width, filter_height) = filter.borrow().get_size();
         this.add_filter(&mut filter.borrow_mut(), 2, filter_width + 1, 0);
-        this.add_child(filter, env_width + 2, osc_height + lfo_height);
+        this.add_child(filter, env_width + 1, osc_height + lfo_height - 1);
 
         let delay: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         delay.borrow_mut().enable_border(true);
+        delay.borrow_mut().join_border(JOIN_UP, JOIN_RIGHT, JOIN_NONE, JOIN_RIGHT);
         this.add_delay(&mut delay.borrow_mut(), 1, 0);
         let (delay_width, _delay_height) = delay.borrow().get_size();
-        this.add_child(delay, env_width + 2, osc_height + lfo_height + filter_height);
+        this.add_child(delay, env_width + 1, osc_height + lfo_height + filter_height - 2);
 
         let patch: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         patch.borrow_mut().enable_border(true);
+        patch.borrow_mut().join_border(JOIN_LEFT, JOIN_UP, JOIN_LEFT, JOIN_NONE);
         this.add_patch(&mut patch.borrow_mut(), 1, 0);
-        this.add_child(patch, env_width + delay_width + 2, osc_height + lfo_height + filter_height);
+        this.add_child(patch, env_width + delay_width + 1, osc_height + lfo_height + filter_height - 2);
 
         let sysinfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         sysinfo.borrow_mut().enable_border(true);
         this.add_sysinfo(&mut sysinfo.borrow_mut(), 1, 0);
-        this.add_child(sysinfo, 96, 0);
+        this.add_child(sysinfo, 95, 0);
 
         this.window.set_position(1, 1);
         this.window.set_color_scheme(colors);
@@ -277,19 +286,19 @@ impl Surface {
         target.add_child(osc_spread, 14 + x_offset, 4 + y_offset);
 
         key.set(Parameter::Oscillator, func_id, Parameter::KeyFollow);
-        let osc_sync = self.new_option("KeyFollow", 0, &key);
-        target.add_child(osc_sync, 14 + x_offset, 8 + y_offset);
+        let key_follow = self.new_option("KeyFollow", 0, &key);
+        target.add_child(key_follow, 14 + x_offset, 8 + y_offset);
 
         /*
         key.set(Parameter::Oscillator, func_id, Parameter::Wavetable);
-        let osc_sync = self.new_textfield("Wavetable", "default", &key);
-        target.add_child(osc_sync, 14 + x_offset, 10 + y_offset);
+        let wavetable = self.new_textfield("Wavetable", "default", &key);
+        target.add_child(wavetable, 14 + x_offset, 10 + y_offset);
         */
 
         if func_id == 2 {
             key.set(Parameter::Oscillator, func_id, Parameter::Sync);
-            let osc_sync = self.new_option("Sync", 0, &key);
-            target.add_child(osc_sync, x_offset, 10 + y_offset);
+            let osc_sync = self.new_option("OscSync", 0, &key);
+            target.add_child(osc_sync, 14 + x_offset, 9 + y_offset);
         }
     }
 
@@ -435,7 +444,7 @@ impl Surface {
         target.add_child(tone, 14 + x_offset, 4 + y_offset);
 
         key.set(Parameter::Delay, 1, Parameter::Sync);
-        let sync = self.new_option("Sync", 0, &key);
+        let sync = self.new_option("BpmSync", 0, &key);
         target.add_child(sync, x_offset, 8 + y_offset);
     }
 
