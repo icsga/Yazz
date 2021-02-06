@@ -8,11 +8,7 @@ use super::{Bar, Button, Canvas, CanvasRef, Container, ContainerRef, Controller,
             Dial, Index, Label, MouseHandler, ObserverRef, Printer ,ColorScheme,
             Slider, Value, ValueDisplay, Widget};
 
-use super::container::{
-JOIN_NONE, JOIN_LEFT, JOIN_RIGHT, JOIN_UP, JOIN_DOWN,
-JOIN_LEFT_UP, JOIN_RIGHT_UP, JOIN_LEFT_DOWN, JOIN_RIGHT_DOWN,
-MASK_LEFT_UP, MASK_RIGHT_UP, MASK_LEFT_DOWN, MASK_RIGHT_DOWN,
-};
+use super::container::{JOIN_NONE, JOIN_LEFT, JOIN_RIGHT, JOIN_UP, JOIN_DOWN};
 
 pub struct Surface {
     window: Container<ParamId>,
@@ -28,7 +24,7 @@ impl Surface {
         let controller = Controller::new();
         let mod_targets: HashMap<ParamId, ObserverRef> = HashMap::new();
         let mouse_handler = MouseHandler::new();
-        let canvas: CanvasRef<ParamId> = Canvas::new(50, 21);
+        let canvas: CanvasRef<ParamId> = Canvas::new(50, 20);
         let canvas_clone = canvas.clone();
         let mut this = Surface{window,
                                controller,
@@ -262,7 +258,6 @@ impl Surface {
         title.push(((func_id as u8) + b'0') as char);
         let len = title.len();
         let title = Label::new(title, len as Index);
-        //title.borrow_mut().select_light();
         target.add_child(title, 10 + x_offset, y_offset);
 
         let mut key = ParamId::new(Parameter::Oscillator, func_id, Parameter::Level);
@@ -288,12 +283,6 @@ impl Surface {
         key.set(Parameter::Oscillator, func_id, Parameter::KeyFollow);
         let key_follow = self.new_option("KeyFollow", 0, &key);
         target.add_child(key_follow, 14 + x_offset, 8 + y_offset);
-
-        /*
-        key.set(Parameter::Oscillator, func_id, Parameter::Wavetable);
-        let wavetable = self.new_textfield("Wavetable", "default", &key);
-        target.add_child(wavetable, 14 + x_offset, 10 + y_offset);
-        */
 
         if func_id == 2 {
             key.set(Parameter::Oscillator, func_id, Parameter::Sync);
@@ -457,8 +446,6 @@ impl Surface {
         let title = Label::new(title.to_string(), len as Index);
         target.add_child(title, x_offset, y_offset);
 
-        // Level, Drive, Voices, Spread
-
         let mut key = ParamId::new(Parameter::Patch, 1, Parameter::Level);
         let level = self.new_mod_dial_float("Level", 0.0, 100.0, 50.0, false, &key);
         target.add_child(level, x_offset, 1 + y_offset);
@@ -484,11 +471,6 @@ impl Surface {
                    target: &mut Container<ParamId>,
                    x_offset: Index,
                    y_offset: Index) {
-        //let title = "System";
-        //let len = title.len();
-        //let title = Label::new(title.to_string(), len as Index);
-        //target.add_child(title, x_offset, y_offset);
-
         let mut key = ParamId::new(Parameter::System, 0, Parameter::Busy);
         let busy_value = self.new_label_value_int("Busy", 0, &key);
         target.add_child(busy_value, x_offset, y_offset - 1);

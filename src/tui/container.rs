@@ -101,15 +101,6 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         let mut buff = String::with_capacity(self.props.width * 4);
         p.set_color(self.props.colors.fg_base, self.props.colors.bg_base); 
 
-        //p.print(self.props.pos_x, self.props.pos_y, "┌");
-        match self.join_border[0] {
-            JOIN_NONE => buff.push('┌'),
-            JOIN_LEFT => buff.push('┬'),
-            JOIN_UP => buff.push('├'),
-            JOIN_LEFT_UP => buff.push('┼'),
-            _ => panic!("Unexpected border condition {}", self.join_border[0]),
-        }
-
         // Overall position of frame
         let x_start = self.props.pos_x;
         let x_end = x_start + self.props.width;
@@ -125,18 +116,21 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         }
 
         // Draw upper line and title
+        // TODO: match can be replaced by array lookup with corner bitmap
+        match self.join_border[0] {
+            JOIN_NONE => buff.push('┌'),
+            JOIN_LEFT => buff.push('┬'),
+            JOIN_UP => buff.push('├'),
+            JOIN_LEFT_UP => buff.push('┼'),
+            _ => panic!("Unexpected border condition {}", self.join_border[0]),
+        }
         for _x in  (x_start + 1)..(x_middle_left) {
-            //p.print(x, self.props.pos_y, "─");
             buff.push('─');
         }
-        //p.print(x_middle_left, self.props.pos_y, &self.title);
         buff.push_str(&self.title);
         for _x in  (x_middle_right)..(x_end) {
-            //p.print(x, self.props.pos_y, "─");
             buff.push('─');
         }
-
-        //p.print(x_end, self.props.pos_y, "┐");
         match self.join_border[1] {
             JOIN_NONE => buff.push('┐'),
             JOIN_RIGHT => buff.push('┬'),
@@ -147,12 +141,13 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
         p.print(self.props.pos_x, self.props.pos_y, &buff);
         buff.clear();
 
+        // Draw side lines
         for y in (y_start + 1)..(y_end) {
             p.print(x_start, y, "│");
             p.print(x_end, y, "│");
         }
 
-        //p.print(x_start, y_end, "└");
+        // Draw lower line
         match self.join_border[2] {
             JOIN_NONE => buff.push('└'),
             JOIN_LEFT => buff.push('┴'),
@@ -161,10 +156,8 @@ impl<Key: Copy + Eq + Hash> Container<Key> {
             _ => panic!("Unexpected border condition {}", self.join_border[2]),
         }
         for _x in (x_start + 1)..(x_end) {
-            //p.print(x, y_end, "─");
             buff.push('─');
         }
-        //p.print(x_end, y_end, "┘");
         match self.join_border[3] {
             JOIN_NONE => buff.push('┘'),
             JOIN_RIGHT => buff.push('┴'),
@@ -224,6 +217,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Container<Key> {
     }
 
     fn set_dirty(&mut self, is_dirty: bool) {
+        self.props.dirty = is_dirty;
         for child in self.children.iter() {
             child.borrow_mut().set_dirty(is_dirty);
         }
@@ -239,7 +233,9 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Container<Key> {
     }
 
     fn draw(&self, printer: &mut dyn Printer) {
-        if self.draw_border {
+        // Only draw border if container has explicitly been marked as dirty
+        // (used for full redraw).
+        if self.props.dirty && self.draw_border {
             self.draw_border(printer);
         }
         for child in self.children.iter() {

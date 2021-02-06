@@ -637,8 +637,7 @@ impl Tui {
             self.display_idle_time();
             self.display_status_line();
         }
-
-        stdout().flush().ok();
+        self.printer.update();
     }
 
     fn display_last_parameter(p: &mut dyn Printer, c: &ColorScheme, v: &SynthParam, wt_list: &[(usize, String)]) {
@@ -891,15 +890,16 @@ impl Tui {
         let ctrl_set = (ctrl_set + if ctrl_set <= 9 { b'0' } else { b'a' - 10 }) as char;
         self.printer.set_color(self.current_color.fg_base_l, self.current_color.bg_base);
         print!("{}| Mode: {:?} | Active controller set: {} |",
-            cursor::Goto(1, 48), // TODO: Calculate y-position
+            cursor::Goto(1, 47), // TODO: Calculate y-position
             self.mode,
             ctrl_set);
         print!("{}Press <F1> for help, <F12> to exit ",
-            cursor::Goto(80, 48));
+            cursor::Goto(80, 47));
     }
 
     fn display_help(&mut self) {
         print!("{}{}", clear::All, cursor::Goto(1, 1));
+        self.printer.set_color(self.current_color.fg_base, self.current_color.bg_base);
         println!("Global keys:\r");
         println!("------------\r");
         println!("<TAB>    : Switch between Edit and Play mode\r");
@@ -927,11 +927,14 @@ impl Tui {
         println!("0 - 9, a - z : Select MIDI controller assignment set\r");
         println!("\r");
         println!("Press any key to continue.\r");
-        stdout().flush().ok();
+        //stdout().flush().ok();
     }
 
     fn display_name_prompt(&mut self) {
-        print!("{}{} Patch name: {}", cursor::Goto(1, 1), clear::CurrentLine, self.temp_name);
+        self.printer.set_color(self.current_color.bg_base, self.current_color.fg_base);
+        print!("{}{} Patch name: ", cursor::Goto(1, 1), clear::CurrentLine);
+        self.printer.set_color(self.current_color.bg_base, self.current_color.fg_base_l);
+        print!("{}", self.temp_name);
         stdout().flush().ok();
     }
 }

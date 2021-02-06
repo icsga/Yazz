@@ -23,12 +23,12 @@ impl ColorScheme {
         ColorScheme {
             fg_base: AnsiValue(16),     // 16 = black
             fg_base_l: AnsiValue(244),    // 240 = dark grey
-            fg_compl: AnsiValue(231),   // 231 = white
-            fg_compl_l: AnsiValue(188), // 188 = light grey
+            fg_compl: AnsiValue(0),   // 231 = white
+            fg_compl_l: AnsiValue(8), // 188 = light grey
             bg_base: AnsiValue(231),
             bg_base_l: AnsiValue(188),
-            bg_compl: AnsiValue(0),
-            bg_compl_l: AnsiValue(8),
+            bg_compl: AnsiValue(231),
+            bg_compl_l: AnsiValue(188),
         }
     }
 

@@ -3,6 +3,8 @@ use termion::color::AnsiValue;
 
 use super::printer::{Index, Printer};
 
+use std::io::{stdout, Write};
+
 pub struct StdioPrinter {
     last_fg: AnsiValue,
     last_bg: AnsiValue,
@@ -46,7 +48,6 @@ impl Printer for StdioPrinter {
 
     // Update the screen contents
     fn update(&mut self) {
-        // Nothing to be done here.
-        // TODO: Maybe flush stdout?
+        stdout().flush().ok();
     }
 }
