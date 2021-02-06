@@ -63,7 +63,9 @@ pub struct Tui {
     max_busy: Duration,
     show_tui: bool,
     printer: StdioPrinter,
-    colors: Rc<ColorScheme>,
+    colors: Vec<Rc<ColorScheme>>,
+    current_color: Rc<ColorScheme>,
+    color_index: usize,
 
     bank: SoundBank,                // Bank with sound patches
     sound: Rc<RefCell<SoundPatch>>, // Current sound patch as loaded from disk
@@ -82,8 +84,12 @@ pub struct Tui {
 
 impl Tui {
     pub fn new(sender: Sender<SynthMessage>, ui_receiver: Receiver<UiMessage>, show_tui: bool) -> Tui {
-        let colors = Rc::new(ColorScheme::new());
-        let mut window = Surface::new(colors.clone());
+        let mut colors = vec![Rc::new(ColorScheme::new())];
+        colors.push(Rc::new(ColorScheme::dark()));
+        colors.push(Rc::new(ColorScheme::amber()));
+        let color_index = 0;
+        let current_color = colors[color_index].clone();
+        let mut window = Surface::new(current_color.clone());
         let sound = Rc::new(RefCell::new(SoundPatch::new()));
         window.set_position(1, 3);
         window.update_all(&sound.borrow().data);
@@ -102,6 +108,8 @@ impl Tui {
             show_tui,
             printer: StdioPrinter::new(),
             colors,
+            current_color,
+            color_index,
             bank: SoundBank::new(SOUND_DATA_VERSION, SYNTH_ENGINE_VERSION),
             sound,
             sound_copy: SoundPatch::new(),
@@ -214,6 +222,16 @@ impl Tui {
                 // Read bank from disk
                 self.bank.load_bank("Yazz_FactoryBank.ysn").unwrap();
                 self.select_sound(0);
+                true
+            },
+            Key::F(7) => {
+                // Cycle through color schemes
+                self.color_index += 1;
+                if self.color_index >= self.colors.len() {
+                    self.color_index = 0;
+                }
+                self.current_color = self.colors[self.color_index].clone();
+                self.window.set_color_scheme(self.current_color.clone());
                 true
             },
             Key::F(10) => {
@@ -598,7 +616,7 @@ impl Tui {
         }
 
         if self.selection_changed {
-            self.printer.set_color(self.colors.fg_base, self.colors.bg_base);
+            self.printer.set_color(self.current_color.fg_base, self.current_color.bg_base);
             print!("{}", clear::All);
             self.selection_changed = false;
             self.window.set_dirty(true);
@@ -610,12 +628,11 @@ impl Tui {
 
         if let Mode::Edit = self.mode {
             print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
-            Tui::display_selector(&mut self.printer, &self.colors, &self.selector, true);
+            Tui::display_selector(&mut self.printer, &self.current_color, &self.selector, true);
         } else {
             print!("{}{}", cursor::Goto(1, 1), clear::CurrentLine);
-            Tui::display_last_parameter(&mut self.printer, &self.colors, &self.last_value, &self.selector.wavetable_list);
+            Tui::display_last_parameter(&mut self.printer, &self.current_color, &self.last_value, &self.selector.wavetable_list);
         }
-        //self.printer.set_color(self.colors.fg_base, self.colors.bg_base);
         if self.show_tui {
             self.display_idle_time();
             self.display_status_line();
@@ -625,9 +642,9 @@ impl Tui {
     }
 
     fn display_last_parameter(p: &mut dyn Printer, c: &ColorScheme, v: &SynthParam, wt_list: &[(usize, String)]) {
-        p.set_color(c.fg_compl, c.bg_compl_l);
+        p.set_color(c.bg_base, c.fg_base_l);
         print!("{} {} {}", v.function, v.function_id, v.parameter);
-        p.set_color(c.fg_compl, c.bg_compl);
+        p.set_color(c.bg_base, c.fg_base);
         match v.value {
             ParameterValue::Int(x) => print!(" {}", x),
             ParameterValue::Float(x) => print!(" {:.3}", x),
@@ -657,7 +674,7 @@ impl Tui {
         let mut display_state = SelectorState::Function;
         let mut x_pos: u16 = 1;
         let mut selection = &s.func_selection;
-        p.set_color(c.fg_compl, c.bg_compl_l);
+        p.set_color(c.bg_base, c.fg_base_l);
         loop {
             match display_state {
                 SelectorState::Function => {
@@ -738,38 +755,38 @@ impl Tui {
 
     fn display_function(p: &mut dyn Printer, c: &ColorScheme, func: &ItemSelection, selected: bool) {
         if selected {
-            p.set_color(c.fg_compl, c.bg_compl);
+            p.set_color(c.bg_base, c.fg_base);
         }
         print!("{}", func.item_list[func.item_index].item);
         if selected {
-            p.set_color(c.fg_compl, c.bg_compl_l);
+            p.set_color(c.bg_base, c.fg_base_l);
         }
     }
 
     fn display_function_index(p: &mut dyn Printer, c: &ColorScheme, func: &ItemSelection, selected: bool) {
         if selected {
-            p.set_color(c.fg_compl, c.bg_compl);
+            p.set_color(c.bg_base, c.fg_base);
         }
         let function_id = if let ParameterValue::Int(x) = &func.value { *x as usize } else { panic!() };
         print!(" {}", function_id);
         if selected {
-            p.set_color(c.fg_compl, c.bg_compl_l);
+            p.set_color(c.bg_base, c.fg_base_l);
         }
     }
 
     fn display_param(p: &mut dyn Printer, c: &ColorScheme, param: &ItemSelection, selected: bool) {
         if selected {
-            p.set_color(c.fg_compl, c.bg_compl);
+            p.set_color(c.bg_base, c.fg_base);
         }
         print!(" {} ", param.item_list[param.item_index].item);
         if selected {
-            p.set_color(c.fg_compl, c.bg_compl_l);
+            p.set_color(c.bg_base, c.fg_base_l);
         }
     }
 
     fn display_value(p: &mut dyn Printer, c: &ColorScheme, param: &ItemSelection, selected: bool, wt_list: &[(usize, String)]) {
         if selected {
-            p.set_color(c.fg_compl, c.bg_compl);
+            p.set_color(c.bg_base, c.fg_base);
         }
         match param.value {
             ParameterValue::Int(x) => print!(" {}", x),
@@ -792,30 +809,30 @@ impl Tui {
             _ => ()
         }
         if selected {
-            p.set_color(c.fg_compl, c.bg_compl_l);
+            p.set_color(c.bg_base, c.fg_base_l);
         }
     }
 
     fn display_midi_learn(p: &mut dyn Printer, c: &ColorScheme) {
-        p.set_color(c.fg_compl, c.bg_compl);
+        p.set_color(c.bg_base, c.fg_base);
         print!("  MIDI Learn: Send controller data");
-        p.set_color(c.fg_compl, c.bg_compl_l);
+        p.set_color(c.bg_base, c.fg_base_l);
     }
 
     fn display_add_marker(p: &mut dyn Printer, c: &ColorScheme) {
-        p.set_color(c.fg_compl, c.bg_compl);
+        p.set_color(c.bg_base, c.fg_base);
         print!("  Select marker to add");
-        p.set_color(c.fg_compl, c.bg_compl_l);
+        p.set_color(c.bg_base, c.fg_base_l);
     }
 
     fn display_goto_marker(p: &mut dyn Printer, c: &ColorScheme) {
-        p.set_color(c.fg_compl, c.bg_compl);
+        p.set_color(c.bg_base, c.fg_base);
         print!("  Select marker to go to");
-        p.set_color(c.fg_compl, c.bg_compl_l);
+        p.set_color(c.bg_base, c.fg_base_l);
     }
 
     fn display_options(p: &mut dyn Printer, c: &ColorScheme, selector: &ParamSelector, s: &ItemSelection, x_pos: u16) {
-        p.set_color(c.fg_compl, c.bg_compl_l);
+        p.set_color(c.bg_base, c.fg_base_l);
         let selector_state = selector.state;
         if selector_state == SelectorState::Function || selector_state == SelectorState::ValueFunction
         || selector_state == SelectorState::Param || selector_state == SelectorState::ValueParam {
@@ -872,10 +889,13 @@ impl Tui {
     fn display_status_line(&mut self) {
         let ctrl_set = self.active_ctrl_set as u8;
         let ctrl_set = (ctrl_set + if ctrl_set <= 9 { b'0' } else { b'a' - 10 }) as char;
-        print!("{}| Mode: {:?} | Active controller set: {} |                Press <F1> for help, <F12> to exit ",
-            cursor::Goto(1, 50),
+        self.printer.set_color(self.current_color.fg_base_l, self.current_color.bg_base);
+        print!("{}| Mode: {:?} | Active controller set: {} |",
+            cursor::Goto(1, 51),
             self.mode,
             ctrl_set);
+        print!("{}Press <F1> for help, <F12> to exit ",
+            cursor::Goto(80, 51));
     }
 
     fn display_help(&mut self) {

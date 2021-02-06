@@ -5,7 +5,7 @@ use std::rc::Rc;
 use termion::cursor;
 
 use super::Observer;
-use super::{Value, get_int};
+use super::Value;
 use super::{Printer, Widget, WidgetProperties};
 
 pub type ValueDisplayRef<Key> = Rc<RefCell<ValueDisplay<Key>>>;
@@ -35,9 +35,19 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for ValueDisplay<Key> {
     }
 
     fn draw(&self, p: &mut dyn Printer) {
-        let v = get_int(&self.value);
-        p.set_color(self.props.colors.fg_compl, self.props.colors.bg_compl);
-        print!("{} {} ", cursor::Goto(self.props.pos_x as u16, self.props.pos_y as u16), v);
+        p.set_color(self.props.colors.fg_compl, self.props.colors.bg_compl_l);
+        print!("{} ", cursor::Goto(self.props.pos_x as u16, self.props.pos_y as u16));
+        match &self.value {
+            Value::Int(v) => {
+                print!("{:6} ", v);
+            },
+            Value::Float(v) => {
+                print!("{:.3} ", v);
+            },
+            Value::Str(v) => {
+                print!("{:.3} ", v);
+            }
+        }
     }
 }
 

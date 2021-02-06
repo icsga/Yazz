@@ -442,7 +442,7 @@ pub static MOD_PARAMS: [MenuItem; 4] = [
 pub static PATCH_PARAMS: [MenuItem; 12] = [
     MenuItem{item: Parameter::Level,        key: 'l', val_range: ValueRange::Float(0.0, 100.0, 1.0),    next: &[]},
     MenuItem{item: Parameter::Drive,        key: 'd', val_range: ValueRange::Float(0.0, 10.0, 1.0),     next: &[]},
-    MenuItem{item: Parameter::Pitchbend ,   key: 'p', val_range: ValueRange::Int(0, 12),                next: &[]},
+    MenuItem{item: Parameter::Pitchbend,    key: 'p', val_range: ValueRange::Int(0, 12),                next: &[]},
     MenuItem{item: Parameter::VelSens,      key: 'v', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
     MenuItem{item: Parameter::EnvDepth,     key: 'e', val_range: ValueRange::Float(0.0, 1.0, 0.01),     next: &[]},
     MenuItem{item: Parameter::PlayMode,     key: 'm', val_range: ValueRange::Choice(&PLAY_MODES),       next: &[]},

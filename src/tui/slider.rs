@@ -71,7 +71,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Slider<Key> {
 
     fn draw(&self, p: &mut dyn Printer) {
         let mut index = self.get_index(&self.value);
-        p.set_color(self.props.colors.fg_base_l, self.props.colors.bg_base_l);
+        p.set_color(self.props.colors.fg_compl_l, self.props.colors.bg_compl_l);
         for i in 0..self.props.height {
             let chars = if index >= 8 { "█" } else {
                 match index % 8 {

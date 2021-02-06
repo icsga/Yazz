@@ -157,6 +157,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Container<Key> {
         for c in self.children.iter_mut() {
             c.borrow_mut().set_color_scheme(colors.clone());
         }
+        self.get_widget_properties_mut().set_color_scheme(colors);
     }
 
     fn set_dirty(&mut self, is_dirty: bool) {

@@ -13,7 +13,6 @@ pub struct Surface {
     controller: Controller<ParamId>,
     mod_targets: HashMap<ParamId, ObserverRef>, // Maps the modulation indicator to the corresponding parameter key
     mouse_handler: MouseHandler<ParamId>,
-    colors: Rc<ColorScheme>,
     pub canvas: CanvasRef<ParamId>,
 }
 
@@ -29,7 +28,6 @@ impl Surface {
                                controller,
                                mod_targets,
                                mouse_handler,
-                               colors,
                                canvas};
 
         let osc: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
@@ -58,41 +56,44 @@ impl Surface {
         let x = lfo.borrow().get_width();
         this.add_lfo(&mut lfo.borrow_mut(), 2, x, 0);
 
-        this.add_glfo(&mut lfo.borrow_mut(), 1, x * 2 - 1, 0);
-        this.add_glfo(&mut lfo.borrow_mut(), 2, x * 3 - 2, 0);
+        this.add_glfo(&mut lfo.borrow_mut(), 1, x * 2 - 0, 0);
+        this.add_glfo(&mut lfo.borrow_mut(), 2, x * 3 - 1, 0);
 
         let (_, lfo_height) = lfo.borrow().get_size();
         this.add_child(lfo, env_width + 2, osc_height);
 
         this.add_child(canvas_clone, 2, osc_height + env_height);
 
-        /*
-        let glfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
-        glfo.borrow_mut().enable_border(true);
-        this.add_glfo(&mut glfo.borrow_mut(), 1, 1, 0);
-        let (x, _) = glfo.borrow().get_size();
-        this.add_glfo(&mut glfo.borrow_mut(), 2, x + 2, 0);
-        let (_, glfo_height) = glfo.borrow().get_size();
-        this.add_child(glfo, env_width + lfo_width + 2, osc_height);
-        */
-
         let filter: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         filter.borrow_mut().enable_border(true);
         this.add_filter(&mut filter.borrow_mut(), 1, 1, 0);
         let (filter_width, filter_height) = filter.borrow().get_size();
-        this.add_filter(&mut filter.borrow_mut(), 2, filter_width, 0);
-        //this.add_child(filter, env_width + 2, osc_height + lfo_height + glfo_height);
+        this.add_filter(&mut filter.borrow_mut(), 2, filter_width + 1, 0);
         this.add_child(filter, env_width + 2, osc_height + lfo_height);
+
+        let delay: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
+        delay.borrow_mut().enable_border(true);
+        this.add_delay(&mut delay.borrow_mut(), 1, 0);
+        let (delay_width, _delay_height) = delay.borrow().get_size();
+        this.add_child(delay, env_width + 2, osc_height + lfo_height + filter_height);
+
+        let patch: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
+        patch.borrow_mut().enable_border(true);
+        this.add_patch(&mut patch.borrow_mut(), 1, 0);
+        this.add_child(patch, env_width + delay_width + 2, osc_height + lfo_height + filter_height);
 
         let sysinfo: ContainerRef<ParamId> = Rc::new(RefCell::new(Container::new()));
         sysinfo.borrow_mut().enable_border(true);
         this.add_sysinfo(&mut sysinfo.borrow_mut(), 1, 0);
-        //this.add_child(sysinfo, env_width + 2, osc_height + lfo_height + glfo_height + filter_height);
-        this.add_child(sysinfo, env_width + 2, osc_height + lfo_height + filter_height);
+        this.add_child(sysinfo, 96, 0);
 
         this.window.set_position(1, 1);
-        this.window.set_color_scheme(this.colors.clone());
+        this.window.set_color_scheme(colors);
         this
+    }
+
+    pub fn set_color_scheme(&mut self, colors: Rc<ColorScheme>) {
+        self.window.set_color_scheme(colors);
     }
 
     pub fn add_child<C>(&mut self, child: Rc<RefCell<C>>, pos_x: Index, pos_y: Index)
@@ -189,14 +190,28 @@ impl Surface {
         Rc::new(RefCell::new(c))
     }
 
-    fn new_label_value(&mut self,
-                       label: &str,
-                       value: i64,
-                       key: &ParamId) -> ContainerRef<ParamId> {
+    fn new_label_value_int(&mut self,
+                           label: &str,
+                           value: i64,
+                           key: &ParamId) -> ContainerRef<ParamId> {
         let mut c = Container::new();
         let len = label.len() as Index;
         let label = Label::new(label.to_string(), len);
         let val_display = ValueDisplay::new(Value::Int(value));
+        self.controller.add_observer(key, val_display.clone());
+        c.add_child(label, 0, 1);
+        c.add_child(val_display, len + 1, 1);
+        Rc::new(RefCell::new(c))
+    }
+
+    fn new_label_value_float(&mut self,
+                            label: &str,
+                            value: f64,
+                            key: &ParamId) -> ContainerRef<ParamId> {
+        let mut c = Container::new();
+        let len = label.len() as Index;
+        let label = Label::new(label.to_string(), len);
+        let val_display = ValueDisplay::new(Value::Float(value));
         self.controller.add_observer(key, val_display.clone());
         c.add_child(label, 0, 1);
         c.add_child(val_display, len + 1, 1);
@@ -238,6 +253,7 @@ impl Surface {
         title.push(((func_id as u8) + b'0') as char);
         let len = title.len();
         let title = Label::new(title, len as Index);
+        //title.borrow_mut().select_light();
         target.add_child(title, 10 + x_offset, y_offset);
 
         let mut key = ParamId::new(Parameter::Oscillator, func_id, Parameter::Level);
@@ -257,7 +273,7 @@ impl Surface {
         target.add_child(osc_freq, x_offset, 4 + y_offset);
 
         key.set(Parameter::Oscillator, func_id, Parameter::Spread);
-        let osc_spread = self.new_mod_dial_float("Spread", 0.0, 2.0, 0.0, false, &key);
+        let osc_spread = self.new_mod_dial_float("FrqSpread", 0.0, 2.0, 0.0, false, &key);
         target.add_child(osc_spread, 14 + x_offset, 4 + y_offset);
 
         key.set(Parameter::Oscillator, func_id, Parameter::KeyFollow);
@@ -393,22 +409,84 @@ impl Surface {
         target.add_child(filter_follow, x_offset, 8 + y_offset);
     }
 
-    fn add_sysinfo(&mut self,
-                   target: &mut Container<ParamId>,
-                   x_offset: Index,
-                   y_offset: Index) {
-        let title = "System";
+    fn add_delay(&mut self,
+                 target: &mut Container<ParamId>,
+                 x_offset: Index,
+                 y_offset: Index) {
+        let title = "Delay";
         let len = title.len();
         let title = Label::new(title.to_string(), len as Index);
         target.add_child(title, x_offset, y_offset);
 
+        let mut key = ParamId::new(Parameter::Delay, 1, Parameter::Time);
+        let time = self.new_mod_dial_float("Time", 0.01, 1.0, 0.5, false, &key);
+        target.add_child(time, x_offset, 1 + y_offset);
+
+        key.set(Parameter::Delay, 1, Parameter::Level);
+        let level = self.new_mod_dial_float("Level", 0.0, 1.0, 0.5, false, &key);
+        target.add_child(level, 14 + x_offset, 1 + y_offset);
+
+        key.set(Parameter::Delay, 1, Parameter::Feedback);
+        let feedback = self.new_mod_dial_float("Feedback", 0.0, 1.0, 0.5, false, &key);
+        target.add_child(feedback, x_offset, 4 + y_offset);
+
+        key.set(Parameter::Delay, 1, Parameter::Tone);
+        let tone = self.new_mod_dial_float("Tone", 100.0, 5000.0, 3000.0, false, &key);
+        target.add_child(tone, 14 + x_offset, 4 + y_offset);
+
+        key.set(Parameter::Delay, 1, Parameter::Sync);
+        let sync = self.new_option("Sync", 0, &key);
+        target.add_child(sync, x_offset, 8 + y_offset);
+    }
+
+    fn add_patch(&mut self,
+                 target: &mut Container<ParamId>,
+                 x_offset: Index,
+                 y_offset: Index) {
+        let title = "Patch";
+        let len = title.len();
+        let title = Label::new(title.to_string(), len as Index);
+        target.add_child(title, x_offset, y_offset);
+
+        // Level, Drive, Voices, Spread
+
+        let mut key = ParamId::new(Parameter::Patch, 1, Parameter::Level);
+        let level = self.new_mod_dial_float("Level", 0.0, 100.0, 50.0, false, &key);
+        target.add_child(level, x_offset, 1 + y_offset);
+
+        key.set(Parameter::Patch, 1, Parameter::Drive);
+        let drive = self.new_mod_dial_float("Drive", 0.0, 10.0, 5.0, false, &key);
+        target.add_child(drive, 14 + x_offset, 1 + y_offset);
+
+        key.set(Parameter::Patch, 1, Parameter::Voices);
+        let voices = self.new_mod_dial_int("Voices", 1, 10, 1, false, &key);
+        target.add_child(voices, x_offset, 4 + y_offset);
+
+        key.set(Parameter::Patch, 1, Parameter::Spread);
+        let spread = self.new_mod_dial_float("PanSpread", 0.0, 1.0, 1.0, false, &key);
+        target.add_child(spread, 14 + x_offset, 4 + y_offset);
+
+        key.set(Parameter::Patch, 1, Parameter::Bpm);
+        let bpm = self.new_label_value_float("Bpm", 120.0, &key);
+        target.add_child(bpm, x_offset, 7 + y_offset);
+    }
+
+    fn add_sysinfo(&mut self,
+                   target: &mut Container<ParamId>,
+                   x_offset: Index,
+                   y_offset: Index) {
+        //let title = "System";
+        //let len = title.len();
+        //let title = Label::new(title.to_string(), len as Index);
+        //target.add_child(title, x_offset, y_offset);
+
         let mut key = ParamId::new(Parameter::System, 0, Parameter::Busy);
-        let busy_value = self.new_label_value("Busy", 0, &key);
-        target.add_child(busy_value, x_offset, 1 + y_offset);
+        let busy_value = self.new_label_value_int("Busy", 0, &key);
+        target.add_child(busy_value, x_offset, y_offset - 1);
 
         key.set(Parameter::System, 0, Parameter::Idle);
-        let idle_value = self.new_label_value("Idle", 0, &key);
-        target.add_child(idle_value, x_offset, 2 + y_offset);
+        let idle_value = self.new_label_value_int("Idle", 0, &key);
+        target.add_child(idle_value, x_offset, y_offset);
     }
 
     fn param_to_widget_value(value: ParameterValue) -> Value {

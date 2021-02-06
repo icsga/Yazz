@@ -88,7 +88,7 @@ impl<Key: Copy + Eq + Hash> Widget<Key> for Dial<Key> {
             _ => "  ",
             //_ => "  ",
         };
-        p.set_color(self.props.colors.fg_compl, self.props.colors.bg_compl_l);
+        p.set_color(self.props.colors.fg_compl_l, self.props.colors.bg_compl_l);
         p.print(self.props.pos_x, self.props.pos_y, chars);
         let chars = match index {
             0 => "/ ",

@@ -16,6 +16,23 @@ pub struct ColorScheme {
 
 impl ColorScheme {
     pub fn new() -> ColorScheme {
+        ColorScheme::light()
+    }
+
+    pub fn light() -> ColorScheme {
+        ColorScheme {
+            fg_base: AnsiValue(16),     // 16 = black
+            fg_base_l: AnsiValue(244),    // 240 = dark grey
+            fg_compl: AnsiValue(231),   // 231 = white
+            fg_compl_l: AnsiValue(188), // 188 = light grey
+            bg_base: AnsiValue(231),
+            bg_base_l: AnsiValue(188),
+            bg_compl: AnsiValue(0),
+            bg_compl_l: AnsiValue(8),
+        }
+    }
+
+    pub fn dark() -> ColorScheme {
         ColorScheme {
             fg_base: AnsiValue(15),   // 15 = White
             fg_base_l: AnsiValue(7),  // 7 = Light Grey
@@ -25,6 +42,19 @@ impl ColorScheme {
             bg_base_l: AnsiValue(8),
             bg_compl: AnsiValue(15),
             bg_compl_l: AnsiValue(7),
+        }
+    }
+
+    pub fn amber() -> ColorScheme {
+        ColorScheme {
+            fg_base: AnsiValue(208),
+            fg_base_l: AnsiValue(214),
+            fg_compl: AnsiValue(208),
+            fg_compl_l: AnsiValue(214),
+            bg_base: AnsiValue(0),
+            bg_base_l: AnsiValue(8),
+            bg_compl: AnsiValue(0),
+            bg_compl_l: AnsiValue(8),
         }
     }
 
