@@ -917,8 +917,8 @@ impl Tui {
         println!("</ >         : Move backwards/ forwards in the parameter history\r");
         println!("PgUp/ PgDown : Increase/ decrease function ID of current parameter\r");
         println!("[/ ]         : Move backwards/ forwards through the parameter list of the current function\r");
-        println!("\"<MarkerID> : Set a marker with the MarkerID at the current parameter\r");
-        println!("\'<MarkerID> : Recall the parameter with the given MarkerID\r");
+        println!("\"<MarkerID>  : Set a marker with the MarkerID at the current parameter\r");
+        println!("\'<MarkerID>  : Recall the parameter with the given MarkerID\r");
         println!("/            : Create a new modulator for currently edited parameter\r");
         println!("<Ctrl-L>     : MIDI learn, assigns a MIDI controller to the currently edited parameter\r");
         println!("<Ctrl-L><Bsp>: Clear a MIDI controller assignment for the currently edited parameter\r");
