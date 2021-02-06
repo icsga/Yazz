@@ -28,7 +28,7 @@ Press F12 to exit Yazz.
 This functionality is still under construction.
 
 Currently the sound filename is hardwired to "Yazz_FactoryBank.ysn". It is
-loaded automatically on startup.  To load the file manually, press F3.
+loaded automatically on startup. To load the file manually, press F3.
 
 You can change the current program by sending MIDI program change commands.
 In Play mode, you can additionally use the '+', '-' keys for program changing.
@@ -37,17 +37,16 @@ In Play mode, you can additionally use the '+', '-' keys for program changing.
 program without saving.**
 
 To save a sound, press F2. Currently, only saving the complete sound bank is
-supported. Copying a sound, saving single sounds etc. are still on the TODO
-list. There is also no safety dialog yet to prevent accidentally overwriting
+supported. There is also no safety dialog yet to prevent accidentally overwriting
 sounds. Making manual backups might be a good idea if you made a cool sound and
 want to keep it.
 
 ## Copying and renaming sounds
 
-Press <Ctrl-C> to copy the current sound to an internal sound buffer.
+Press <Ctrl-C> to copy the current sound to the internal clipboard.
 
-Press <Ctrl-V> to paste the contents of the internal sound buffer into the
-current sound.
+Press <Ctrl-V> to paste the contents of the internal clipboard to the
+current sound patch.
 
 Press <Ctrl-N> to rename the current sound.
 
@@ -103,7 +102,7 @@ The parameter selection uses the same mechanism as the function selection
 The value can be changed by:
 
 * Typing in the target value and pressing Enter, e.g. "3.14" for a float value,
-* Using '+'/ '-' to increment/ decrement the value,
+* Using '+'/ '-' to increment/ decrement the value by a fixed amount,
 * Using the input controller (currently the modulation wheel) to set the value.
 * Using a MIDI controller assigned to this parameter to set the value.
 
@@ -154,13 +153,19 @@ automatically after every controller assignment change.
 
 Yazz has a flexible modulation matrix, which allows using most signal outputs
 as modulation values for sound parameters. There are two different types of
-modulation sources and targets:
+modulation sources and targets: Global and Local. Global parameters are note-
+and voice-independent and only represent a single value at any time. Local
+parameters are note- or voice-specific, with individual values per note or
+voice.
+
+Global modulation sources can modulate both global and local modulation
+targets. Local modulation sources can modulate only local modulation targets.
 
 * Global modulation sources:
     * Channel aftertouch
-    * Global LFOs
     * Pitch wheel
     * Modulation wheel
+    * Global LFOs
 * Local modulation sources:
     * Note on velocity
     * Oscillator output
@@ -178,7 +183,8 @@ Both the source and the target parameters can be entered the same way as
 selecting a synth parameter. Modulation source requires only Function and
 Function ID, while Modulation Target also requires the Parameter to modulate.
 
-Any modulator can be adjusted in intensity and can be turned on/ off.
+Any modulator can be adjusted in intensity and can be turned on/ off. Both
+intensity and on/ off status can themselves be modulated by other modulators.
 
 ## User wavetables
 
@@ -188,7 +194,8 @@ scanned for Wave files. Any files found that are in the right format are added
 to the list of available wavetables.
 
 Currently the only supported format for wavetable files is single-channel files
-with 32-bit float values.
+with 32-bit float values, with a length of 2048 samples. Support for other
+formats is in the works.
 
 Sounds only store a reference to the wavetable, not the actual wavetable data
 itself, so if an external table was used for a sound, the corresponding file
@@ -197,7 +204,7 @@ will use the internal default wavetable instead.
 
 ## Play Mode: Select controller set
 
-Yazz groups MIDI controllers assignments into 36 controller sets. That means
+Yazz groups MIDI controller assignments into 36 controller sets. That means
 that even with just a single controller available, it is possible to control 36
 different parameters by switching the active set.
 
