@@ -1,6 +1,5 @@
 
 use termion::cursor;
-use termion::cursor::DetectCursorPos;
 use termion::event::*;
 use termion::input::{TermRead, MouseTerminal};
 use termion::raw::{IntoRawMode, RawTerminal};

@@ -118,16 +118,13 @@ impl Display {
                 SelectorState::ValueFunction => {
                     self.display_function(p, &s.value_func_selection, selector_state == SelectorState::ValueFunction);
                     selection = &s.value_func_selection;
-                    x_pos = 30;
                 }
                 SelectorState::ValueFunctionIndex => {
                     self.display_function_index(p, &s.value_func_selection, selector_state == SelectorState::ValueFunctionIndex);
-                    x_pos = 38;
                 }
                 SelectorState::ValueParam => {
                     self.display_param(p, &s.value_param_selection, selector_state == SelectorState::ValueParam);
                     selection = &s.value_param_selection;
-                    x_pos = 46;
                 }
             }
             if display_state == selector_state {
@@ -144,7 +141,7 @@ impl Display {
             p.set_color(self.color.bg_base, self.color.fg_base);
         }
         print!("{}", func.item_list[func.item_index].item);
-        write!(self.buffer, "{}", func.item_list[func.item_index].item);
+        write!(self.buffer, "{}", func.item_list[func.item_index].item).unwrap();
         if selected {
             p.set_color(self.color.bg_base, self.color.fg_base_l);
         }
@@ -156,7 +153,7 @@ impl Display {
         }
         let function_id = if let ParameterValue::Int(x) = &func.value { *x as usize } else { panic!() };
         print!(" {}", function_id);
-        write!(self.buffer, " {}", function_id);
+        write!(self.buffer, " {}", function_id).unwrap();
         if selected {
             p.set_color(self.color.bg_base, self.color.fg_base_l);
         }
@@ -167,7 +164,7 @@ impl Display {
             p.set_color(self.color.bg_base, self.color.fg_base);
         }
         print!(" {} ", param.item_list[param.item_index].item);
-        write!(self.buffer, " {} ", param.item_list[param.item_index].item);
+        write!(self.buffer, " {} ", param.item_list[param.item_index].item).unwrap();
         if selected {
             p.set_color(self.color.bg_base, self.color.fg_base_l);
         }
@@ -180,11 +177,11 @@ impl Display {
         match param.value {
             ParameterValue::Int(x) => {
                 print!(" {}", x);
-                write!(self.buffer, " {}", x);
+                write!(self.buffer, " {}", x).unwrap();
             }
             ParameterValue::Float(x) => {
                 print!(" {:.3}", x);
-                write!(self.buffer, " {:.3}", x);
+                write!(self.buffer, " {:.3}", x).unwrap();
             }
             ParameterValue::Choice(x) => {
                 let item = &param.item_list[param.item_index];
@@ -192,13 +189,13 @@ impl Display {
                 let selection = if let ValueRange::Choice(list) = range { list } else { panic!("item: {:?}, range: {:?}", item, range) };
                 let item = selection[x].item;
                 print!(" {}", item);
-                write!(self.buffer, " {}", item);
+                write!(self.buffer, " {}", item).unwrap();
             },
             ParameterValue::Dynamic(_, x) => {
                 for (k, v) in wt_list {
                     if *k == x {
                         print!(" {}", v);
-                        write!(self.buffer, " {}", v);
+                        write!(self.buffer, " {}", v).unwrap();
                         break;
                     }
                 }
