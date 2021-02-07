@@ -1,5 +1,6 @@
 
 use termion::cursor;
+use termion::cursor::DetectCursorPos;
 use termion::event::*;
 use termion::input::{TermRead, MouseTerminal};
 use termion::raw::{IntoRawMode, RawTerminal};
@@ -11,7 +12,7 @@ use super::Index;
 use crossbeam_channel::{Sender};
 use log::info;
 
-use std::io::{Write, stdout, stdin};
+use std::io::{stdout, stdin};
 use std::thread::spawn;
 
 pub struct TermionWrapper {
@@ -22,14 +23,14 @@ impl TermionWrapper {
     pub fn new() -> Result<TermionWrapper, std::io::Error> {
         println!("{}", cursor::Hide);
         let mut t = TermionWrapper{
-            stdout: MouseTerminal::from(stdout().into_raw_mode()?)
+            stdout: MouseTerminal::from(stdout().into_raw_mode()?),
         };
         let count = t.stdout.available_colors().unwrap();
         println!("Available colors: {}", count);
         Ok(t)
     }
 
-    pub fn run(mut termion: TermionWrapper, to_ui_sender: Sender<UiMessage>) -> std::thread::JoinHandle<()> {
+    pub fn run(to_ui_sender: Sender<UiMessage>) -> std::thread::JoinHandle<()> {
         spawn(move || {
             let mut exit = false;
             let stdin = stdin();
@@ -48,7 +49,7 @@ impl TermionWrapper {
                             }
                             _ => to_ui_sender.send(UiMessage::Key(c)).unwrap(),
                         };
-                        termion.stdout.flush().unwrap();
+                        //termion.stdout.flush().unwrap();
                     }
                     Event::Mouse(m) => {
                         match m {

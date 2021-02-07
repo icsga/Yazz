@@ -138,8 +138,8 @@ fn setup_ui(to_synth_sender: Sender<SynthMessage>, to_ui_sender: Sender<UiMessag
             return Err(());
         }
     };
-    let term_handle = TermionWrapper::run(termion, to_ui_sender);
-    let tui_handle = Tui::run(to_synth_sender, ui_receiver, show_tui);
+    let term_handle = TermionWrapper::run(to_ui_sender);
+    let tui_handle = Tui::run(to_synth_sender, ui_receiver, show_tui, termion);
     println!("\r... finished");
     Ok((term_handle, tui_handle))
 }
