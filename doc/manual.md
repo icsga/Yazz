@@ -43,12 +43,12 @@ want to keep it.
 
 ## Copying and renaming sounds
 
-Press <Ctrl-C> to copy the current sound to the internal clipboard.
+Press `<Ctrl-C>` to copy the current sound to the internal clipboard.
 
-Press <Ctrl-V> to paste the contents of the internal clipboard to the
+Press `<Ctrl-V>` to paste the contents of the internal clipboard to the
 current sound patch.
 
-Press <Ctrl-N> to rename the current sound.
+Press `<Ctrl-N>` to rename the current sound.
 
 ## Operating modes
 
@@ -133,7 +133,7 @@ controller:
 
 * Select the target parameter in the command line (e.g. "o1l" to select
   oscillator 1 level.
-* Enter MIDI learn mode by pressing "Ctrl-l". The command line will show the text
+* Enter MIDI learn mode by pressing `<Ctrl-L>`. The command line will show the text
   **MIDI learn: Send controller data**.
 * Send values with the MIDI controller. Yazz needs at least two distinct values
   to be able to distinguish between absolute and relative controller types.
